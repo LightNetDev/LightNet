@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Have an idea for a new feature or improvement? Awesome! Fill out this form to share your thoughts, and let's get the conversation started!
+        Have an idea for a new feature or improvement? Awesome! Fill out this form to share your thoughts, and let's get the conversation started.
 
         Want to report a bug instead? [Use our bug report form](https://github.com/lightnetdev/lightnet/issues/new?assignees=&labels=&projects=&template=---01-bug-report.yml)
   - type: textarea
