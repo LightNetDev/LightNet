@@ -1,4 +1,4 @@
-import type { Language } from "../../i18n/languages"
+import type { Language } from "../../i18n/language"
 
 export type MediaType = {
   id: string

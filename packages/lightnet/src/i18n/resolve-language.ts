@@ -1,10 +1,10 @@
 import { AstroError } from "astro/errors"
+import config from "virtual:lightnet/config"
 
-import { ALL_LANGUAGES } from "./languages"
 import type { TranslateFn } from "./translate"
 
 const languages = Object.fromEntries(
-  ALL_LANGUAGES.map((lang) => [lang.code, lang]),
+  config.languages.map((lang) => [lang.code, lang]),
 )
 
 export const resolveLanguage = (bcp47: string) => {

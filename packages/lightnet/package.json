@@ -52,12 +52,13 @@
     "@types/react": "^18.3.18",
     "daisyui": "^4.12.23",
     "fuse.js": "^7.1.0",
-    "marked": "^15.0.6",
+    "marked": "^15.0.7",
+    "yaml": "^2.7.0",
     "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",
-    "@types/node": "^22.13.1",
+    "@types/node": "^22.13.4",
     "vitest": "^3.0.5"
   }
 }

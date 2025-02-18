@@ -2,9 +2,6 @@
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
 
-import de from "./src/translations/de.json"
-import en from "./src/translations/en.json"
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://test.com",
@@ -16,13 +13,12 @@ export default defineConfig({
         {
           code: "en",
           label: "English",
-          translations: en,
-          isDefaultLocale: true,
+          isDefaultUILanguage: true,
         },
         {
           code: "de",
           label: "Deutsch",
-          translations: de,
+          isUILanguage: true,
         },
       ],
       favicon: [{ href: "favicon.svg" }],

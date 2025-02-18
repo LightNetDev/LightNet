@@ -1,14 +1,17 @@
 import { AstroError } from "astro/errors"
 import config from "virtual:lightnet/config"
+import YAML from "yaml"
 
 import { resolveDefaultLocale } from "./resolve-default-locale"
-import de from "./translations/de.json"
-import en from "./translations/en.json"
+import { resolveLocales } from "./resolve-locales"
+import type { LightNetTranslationKey } from "./translations/translation-key"
 
 type TranslationsByLocales = Record<string, Record<string, string>>
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
-export type TranslationKey = keyof typeof en | (string & NonNullable<unknown>)
+export type TranslationKey =
+  | LightNetTranslationKey
+  | (string & NonNullable<unknown>)
 export type TranslationOptions = { allowFixedStrings?: boolean }
 
 export type TranslateFn = (
@@ -16,24 +19,26 @@ export type TranslateFn = (
   options?: TranslationOptions,
 ) => string
 
-const configTranslations = config.languages
-  .filter((l) => !!l.translations)
-  .reduce((prev, curr) => ({ ...prev, [curr.code]: curr.translations }), {})
-const translationsByLocales = merge({ de, en }, configTranslations)
+const locales = resolveLocales(config)
 const defaultLocale = resolveDefaultLocale(config)
+
+const builtInTranslations = await loadTranslations("/i18n/translations")
+const userTranslations = await loadTranslations("/src/translations")
+
+const translationsByLocales = merge(builtInTranslations, userTranslations)
 
 export function useTranslate(locale: string | undefined): TranslateFn {
   const resolvedLocale = locale ?? defaultLocale
   const translations = translationsByLocales[resolvedLocale]
-  const defaultTranslations = translationsByLocales[defaultLocale]
+  const fallbackTranslations = translationsByLocales[defaultLocale]
   if (!translations) {
     throw new AstroError(
       `No translations found for language ${resolvedLocale}`,
-      "Add them to your lightnet config inside astro.config.mjs.",
+      "Add them to your project's src/translations folder",
     )
   }
   return (key: TranslationKey, options?: TranslationOptions) => {
-    const value = translations[key] ?? defaultTranslations[key]
+    const value = translations[key] ?? fallbackTranslations[key]
     const isTranslationKey = key.startsWith("custom.") || key.startsWith("ln.")
     if (!value && options?.allowFixedStrings && !isTranslationKey) {
       return key
@@ -46,6 +51,31 @@ export function useTranslate(locale: string | undefined): TranslateFn {
     }
     return value
   }
+}
+
+async function loadTranslations(path: string) {
+  const translations: TranslationsByLocales = {}
+  const imports = Object.entries(
+    import.meta.glob(
+      ["./translations/*.(yml|yaml)", "/src/translations/*.(yml|yaml)"],
+      {
+        query: "?raw",
+        import: "default",
+      },
+    ),
+  )
+  const addTranslation = async (locale: string) => {
+    const translationImport = imports.find(([importPath]) =>
+      importPath.includes(`${path}/${locale}.`),
+    )?.[1]
+    if (!translationImport) {
+      return
+    }
+    const translationsYml = (await translationImport()) as string
+    translations[locale] = YAML.parse(translationsYml)
+  }
+  await Promise.all(locales.map((locale) => addTranslation(locale)))
+  return translations
 }
 
 function merge(

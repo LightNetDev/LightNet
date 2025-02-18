@@ -30,46 +30,54 @@ const linkSchema = z.object({
 /**
  * Language Schema.
  */
-const languageSchema = z.object({
-  /**
-   * BCP-47 language code for this language.
-   *
-   * This will be the identifier of this language and will
-   * also appear on the URL paths of the website.
-   */
-  code: z.string({ description: "BCP-47 language code" }),
-  /**
-   * The name of the language that will be shown on the Website.
-   *
-   * Can either be a fixed string or a translation key.
-   */
-  label: z.string(),
-  /**
-   * The text direction of this language.
-   *
-   * Either right-to-left = rtl, or left-to-right = ltr.
-   *
-   * Default is "ltr".
-   */
-  direction: z.enum(["rtl", "ltr"]).default("ltr"),
-  /**
-   * Translations for this language.
-   * This needs to be set if the the language should be used a UI locale.
-   *
-   * We expect a flat object with the keys being the translation keys and
-   * the values being the translated strings for this language.
-   */
-  translations: z.record(z.string(), z.string()).optional(),
-  /**
-   * Should this language be used as the default language for the User Interface.
-   *
-   * Default locale will be the first language the user sees. Also translations
-   * will fallback to use the default locale if no translation entry is found.
-   *
-   * Default is false.
-   */
-  isDefaultLocale: z.boolean().default(false),
-})
+const languageSchema = z
+  .object({
+    /**
+     * BCP-47 language tag for this language.
+     *
+     * This will be the identifier of this language and will
+     * also appear on the URL paths of the website.
+     */
+    code: z.string(),
+    /**
+     * The name of the language that will be shown on the Website.
+     *
+     * Can either be a fixed string or a translation key.
+     */
+    label: z.string(),
+    /**
+     * The text direction of this language.
+     *
+     * Either right-to-left = rtl, or left-to-right = ltr.
+     *
+     * Default is "ltr".
+     */
+    direction: z.enum(["rtl", "ltr"]).default("ltr"),
+    /**
+     * Should this language be used as an user interface language?
+     *
+     * Make sure to provide translations inside the `src/translations/` folder.
+     *
+     * Default is `false`
+     */
+    isUILanguage: z.boolean().default(false),
+    /**
+     * Should this language be used as the default user interface language?
+     *
+     * The default language will be used as a fallback when translations are missing
+     * also this will be the language selected when a user visits the site on the `/` path.
+     *
+     * Setting this to `true` will also set `isUILanguage` to `true`.
+     *
+     * Default is `false`
+     */
+    isDefaultUILanguage: z.boolean().default(false),
+  })
+  .transform((language) => ({
+    ...language,
+    // if language is default ui language also set is ui language to true.
+    isUILanguage: language.isDefaultUILanguage || language.isUILanguage,
+  }))
 
 const absolutePath = (path: string) =>
   `${path.startsWith("/") ? "" : "/"}${path}`
