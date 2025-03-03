@@ -1,7 +1,7 @@
 /// <reference path="../i18n/locals.d.ts" />
 import react from "@astrojs/react"
-import type { AstroIntegration } from "astro"
 import tailwindcss from "@tailwindcss/vite"
+import type { AstroIntegration } from "astro"
 
 import { resolveDefaultLocale } from "../i18n/resolve-default-locale"
 import { resolveLocales } from "../i18n/resolve-locales"

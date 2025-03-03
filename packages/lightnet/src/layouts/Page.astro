@@ -1,4 +1,6 @@
 ---
+import "./global.css"
+
 import { ClientRouter } from "astro:transitions"
 import config from "virtual:lightnet/config"
 
@@ -7,8 +9,6 @@ import Favicon from "./components/Favicon.astro"
 import PageNavigation from "./components/PageNavigation.astro"
 import PageTitle from "./components/PageTitle.astro"
 import PreloadReact from "./components/PreloadReact"
-
-import "./global.css"
 
 interface Props {
   title?: string
