@@ -6,6 +6,23 @@
 @plugin "@iconify/tailwind4" {
   prefixes: mdi;
 }
+@plugin "daisyui" {
+  prefix: "dy-";
+  logs: false;
+  themes: light --default;
+  exclude: rootcolor scrollbar;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-secondary: var(--primary-color);
+  --radius-selector: 1rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.375rem;
+  --color-base-100: oklch(0.967 0.003 264.542);
+  --color-base-content: oklch(0.707 0.022 261.325);
+}
 
 @theme inline {
   --color-primary: var(--primary-color);

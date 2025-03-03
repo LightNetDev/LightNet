@@ -94,7 +94,7 @@ export default function SearchFilter({
 
   return (
     <>
-      <label className="dy-input dy-input-bordered mb-2 flex items-center gap-2">
+      <label className="dy-input dy-input-md dy-input-bordered mb-2 flex w-full items-center gap-2">
         <input
           type="search"
           className="grow"
@@ -111,13 +111,11 @@ export default function SearchFilter({
       <div className="mb-8 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-6 md:mb-10">
         {languageFilterEnabled && (
           <label className="dy-form-control">
-            <div className="dy-label">
-              <span className="text-xs font-bold uppercase text-gray-500">
-                {t("ln.language_one")}
-              </span>
-            </div>
+            <span className="mb-1 mt-2 block text-xs font-bold uppercase text-gray-500">
+              {t("ln.language_one")}
+            </span>
             <select
-              className="dy-select dy-select-bordered sm:dy-select-sm"
+              className="dy-select dy-select-bordered sm:dy-select-sm w-full"
               value={language}
               id="language-select"
               onChange={(e) => setLanguage(e.currentTarget.value)}
@@ -134,13 +132,11 @@ export default function SearchFilter({
 
         {typesFilterEnabled && (
           <label className="dy-form-control">
-            <div className="dy-label">
-              <span className="text-xs font-bold uppercase text-gray-500">
-                {t("ln.type_one")}
-              </span>
-            </div>
+            <span className="mb-1 mt-2 block text-xs font-bold uppercase text-gray-500">
+              {t("ln.type_one")}
+            </span>
             <select
-              className="dy-select dy-select-bordered sm:dy-select-sm"
+              className="dy-select dy-select-bordered sm:dy-select-sm w-full"
               value={type}
               id="type-select"
               onChange={(e) => setType(e.currentTarget.value)}
@@ -159,13 +155,11 @@ export default function SearchFilter({
 
         {categoriesFilterEnabled && (
           <label className="dy-form-control">
-            <div className="dy-label">
-              <span className="text-xs font-bold uppercase text-gray-500">
-                {t("ln.category_one")}
-              </span>
-            </div>
+            <span className="mb-1 mt-2 block text-xs font-bold uppercase text-gray-500">
+              {t("ln.category_one")}
+            </span>
             <select
-              className="dy-select dy-select-bordered sm:dy-select-sm"
+              className="dy-select dy-select-bordered sm:dy-select-sm w-full"
               value={category}
               id="category-select"
               onChange={(e) => setCategory(e.currentTarget.value)}

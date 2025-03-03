@@ -49,6 +49,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind4": "^1.0.6",
     "@tailwindcss/typography": "^0.5.16",
+    "daisyui": "^5.0.0",
     "@types/react": "^18.3.18",
     "fuse.js": "^7.1.0",
     "i18next": "^24.2.2",
