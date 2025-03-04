@@ -6,6 +6,7 @@ import type { SearchQuery } from "../hooks/use-search"
 import type { MediaType, TranslatedLanguage } from "../types"
 import type { Translations } from "../utils/search-translations"
 import { useProvidedTranslations } from "../utils/use-provided-translations"
+import Select from "./Select"
 
 // URL search params
 const SEARCH = "search"
@@ -98,7 +99,6 @@ export default function SearchFilter({
         <input
           type="search"
           className="grow"
-          id="search-input"
           ref={searchInput}
           placeholder={t("ln.search.placeholder")}
           enterKeyHint="search"
@@ -110,72 +110,44 @@ export default function SearchFilter({
       </label>
       <div className="mb-8 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-6 md:mb-10">
         {languageFilterEnabled && (
-          <label className="dy-form-control">
-            <span className="mb-1 mt-2 block text-xs font-bold uppercase text-gray-500">
-              {t("ln.language_one")}
-            </span>
-            <select
-              className="dy-select dy-select-bordered sm:dy-select-sm w-full"
-              value={language}
-              id="language-select"
-              onChange={(e) => setLanguage(e.currentTarget.value)}
-            >
-              <option value="">{t("ln.search.all-languages")}</option>
-              {contentLanguages.map(({ code, name }) => (
-                <option key={code} value={code} lang={code}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <Select
+            label={t("ln.language_one")}
+            initialValue={language}
+            valueChange={(val) => setLanguage(val)}
+            options={[
+              { id: "", label: t("ln.search.all-languages") },
+              ...contentLanguages.map(({ code: id, name: label }) => ({
+                id,
+                label,
+              })),
+            ]}
+          />
         )}
 
         {typesFilterEnabled && (
-          <label className="dy-form-control">
-            <span className="mb-1 mt-2 block text-xs font-bold uppercase text-gray-500">
-              {t("ln.type_one")}
-            </span>
-            <select
-              className="dy-select dy-select-bordered sm:dy-select-sm w-full"
-              value={type}
-              id="type-select"
-              onChange={(e) => setType(e.currentTarget.value)}
-            >
-              <option key="" value="">
-                {t("ln.search.all-types")}
-              </option>
-              {mediaTypes.map(({ id, label }) => (
-                <option key={id} value={id}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <Select
+            label={t("ln.type_one")}
+            initialValue={type}
+            valueChange={(val) => setType(val)}
+            options={[
+              { id: "", label: t("ln.search.all-types") },
+              ...mediaTypes,
+            ]}
+          />
         )}
 
         {categoriesFilterEnabled && (
-          <label className="dy-form-control">
-            <span className="mb-1 mt-2 block text-xs font-bold uppercase text-gray-500">
-              {t("ln.category_one")}
-            </span>
-            <select
-              className="dy-select dy-select-bordered sm:dy-select-sm w-full"
-              value={category}
-              id="category-select"
-              onChange={(e) => setCategory(e.currentTarget.value)}
-            >
-              <option key="" value="">
-                {t("ln.search.all-categories")}
-              </option>
-              {Object.entries(categories)
+          <Select
+            label={t("ln.category_one")}
+            initialValue={category}
+            valueChange={(val) => setCategory(val)}
+            options={[
+              { id: "", label: t("ln.search.all-categories") },
+              ...Object.entries(categories)
                 .sort((a, b) => a[1].localeCompare(b[1], locale))
-                .map(([id, label]) => (
-                  <option key={id} value={id}>
-                    {label}
-                  </option>
-                ))}
-            </select>
-          </label>
+                .map(([id, label]) => ({ id, label })),
+            ]}
+          />
         )}
       </div>
     </>
