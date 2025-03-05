@@ -5,7 +5,7 @@ import lightnet from "lightnet"
 
 /**
  * Defines the available languages for the site, covering both
- * user interface and content languages.
+ * site and content languages.
  *
  * @type {import('lightnet').Language[]}
  */
@@ -13,12 +13,12 @@ const languages = [
   {
     code: "en", // BCP47 language code for English
     label: "English", // Name displayed in the language selector
-    isDefaultUILanguage: true, // Sets English as the default user interface language
+    isDefaultSiteLanguage: true, // Sets English as the default site language
   },
   {
     code: "de", // BCP47 language code for German
     label: "Deutsch", // Display name for German
-    isUILanguage: true, // Sets German as an user interface language
+    isSiteLanguage: true, // Sets German as an site language
   },
 ]
 

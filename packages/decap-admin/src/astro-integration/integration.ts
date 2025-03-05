@@ -37,12 +37,12 @@ const userConfigSchema = z.object({
    */
   imagesFolder: z.string().default("images"),
   /**
-   * Content languages and UI languages.
+   * Content languages and site languages.
    */
   languages: z
     .object({
       code: z.string(),
-      isDefaultUILanguage: z.boolean().default(false),
+      isDefaultSiteLanguage: z.boolean().default(false),
     })
     .array(),
   /**

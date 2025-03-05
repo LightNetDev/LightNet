@@ -13,12 +13,12 @@ export default defineConfig({
         {
           code: "en",
           label: "English",
-          isDefaultUILanguage: true,
+          isDefaultSiteLanguage: true,
         },
         {
           code: "de",
           label: "Deutsch",
-          isUILanguage: true,
+          isSiteLanguage: true,
         },
       ],
       favicon: [{ href: "favicon.svg" }],

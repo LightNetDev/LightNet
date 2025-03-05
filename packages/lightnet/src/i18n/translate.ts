@@ -16,7 +16,7 @@ export type TranslateFn = (key: TranslationKey, options?: TOptions) => string
 const languageCodes = [
   ...new Set(
     config.languages
-      .filter((lng) => lng.isUILanguage)
+      .filter((lng) => lng.isSiteLanguage)
       .flatMap((lng) => [lng.code, ...lng.fallbackLanguages, "en"]),
   ),
 ]
