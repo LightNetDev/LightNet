@@ -1,5 +1,3 @@
-import { options } from "marked"
-
 type Props = {
   label: string
   initialValue: string
