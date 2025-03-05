@@ -6,6 +6,7 @@
 @plugin "@iconify/tailwind4" {
   prefixes: mdi;
 }
+
 @plugin "daisyui" {
   prefix: "dy-";
   logs: false;
@@ -20,8 +21,41 @@
   --radius-selector: 1rem;
   --radius-field: 0.375rem;
   --radius-box: 0.375rem;
-  --color-base-100: oklch(0.967 0.003 264.542);
-  --color-base-content: oklch(0.707 0.022 261.325);
+  --color-base-100: #f3f4f6;
+  --color-base-200: #e5e7eb;
+  --color-base-300: #d1d5db;
+  --color-base-content: #9ca3af;
+
+  --color-primary: var(--primary-color);
+  --color-primary-content: #f9fafb;
+  --color-secondary: var(--primary-color);
+  --color-secondary-content: #f9fafb;
+  --color-accent: var(--primary-color);
+  --color-accent-content: #f9fafb;
+  --color-neutral: #4b5563;
+  --color-neutral-content: #f9fafb;
+  --color-info: #0ea5e9;
+  --color-info-content: #f9fafb;
+  --color-success: #16a34a;
+  --color-success-content: #f9fafb;
+  --color-warning: #f97316;
+  --color-warning-content: #fff7ed;
+  --color-error: #dc2626;
+  --color-error-content: #fef2f2;
+}
+
+@theme {
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #030712;
 }
 
 @theme inline {
