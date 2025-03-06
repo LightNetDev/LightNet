@@ -1,7 +1,5 @@
-@import "tailwindcss";
+@import "tailwindcss" source("../");
 @import "./color-overrides.css";
-
-@source "../";
 
 @plugin "@tailwindcss/typography";
 @plugin "@iconify/tailwind4" {
