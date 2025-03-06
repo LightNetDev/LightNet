@@ -15,10 +15,13 @@
   exclude: rootcolor scrollbar;
 }
 
+@theme inline {
+  --color-primary: var(--primary-color);
+}
+
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
-  --color-secondary: var(--primary-color);
   --radius-selector: 1rem;
   --radius-field: 0.375rem;
   --radius-box: 0.375rem;
@@ -43,8 +46,4 @@
   --color-warning-content: #fff7ed;
   --color-error: #dc2626;
   --color-error-content: #fef2f2;
-}
-
-@theme inline {
-  --color-primary: var(--primary-color);
 }
