@@ -1,5 +1,21 @@
 # lightnet
 
+## 2.17.0
+
+### Minor Changes
+
+- [#220](https://github.com/LightNetDev/LightNet/pull/220) [`e10c96f`](https://github.com/LightNetDev/LightNet/commit/e10c96fb850db6d043c9bc0c929170c271979492) Thanks [@smn-cds](https://github.com/smn-cds)! - Update Tailwind CSS to v4
+
+  - updates `tailwindcss` dependency to version ^4.
+  - `@astro/tailwindcss` dependency has been replaced with `@tailwindcss/vite`
+  - removes the use of `tailwind.config.js` inside site projects
+  - astro config now supports setting `primaryColor` inside the lightnet integration
+  - changes default `primaryColor` from `#E6B15C` (yellow-orange) to `#1E2939` (dark gray)
+
+### Patch Changes
+
+- [#220](https://github.com/LightNetDev/LightNet/pull/220) [`e10c96f`](https://github.com/LightNetDev/LightNet/commit/e10c96fb850db6d043c9bc0c929170c271979492) Thanks [@smn-cds](https://github.com/smn-cds)! - Renames UI language to site language.
+
 ## 2.16.3
 
 ### Patch Changes

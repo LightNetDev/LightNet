@@ -8,7 +8,7 @@
     "@lightnet/decap-admin": "^2.4.0",
     "@tailwindcss/vite": "^4.0.9",
     "astro": "^5.4.0",
-    "lightnet": "^2.16.3",
+    "lightnet": "^2.17.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sharp": "^0.33.5",

@@ -1,5 +1,11 @@
 # @lightnet/decap-admin
 
+## 2.4.1
+
+### Patch Changes
+
+- [#220](https://github.com/LightNetDev/LightNet/pull/220) [`e10c96f`](https://github.com/LightNetDev/LightNet/commit/e10c96fb850db6d043c9bc0c929170c271979492) Thanks [@smn-cds](https://github.com/smn-cds)! - Renames UI language to site language.
+
 ## 2.4.0
 
 ### Minor Changes
