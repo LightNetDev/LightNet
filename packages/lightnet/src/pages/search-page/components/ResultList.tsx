@@ -121,7 +121,7 @@ export default function ResultList({
           <div className="dy-divider">
             <button
               type="button"
-              className="dy-btn"
+              className="dy-btn text-gray-700"
               onClick={() => setMaxItems(maxItems + PAGE_SIZE)}
             >
               {t("ln.search.more-results")}
