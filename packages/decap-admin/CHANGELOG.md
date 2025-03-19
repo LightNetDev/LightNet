@@ -1,5 +1,11 @@
 # @lightnet/decap-admin
 
+## 2.4.2
+
+### Patch Changes
+
+- [#224](https://github.com/LightNetDev/LightNet/pull/224) [`bb11b47`](https://github.com/LightNetDev/LightNet/commit/bb11b47ec257208938d7cac8416ef95b9539d5a8) Thanks [@smn-cds](https://github.com/smn-cds)! - Remove decap-cms npm dependency.
+
 ## 2.4.1
 
 ### Patch Changes
