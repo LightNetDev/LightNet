@@ -1,5 +1,11 @@
 # lightnet
 
+## 2.17.1
+
+### Patch Changes
+
+- [#222](https://github.com/LightNetDev/LightNet/pull/222) [`00dd8e9`](https://github.com/LightNetDev/LightNet/commit/00dd8e95a80cdda53c52077ff4caa9c9f6b3b523) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix contrast of more results button.
+
 ## 2.17.0
 
 ### Minor Changes
