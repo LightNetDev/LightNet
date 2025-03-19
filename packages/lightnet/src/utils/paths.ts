@@ -9,32 +9,33 @@ export function detailsPagePath(
   locale: string | undefined,
   { id }: { id: string },
 ) {
-  return localizePath(locale, `/media/${id}`)
+  return `/${locale}/media/${id}`
 }
 
 /**
  * Build path to the search page.
  *
- * @param language current locale
+ * @param locale current locale
  * @param query  search query params
  * @returns path to the search page eg. '/en/media?category=comics'
  */
 export function searchPagePath(
-  language: string | undefined,
+  locale: string | undefined,
   filter?: { category: string },
 ) {
   const searchParams = new URLSearchParams()
   if (filter?.category) {
     searchParams.append("category", filter.category)
   }
-  return localizePath(
-    language,
-    `/media${searchParams.size ? `?${searchParams.toString()}` : ""}`,
-  )
+  const query = searchParams.size ? `?${searchParams.toString()}` : ""
+  return `/${locale}/media${query}`
 }
 
 /**
  * Resolve a path for a given locale.
+ * Use this if you create paths based on user's input. In
+ * cases where you control the full path, JavaScript template strings
+ * are the easier solution to create a localized path.
  *
  * @param locale current locale
  * @param path to be resolved. A '/' at the beginning of the path is not required.
