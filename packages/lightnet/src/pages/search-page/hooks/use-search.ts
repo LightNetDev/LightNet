@@ -11,7 +11,7 @@ export type SearchQuery = {
 }
 
 export function useSearch() {
-  const fuse = useRef<Fuse<SearchItem>>()
+  const fuse = useRef<Fuse<SearchItem>>(undefined)
   const [allItems, setAllItems] = useState<SearchItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [query, setQuery] = useState<SearchQuery>({})
