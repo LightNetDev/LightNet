@@ -38,28 +38,28 @@
   "peerDependencies": {
     "@astrojs/react": "^4.1.0",
     "@astrojs/tailwind": "^6.0.0",
-    "tailwindcss": "^3.4.17",
     "astro": "^5.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sharp": "^0.33.4",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.5.3"
   },
   "dependencies": {
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.16",
-    "daisyui": "^4.12.23",
-    "@types/react": "^18.3.18",
+    "@types/react": "^19.0.11",
+    "daisyui": "^4.12.24",
     "fuse.js": "^7.1.0",
-    "i18next": "^24.2.2",
+    "i18next": "^24.2.3",
     "marked": "^15.0.7",
     "yaml": "^2.7.0",
     "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.50.1",
-    "@types/node": "^22.13.5",
-    "vitest": "^3.0.7"
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.13.10",
+    "vitest": "^3.0.9"
   }
 }
