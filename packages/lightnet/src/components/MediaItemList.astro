@@ -38,7 +38,7 @@ const mediaTypes = Object.fromEntries(
                   id: item.id,
                 })
           }
-          class="md:rounded-xs group flex overflow-hidden py-4 transition-colors ease-in-out hover:bg-gray-100 md:py-8"
+          class="group flex overflow-hidden py-4 transition-colors ease-in-out md:rounded-sm md:py-8 md:hover:bg-gray-100"
           class:list={
             item.disabled ? "pointer-events-none cursor-default opacity-50" : ""
           }
@@ -46,7 +46,7 @@ const mediaTypes = Object.fromEntries(
         >
           <div class="flex h-32 w-32 shrink-0 flex-col items-start justify-center">
             <Image
-              class="rounded-xs max-h-32 w-auto max-w-32 object-contain shadow-md"
+              class="max-h-32 w-auto max-w-32 rounded-sm object-contain shadow-md"
               src={item.data.image}
               alt=""
             />
@@ -73,7 +73,7 @@ const mediaTypes = Object.fromEntries(
           </div>
 
           <Icon
-            className="mdi--chevron-right hidden sm:block group-hover:text-primary my-auto ms-2 me-4 shrink-0 text-2xl text-gray-300"
+            className="mdi--chevron-right hidden sm:block md:group-hover:text-primary my-auto ms-2 me-4 shrink-0 text-2xl text-gray-300"
             flipIcon={direction === "rtl"}
             ariaLabel=""
           />

@@ -17,11 +17,5 @@
   ],
   "tailwindCSS.includeLanguages": {
     "astro": "html"
-  },
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "tailwindCSS.experimental.configFile": {
-    "packages/lightnet/src/layouts/global.css": "packages/lightnet/src/**"
   }
 }

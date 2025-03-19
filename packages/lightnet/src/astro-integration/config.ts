@@ -125,16 +125,6 @@ export const configSchema = z.object({
    */
   title: z.string(),
   /**
-   * Defines the primary color for your site.
-   *
-   * The primary color is applied to various UI elements, such as buttons,
-   * links, and hover states. Choose a color that aligns with your brand
-   * and provides good contrast against a white background for accessibility.
-   *
-   * Default: #1E2939 (dark gray)
-   */
-  primaryColor: z.string().default("#1E2939"),
-  /**
    * All languages: content languages and site languages.
    */
   languages: languageSchema.array(),

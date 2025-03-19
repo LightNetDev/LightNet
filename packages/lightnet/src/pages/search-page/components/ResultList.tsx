@@ -52,11 +52,11 @@ export default function ResultList({
               href={detailsPagePath(locale, {
                 id: item.id,
               })}
-              className="md:rounded-xs group flex overflow-hidden py-6 transition-colors ease-in-out hover:bg-gray-100 md:py-10"
+              className="group flex overflow-hidden py-6 transition-colors ease-in-out md:rounded-sm md:py-10 md:hover:bg-gray-100"
             >
               <div className="flex h-36 w-36 shrink-0 flex-col items-start justify-center">
                 <img
-                  className="rounded-xs max-h-36 w-auto max-w-36 object-contain shadow-md"
+                  className="max-h-36 w-auto max-w-36 rounded-sm object-contain shadow-md"
                   src={item.image.src}
                   width={item.image.width}
                   height={item.image.height}
@@ -108,7 +108,7 @@ export default function ResultList({
                 </div>
               </div>
               <Icon
-                className="mdi--chevron-right group-hover:text-primary my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 sm:block"
+                className="mdi--chevron-right md:group-hover:text-primary my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 sm:block"
                 flipIcon={direction === "rtl"}
                 ariaLabel=""
               />

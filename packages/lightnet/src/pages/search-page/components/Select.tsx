@@ -13,7 +13,7 @@ export default function Select({
 }: Props) {
   return (
     <label className="dy-form-control">
-      <span className="mb-1 mt-2 block text-xs font-bold uppercase text-gray-500">
+      <span className="my-2 block text-xs font-bold uppercase text-gray-500">
         {label}
       </span>
       <select

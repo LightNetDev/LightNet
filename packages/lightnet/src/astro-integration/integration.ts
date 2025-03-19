@@ -1,6 +1,6 @@
 /// <reference path="../i18n/locals.d.ts" />
 import react from "@astrojs/react"
-import tailwindcss from "@tailwindcss/vite"
+import tailwind from "@astrojs/tailwind"
 import type { AstroIntegration } from "astro"
 
 import { resolveDefaultLocale } from "../i18n/resolve-default-locale"
@@ -58,14 +58,11 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
 
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
-        astroConfig.integrations.push(react())
+        astroConfig.integrations.push(tailwind(), react())
 
         updateConfig({
           vite: {
-            plugins: [
-              vitePluginLightnetConfig(config, astroConfig, logger),
-              tailwindcss(),
-            ],
+            plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },
           i18n: {
             defaultLocale: resolveDefaultLocale(config),

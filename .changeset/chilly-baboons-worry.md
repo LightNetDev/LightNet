@@ -2,4 +2,4 @@
 "lightnet": patch
 ---
 
-Fix contrast of more results button.
+Revert Tailwind CSS back to v3.

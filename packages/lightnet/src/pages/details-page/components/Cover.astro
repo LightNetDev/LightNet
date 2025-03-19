@@ -15,8 +15,8 @@ const isPortraitImage = image.height > image.width
 ---
 
 <div
-  class="shadow-xs relative shrink-0 overflow-hidden"
-  class:list={style === "book" ? "rounded-xs" : "rounded-md"}
+  class="relative shrink-0 overflow-hidden shadow-sm"
+  class:list={style === "book" ? "rounded-sm" : "rounded-md"}
 >
   <Image
     class:list={isPortraitImage ? "h-52 w-auto sm:h-72" : "h-auto w-52 sm:w-72"}

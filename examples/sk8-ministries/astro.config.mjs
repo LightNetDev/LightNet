@@ -41,17 +41,6 @@ export default defineConfig({
       title: "x.site.title",
 
       /**
-       * Defines the primary color for your site.
-       *
-       * The primary color is applied to various UI elements, such as buttons,
-       * links, and hover states. Choose a color that aligns with your brand
-       * and provides good contrast against a white background for accessibility.
-       *
-       * Example: #14004B (dark purple)
-       */
-      primaryColor: "#14004B",
-
-      /**
        * Path to the logo displayed in the header, located in ./src/assets.
        * Supported formats: svg, png, jpg, webp. Your logo will be optimized for performance.
        */

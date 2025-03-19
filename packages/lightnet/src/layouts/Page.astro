@@ -1,6 +1,4 @@
 ---
-import "./global.css"
-
 import { ClientRouter } from "astro:transitions"
 import config from "virtual:lightnet/config"
 
@@ -20,7 +18,6 @@ const configTitle = Astro.locals.i18n.t(config.title)
 
 const { currentLocale } = Astro.locals.i18n
 const language = resolveLanguage(currentLocale)
-const primaryColor = config.primaryColor
 ---
 
 <!doctype html>
@@ -51,9 +48,5 @@ const primaryColor = config.primaryColor
       <slot />
     </main>
     <PreloadReact client:idle />
-  </body><style is:global define:vars={{ primaryColor }}>
-    :root {
-      --primary-color: var(--primaryColor);
-    }
-  </style>
+  </body>
 </html>

@@ -1,6 +1,5 @@
 {
   "semi": false,
-  "tailwindStylesheet": "./packages/lightnet/src/layouts/global.css",
   "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
   "overrides": [
     {

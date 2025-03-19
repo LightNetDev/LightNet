@@ -20,7 +20,7 @@ const categories = await getCategories(currentLocale, t)
         {categories.map((category) => (
           <li class="flex max-w-56 grow">
             <a
-              class="shadow-xs flex h-12 w-full items-center justify-center rounded-xl bg-gray-200 p-2 px-8 hover:bg-gray-300 sm:h-14"
+              class="flex h-12 w-full items-center justify-center rounded-xl bg-gray-200 p-2 px-8 shadow-sm hover:bg-gray-300 sm:h-14"
               href={searchPagePath(currentLocale, {
                 category: category.id,
               })}

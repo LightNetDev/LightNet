@@ -95,7 +95,7 @@ export default function SearchFilter({
 
   return (
     <>
-      <label className="dy-input dy-input-md dy-input-bordered mb-2 flex w-full items-center gap-2">
+      <label className="dy-input dy-input-bordered mb-2 flex items-center gap-2">
         <input
           type="search"
           className="grow"
