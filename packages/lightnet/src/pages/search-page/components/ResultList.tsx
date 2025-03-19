@@ -99,7 +99,7 @@ export default function ResultList({
 
                 <div className="hidden sm:block">
                   <p
-                    className="line-clamp-3 max-w-screen-sm text-xs text-gray-500"
+                    className="line-clamp-3 max-w-screen-sm text-xs"
                     lang={item.language}
                     dir={languages[item.language].direction}
                   >
