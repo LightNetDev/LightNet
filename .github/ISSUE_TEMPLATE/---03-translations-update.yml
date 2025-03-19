@@ -12,9 +12,8 @@ body:
     attributes:
       label: What language are you referring to?
       description: >
-        Tell us its [BCP-47 tag](https://en.wikipedia.org/wiki/IETF_language_tag) e.g. `en` for english. 
-        Use the existing code of the language you want to update or use [this tool](https://r12a.github.io/app-subtags/) 
-        to look up a new language's code.
+        Tell us its [IETF BCP-47 tag](https://en.wikipedia.org/wiki/IETF_language_tag) e.g. `en` for english. 
+        [This tool](https://r12a.github.io/app-subtags/), google or chat-gpt might be helping you to find the code.
       placeholder: en
     validations:
       required: true

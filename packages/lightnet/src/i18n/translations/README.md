@@ -1,4 +1,4 @@
-# LightNet Translations
+# LightNet Built-in Translations
 
 This folder contains all the built-in translations for LightNet.
 Check the [translation status](TRANSLATION-STATUS.md) for an overview of completed translations and pending work.
