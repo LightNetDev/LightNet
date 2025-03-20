@@ -142,11 +142,11 @@ ln.details.part-of-collection: Part of collection
 # Used on: https://sk8-ministries.pages.dev/en/media/ride-the-ramp-of-faith--en/
 ln.details.download: Download
 
-# Notification message indicating that the URL has been copied to the clipboard.
+# Notification message indicating that the link has been copied to the clipboard.
 #
-# English: URL copied to clipboard
+# English: Link copied to clipboard
 # Used on: https://sk8-ministries.pages.dev/en/media/ride-the-ramp-of-faith--en/ (Firefox)
-ln.share.url-copied-to-clipboard: URL copied to clipboard
+ln.share.url-copied-to-clipboard: Link copied to clipboard
 
 # Title for the 404-error page. This page is displayed when a path does not exist.
 #
