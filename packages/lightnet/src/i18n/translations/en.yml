@@ -68,6 +68,9 @@ ln.language_other: Languages
 # Used on: https://sk8-ministries.pages.dev/en/media
 ln.type_one: Type
 
+# English: Types
+ln.type_other: Types
+
 # Accessibility label for an external link.
 # This is only "visible" to a screen-reader.
 #
