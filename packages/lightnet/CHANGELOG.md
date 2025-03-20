@@ -1,5 +1,14 @@
 # lightnet
 
+## 2.18.0
+
+### Minor Changes
+
+- [#228](https://github.com/LightNetDev/LightNet/pull/228) [`b3bb5cc`](https://github.com/LightNetDev/LightNet/commit/b3bb5cc97a4f14ccb46c68f9dcdbe73d74563452) Thanks [@smn-cds](https://github.com/smn-cds)! - Add builtin languages
+
+  - Russian
+  - Ukrainian
+
 ## 2.17.3
 
 ### Patch Changes
