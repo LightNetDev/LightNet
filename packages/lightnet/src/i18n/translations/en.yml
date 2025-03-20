@@ -20,56 +20,33 @@ ln.home.title: Home
 
 # Label for a single media item category.
 #
-# Define the plural forms for different quantities as follows:
-# - ln.category_one : for a singular item (e.g., "1 item")
-# - ln.category_two : for exactly two items
-# - ln.category_few : for a few items (language-specific rules)
-# - ln.category_many : for many items (language-specific rules)
-# - ln.category_other: for all other cases
-#
-# For guidance on the correct plural forms for your language,
-# use this tool: https://jsfiddle.net/6bpxsgd4
-#
 # English: Category
 # Used on: https://sk8-ministries.pages.dev/en/media
-ln.category_one: Category
+ln.category: Category
 
 # Label for multiple media item categories.
 #
 # English: Categories
 # Used on: https://sk8-ministries.pages.dev/en/media/how-to-360-flip--en/
-ln.category_other: Categories
+ln.categories: Categories
 
 # Label for a single language.
 #
-# Define the plural forms for different quantities as follows:
-# - ln.language_one : for a singular item (e.g., "1 item")
-# - ln.language_two : for exactly two items
-# - ln.language_few : for a few items (language-specific rules)
-# - ln.language_many : for many items (language-specific rules)
-# - ln.language_other: for all other cases
-#
-# For guidance on the correct plural forms for your language,
-# use this tool: https://jsfiddle.net/6bpxsgd4
-#
 # English: Language
 # Used on: https://sk8-ministries.pages.dev/en/media
-ln.language_one: Language
+ln.language: Language
 
 # Label for multiple languages.
 #
 # English: Languages
 # Used on: https://sk8-ministries.pages.dev/en/media/how-to-kickflip--en/
-ln.language_other: Languages
+ln.languages: Languages
 
 # Label for a single media type.
 #
 # English: Type
 # Used on: https://sk8-ministries.pages.dev/en/media
-ln.type_one: Type
-
-# English: Types
-ln.type_other: Types
+ln.type: Type
 
 # Accessibility label for an external link.
 # This is only "visible" to a screen-reader.

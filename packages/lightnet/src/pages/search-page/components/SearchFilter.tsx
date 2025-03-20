@@ -111,7 +111,7 @@ export default function SearchFilter({
       <div className="mb-8 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-6 md:mb-10">
         {languageFilterEnabled && (
           <Select
-            label={t("ln.language_one")}
+            label={t("ln.language")}
             initialValue={language}
             valueChange={(val) => setLanguage(val)}
             options={[
@@ -126,7 +126,7 @@ export default function SearchFilter({
 
         {typesFilterEnabled && (
           <Select
-            label={t("ln.type_one")}
+            label={t("ln.type")}
             initialValue={type}
             valueChange={(val) => setType(val)}
             options={[
@@ -138,7 +138,7 @@ export default function SearchFilter({
 
         {categoriesFilterEnabled && (
           <Select
-            label={t("ln.category_one")}
+            label={t("ln.category")}
             initialValue={category}
             valueChange={(val) => setCategory(val)}
             options={[

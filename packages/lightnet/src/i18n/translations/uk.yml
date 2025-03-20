@@ -1,12 +1,11 @@
 ln.header.open-main-menu: Відкрити головне меню
 ln.header.select-language: Оберіть мову
 ln.home.title: Головна
-ln.category_one: Категорія
-ln.category_other: Категорії
-ln.language_one: Мова
-ln.language_other: Мови
-ln.type_one: Тип
-ln.type_other: Типи
+ln.category: Категорія
+ln.categories: Категорії
+ln.language: Мова
+ln.languages: Мови
+ln.type: Тип
 ln.external-link: Зовнішнє посилання
 ln.search.title: Пошук
 ln.search.placeholder: Пошук за назвою, автором, описом...

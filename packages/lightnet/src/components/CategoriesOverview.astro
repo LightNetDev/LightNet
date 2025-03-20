@@ -15,7 +15,7 @@ const categories = await getCategories(currentLocale, t)
 
 {
   categories.length && (
-    <Section title={title ?? t("ln.category", { count: categories.length })}>
+    <Section title={title ?? t("ln.categories")}>
       <ul class="flex w-full flex-wrap gap-2 sm:gap-3">
         {categories.map((category) => (
           <li class="flex max-w-56 grow">

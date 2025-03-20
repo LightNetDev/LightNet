@@ -1,12 +1,11 @@
 ln.header.open-main-menu: Открыть главное меню
 ln.header.select-language: Выберите язык
 ln.home.title: Главная
-ln.category_one: Категория
-ln.category_other: Категории
-ln.language_one: Язык
-ln.language_other: Языки
-ln.type_one: Тип
-ln.type_other: Типы
+ln.category: Категория
+ln.categories: Категории
+ln.language: Язык
+ln.languages: Языки
+ln.type: Тип
 ln.external-link: Внешняя ссылка
 ln.search.title: Поиск
 ln.search.placeholder: Поиск по названию, автору, описанию...
