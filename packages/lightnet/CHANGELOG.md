@@ -1,5 +1,11 @@
 # lightnet
 
+## 2.17.3
+
+### Patch Changes
+
+- [#226](https://github.com/LightNetDev/LightNet/pull/226) [`8983023`](https://github.com/LightNetDev/LightNet/commit/898302310969a3cd255441241c112f4a8f360789) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies.
+
 ## 2.17.2
 
 ### Patch Changes
