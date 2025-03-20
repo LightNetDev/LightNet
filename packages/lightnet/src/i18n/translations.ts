@@ -3,6 +3,8 @@ import YAML from "yaml"
 const builtInTranslations = {
   en: () => import("./translations/en.yml?raw"),
   de: () => import("./translations/de.yml?raw"),
+  uk: () => import("./translations/uk.yml?raw"),
+  ru: () => import("./translations/ru.yml?raw"),
 } as const
 
 type BuiltInLanguage = keyof typeof builtInTranslations
