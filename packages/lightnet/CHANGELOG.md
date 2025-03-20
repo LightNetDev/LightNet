@@ -1,5 +1,11 @@
 # lightnet
 
+## 2.18.1
+
+### Patch Changes
+
+- [#230](https://github.com/LightNetDev/LightNet/pull/230) [`afab19a`](https://github.com/LightNetDev/LightNet/commit/afab19a4aa365958289c99805bdf94c6bca978d3) Thanks [@smn-cds](https://github.com/smn-cds)! - Register uk and ru translations.
+
 ## 2.18.0
 
 ### Minor Changes
