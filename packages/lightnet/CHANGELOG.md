@@ -1,5 +1,11 @@
 # lightnet
 
+## 2.18.2
+
+### Patch Changes
+
+- [#232](https://github.com/LightNetDev/LightNet/pull/232) [`1ab5c4e`](https://github.com/LightNetDev/LightNet/commit/1ab5c4ea5d081d05f99f9e668e05e8cfd23a890d) Thanks [@smn-cds](https://github.com/smn-cds)! - Simplify plural rules.
+
 ## 2.18.1
 
 ### Patch Changes
