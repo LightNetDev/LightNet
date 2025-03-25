@@ -4,9 +4,9 @@ import { resolveLanguage } from "../../../i18n/resolve-language"
 import { markdownToHtml } from "../../../utils/markdown"
 
 interface Props {
-  slug: string
+  mediaId: string
 }
-const item = await getMediaItem(Astro.props.slug)
+const item = await getMediaItem(Astro.props.mediaId)
 
 const { description, language } = item.data
 

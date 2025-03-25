@@ -14,12 +14,12 @@ import VideoDetails from "./VideoDetails.astro"
 export const getStaticPaths = (async () => {
   const mediaItems = await getMediaItems()
   return resolveLocales(config).flatMap((locale) =>
-    mediaItems.map(({ id: slug }) => ({ params: { slug, locale } })),
+    mediaItems.map(({ id: mediaId }) => ({ params: { mediaId, locale } })),
   )
 }) satisfies GetStaticPaths
 
-const { slug } = Astro.params
-const mediaItem = (await getMediaItem(Astro.params.slug)).data
+const { mediaId } = Astro.params
+const mediaItem = (await getMediaItem(Astro.params.mediaId)).data
 
 const {
   data: { detailsPage },
@@ -47,7 +47,11 @@ if (detailsPage?.layout === "custom") {
   title={mediaItem.title}
   description={markdownToText(mediaItem.description)}
 >
-  {layout === "default" && <DefaultDetails slug={slug} {...detailsPage} />}
-  {layout === "video" && <VideoDetails slug={slug} {...detailsPage} />}
-  {CustomDetails && <CustomDetails slug={slug} {...detailsPage} />}
+  {
+    layout === "default" && (
+      <DefaultDetails mediaId={mediaId} {...detailsPage} />
+    )
+  }
+  {layout === "video" && <VideoDetails mediaId={mediaId} {...detailsPage} />}
+  {CustomDetails && <CustomDetails mediaId={mediaId} {...detailsPage} />}
 </Page>

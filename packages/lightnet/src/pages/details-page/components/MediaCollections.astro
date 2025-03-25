@@ -3,11 +3,11 @@ import { getMediaItem } from "../../../content/get-media-items"
 import MediaCollection from "./MediaCollection.astro"
 
 interface Props {
-  slug: string
+  mediaId: string
 }
 
-const { slug } = Astro.props
-const item = await getMediaItem(slug)
+const { mediaId } = Astro.props
+const item = await getMediaItem(mediaId)
 
 const collections = item.data.collections?.map(
   ({ collection }) => collection.id,
@@ -16,6 +16,6 @@ const collections = item.data.collections?.map(
 
 {
   collections?.map((id) => (
-    <MediaCollection collectionId={id} disableItem={slug} />
+    <MediaCollection collectionId={id} disableItem={mediaId} />
   ))
 }

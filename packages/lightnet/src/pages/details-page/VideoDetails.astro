@@ -10,12 +10,12 @@ import Title from "./components/Title.astro"
 import VideoPlayer from "./components/VideoPlayer.astro"
 
 export type Props = {
-  slug: string
+  mediaId: string
 }
 
-const { slug } = Astro.props
+const { mediaId } = Astro.props
 
-const item = await getMediaItem(slug)
+const item = await getMediaItem(mediaId)
 ---
 
 <div class="mx-auto max-w-screen-md md:px-8">
@@ -32,12 +32,12 @@ const item = await getMediaItem(slug)
 <div
   class="mx-auto mt-12 flex max-w-screen-md flex-col items-start px-4 md:mt-14 md:px-8"
 >
-  <Title slug={slug} />
-  <Authors slug={slug} />
+  <Title mediaId={mediaId} />
+  <Authors mediaId={mediaId} />
   <ShareButton className="mt-8" />
 </div>
 
-<Description slug={slug} />
-<Content slug={slug} />
-<MediaCollections slug={slug} />
-<Details slug={slug} />
+<Description mediaId={mediaId} />
+<Content mediaId={mediaId} />
+<MediaCollections mediaId={mediaId} />
+<Details mediaId={mediaId} />

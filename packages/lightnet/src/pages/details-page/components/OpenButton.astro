@@ -4,11 +4,11 @@ import { getMediaItem } from "../../../content/get-media-items"
 import { createContentMetadata } from "../utils/create-content-metadata"
 
 interface Props {
-  slug: string
+  mediaId: string
   openActionLabel: string
 }
-const { slug, openActionLabel } = Astro.props
-const item = await getMediaItem(slug)
+const { mediaId, openActionLabel } = Astro.props
+const item = await getMediaItem(mediaId)
 const content = createContentMetadata(item.data.content[0])
 ---
 

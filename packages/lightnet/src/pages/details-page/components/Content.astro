@@ -7,10 +7,10 @@ import {
 } from "../utils/create-content-metadata"
 
 interface Props {
-  slug: string
+  mediaId: string
 }
 
-const item = await getMediaItem(Astro.props.slug)
+const item = await getMediaItem(Astro.props.mediaId)
 
 if (item.data.content.length < 2) {
   return

@@ -2,11 +2,11 @@
 import { getMediaItem } from "../../../content/get-media-items"
 
 interface Props {
-  slug: string
+  mediaId: string
   className?: string
 }
 
-const item = await getMediaItem(Astro.props.slug)
+const item = await getMediaItem(Astro.props.mediaId)
 ---
 
 <h1

@@ -8,15 +8,16 @@ import { detailsPagePath } from "../../../../utils/paths"
 import Label from "./Label.astro"
 
 interface Props {
-  slug: string
+  mediaId: string
 }
 
-const item = await getMediaItem(Astro.props.slug)
+const item = await getMediaItem(Astro.props.mediaId)
 
-const { slug } = Astro.props
+const { mediaId } = Astro.props
 const translations = (await getMediaItems())
   .filter(
-    (entry) => entry.data.commonId === item.data.commonId && entry.id !== slug,
+    (entry) =>
+      entry.data.commonId === item.data.commonId && entry.id !== mediaId,
   )
   .sort((a, b) => a.data.language.localeCompare(b.data.language))
 

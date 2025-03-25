@@ -3,15 +3,15 @@ import Categories from "./Categories.astro"
 import Languages from "./Languages.astro"
 
 interface Props {
-  slug: string
+  mediaId: string
 }
 
-const { slug } = Astro.props
+const { mediaId } = Astro.props
 ---
 
 <div class="mx-auto mt-20 max-w-screen-md px-4 sm:mt-24 md:px-8" id="details">
   <div class="flex flex-col gap-4">
-    <Languages slug={slug} />
-    <Categories slug={slug} />
+    <Languages mediaId={mediaId} />
+    <Categories mediaId={mediaId} />
   </div>
 </div>

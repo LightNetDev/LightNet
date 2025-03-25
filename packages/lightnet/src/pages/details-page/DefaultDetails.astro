@@ -10,13 +10,13 @@ import ShareButton from "./components/ShareButton.astro"
 import Title from "./components/Title.astro"
 
 export type Props = {
-  slug: string
+  mediaId: string
   coverStyle?: "default" | "book"
   openActionLabel?: string
 }
 
 const {
-  slug,
+  mediaId,
   coverStyle = "default",
   openActionLabel = "ln.details.open",
 } = Astro.props
@@ -25,20 +25,20 @@ const {
 <div
   class="mx-auto mt-10 flex max-w-screen-md flex-col items-center gap-8 px-4 sm:mt-20 sm:flex-row sm:items-start sm:gap-14 md:px-8"
 >
-  <Cover slug={slug} style={coverStyle} />
+  <Cover mediaId={mediaId} style={coverStyle} />
   <div class="flex flex-col items-center sm:items-start">
-    <Title className="text-center sm:text-start" slug={slug} />
-    <Authors className="text-center sm:text-start" slug={slug} />
+    <Title className="text-center sm:text-start" mediaId={mediaId} />
+    <Authors className="text-center sm:text-start" mediaId={mediaId} />
 
     <div
       class="mt-8 flex flex-col justify-center gap-4 sm:justify-start md:mt-14"
     >
-      <OpenButton slug={slug} openActionLabel={openActionLabel} />
+      <OpenButton mediaId={mediaId} openActionLabel={openActionLabel} />
       <ShareButton />
     </div>
   </div>
 </div>
-<Description slug={slug} />
-<Content slug={slug} />
-<MediaCollections slug={slug} />
-<Details slug={slug} />
+<Description mediaId={mediaId} />
+<Content mediaId={mediaId} />
+<MediaCollections mediaId={mediaId} />
+<Details mediaId={mediaId} />

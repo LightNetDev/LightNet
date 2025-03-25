@@ -5,10 +5,10 @@ import { searchPagePath } from "../../../../utils/paths"
 import Label from "./Label.astro"
 
 interface Props {
-  slug: string
+  mediaId: string
 }
 
-const item = await getMediaItem(Astro.props.slug)
+const item = await getMediaItem(Astro.props.mediaId)
 
 const categories = item.data.categories?.map(({ id }) => id)
 const { t } = Astro.locals.i18n

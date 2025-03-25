@@ -4,12 +4,12 @@ import { Image } from "astro:assets"
 import { getMediaItem } from "../../../content/get-media-items"
 
 interface Props {
-  slug: string
+  mediaId: string
   style?: "default" | "book"
 }
-const { slug, style = "default" } = Astro.props
+const { mediaId, style = "default" } = Astro.props
 
-const item = await getMediaItem(slug)
+const item = await getMediaItem(mediaId)
 const image = item.data.image
 const isPortraitImage = image.height > image.width
 ---
