@@ -6,6 +6,11 @@
 - What does this PR change? Give us a brief description.
 - Did you change something visual? A before/after screenshot can be helpful.
 
+#### License
+
+By submitting a pull request for this project,
+I agree to license my contribution under the MIT license to this project.
+
 <!--
 Here’s what will happen next:
 One or more of our maintainers will take a look and may ask you to make changes.
