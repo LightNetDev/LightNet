@@ -1,9 +1,9 @@
 ---
+import VideoPlayer from "../../../components/VideoPlayer.astro"
+import { getMediaItem } from "../../../content/get-media-items"
+import Authors from "./main-details/Authors.astro"
 import ShareButton from "./main-details/ShareButton.astro"
 import Title from "./main-details/Title.astro"
-import Authors from "./main-details/Authors.astro"
-import { getMediaItem } from "../../../content/get-media-items"
-import VideoPlayer from "../../../components/VideoPlayer.astro"
 
 export type Props = {
   mediaId: string
