@@ -2,7 +2,7 @@
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
 
-import MediaItemList from "../../../components/MediaItemList.astro"
+import MediaList from "../../../components/MediaList.astro"
 import { getMediaItems } from "../../../content/get-media-items"
 import { queryMediaItems } from "../../../content/query-media-items"
 
@@ -35,5 +35,5 @@ const t = Astro.locals.i18n.t
   <h3 class="mb-2 text-lg font-bold text-gray-700">
     {t(collection.data.label)}
   </h3>
-  <MediaItemList items={items} />
+  <MediaList items={items} />
 </section>

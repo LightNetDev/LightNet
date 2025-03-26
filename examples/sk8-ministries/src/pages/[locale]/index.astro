@@ -7,7 +7,7 @@ export { getLocalePaths as getStaticPaths } from "lightnet/i18n"
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
 import {
-  GallerySection,
+  MediaGallerySection,
   HeroSection,
   HighlightSection,
   Page,
@@ -76,13 +76,13 @@ const t = Astro.locals.i18n.t
     titleSize="xl"
     subtitleSize="xl"
   />
+
   {
     /* 
     This section shows the latest books that have been added to the library.
      */
   }
-
-  <GallerySection
+  <MediaGallerySection
     title={t("x.home.our-latest-books")}
     items={latestBooks}
     layout="book"
@@ -109,7 +109,7 @@ const t = Astro.locals.i18n.t
     This section shows the learn skateboarding collection. It uses the collection name as the title.
      */
   }
-  <GallerySection
+  <MediaGallerySection
     title={learnSkateboarding.data.label}
     items={learnSkateboardingItems}
     layout="video"

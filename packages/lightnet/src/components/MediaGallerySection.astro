@@ -1,8 +1,8 @@
 ---
-import Gallery from "./Gallery.astro"
+import MediaGallery from "./MediaGallery.astro"
 import Section from "./Section.astro"
 
-type GalleryItem = {
+type MediaItem = {
   id: string
   data: {
     title: string
@@ -13,7 +13,7 @@ type GalleryItem = {
 
 interface Props {
   title?: string
-  items: GalleryItem[]
+  items: MediaItem[]
   layout: "book" | "video" | "portrait" | "landscape"
 }
 
@@ -21,5 +21,5 @@ const { title, items, layout } = Astro.props
 ---
 
 <Section title={title}>
-  <Gallery items={items} layout={layout} />
+  <MediaGallery items={items} layout={layout} />
 </Section>

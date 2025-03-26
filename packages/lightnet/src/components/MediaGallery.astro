@@ -6,7 +6,7 @@ import { getMediaTypes } from "../content/get-media-types"
 import { detailsPagePath } from "../utils/paths"
 import Icon from "./Icon"
 
-type GalleryItem = {
+type MediaItem = {
   id: string
   data: {
     title: string
@@ -25,7 +25,7 @@ const types = Object.fromEntries(
 )
 
 interface Props {
-  items: GalleryItem[]
+  items: MediaItem[]
   layout: "book" | "video" | "portrait" | "landscape"
 }
 
