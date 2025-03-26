@@ -1,0 +1,30 @@
+---
+import ShareButton from "./main-details/ShareButton.astro"
+import Title from "./main-details/Title.astro"
+import Authors from "./main-details/Authors.astro"
+import { getMediaItem } from "../../../content/get-media-items"
+import VideoPlayer from "../../../components/VideoPlayer.astro"
+
+export type Props = {
+  mediaId: string
+}
+
+const { mediaId } = Astro.props
+
+const item = await getMediaItem(mediaId)
+---
+
+<div class="mx-auto max-w-screen-md md:mt-8 md:px-8">
+  <VideoPlayer
+    url={item.data.content[0].url!}
+    title={item.data.title}
+    image={item.data.image}
+  />
+</div>
+<div
+  class="mx-auto mt-12 flex max-w-screen-md flex-col items-start px-4 md:mt-14 md:px-8"
+>
+  <Title mediaId={mediaId} />
+  <Authors mediaId={mediaId} />
+  <ShareButton className="mt-8" />
+</div>

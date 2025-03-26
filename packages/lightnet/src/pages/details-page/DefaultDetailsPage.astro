@@ -1,13 +1,11 @@
 ---
-import Authors from "./components/Authors.astro"
 import ContentSection from "./components/ContentSection.astro"
-import Cover from "./components/Cover.astro"
 import DescriptionSection from "./components/DescriptionSection.astro"
-import MoreDetailsSection from "./components/more-details/MoreDetailsSection.astro"
+import MoreDetailsSection from "./components/MoreDetailsSection.astro"
 import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
-import OpenButton from "./components/OpenButton.astro"
-import ShareButton from "./components/ShareButton.astro"
-import Title from "./components/Title.astro"
+import OpenButton from "./components/main-details/OpenButton.astro"
+import ShareButton from "./components/main-details/ShareButton.astro"
+import MainDetailsSection from "./components/MainDetailsSection.astro"
 
 export type Props = {
   mediaId: string
@@ -15,29 +13,13 @@ export type Props = {
   openActionLabel?: string
 }
 
-const {
-  mediaId,
-  coverStyle = "default",
-  openActionLabel = "ln.details.open",
-} = Astro.props
+const { mediaId, coverStyle, openActionLabel = "ln.details.open" } = Astro.props
 ---
 
-<div
-  class="mx-auto mt-10 flex max-w-screen-md flex-col items-center gap-8 px-4 sm:mt-20 sm:flex-row sm:items-start sm:gap-14 md:px-8"
->
-  <Cover mediaId={mediaId} style={coverStyle} />
-  <div class="flex flex-col items-center sm:items-start">
-    <Title className="text-center sm:text-start" mediaId={mediaId} />
-    <Authors className="text-center sm:text-start" mediaId={mediaId} />
-
-    <div
-      class="mt-8 flex flex-col justify-center gap-4 sm:justify-start md:mt-14"
-    >
-      <OpenButton mediaId={mediaId} openActionLabel={openActionLabel} />
-      <ShareButton />
-    </div>
-  </div>
-</div>
+<MainDetailsSection mediaId={mediaId} coverStyle={coverStyle}>
+  <OpenButton mediaId={mediaId} openActionLabel={openActionLabel} />
+  <ShareButton />
+</MainDetailsSection>
 <DescriptionSection mediaId={mediaId} />
 <ContentSection mediaId={mediaId} />
 <MediaCollectionsSection mediaId={mediaId} />
