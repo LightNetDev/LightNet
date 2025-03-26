@@ -6,13 +6,23 @@ interface Props {
   className?: string
 }
 
-const item = await getMediaItem(Astro.props.mediaId)
+const {
+  data: { title, language },
+} = await getMediaItem(Astro.props.mediaId)
+
+const titleSize = {
+  md: "text-3xl sm:text-4xl",
+  xl: "text-4xl sm:text-5xl",
+}
 ---
 
 <h1
-  class="text-4xl font-bold sm:text-5xl"
-  lang={item.data.language}
-  class:list={Astro.props.className}
+  class="font-bold"
+  lang={language}
+  class:list={[
+    titleSize[title.length > 20 ? "md" : "xl"],
+    Astro.props.className,
+  ]}
 >
-  {item.data.title}
+  {title}
 </h1>
