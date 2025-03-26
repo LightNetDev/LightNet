@@ -7,4 +7,5 @@ Streamline handling of components. Make sure all components including a section 
 - Removes `Gallery` export
 - Adds `MediaGallerySection` that includes the section component
 - Renames `Hero` to `HeroSection`
-- Renames `CategoriesOverview` to `CategoriesSection`.
+- Renames `CategoriesOverview` to `CategoriesSection`
+- Renames `MediaItemList` to `MediaList`
