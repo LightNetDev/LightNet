@@ -1,3 +1,7 @@
+/**
+ * Details page components are still experimental.
+ * We might break the API without updating the major version.
+ */
 export { default as MediaCollectionsSection } from "../src/pages/details-page/components/MediaCollectionsSection.astro"
 export { default as DescriptionSection } from "../src/pages/details-page/components/DescriptionSection.astro"
 export { default as ContentSection } from "../src/pages/details-page/components/ContentSection.astro"

@@ -2,4 +2,4 @@
 "lightnet": minor
 ---
 
-Exports details page components
+Exports experimental details page components
