@@ -1,10 +1,10 @@
 ---
 import Authors from "./components/Authors.astro"
-import Content from "./components/Content.astro"
+import ContentSection from "./components/ContentSection.astro"
 import Cover from "./components/Cover.astro"
-import Description from "./components/Description.astro"
-import Details from "./components/details/Details.astro"
-import MediaCollections from "./components/MediaCollections.astro"
+import DescriptionSection from "./components/DescriptionSection.astro"
+import MoreDetailsSection from "./components/more-details/MoreDetailsSection.astro"
+import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
 import OpenButton from "./components/OpenButton.astro"
 import ShareButton from "./components/ShareButton.astro"
 import Title from "./components/Title.astro"
@@ -38,7 +38,7 @@ const {
     </div>
   </div>
 </div>
-<Description mediaId={mediaId} />
-<Content mediaId={mediaId} />
-<MediaCollections mediaId={mediaId} />
-<Details mediaId={mediaId} />
+<DescriptionSection mediaId={mediaId} />
+<ContentSection mediaId={mediaId} />
+<MediaCollectionsSection mediaId={mediaId} />
+<MoreDetailsSection mediaId={mediaId} />

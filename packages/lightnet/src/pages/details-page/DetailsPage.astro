@@ -8,8 +8,8 @@ import { getMediaType } from "../../content/get-media-types"
 import { resolveLocales } from "../../i18n/resolve-locales"
 import Page from "../../layouts/Page.astro"
 import { markdownToText } from "../../utils/markdown"
-import DefaultDetails from "./DefaultDetails.astro"
-import VideoDetails from "./VideoDetails.astro"
+import DefaultDetailsPage from "./DefaultDetailsPage.astro"
+import VideoDetailsPage from "./VideoDetailsPage.astro"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getMediaItems()
@@ -49,9 +49,13 @@ if (detailsPage?.layout === "custom") {
 >
   {
     layout === "default" && (
-      <DefaultDetails mediaId={mediaId} {...detailsPage} />
+      <DefaultDetailsPage mediaId={mediaId} {...detailsPage} />
     )
   }
-  {layout === "video" && <VideoDetails mediaId={mediaId} {...detailsPage} />}
+  {
+    layout === "video" && (
+      <VideoDetailsPage mediaId={mediaId} {...detailsPage} />
+    )
+  }
   {CustomDetails && <CustomDetails mediaId={mediaId} {...detailsPage} />}
 </Page>
