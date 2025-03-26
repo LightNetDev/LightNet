@@ -1,4 +1,4 @@
-export { default as CategoriesOverview } from "../src/components/CategoriesOverview.astro"
+export { default as CategoriesSection } from "../src/components/CategoriesSection.astro"
 export { default as GallerySection } from "../src/components/GallerySection.astro"
 export { default as HeroSection } from "../src/components/HeroSection.astro"
 export { default as HighlightSection } from "../src/components/HighlightSection.astro"
