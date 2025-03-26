@@ -52,27 +52,29 @@ async function parseUrl(urlToParse: string): Promise<{
 }
 ---
 
-{
-  host === "youtube" ? (
-    <iframe
-      class="h-full w-full"
-      src={`https://www.youtube-nocookie.com/embed/${id}`}
-      title={title}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen
-    />
-  ) : host === "vimeo" ? (
-    <iframe
-      class="h-full w-full"
-      src={`https://player.vimeo.com/video/${id}`}
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen
-    />
-  ) : host === "mp4" ? (
-    <video class="h-full w-full" controls preload="auto" poster={image}>
-      <source src={id} type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-  ) : null
-}
+<div class="aspect-video w-full overflow-hidden bg-black md:mt-8 md:rounded-lg">
+  {
+    host === "youtube" ? (
+      <iframe
+        class="h-full w-full"
+        src={`https://www.youtube-nocookie.com/embed/${id}`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      />
+    ) : host === "vimeo" ? (
+      <iframe
+        class="h-full w-full"
+        src={`https://player.vimeo.com/video/${id}`}
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+      />
+    ) : host === "mp4" ? (
+      <video class="h-full w-full" controls preload="auto" poster={image}>
+        <source src={id} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    ) : null
+  }
+</div>

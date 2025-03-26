@@ -7,7 +7,7 @@ import Details from "./components/details/Details.astro"
 import MediaCollections from "./components/MediaCollections.astro"
 import ShareButton from "./components/ShareButton.astro"
 import Title from "./components/Title.astro"
-import VideoPlayer from "./components/VideoPlayer.astro"
+import VideoPlayer from "../../components/VideoPlayer.astro"
 
 export type Props = {
   mediaId: string
@@ -18,16 +18,12 @@ const { mediaId } = Astro.props
 const item = await getMediaItem(mediaId)
 ---
 
-<div class="mx-auto max-w-screen-md md:px-8">
-  <div
-    class="aspect-video w-full overflow-hidden bg-black md:mt-8 md:rounded-lg"
-  >
-    <VideoPlayer
-      url={item.data.content[0].url!}
-      title={item.data.title}
-      image={item.data.image}
-    />
-  </div>
+<div class="mx-auto max-w-screen-md md:mt-8 md:px-8">
+  <VideoPlayer
+    url={item.data.content[0].url!}
+    title={item.data.title}
+    image={item.data.image}
+  />
 </div>
 <div
   class="mx-auto mt-12 flex max-w-screen-md flex-col items-start px-4 md:mt-14 md:px-8"
