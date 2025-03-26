@@ -1,0 +1,25 @@
+---
+import Gallery from "./Gallery.astro"
+import Section from "./Section.astro"
+
+type GalleryItem = {
+  id: string
+  data: {
+    title: string
+    type: { id: string }
+    image: ImageMetadata
+  }
+}
+
+interface Props {
+  title?: string
+  items: GalleryItem[]
+  layout: "book" | "video" | "portrait" | "landscape"
+}
+
+const { title, items, layout } = Astro.props
+---
+
+<Section title={title}>
+  <Gallery items={items} layout={layout} />
+</Section>

@@ -1,5 +1,5 @@
 export { default as CategoriesOverview } from "../src/components/CategoriesOverview.astro"
-export { default as Gallery } from "../src/components/Gallery.astro"
+export { default as GallerySection } from "../src/components/GallerySection.astro"
 export { default as Hero } from "../src/components/Hero.astro"
 export { default as HighlightSection } from "../src/components/HighlightSection.astro"
 export { default as Icon } from "../src/components/Icon"
