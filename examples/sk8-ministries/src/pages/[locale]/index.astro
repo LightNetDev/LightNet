@@ -8,7 +8,7 @@ import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
 import {
   GallerySection,
-  Hero,
+  HeroSection,
   HighlightSection,
   Page,
 } from "lightnet/components"
@@ -69,7 +69,7 @@ const t = Astro.locals.i18n.t
     The both text are translated to the current locale using the i18n.t function.
      */
   }
-  <Hero
+  <HeroSection
     image={heroImage}
     title={t("x.site.title")}
     subtitle={t("x.ministry.slogan")}

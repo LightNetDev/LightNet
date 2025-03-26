@@ -1,14 +1,16 @@
 ---
 export { getLocalePaths as getStaticPaths } from "lightnet/i18n"
 
-import { Gallery, Page, Section } from "lightnet/components"
+import { GallerySection, Page } from "lightnet/components"
 import { getMediaItems } from "lightnet/content"
 
-const allItems = await getMediaItems({})
+const allItems = await getMediaItems()
 ---
 
 <Page>
-  <Section title={Astro.locals.i18n.t("home.all-items")}>
-    <Gallery items={allItems} layout="book" />
-  </Section>
+  <GallerySection
+    title={Astro.locals.i18n.t("home.all-items")}
+    items={allItems}
+    layout="book"
+  />
 </Page>

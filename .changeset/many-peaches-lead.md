@@ -4,5 +4,6 @@
 
 Reorganize components
 
-- Removed `Gallery` export
-- Added `GallerySection` that includes the section component.
+- Removes `Gallery` export
+- Adds `GallerySection` that includes the section component
+- Renames `Hero` to `HeroSection`
