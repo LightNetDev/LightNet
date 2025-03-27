@@ -29,10 +29,10 @@ const t = Astro.locals.i18n.t
 ---
 
 <section class="mx-auto mt-16 max-w-screen-md px-4 md:mt-20 md:px-8">
-  <h2 class="mb-3 text-xs font-bold uppercase text-gray-600">
+  <h2 class="mb-1 text-xs font-bold uppercase text-gray-600 md:mb-2">
     {t("ln.details.part-of-collection")}
   </h2>
-  <h3 class="mb-2 text-lg font-bold text-gray-700">
+  <h3 class="text-lg font-bold text-gray-700">
     {t(collection.data.label)}
   </h3>
   <MediaList items={items} />

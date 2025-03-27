@@ -19,9 +19,7 @@ const { mediaId, coverStyle = "default" } = Astro.props
     <Title className="text-center sm:text-start" mediaId={mediaId} />
     <Authors className="text-center sm:text-start" mediaId={mediaId} />
 
-    <div
-      class="mt-8 flex flex-col justify-center gap-4 sm:justify-start md:mt-14"
-    >
+    <div class="mt-10 flex flex-col justify-center gap-4 sm:justify-start">
       <slot />
     </div>
   </div>
