@@ -183,7 +183,7 @@ export const configSchema = z.object({
    * Path to an Astro component to be added to the HTML head element of all pages.
    * For example use this if you need to add an analytics script to every page.
    *
-   * @example "./src/components/HeadElement.astro"
+   * @example "./src/components/MyHeadTag.astro"
    */
   headComponent: z.string().optional(),
   /**
