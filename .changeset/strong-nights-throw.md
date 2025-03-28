@@ -1,5 +1,5 @@
 ---
-"lightnet": patch
+"lightnet": major
 ---
 
 Improve Section

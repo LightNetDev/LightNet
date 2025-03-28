@@ -1,5 +1,5 @@
 ---
-"lightnet": patch
+"lightnet": major
 ---
 
 Streamline handling of components. Make sure all components including a section are suffixed with `Section`.

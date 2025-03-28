@@ -1,5 +1,5 @@
 ---
-"lightnet": patch
+"lightnet": major
 ---
 
-Rename `slug` to `mediaId`.
+Renames custom details pages prop `slug` to `mediaId`.
