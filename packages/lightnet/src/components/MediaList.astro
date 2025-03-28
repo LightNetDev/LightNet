@@ -1,16 +1,29 @@
 ---
 import { Image } from "astro:assets"
 
-import type { MediaItemEntry } from "../content/content-schema-internal"
 import { getMediaTypes } from "../content/get-media-types"
 import { detailsPagePath } from "../utils/paths"
 import Icon from "./Icon"
 
-interface Props {
-  items: (MediaItemEntry & { disabled?: boolean })[]
+type MediaItem = {
+  id: string
+  disabled?: boolean
+  data: {
+    title: string
+    language: string
+    authors: string[]
+    type: { id: string }
+    image: ImageMetadata
+  }
 }
 
-const { items } = Astro.props
+interface Props {
+  items: (MediaItem | undefined)[]
+}
+
+// We allow users to pass undefined values because
+// this is in the return type of getEntry
+const items = Astro.props.items.filter((item) => !!item)
 
 const { t, direction } = Astro.locals.i18n
 

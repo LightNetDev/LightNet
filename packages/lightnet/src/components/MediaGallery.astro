@@ -25,11 +25,14 @@ const types = Object.fromEntries(
 )
 
 interface Props {
-  items: MediaItem[]
+  items: (MediaItem | undefined)[]
   layout: "book" | "video" | "portrait" | "landscape"
 }
 
-const { items, layout } = Astro.props
+const { items: itemsInput, layout } = Astro.props
+// We allow users to pass undefined values because
+// this is in the return type of getEntry
+const items = itemsInput.filter((item) => !!item)
 ---
 
 {

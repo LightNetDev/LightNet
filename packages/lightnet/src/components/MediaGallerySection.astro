@@ -15,7 +15,7 @@ type MediaItem = {
 
 interface Props {
   title?: string
-  items: MediaItem[]
+  items: (MediaItem | undefined)[]
   layout: "book" | "video" | "portrait" | "landscape"
 }
 
