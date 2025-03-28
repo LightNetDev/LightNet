@@ -12,3 +12,8 @@ declare module "virtual:lightnet/project-context" {
   const context: import("./project-context").ProjectContext
   export default context
 }
+
+declare module "virtual:lightnet/components/CustomHeadComponent" {
+  const CustomHeadComponent: ((props: Record<string, any>) => any) | undefined
+  export default CustomHeadComponent
+}
