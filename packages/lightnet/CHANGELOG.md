@@ -1,5 +1,34 @@
 # lightnet
 
+## 3.0.0
+
+### Major Changes
+
+- [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Renames custom details pages prop `slug` to `mediaId`.
+
+- [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Streamline handling of components. Make sure all components including a section are suffixed with `Section`.
+
+  - Removes `Gallery` export
+  - Adds `MediaGallerySection` that includes the section component
+  - Renames `Hero` to `HeroSection`
+  - Renames `CategoriesOverview` to `CategoriesSection`
+  - Renames `MediaItemList` to `MediaList`
+
+- [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve Section
+
+  - rename maxWidth values: `full` => `wide`, `prose` => `narrow`
+  - add marginTop settings: `none`, `sm`, `lg`
+
+### Minor Changes
+
+- [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Exports experimental details page components
+
+- [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Accept undefined media items on Gallery and List component.
+
+- [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Add VideoPlayer component
+
+- [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Add support for custom head components.
+
 ## 2.18.2
 
 ### Patch Changes

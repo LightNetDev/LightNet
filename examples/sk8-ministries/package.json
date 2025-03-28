@@ -13,9 +13,9 @@
   "dependencies": {
     "@astrojs/react": "^4.2.1",
     "@astrojs/tailwind": "^6.0.0",
-    "@lightnet/decap-admin": "^2.4.2",
+    "@lightnet/decap-admin": "^3.0.0",
     "astro": "^5.5.3",
-    "lightnet": "^2.18.0",
+    "lightnet": "^3.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sharp": "^0.33.5",

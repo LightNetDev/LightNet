@@ -2,7 +2,7 @@
   "name": "@lightnet/decap-admin",
   "type": "module",
   "license": "MIT",
-  "version": "2.4.2",
+  "version": "3.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet",
@@ -22,7 +22,7 @@
   },
   "peerDependencies": {
     "astro": "^5.1.0",
-    "lightnet": "^2.0.22",
+    "lightnet": "^3.0.0",
     "sharp": "^0.33.4",
     "typescript": "^5.5.3"
   },
