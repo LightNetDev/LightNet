@@ -8,9 +8,9 @@ import { getMediaType } from "../../content/get-media-types"
 import { resolveLocales } from "../../i18n/resolve-locales"
 import Page from "../../layouts/Page.astro"
 import { markdownToText } from "../../utils/markdown"
+import AudioDetailsPage from "./AudioDetailsPage.astro"
 import DefaultDetailsPage from "./DefaultDetailsPage.astro"
 import VideoDetailsPage from "./VideoDetailsPage.astro"
-import AudioDetailsPage from "./AudioDetailsPage.astro"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getMediaItems()
