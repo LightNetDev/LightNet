@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.0.1
+
+### Patch Changes
+
+- [#236](https://github.com/LightNetDev/LightNet/pull/236) [`91776f2`](https://github.com/LightNetDev/LightNet/commit/91776f2998a5a98568b6d96815eeed44c03e0df5) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix details components export.
+
 ## 3.0.0
 
 ### Major Changes
