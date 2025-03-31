@@ -24,7 +24,7 @@
     "./content": "./exports/content.ts",
     "./utils": "./exports/utils.ts",
     "./components": "./exports/components.ts",
-    "./details-page": "./exports/details-page.ts",
+    "./experimental-details-page": "./exports/details-page.ts",
     "./i18n": "./exports/i18n.ts",
     "./locals": "./src/i18n/locals.ts",
     "./tailwind.config.ts": "./tailwind.config.ts",
