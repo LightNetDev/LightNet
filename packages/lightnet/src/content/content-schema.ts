@@ -223,6 +223,12 @@ export const mediaTypeSchema = z.object({
          */
         layout: z.literal("video"),
       }),
+      z.object({
+        /**
+         * Detail page for audio files.
+         */
+        layout: z.literal("audio"),
+      }),
     ])
     .optional(),
   /**

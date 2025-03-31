@@ -10,6 +10,7 @@ import Page from "../../layouts/Page.astro"
 import { markdownToText } from "../../utils/markdown"
 import DefaultDetailsPage from "./DefaultDetailsPage.astro"
 import VideoDetailsPage from "./VideoDetailsPage.astro"
+import AudioDetailsPage from "./AudioDetailsPage.astro"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getMediaItems()
@@ -54,6 +55,11 @@ if (detailsPage?.layout === "custom") {
   {
     layout === "video" && (
       <VideoDetailsPage mediaId={mediaId} {...detailsPage} />
+    )
+  }
+  {
+    layout === "audio" && (
+      <AudioDetailsPage mediaId={mediaId} {...detailsPage} />
     )
   }
   {CustomDetails && <CustomDetails mediaId={mediaId} {...detailsPage} />}

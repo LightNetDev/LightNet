@@ -22,5 +22,6 @@ x.category.teens: Teens
 x.category.theology: Theology
 x.type.book: Book
 x.type.video: Video
+x.type.audio: Audio
 x.details.action.read: Read
 x.details.action.watch: Watch

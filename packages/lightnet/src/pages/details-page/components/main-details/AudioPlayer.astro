@@ -1,0 +1,15 @@
+---
+type Props = {
+  src: string
+  className?: string
+}
+const { src, className } = Astro.props
+---
+
+<audio class="rounded-xl" class:list={[className]} src={src} controls></audio>
+
+<style>
+  audio::-webkit-media-controls-enclosure {
+    border-radius: 0;
+  }
+</style>
