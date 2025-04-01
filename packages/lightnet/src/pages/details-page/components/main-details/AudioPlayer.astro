@@ -1,9 +1,17 @@
 ---
+import { AstroError } from "astro/errors"
+
 type Props = {
   src: string
   className?: string
 }
 const { src, className } = Astro.props
+if (!src.endsWith(".mp3")) {
+  throw new AstroError(
+    `Unsupported audio file ${src}`,
+    "Mp3 is the only supported format.",
+  )
+}
 ---
 
 <audio class="rounded-xl" class:list={[className]} src={src} controls></audio>
