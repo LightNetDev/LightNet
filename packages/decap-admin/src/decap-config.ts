@@ -150,15 +150,17 @@ export const config = {
           hint: "Upload your files or paste URLs. First item in the list is the main content.",
           min: 1,
           // max is required for min to work :( https://github.com/decaporg/decap-cms/issues/4733
-          max: 10,
+          max: 50,
           summary: "{{fields.url}}",
           fields: [
             {
               name: "url",
               label: "Url",
               widget: "file",
-              hint: "Maximum file size is 15 MB.",
-              media_library: { config: { max_file_size: 15000000 } },
+              hint: `Maximum file size is ${userConfig.maxFileSize} MB.`,
+              media_library: {
+                config: { max_file_size: userConfig.maxFileSize * 1000000 },
+              },
             },
           ],
         },

@@ -37,6 +37,12 @@ const userConfigSchema = z.object({
    */
   imagesFolder: z.string().default("images"),
   /**
+   * Maximum upload file size in megabytes.
+   *
+   * Default is 25 (this aligns with Cloudflare's max file size).
+   */
+  maxFileSize: z.number().default(25),
+  /**
    * Content languages and site languages.
    */
   languages: z
