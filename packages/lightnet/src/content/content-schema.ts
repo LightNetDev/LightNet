@@ -134,6 +134,7 @@ export const mediaItemSchema = z.object({
          * - links to youtube videos
          * - links to vimeo videos
          * - links to .mp4 video files
+         * - links to .mp3 audio files
          * - links to external websites
          * - links to pdfs (might be hosted inside the public/files/ folder)
          * - links to epubs (might be hosted inside the public/files/ folder)
@@ -226,6 +227,8 @@ export const mediaTypeSchema = z.object({
       z.object({
         /**
          * Detail page for audio files.
+         *
+         * This only supports mp3 files.
          */
         layout: z.literal("audio"),
       }),
