@@ -1,5 +1,15 @@
 # lightnet
 
+## 3.1.0
+
+### Minor Changes
+
+- [#238](https://github.com/LightNetDev/LightNet/pull/238) [`3f1cdbc`](https://github.com/LightNetDev/LightNet/commit/3f1cdbcbf83d20bec83a4c6d3bf1b97ec76e72ee) Thanks [@smn-cds](https://github.com/smn-cds)! - Add Audio details page.
+
+### Patch Changes
+
+- [#238](https://github.com/LightNetDev/LightNet/pull/238) [`3f1cdbc`](https://github.com/LightNetDev/LightNet/commit/3f1cdbcbf83d20bec83a4c6d3bf1b97ec76e72ee) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies.
+
 ## 3.0.1
 
 ### Patch Changes

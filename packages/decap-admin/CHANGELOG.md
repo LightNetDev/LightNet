@@ -1,5 +1,15 @@
 # @lightnet/decap-admin
 
+## 3.1.0
+
+### Minor Changes
+
+- [#238](https://github.com/LightNetDev/LightNet/pull/238) [`3f1cdbc`](https://github.com/LightNetDev/LightNet/commit/3f1cdbcbf83d20bec83a4c6d3bf1b97ec76e72ee) Thanks [@smn-cds](https://github.com/smn-cds)! - Support changing the max file size. Set default to 25 MB.
+
+### Patch Changes
+
+- [#238](https://github.com/LightNetDev/LightNet/pull/238) [`3f1cdbc`](https://github.com/LightNetDev/LightNet/commit/3f1cdbcbf83d20bec83a4c6d3bf1b97ec76e72ee) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies.
+
 ## 3.0.0
 
 ### Patch Changes
