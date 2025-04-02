@@ -6,7 +6,7 @@ LightNet is built as an integration for the [Astro](https://astro.build) framewo
 
 ## Documentation
 
-[Read the LightNet docs](https://lightnet-docs.pages.dev) to learn how to use LightNet.
+[Read the LightNet docs](https://docs.lightnet.community) to learn how to use LightNet.
 
 ## Example site
 

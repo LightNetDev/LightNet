@@ -4,7 +4,7 @@ Administration UI for LightNet sites. This is built as an [Astro Integration](ht
 
 ## Documentation
 
-[Read the LightNet Administration UI docs](https://lightnet-docs.pages.dev/content/administration-ui/) on how to use this.
+[Read the LightNet Administration UI docs](https://docs.lightnet.community/content/administration-ui/) on how to use this.
 
 ## License
 
