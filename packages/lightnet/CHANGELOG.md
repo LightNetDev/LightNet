@@ -1,5 +1,14 @@
 # lightnet
 
+## 3.1.1
+
+### Patch Changes
+
+- [#243](https://github.com/LightNetDev/LightNet/pull/243) [`735e984`](https://github.com/LightNetDev/LightNet/commit/735e984ee00e67bc0d326e4e67efd45cf10b73e0) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix open button label for websites
+
+  Before website links e.g. https://wikipedia.org showed a "Download" button on the details page.
+  With this fix they show a "Open" button.
+
 ## 3.1.0
 
 ### Minor Changes
