@@ -180,12 +180,18 @@ export const configSchema = z.object({
    */
   internalDomains: z.array(z.string()).default([]),
   /**
-   * Path to an Astro component to be added to the HTML head element of all pages.
+   * Path to an Astro component to be added into the HTML head element of all pages.
    * For example use this if you need to add an analytics script to every page.
    *
    * @example "./src/components/MyHeadTag.astro"
    */
   headComponent: z.string().optional(),
+  /**
+   * Path to an Astro component to be added as a footer to all pages.
+   *
+   * @example "./src/components/MyFooter.astro"
+   */
+  footerComponent: z.string().optional(),
   /**
    * Configure search page behavior
    */

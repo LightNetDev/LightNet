@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions"
-import CustomHeadComponent from "virtual:lightnet/components/CustomHeadComponent"
+import CustomHead from "virtual:lightnet/components/CustomHead"
+import CustomFooter from "virtual:lightnet/components/CustomFooter"
 import config from "virtual:lightnet/config"
 
 import { resolveLanguage } from "../i18n/resolve-language"
@@ -26,7 +27,7 @@ const language = resolveLanguage(currentLocale)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {CustomHeadComponent && <CustomHeadComponent />}
+    {CustomHead && <CustomHead />}
     <title>{title ? `${title} | ${configTitle}` : configTitle}</title>
     {description && <meta name="description" content={description} />}
     {config.manifest && <link rel="manifest" href={config.manifest} />}
@@ -34,7 +35,7 @@ const language = resolveLanguage(currentLocale)
     <Favicon />
     <ClientRouter />
   </head>
-  <body class="overflow-y-scroll bg-gray-50 text-gray-900">
+  <body class="min-h-screen overflow-y-scroll bg-gray-50 text-gray-900">
     <header
       class="fixed top-0 z-50 h-14 w-full bg-white shadow-lg sm:h-20"
       transition:animate="none"
@@ -46,9 +47,10 @@ const language = resolveLanguage(currentLocale)
         <PageNavigation />
       </div>
     </header>
-    <main class="mx-auto min-h-screen pb-8 pt-14 sm:py-20">
+    <main class="mx-auto pb-8 pt-14 sm:py-20">
       <slot />
     </main>
+    {CustomFooter && <CustomFooter />}
     <PreloadReact client:idle />
   </body>
 </html>

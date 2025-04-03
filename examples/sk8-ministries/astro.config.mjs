@@ -95,6 +95,7 @@ export default defineConfig({
           label: "LightNet", // Fixed string; not translatable
         },
       ],
+      footerComponent: "./src/components/Footer.astro",
 
       /**
        * Configuration for the search page.

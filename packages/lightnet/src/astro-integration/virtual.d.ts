@@ -13,7 +13,12 @@ declare module "virtual:lightnet/project-context" {
   export default context
 }
 
-declare module "virtual:lightnet/components/CustomHeadComponent" {
-  const CustomHeadComponent: ((props: Record<string, any>) => any) | undefined
-  export default CustomHeadComponent
+declare module "virtual:lightnet/components/CustomHead" {
+  const CustomHead: ((props: Record<string, any>) => any) | undefined
+  export default CustomHead
+}
+
+declare module "virtual:lightnet/components/CustomFooter" {
+  const CustomFooter: ((props: Record<string, any>) => any) | undefined
+  export default CustomFooter
 }

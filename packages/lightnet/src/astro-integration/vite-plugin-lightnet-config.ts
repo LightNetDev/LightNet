@@ -8,13 +8,15 @@ import { type LightnetConfig } from "./config"
 const CONFIG = "virtual:lightnet/config"
 const LOGO = "virtual:lightnet/logo"
 const PROJECT_CONTEXT = "virtual:lightnet/project-context"
-const CUSTOM_HEAD_COMPONENT = "virtual:lightnet/components/CustomHeadComponent"
+const CUSTOM_HEAD = "virtual:lightnet/components/CustomHead"
+const CUSTOM_FOOTER = "virtual:lightnet/components/CustomFooter"
 
 const VIRTUAL_MODULES = [
   CONFIG,
   LOGO,
   PROJECT_CONTEXT,
-  CUSTOM_HEAD_COMPONENT,
+  CUSTOM_HEAD,
+  CUSTOM_FOOTER,
 ] as const
 
 export function vitePluginLightnetConfig(
@@ -52,9 +54,13 @@ export function vitePluginLightnetConfig(
             : "export default undefined;"
         case PROJECT_CONTEXT:
           return `export default ${JSON.stringify({ root, srcDir, site })}`
-        case CUSTOM_HEAD_COMPONENT:
+        case CUSTOM_HEAD:
           return config.headComponent
             ? `export { default } from ${resolveFilePath(config.headComponent)};`
+            : "export default undefined;"
+        case CUSTOM_FOOTER:
+          return config.footerComponent
+            ? `export { default } from ${resolveFilePath(config.footerComponent)};`
             : "export default undefined;"
       }
     },
