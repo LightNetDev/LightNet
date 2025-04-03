@@ -26,6 +26,17 @@ test("Should create complete content metadata", () => {
     },
   },
   {
+    url: "https://wikipedia.org",
+    expected: {
+      canBeOpened: true,
+      target: "_blank",
+      label: "wikipedia.org",
+      isExternal: true,
+      extension: "",
+      type: "link",
+    },
+  },
+  {
     url: "https://some.host/some.pDf",
     expected: {
       canBeOpened: true,

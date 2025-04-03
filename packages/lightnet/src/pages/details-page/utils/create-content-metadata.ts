@@ -49,17 +49,18 @@ export function createContentMetadata({
   url: string
   label?: string
 }) {
-  const lastUrlSegment = url.split("/").slice(-1)[0]
-  const hasExtension = lastUrlSegment.includes(".")
+  const isExternal = isExternalUrl(url)
+  const path = isExternal ? new URL(url).pathname : url
+
+  const lastPathSegment = path.split("/").slice(-1)[0]
+  const hasExtension = lastPathSegment.includes(".")
   const extension = hasExtension
-    ? lastUrlSegment.split(".").slice(-1)[0].toLowerCase()
+    ? lastPathSegment.split(".").slice(-1)[0].toLowerCase()
     : ""
 
-  const isExternal = isExternalUrl(url)
-
-  const linkName = isExternal ? new URL(url).hostname : lastUrlSegment
+  const linkName = isExternal ? new URL(url).hostname : lastPathSegment
   const fileName = hasExtension
-    ? lastUrlSegment.slice(0, -(extension.length + 1))
+    ? lastPathSegment.slice(0, -(extension.length + 1))
     : undefined
   const label = customLabel ?? fileName ?? linkName
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
