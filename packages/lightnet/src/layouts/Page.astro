@@ -35,7 +35,9 @@ const language = resolveLanguage(currentLocale)
     <Favicon />
     <ClientRouter />
   </head>
-  <body class="min-h-screen overflow-y-scroll bg-gray-50 text-gray-900">
+  <body
+    class="flex min-h-screen flex-col overflow-y-scroll bg-gray-50 text-gray-900"
+  >
     <header
       class="fixed top-0 z-50 h-14 w-full bg-white shadow-lg sm:h-20"
       transition:animate="none"
@@ -47,7 +49,7 @@ const language = resolveLanguage(currentLocale)
         <PageNavigation />
       </div>
     </header>
-    <main class="mx-auto pb-8 pt-14 sm:py-20">
+    <main class="grow pb-8 pt-14 sm:py-20">
       <slot />
     </main>
     {CustomFooter && <CustomFooter />}
