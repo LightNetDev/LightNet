@@ -49,7 +49,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.16",
-    "@types/react": "^19.0.12",
+    "@types/react": "^19.1.0",
     "daisyui": "^4.12.24",
     "fuse.js": "^7.1.0",
     "i18next": "^24.2.3",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
-    "@types/node": "^22.13.15",
+    "@types/node": "^22.14.0",
     "vitest": "^3.1.1"
   }
 }
