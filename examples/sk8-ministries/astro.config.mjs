@@ -44,7 +44,7 @@ export default defineConfig({
        * Path to the logo displayed in the header, located in ./src/assets.
        * Supported formats: svg, png, jpg, webp. Your logo will be optimized for performance.
        */
-      logo: { src: "./src/assets/logo.png", replacesTitle: true },
+      logo: { src: "./src/assets/logo.png" },
 
       /**
        * Language settings for UI and content.
