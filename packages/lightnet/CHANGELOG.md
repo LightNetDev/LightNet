@@ -1,5 +1,32 @@
 # lightnet
 
+## 3.3.0
+
+### Minor Changes
+
+- [#250](https://github.com/LightNetDev/LightNet/pull/250) [`bc728aa`](https://github.com/LightNetDev/LightNet/commit/bc728aae93cdba4383167488536e5c6ab3654523) Thanks [@smn-cds](https://github.com/smn-cds)! - Introduce DetailsPage wrapper component
+
+  ‼️ BREAKING CHANGE on experimental custom details page API.
+
+  With this change all custom details pages need to be wrapped by
+  a `DetailsPage` component. This component is exported by `@lightnet/experimental-details-page`.
+  Previously custom details pages were automatically wrapped by LightNet.
+
+  This is how to create a custom details page:
+
+  ```astro
+  ---
+  import { DetailsPage } from "@lightNet/experimental-details-page"
+  type Props = {
+    mediaId
+  }
+  ---
+
+  <DetailsPage mediaId={Astro.props.mediaId}>
+    {/* Your custom details page components go here */}
+  </DetailsPage>
+  ```
+
 ## 3.2.0
 
 ### Minor Changes
