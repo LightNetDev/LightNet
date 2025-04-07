@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.4.0
+
+### Minor Changes
+
+- [#252](https://github.com/LightNetDev/LightNet/pull/252) [`9573e88`](https://github.com/LightNetDev/LightNet/commit/9573e88515f66ade87cb187b59abba498527c693) Thanks [@smn-cds](https://github.com/smn-cds)! - Add config logo option `replacesTitle`. This will hide the title from the header bar.
+
 ## 3.3.0
 
 ### Minor Changes
