@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.1.2
+
+### Patch Changes
+
+- [#247](https://github.com/LightNetDev/LightNet/pull/247) [`6f926f7`](https://github.com/LightNetDev/LightNet/commit/6f926f7c51753907154c70ad6bcb335813f8829f) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix invalid i18n config passed to Astro.
+
 ## 3.1.1
 
 ### Patch Changes
