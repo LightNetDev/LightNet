@@ -187,7 +187,7 @@ export const configSchema = z.object({
    */
   headComponent: z.string().optional(),
   /**
-   * Path to an Astro component to be added as a footer to all pages.
+   * Path to an Astro component to be added at the bottom of all pages.
    *
    * @example "./src/components/MyFooter.astro"
    */
