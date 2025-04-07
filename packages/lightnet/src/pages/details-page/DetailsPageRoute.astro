@@ -6,8 +6,6 @@ import config from "virtual:lightnet/config"
 import { getMediaItem, getMediaItems } from "../../content/get-media-items"
 import { getMediaType } from "../../content/get-media-types"
 import { resolveLocales } from "../../i18n/resolve-locales"
-import Page from "../../layouts/Page.astro"
-import { markdownToText } from "../../utils/markdown"
 import AudioDetailsPage from "./AudioDetailsPage.astro"
 import DefaultDetailsPage from "./DefaultDetailsPage.astro"
 import VideoDetailsPage from "./VideoDetailsPage.astro"
@@ -43,24 +41,11 @@ if (detailsPage?.layout === "custom") {
 }
 ---
 
-<Page
-  title={mediaItem.title}
-  description={markdownToText(mediaItem.description)}
->
-  {
-    layout === "default" && (
-      <DefaultDetailsPage mediaId={mediaId} {...detailsPage} />
-    )
-  }
-  {
-    layout === "video" && (
-      <VideoDetailsPage mediaId={mediaId} {...detailsPage} />
-    )
-  }
-  {
-    layout === "audio" && (
-      <AudioDetailsPage mediaId={mediaId} {...detailsPage} />
-    )
-  }
-  {CustomDetails && <CustomDetails mediaId={mediaId} {...detailsPage} />}
-</Page>
+{
+  layout === "default" && (
+    <DefaultDetailsPage mediaId={mediaId} {...detailsPage} />
+  )
+}
+{layout === "video" && <VideoDetailsPage mediaId={mediaId} {...detailsPage} />}
+{layout === "audio" && <AudioDetailsPage mediaId={mediaId} {...detailsPage} />}
+{CustomDetails && <CustomDetails mediaId={mediaId} {...detailsPage} />}

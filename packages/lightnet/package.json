@@ -29,10 +29,10 @@
     "./locals": "./src/i18n/locals.ts",
     "./tailwind.config.ts": "./tailwind.config.ts",
     "./layouts/MarkdownPage.astro": "./src/layouts/MarkdownPage.astro",
-    "./pages/404.astro": "./src/pages/404.astro",
-    "./pages/RedirectToDefaultLocale.astro": "./src/pages/RedirectToDefaultLocale.astro",
-    "./pages/SearchPage.astro": "./src/pages/search-page/SearchPage.astro",
-    "./pages/DetailsPage.astro": "./src/pages/details-page/DetailsPage.astro",
+    "./pages/404Route.astro": "./src/pages/404Route.astro",
+    "./pages/RootRoute.astro": "./src/pages/RootRoute.astro",
+    "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
+    "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
     "./pages/api/search.ts": "./src/pages/api/search.ts"
   },
   "peerDependencies": {

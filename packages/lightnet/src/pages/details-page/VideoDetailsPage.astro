@@ -1,6 +1,7 @@
 ---
 import ContentSection from "./components/ContentSection.astro"
 import DescriptionSection from "./components/DescriptionSection.astro"
+import DetailsPage from "./components/DetailsPage.astro"
 import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
 import MoreDetailsSection from "./components/MoreDetailsSection.astro"
 import VideoDetailsSection from "./components/VideoDetailsSection.astro"
@@ -12,8 +13,10 @@ export type Props = {
 const { mediaId } = Astro.props
 ---
 
-<VideoDetailsSection mediaId={mediaId} />
-<DescriptionSection mediaId={mediaId} />
-<ContentSection mediaId={mediaId} />
-<MediaCollectionsSection mediaId={mediaId} />
-<MoreDetailsSection mediaId={mediaId} />
+<DetailsPage mediaId={mediaId}>
+  <VideoDetailsSection mediaId={mediaId} />
+  <DescriptionSection mediaId={mediaId} />
+  <ContentSection mediaId={mediaId} />
+  <MediaCollectionsSection mediaId={mediaId} />
+  <MoreDetailsSection mediaId={mediaId} />
+</DetailsPage>

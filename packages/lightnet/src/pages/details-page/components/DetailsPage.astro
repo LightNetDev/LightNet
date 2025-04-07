@@ -1,0 +1,18 @@
+---
+import { getMediaItem } from "../../../content/get-media-items"
+import Page from "../../../layouts/Page.astro"
+import { markdownToText } from "../../../utils/markdown"
+
+type Props = {
+  mediaId: string
+}
+
+const mediaItem = (await getMediaItem(Astro.props.mediaId)).data
+---
+
+<Page
+  title={mediaItem.title}
+  description={markdownToText(mediaItem.description)}
+>
+  <slot />
+</Page>
