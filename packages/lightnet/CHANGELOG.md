@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.2.0
+
+### Minor Changes
+
+- [#246](https://github.com/LightNetDev/LightNet/pull/246) [`7c59151`](https://github.com/LightNetDev/LightNet/commit/7c59151a0d2eb698eff9891d0ba780ab29a6efe5) Thanks [@smn-cds](https://github.com/smn-cds)! - Add config option to set a footer component.
+
 ## 3.1.2
 
 ### Patch Changes
