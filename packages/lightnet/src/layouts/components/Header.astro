@@ -1,0 +1,14 @@
+---
+import PageNavigation from "./PageNavigation.astro"
+import PageTitle from "./PageTitle.astro"
+---
+
+<header
+  class="fixed top-0 z-50 h-14 w-full bg-white shadow-lg sm:h-20"
+  transition:animate="none"
+>
+  <div class="mx-auto flex h-full max-w-screen-xl justify-between px-4 md:px-8">
+    <PageTitle />
+    <PageNavigation />
+  </div>
+</header>

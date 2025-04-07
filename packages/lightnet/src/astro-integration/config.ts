@@ -153,7 +153,7 @@ export const configSchema = z.object({
        * Alt attribute to add for screen reader etc.
        * This can be a fixed string or a translation key.
        */
-      alt: z.string().default(""),
+      alt: z.string().optional(),
       /**
        * Size in px to use for the logo on the header bar.
        * The size will be applied to the shorter side of your logo image.
@@ -161,6 +161,11 @@ export const configSchema = z.object({
        * Default is 28 px.
        */
       size: z.number().default(28),
+      /**
+       * Do not show the site title next to the logo.
+       * Set this to `true` if your logo already contains the title.
+       */
+      replacesTitle: z.boolean().default(false),
     })
     .optional(),
   /**

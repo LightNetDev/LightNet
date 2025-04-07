@@ -14,8 +14,10 @@ function getWidth(logo: ImageMetadata) {
   return Math.floor(size * Math.max(1, logo.width / logo.height))
 }
 
-const logoAlt = config.logo?.alt ?? ""
-const t = Astro.locals.i18n.t
+const logoAlt =
+  config.logo?.alt ?? (config.logo?.replacesTitle ? config.title : "")
+
+const { t } = Astro.locals.i18n
 ---
 
 <a
@@ -40,5 +42,5 @@ const t = Astro.locals.i18n.t
           loading="eager"
         />
       ))
-  }{t(config.title)}</a
+  }{!config.logo?.replacesTitle && t(config.title)}</a
 >
