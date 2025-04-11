@@ -32,7 +32,7 @@ async function createSearchItem(mediaItem: MediaItemEntry) {
   } = await getImage({
     src: image,
     format: "webp",
-    width: 288,
+    width: 256,
   })
   return {
     title,
