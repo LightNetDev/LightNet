@@ -1,5 +1,16 @@
 # lightnet
 
+## 3.4.1
+
+### Patch Changes
+
+- [#254](https://github.com/LightNetDev/LightNet/pull/254) [`46c0f7c`](https://github.com/LightNetDev/LightNet/commit/46c0f7c693a46a7a2e06e72c4a333368aa8f7485) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve responsive image variants:
+
+  - Improve image quality on search result items
+  - Limit the size of the media list image
+  - Streamline details page cover image variants
+  - Streamline gallery image variants
+
 ## 3.4.0
 
 ### Minor Changes
