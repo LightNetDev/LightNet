@@ -49,16 +49,16 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.16",
-    "@types/react": "^19.1.0",
+    "@types/react": "^19.1.2",
     "daisyui": "^4.12.24",
     "fuse.js": "^7.1.0",
-    "i18next": "^24.2.3",
-    "marked": "^15.0.7",
+    "i18next": "^25.0.0",
+    "marked": "^15.0.8",
     "yaml": "^2.7.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
-    "@types/node": "^22.14.0",
+    "@types/node": "^22.14.1",
     "vitest": "^3.1.1"
   }
 }
