@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.4.2
+
+### Patch Changes
+
+- [#256](https://github.com/LightNetDev/LightNet/pull/256) [`3c005c1`](https://github.com/LightNetDev/LightNet/commit/3c005c10ed55061f00f7d9c74e03be879bd5bb85) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve error messages.
+
 ## 3.4.1
 
 ### Patch Changes
