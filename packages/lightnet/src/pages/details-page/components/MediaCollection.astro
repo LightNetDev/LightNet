@@ -14,7 +14,10 @@ const { collectionId, disableItem } = Astro.props
 
 const collection = await getEntry("media-collections", collectionId)
 if (!collection) {
-  throw new AstroError(`Unknown media collection id ${collection}.`)
+  throw new AstroError(
+    `Missing media-collection "${collectionId}".`,
+    `To fix the issue, add a media-collection at "src/content/media-collections/${collectionId}.json".`,
+  )
 }
 const items = (
   await queryMediaItems(getMediaItems(), {

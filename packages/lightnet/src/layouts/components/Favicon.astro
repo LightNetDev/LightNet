@@ -17,8 +17,8 @@ const favicons = config.favicon?.map((favicon) => {
   const type = faviconTypes[extname(favicon.href)]
   if (!type) {
     throw new AstroError(
-      `Unsupported favicon ${favicon.href}`,
-      "favicon must be a .ico, .gif, .jpg, .png, or .svg file",
+      `Unsupported favicon type "${extname(favicon.href)}"`,
+      "To fix the issue, set the favicon href to a path ending with .ico, .gif, .jpg, .png, or .svg.",
     )
   }
   return { ...favicon, type }

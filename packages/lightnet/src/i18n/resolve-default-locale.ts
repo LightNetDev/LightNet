@@ -11,8 +11,8 @@ export const resolveDefaultLocale = ({
   const defaultLanguage = languages.find((l) => l.isDefaultSiteLanguage)
   if (!defaultLanguage) {
     throw new AstroError(
-      "No default site language has been set",
-      "Make sure you have set one language to be the default language by setting the isDefaultSiteLanguage to `true`.",
+      "No default site language set",
+      "To fix the issue, set isDefaultSiteLanguage for one language in the LightNet configuration in your astro.config.mjs file.",
     )
   }
   return defaultLanguage.code

@@ -23,5 +23,6 @@ const prepareItem = async (item: unknown) => {
     mediaItemEntrySchema,
     item,
     (id) => `Invalid media item: ${id}`,
+    (id) => `Fix these issues inside "src/content/media/${id}.json":`,
   )
 }

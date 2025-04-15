@@ -23,7 +23,8 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         const config = verifySchema(
           configSchema,
           lightnetConfig,
-          "Invalid config passed to LightNet integration.",
+          "Invalid LightNet configuration",
+          "Fix these errors on the LightNet configuration inside astro.config.mjs:",
         )
 
         injectRoute({

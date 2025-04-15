@@ -78,7 +78,8 @@ export default function lightnetDecapAdmin(
           ...verifySchema(
             userConfigSchema,
             config,
-            "Invalid config passed to Decap Admin integration.",
+            "Invalid LightNet Administration UI configuration",
+            "Fix these errors on the decapAdmin configuration inside astro.config.mjs:",
           ),
           site: astroConfig.site ?? "localhost:4321",
         }

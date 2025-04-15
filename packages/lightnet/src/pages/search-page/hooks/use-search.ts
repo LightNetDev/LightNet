@@ -20,7 +20,9 @@ export function useSearch() {
       try {
         const response = await fetch("/api/search.json")
         if (!response.ok) {
-          throw new Error("Network response was not ok")
+          throw new Error(
+            "Was not able to load search results from /api/search.json.",
+          )
         }
         const { items }: SearchResponse = await response.json()
         fuse.current = new Fuse(items, {

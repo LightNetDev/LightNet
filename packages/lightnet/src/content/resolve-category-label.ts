@@ -12,8 +12,8 @@ export const resolveCategoryLabel = (
   const category = categories.find((c) => c.id === categoryId)
   if (!category) {
     throw new AstroError(
-      `Unknown category: ${categoryId}`,
-      "Make sure you add the category to the categories content collection.",
+      `Missing category "${categoryId}"`,
+      `To fix the issue, add a category at "src/content/categories/${categoryId}.json".`,
     )
   }
   return translate(category.data.label)

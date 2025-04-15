@@ -12,7 +12,10 @@ export const resolveLanguage = (bcp47: string) => {
   const language = languages[bcp47]
 
   if (!language) {
-    throw new AstroError(`There is no language definition for: ${bcp47}`)
+    throw new AstroError(
+      `Missing language code "${bcp47}"`,
+      `To fix the issue, add a language with the code "${bcp47}" to the LightNet configuration in your astro.config.mjs file.`,
+    )
   }
   return {
     ...language,

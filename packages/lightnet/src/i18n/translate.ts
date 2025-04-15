@@ -47,7 +47,7 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
     if (value.match(/^(?:ln|x)\../i)) {
       throw new AstroError(
         `Missing translation: '${key}' is undefined for language '${resolvedLocale}'.`,
-        `Add a translation for '${key}' to src/translations/${resolvedLocale}.yml`,
+        `To fix the issue, add a translation for '${key}' to src/translations/${resolvedLocale}.yml`,
       )
     }
     return value
