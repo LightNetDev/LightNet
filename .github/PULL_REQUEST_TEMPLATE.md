@@ -6,10 +6,13 @@
 - What does this PR change? Give us a brief description.
 - Did you change something visual? A before/after screenshot can be helpful.
 
-#### License
+#### Contributor License Agreement
 
-By submitting a pull request for this project,
-I agree to license my contribution under the MIT license to this project.
+By submitting this pull request, I agree to the terms of the LightNet Contributor License Agreement:
+
+- I am the original author of the contribution or have the right to submit it.
+- I license this contribution under the MIT License.
+- I understand that my contribution will become part of the LightNet project and may be redistributed under the same license.
 
 <!--
 Here’s what will happen next:
