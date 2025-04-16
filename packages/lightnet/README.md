@@ -1,8 +1,10 @@
 # LightNet
 
-Share the message of Jesus and strengthen believers worldwide. LightNet empowers you to create digital media libraries, making your content accessible on the web — including videos, audio, images, and books.
+Share the message of Jesus and strengthen believers worldwide.
 
-LightNet is built as an integration for the [Astro](https://astro.build) framework, enabling the creation of statically generated sites that can be hosted on any file server. These sites are fast, easily extendable, and fully support internationalization.
+LightNet empowers ministries to run their own digital media libraries. They can easily share content in the heart language of the communities they serve - including videos, audio, images, and documents.
+
+It is built as an integration for the [Astro framework](https://astro.build), enabling the creation of statically generated sites that can be hosted on any file server. These sites are fast, easily extendable, and fully support internationalization.
 
 ## Documentation
 

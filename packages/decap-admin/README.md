@@ -1,6 +1,6 @@
 # @lightnet/decap-cms
 
-Administration UI for LightNet sites. This is built as an [Astro Integration](https://docs.astro.build/en/guides/integrations-guide/) that uses [Decap CMS](https://decapcms.org/) to administrate LightNet´s content folders. It is currently in **beta**.
+**Experimental** Administration UI for LightNet sites. This is built as an [Astro Integration](https://docs.astro.build/en/guides/integrations-guide/) that uses [Decap CMS](https://decapcms.org/) to administrate LightNet´s content folders.
 
 ## Documentation
 
