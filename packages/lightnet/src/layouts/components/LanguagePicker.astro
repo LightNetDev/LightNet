@@ -27,7 +27,7 @@ function currentPathWithLocale(locale: string) {
 
 {
   translations.length > 1 && (
-    <Menu icon="mdi--translate" label="ln.header.select-language">
+    <Menu icon="mdi--web" label="ln.header.select-language">
       {translations.map(({ label, locale, active, href }) => (
         <MenuItem href={href} hreflang={locale} active={active}>
           {label}
