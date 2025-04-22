@@ -19,16 +19,16 @@ const content = createContentMetadata(item.data.content[0])
   hreflang={item.data.language}
 >
   {
-    content.canBeOpened
-      ? Astro.locals.i18n.t(openActionLabel)
-      : Astro.locals.i18n.t("ln.details.download")
-  }
-  {
     content.isExternal && (
       <Icon
         ariaLabel={Astro.locals.i18n.t("ln.external-link")}
         className={`mdi--external-link shrink-0`}
       />
     )
+  }
+  {
+    content.canBeOpened
+      ? Astro.locals.i18n.t(openActionLabel)
+      : Astro.locals.i18n.t("ln.details.download")
   }
 </a>
