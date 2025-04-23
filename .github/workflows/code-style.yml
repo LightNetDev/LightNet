@@ -1,5 +1,8 @@
 name: Code style ✨
 
+permissions:
+  contents: read
+
 on:
   merge_group:
   push:

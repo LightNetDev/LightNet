@@ -1,5 +1,8 @@
 name: i18n 🌏
 
+permissions:
+  contents: write
+
 on:
   pull_request:
     paths:
