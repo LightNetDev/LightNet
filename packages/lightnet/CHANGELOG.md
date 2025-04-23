@@ -1,5 +1,13 @@
 # lightnet
 
+## 3.4.3
+
+### Patch Changes
+
+- [#259](https://github.com/LightNetDev/LightNet/pull/259) [`7e61913`](https://github.com/LightNetDev/LightNet/commit/7e61913cf49863807c25cfdb379a878e47642b03) Thanks [@smn-cds](https://github.com/smn-cds)! - Change language selector icon from "scripts" to "web" icon.
+
+- [#259](https://github.com/LightNetDev/LightNet/pull/259) [`7e61913`](https://github.com/LightNetDev/LightNet/commit/7e61913cf49863807c25cfdb379a878e47642b03) Thanks [@smn-cds](https://github.com/smn-cds)! - Change icon of share button, make it consistent with open button.
+
 ## 3.4.2
 
 ### Patch Changes
