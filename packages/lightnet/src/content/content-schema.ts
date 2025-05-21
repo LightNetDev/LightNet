@@ -72,7 +72,7 @@ export const mediaItemSchema = z.object({
    *
    * @example ["George Miller", "Timothy Meier"]
    */
-  authors: z.array(z.string()).optional(),
+  authors: z.array(z.string()).nullish(),
   /**
    * Date this media item has been created on this lightnet instance.
    * Format is YYYY-MM-DD
@@ -85,7 +85,7 @@ export const mediaItemSchema = z.object({
    *
    * @example ["family"]
    */
-  categories: z.array(reference("categories")).optional(),
+  categories: z.array(reference("categories")).nullish(),
   /**
    * List of media collections this media item is included.
    * Collections can be used to group media items into series, playlists...
@@ -105,7 +105,7 @@ export const mediaItemSchema = z.object({
         index: z.number().optional(),
       }),
     )
-    .optional(),
+    .nullish(),
   /**
    * BCP-47 name of the language this media item is in.
    *
