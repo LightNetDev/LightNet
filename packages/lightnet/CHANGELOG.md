@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.4.4
+
+### Patch Changes
+
+- [#263](https://github.com/LightNetDev/LightNet/pull/263) [`a0d6dc5`](https://github.com/LightNetDev/LightNet/commit/a0d6dc5750284fc26fe3e85497589376b44c3cce) Thanks [@smn-cds](https://github.com/smn-cds)! - Fixes error when all categories are removed through the Admin UI.
+
 ## 3.4.3
 
 ### Patch Changes
