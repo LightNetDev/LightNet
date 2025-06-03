@@ -3,8 +3,7 @@ import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
 
 import MediaList from "../../../components/MediaList.astro"
-import { getMediaItems } from "../../../content/get-media-items"
-import { queryMediaItems } from "../../../content/query-media-items"
+import { getCollectionItems } from "../utils/get-collection-items"
 
 interface Props {
   collectionId: string
@@ -19,11 +18,10 @@ if (!collection) {
     `To fix the issue, add a media-collection at "src/content/media-collections/${collectionId}.json".`,
   )
 }
-const items = (
-  await queryMediaItems(getMediaItems(), {
-    where: { collection: collection.id },
-  })
-).map((item) => ({ ...item, disabled: item.id === disableItem }))
+const items = (await getCollectionItems(collection.id)).map((item) => ({
+  ...item,
+  disabled: item.id === disableItem,
+}))
 
 if (items.length < 2) {
   return
