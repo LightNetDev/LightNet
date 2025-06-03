@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.4.5
+
+### Patch Changes
+
+- [#266](https://github.com/LightNetDev/LightNet/pull/266) [`4aff54c`](https://github.com/LightNetDev/LightNet/commit/4aff54c7bdd9f9cef26006950cfe7222685fba6c) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve build performance of details pages.
+
 ## 3.4.4
 
 ### Patch Changes
