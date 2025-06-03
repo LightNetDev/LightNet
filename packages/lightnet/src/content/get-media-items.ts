@@ -14,6 +14,7 @@ export const getMediaItem = async (id: string) => {
 }
 
 export const getMediaItems = async () => {
+  console.log("get media items")
   const items: unknown[] = await getCollection("media")
   return Promise.all(items.map(prepareItem))
 }
