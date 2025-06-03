@@ -2,10 +2,9 @@ import { compareMediaCollectionItems } from "../../../content/compare-media-coll
 import type { MediaItemEntry } from "../../../content/content-schema-internal"
 import { getMediaItems } from "../../../content/get-media-items"
 
-
 const groupItemsByCollections = async () => {
   const items = await getMediaItems()
-  items.forEach(item => {
+  items.forEach((item) => {
     item.data.collections?.forEach(({ collection }) => {
       if (!itemsByCollections.has(collection.id)) {
         itemsByCollections.set(collection.id, [])
@@ -13,10 +12,9 @@ const groupItemsByCollections = async () => {
       itemsByCollections.get(collection.id)?.push(item)
     })
   })
-  itemsByCollections
-    .forEach((entries, collectionId) =>
-      entries.sort((a, b) => compareMediaCollectionItems(a, b, collectionId))
-    )
+  itemsByCollections.forEach((entries, collectionId) =>
+    entries.sort((a, b) => compareMediaCollectionItems(a, b, collectionId)),
+  )
 }
 
 let isInitialized = false

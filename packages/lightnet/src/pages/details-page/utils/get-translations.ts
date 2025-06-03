@@ -16,7 +16,7 @@ const groupItemsByCommonId = async () => {
 }
 
 let isInitialized = false
-const itemsByCommonId = new Map<string, { id: string, language: string }[]>()
+const itemsByCommonId = new Map<string, { id: string; language: string }[]>()
 
 export const getTranslations = async (mediaId: string) => {
   if (!isInitialized) {
