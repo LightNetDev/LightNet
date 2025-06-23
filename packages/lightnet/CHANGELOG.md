@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.4.6
+
+### Patch Changes
+
+- [#271](https://github.com/LightNetDev/LightNet/pull/271) [`1ad0515`](https://github.com/LightNetDev/LightNet/commit/1ad051587cdf68c34a919f414ad2b5c15ffd273e) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix markdown sanitation for search result descriptions.
+
 ## 3.4.5
 
 ### Patch Changes
