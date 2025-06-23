@@ -2,6 +2,27 @@ import { expect, test } from "vitest"
 
 import { markdownToText } from "../../src/utils/markdown"
 
+test("Should remove '\\' to force new lines", () => {
+  expect(markdownToText("a\\\nb\\ \nc")).toBe("a\nb \nc")
+})
+
+test("Should remove <br> to force new lines", () => {
+  expect(markdownToText("a <br> b<br>\nc")).toBe("a b \nc")
+})
+
+test("Should remove double white space", () => {
+  expect(markdownToText("a  b")).toBe("a b")
+})
+
+test("Should remove triple white space", () => {
+  expect(markdownToText("a   b")).toBe("a b")
+})
+
+test("Should remove escape character '\\'", () => {
+  // eslint-disable-next-line no-useless-escape
+  expect(markdownToText("a \\\* \\\# b")).toBe("a * # b")
+})
+
 test("Should remove headers", () => {
   expect(markdownToText("# H1\n## H2 words#")).toBe("H1\nH2 words#")
 })

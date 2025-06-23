@@ -6,12 +6,15 @@ import { marked } from "marked"
  * @param markdown string
  * @returns plain text
  */
+
 export function markdownToText(markdown?: string) {
   if (!markdown) {
     return markdown
   }
   return (
     markdown
+      // line breaks
+      .replaceAll(/<br>/g, " ")
       //headers
       .replaceAll(/^#+ ?/gm, "")
       // lists
@@ -19,11 +22,15 @@ export function markdownToText(markdown?: string) {
       // block quotes
       .replaceAll(/^>+ ?/gm, "")
       // bold and italics
-      .replaceAll(/[*_]/g, "")
+      .replaceAll(/(?<!\\)[*_]/g, "")
       // images
       .replaceAll(/!\[(.*?)\]\(.*?\)/g, (_, imgAlt) => imgAlt)
       // links
       .replaceAll(/\[(.*?)\]\(.*?\)/g, (_, linkLabel) => linkLabel)
+      // escape character '\'
+      .replaceAll(/\\/g, "")
+      // multi white spaces
+      .replaceAll(/  +/g, " ")
   )
 }
 
