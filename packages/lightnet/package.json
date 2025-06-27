@@ -49,16 +49,17 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.16",
-    "@types/react": "^19.1.6",
+    "@types/react": "^19.1.8",
     "daisyui": "^4.12.24",
     "fuse.js": "^7.1.0",
+    "@tanstack/react-virtual": "^3.13.11",
     "i18next": "^25.2.1",
     "marked": "^15.0.12",
     "yaml": "^2.8.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.29",
-    "vitest": "^3.1.4"
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^22.15.32",
+    "vitest": "^3.2.4"
   }
 }

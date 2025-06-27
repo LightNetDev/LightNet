@@ -16,7 +16,7 @@ env:
 
 jobs:
   preview:
-    if: ${{ github.repository_owner == 'LightNetDev' && github.event.label.name == 'pr preview' }}
+    if: ${{ github.repository_owner == 'LightNetDev'}}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -25,10 +25,10 @@ jobs:
       pull-requests: write
     name: Publish preview release
     steps:
-      - uses: actions/checkout@4
+      - uses: actions/checkout@v4
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@4
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -39,11 +39,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Remove Preview Label
-        uses: actions-ecosystem/action-remove-labels@1
-        with:
-          labels: "pr preview"
-
       - name: Publish packages
         run: |
-          pnpm dlx pkg-pr-new publish --pnpm --compact --no-template 'packages/lightnet'
+          pnpm dlx pkg-pr-new publish --pnpm --no-template 'packages/lightnet'

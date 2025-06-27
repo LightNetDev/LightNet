@@ -66,7 +66,6 @@ export type LightNetTranslationKey =
   | "ln.search.all-categories"
   | "ln.search.all-languages"
   | "ln.search.all-types"
-  | "ln.search.more-results"
   | "ln.search.no-results"
   | "ln.search.placeholder"
   | "ln.search.title"
