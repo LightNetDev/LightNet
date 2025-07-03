@@ -4,11 +4,9 @@ permissions:
   contents: write
 
 on:
-  pull_request:
-    paths:
-      - "packages/lightnet/src/i18n/translations/*.yml"
+  push:
     branches:
-      - "main"
+      - main
 
 jobs:
   update-translation-status:
