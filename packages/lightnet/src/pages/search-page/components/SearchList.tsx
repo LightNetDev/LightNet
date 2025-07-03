@@ -31,7 +31,7 @@ export default function SearchList({
   mediaItemsTotal,
 }: Props) {
   const listRef = useRef<HTMLDivElement | null>(null)
-  const [rowHeight, setRowHeight] = useState(208)
+  const [rowHeight, setRowHeight] = useState(256)
   const { results, isLoading } = useSearch({
     currentLocale,
     categories,
