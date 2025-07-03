@@ -1,0 +1,22 @@
+ln.header.open-main-menu: Avaa päävalikko
+ln.header.select-language: Valitse kieli
+ln.home.title: Etusivu
+ln.category: Kategoria
+ln.categories: Kategoriat
+ln.language: Kieli
+ln.languages: Kielet
+ln.type: Mediatyyppi
+ln.external-link: Ulkoinen linkki
+ln.search.title: Haku
+ln.search.placeholder: Hae mediaa...
+ln.search.all-languages: Kaikki kielet
+ln.search.all-types: Kaikki mediatyypit
+ln.search.all-categories: Kaikki kategoriat
+ln.search.no-results: Ei tuloksia
+ln.details.open: Avaa
+ln.details.share: Jaa
+ln.details.part-of-collection: Osa kokoelmaa
+ln.details.download: Lataa
+ln.share.url-copied-to-clipboard: Linkki kopioitu leikepöydälle
+ln.404.page-not-found: Sivua ei löytynyt
+ln.404.go-to-the-home-page: Palaa etusivulle
