@@ -2,6 +2,7 @@ name: i18n 🌏
 
 permissions:
   contents: write
+  pull-requests: write
 
 on:
   push:
@@ -35,8 +36,11 @@ jobs:
             echo "changes=false" >> $GITHUB_OUTPUT
           fi
       - if: steps.check_changes.outputs.changes == 'true'
-        name: Add changes
-        run: |
-          git add .
-          git commit -m "Update translation status report"
-          git push
+        name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          title: Update translation status report
+          body: This PR updates the translation status report.
+          commit-message: Update translation status report
+          branch: update-translation-status
+          delete-branch: true
