@@ -104,6 +104,7 @@ export default defineConfig({
          * Filters search results by the current locale when navigating to the search page.
          */
         filterByLocale: true,
+        hideHeaderSearchIcon: true,
       },
     }),
 

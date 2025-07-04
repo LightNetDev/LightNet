@@ -1,104 +1,58 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 
 import Icon from "../../../components/Icon"
 import { useDebounce } from "../hooks/use-debounce"
-import type { SearchQuery } from "../hooks/use-search"
-import type { MediaType, TranslatedLanguage } from "../types"
-import type { Translations } from "../utils/search-translations"
-import { useProvidedTranslations } from "../utils/use-provided-translations"
+import { useSearchQueryParam } from "../hooks/use-search-query-param"
+import type {
+  TranslationKey,
+  Translations,
+} from "../utils/search-filter-translations"
+import { CATEGORY, LANGUAGE, SEARCH, TYPE } from "../utils/search-query"
 import Select from "./Select"
 
-// URL search params
-const SEARCH = "search"
-const LANGUAGE = "language"
-const TYPE = "type"
-const CATEGORY = "category"
+type FilterValue = { id: string; name: string }
 
 interface Props {
-  contentLanguages: TranslatedLanguage[]
-  categories: Record<string, string>
-  mediaTypes: MediaType[]
-  locale?: string
+  languages: FilterValue[]
+  categories: FilterValue[]
+  mediaTypes: FilterValue[]
   translations: Translations
-  filterByLocale: boolean
-  updateQuery: (query: SearchQuery) => void
+  languageFilterEnabled: boolean
+  typesFilterEnabled: boolean
+  categoriesFilterEnabled: boolean
+  initialLanguage?: string
 }
 
 export default function SearchFilter({
   categories,
   mediaTypes,
-  updateQuery,
   translations,
-  filterByLocale,
-  locale,
-  contentLanguages,
+  languages,
+  languageFilterEnabled,
+  typesFilterEnabled,
+  categoriesFilterEnabled,
+  initialLanguage,
 }: Props) {
-  const languageFilterEnabled = contentLanguages.length > 1
-  const typesFilterEnabled = mediaTypes.length > 1
-  // Not every media item has a category. So it makes
-  // sense to have the filter when there is only one category.
-  const categoriesFilterEnabled = Object.keys(categories).length > 0
-
-  const getSearchParam = (name: string, defaultValue = "") => {
-    // be lazy to avoid parsing search params all the time
-    return () => {
-      const searchParams = new URLSearchParams(window.location.search)
-      return searchParams.get(name) ?? defaultValue
-    }
-  }
-
-  const [search, setSearch] = useState(getSearchParam(SEARCH))
-  const [language, setLanguage] = useState(() => {
-    let initialLanguageFilter = ""
-    const hasContentLanguage = contentLanguages.find(
-      ({ code }) => code === locale,
-    )
-    if (
-      filterByLocale &&
-      locale &&
-      hasContentLanguage &&
-      languageFilterEnabled
-    ) {
-      initialLanguageFilter = locale
-    }
-    return getSearchParam(LANGUAGE, initialLanguageFilter)()
-  })
-  const [type, setType] = useState(getSearchParam(TYPE))
-  const [category, setCategory] = useState(getSearchParam(CATEGORY))
+  const [search, setSearch] = useSearchQueryParam(SEARCH)
+  const [language, setLanguage] = useSearchQueryParam(LANGUAGE, initialLanguage)
+  const [type, setType] = useSearchQueryParam(TYPE)
+  const [category, setCategory] = useSearchQueryParam(CATEGORY)
 
   const searchInput = useRef<HTMLInputElement | null>(null)
 
-  const t = useProvidedTranslations(translations)
+  const t = (key: TranslationKey) => translations[key]
 
   const debouncedSetSearch = useDebounce((value: string) => {
     setSearch(value)
   }, 300)
 
-  useEffect(() => {
-    const url = new URL(window.location.href)
-    const updateSearchParam = (name: string, value: string) => {
-      // Only update when value before and after are different and both are non empty.
-      if (value === (url.searchParams.get(name) ?? "")) {
-        return
-      }
-      url.searchParams.set(name, value)
-    }
-
-    updateSearchParam(SEARCH, search)
-    updateSearchParam(LANGUAGE, language)
-    updateSearchParam(TYPE, type)
-    updateSearchParam(CATEGORY, category)
-    history.replaceState({ ...history.state }, "", url.toString())
-
-    updateQuery({ search, language, type, category })
-  }, [search, language, type, category])
-
   return (
     <>
-      <label className="dy-input dy-input-bordered mb-2 flex items-center gap-2">
+      <label className="dy-input dy-input-bordered mb-2 flex items-center gap-2 rounded-2xl">
         <input
           type="search"
-          className="grow"
+          className="grow placeholder-gray-500"
+          name="search"
           ref={searchInput}
           placeholder={t("ln.search.placeholder")}
           enterKeyHint="search"
@@ -115,11 +69,8 @@ export default function SearchFilter({
             initialValue={language}
             valueChange={(val) => setLanguage(val)}
             options={[
-              { id: "", label: t("ln.search.all-languages") },
-              ...contentLanguages.map(({ code: id, name: label }) => ({
-                id,
-                label,
-              })),
+              { id: "", name: t("ln.search.all-languages") },
+              ...languages,
             ]}
           />
         )}
@@ -130,7 +81,7 @@ export default function SearchFilter({
             initialValue={type}
             valueChange={(val) => setType(val)}
             options={[
-              { id: "", label: t("ln.search.all-types") },
+              { id: "", name: t("ln.search.all-types") },
               ...mediaTypes,
             ]}
           />
@@ -142,10 +93,8 @@ export default function SearchFilter({
             initialValue={category}
             valueChange={(val) => setCategory(val)}
             options={[
-              { id: "", label: t("ln.search.all-categories") },
-              ...Object.entries(categories)
-                .sort((a, b) => a[1].localeCompare(b[1], locale))
-                .map(([id, label]) => ({ id, label })),
+              { id: "", name: t("ln.search.all-categories") },
+              ...categories,
             ]}
           />
         )}

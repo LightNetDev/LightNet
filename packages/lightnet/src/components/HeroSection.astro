@@ -2,6 +2,8 @@
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
 
+import Icon from "./Icon"
+
 interface Props {
   image: ImageMetadata
   title?: string
@@ -11,6 +13,7 @@ interface Props {
   subtitleSize?: "sm" | "md" | "lg" | "xl"
   subtitleClass?: string
   className?: string
+  showSearch?: boolean
 }
 const {
   image,
@@ -21,6 +24,7 @@ const {
   titleClass,
   subtitleClass,
   className,
+  showSearch = false,
 } = Astro.props
 
 const titleSizes = {
@@ -36,26 +40,27 @@ const subtitleSizes = {
   lg: "text-lg sm:text-xl md:text-3xl",
   xl: "text-xl sm:text-2xl md:text-4xl",
 } as const
+
+const t = Astro.locals.i18n.t
 ---
 
 <div class="w-full">
   <div class="group relative">
     <Image
-      class="h-72 w-full object-cover object-center md:h-[20rem] lg:h-[24rem] xl:h-[30rem]"
+      class="h-[20rem] w-full object-cover object-center lg:h-[24rem] xl:h-[30rem]"
       src={image}
-      widths={[320, 768, 1280, 2560, 3000]}
-      sizes="100vw"
-      loading="eager"
+      layout="full-width"
+      priority={true}
       alt=""
     />
     <div
-      class="bg-gradient-radial absolute top-0 flex h-full w-full flex-col items-center justify-center gap-6 from-black/30 to-black/40 p-4 text-center text-gray-50"
+      class="bg-gradient-radial absolute top-0 flex h-full w-full flex-col items-center justify-center from-black/30 to-black/40 p-4 text-center text-gray-50"
       class:list={[className]}
     >
       {
         title && (
           <h1
-            class="max-w-screen-md font-bold transition-transform duration-1000 group-hover:scale-[102%]"
+            class="max-w-screen-md font-bold tracking-tight transition-transform duration-1000 group-hover:scale-[102%]"
             class:list={[titleSizes[titleSize], titleClass]}
           >
             {title}
@@ -65,7 +70,7 @@ const subtitleSizes = {
       {
         subtitle && (
           <p
-            class="max-w-screen-sm font-bold"
+            class="mt-1 max-w-screen-sm font-bold md:mt-2"
             class:list={[
               "sm:text-lg md:text-2xl",
               subtitleSizes[subtitleSize],
@@ -74,6 +79,29 @@ const subtitleSizes = {
           >
             {subtitle}
           </p>
+        )
+      }
+      {
+        showSearch && (
+          <form
+            action={`/${Astro.currentLocale}/media`}
+            method="get"
+            class="dy-join group mt-6 w-full max-w-sm rounded-2xl shadow-md outline-2 outline-offset-2 outline-gray-400 group-focus-within:outline md:mt-10 md:max-w-md"
+          >
+            <input
+              class="dy-input dy-join-item grow rounded-2xl bg-gray-100/95 text-gray-900 placeholder-gray-500 shadow-inner focus:outline-none"
+              enterkeyhint="search"
+              type="search"
+              name="search"
+              placeholder={t("ln.search.placeholder")}
+            />
+            <button
+              type="submit"
+              class="dy-btn dy-join-item rounded-2xl border-gray-100/95 bg-gray-800 text-gray-50 hover:bg-gray-950 hover:text-gray-300"
+            >
+              <Icon className="mdi--magnify" ariaLabel={t("ln.search.title")} />
+            </button>
+          </form>
         )
       }
       <slot />

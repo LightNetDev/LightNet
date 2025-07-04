@@ -1,21 +1,47 @@
 import Fuse from "fuse.js"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import type { SearchItem, SearchResponse } from "../../api/search-response"
+import { observeSearchQuery, type SearchQuery } from "../utils/search-query"
 
-export type SearchQuery = {
-  search?: string
-  language?: string
-  type?: string
-  category?: string
+declare global {
+  interface Window {
+    lnSearchState?: {
+      fuse: Fuse<SearchItem>
+      items: SearchItem[]
+      locale?: string
+    }
+  }
 }
 
-export function useSearch() {
+interface Context {
+  categories: Record<string, string>
+  mediaTypes: Record<string, { name: string }>
+  languages: Record<string, { name: string }>
+  currentLocale?: string
+}
+
+export function useSearch({
+  currentLocale,
+  categories,
+  mediaTypes,
+  languages,
+}: Context) {
   const fuse = useRef<Fuse<SearchItem>>(undefined)
   const [allItems, setAllItems] = useState<SearchItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [query, setQuery] = useState<SearchQuery>({})
+  const [query, setQuery] = useState<Partial<SearchQuery>>({})
   useEffect(() => {
+    const removeSearchQueryObserver = observeSearchQuery((newQuery) => {
+      const queryIsUpdated = (
+        ["search", "category", "language", "type"] as const
+      ).find((key) => newQuery[key] !== query[key])
+
+      if (!queryIsUpdated) {
+        return
+      }
+      setQuery(newQuery)
+    })
     const fetchData = async () => {
       try {
         const response = await fetch("/api/search.json")
@@ -25,11 +51,28 @@ export function useSearch() {
           )
         }
         const { items }: SearchResponse = await response.json()
-        fuse.current = new Fuse(items, {
+        const enrichedItems = items.map((item) => {
+          const translatedCategories =
+            item.categories &&
+            item.categories.map((categoryId) => categories[categoryId])
+          const translatedType = mediaTypes[item.type].name
+          const translatedLanguage = languages[item.language].name
+
+          return {
+            ...item,
+            translatedCategories,
+            translatedType,
+            translatedLanguage,
+          }
+        })
+        fuse.current = new Fuse(enrichedItems, {
           keys: [
             { name: "title", weight: 3 },
             "language",
             { name: "authors", weight: 2 },
+            { name: "translatedCategories", weight: 2 },
+            { name: "translatedType", weight: 2 },
+            { name: "translatedLanguage", weight: 2 },
             "description",
             "type",
             "categories",
@@ -40,58 +83,69 @@ export function useSearch() {
           ignoreLocation: true,
         })
         setAllItems(items)
+        window.lnSearchState = {
+          locale: currentLocale,
+          items,
+          fuse: fuse.current,
+        }
       } catch (error) {
         console.error(error)
       }
       setIsLoading(false)
     }
-    fetchData()
+    // try restore old search index only if
+    // locale is still the same because we add translated values to the
+    // search index
+    const { lnSearchState } = window
+    if (lnSearchState && lnSearchState.locale === currentLocale) {
+      fuse.current = lnSearchState.fuse
+      setAllItems(lnSearchState.items)
+      setIsLoading(false)
+    } else {
+      fetchData()
+    }
+    return removeSearchQueryObserver
   }, [])
 
-  const { language, type, category, search } = query
-  const fuseQuery = []
-  // order is relevant! query will stop evaluation
-  // when condition is not met.
-  if (language) {
-    fuseQuery.push({ language: `=${language}` })
-  }
-  if (type) {
-    fuseQuery.push({ type: `=${type}` })
-  }
-  if (category) {
-    fuseQuery.push({ categories: `=${category}` })
-  }
-  if (search) {
-    fuseQuery.push({
-      $or: [
-        { title: search },
-        { description: search },
-        { authors: search },
-        { id: search },
-      ],
-    })
-  }
-
-  const updateQuery = (newQuery: SearchQuery) => {
-    const queryIsUpdated = (
-      ["search", "category", "language", "type"] as const
-    ).find((key) => (newQuery[key] ? newQuery[key] !== query[key] : query[key]))
-
-    if (!queryIsUpdated) {
-      return
+  const results = useMemo(() => {
+    const { language, type, category, search } = query
+    const fuseQuery = []
+    // order is relevant! query will stop evaluation
+    // when condition is not met.
+    if (language) {
+      fuseQuery.push({ language: `=${language}` })
     }
-    setQuery(newQuery)
-  }
+    if (type) {
+      fuseQuery.push({ type: `=${type}` })
+    }
+    if (category) {
+      fuseQuery.push({ categories: `=${category}` })
+    }
+    if (search) {
+      fuseQuery.push({
+        $or: [
+          { title: search },
+          { translatedCategories: search },
+          { translatedType: search },
+          { translatedLanguage: search },
+          { description: search },
+          { authors: search },
+          { id: search },
+        ],
+      })
+    }
 
-  if (!fuse.current || !fuseQuery.length) {
-    return { results: allItems, updateQuery, isLoading }
-  }
+    if (!fuse.current || !fuseQuery.length) {
+      return allItems
+    }
+
+    return fuse.current
+      .search({ $and: fuseQuery })
+      .map((fuseItem) => fuseItem.item)
+  }, [query, allItems])
 
   return {
-    results: fuse.current
-      .search({ $and: fuseQuery })
-      .map((fuseItem) => fuseItem.item),
-    updateQuery,
+    results,
     isLoading,
   }
 }

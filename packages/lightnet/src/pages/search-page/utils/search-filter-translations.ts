@@ -1,4 +1,13 @@
-const translationKeys = ["ln.search.no-results"] as const
+const translationKeys = [
+  "ln.search.title",
+  "ln.language",
+  "ln.search.placeholder",
+  "ln.search.all-languages",
+  "ln.type",
+  "ln.search.all-types",
+  "ln.category",
+  "ln.search.all-categories",
+] as const
 
 export type TranslationKey = (typeof translationKeys)[number]
 
