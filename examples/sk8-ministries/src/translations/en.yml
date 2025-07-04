@@ -10,15 +10,23 @@ x.home.bbq.text: >
   Don’t miss this opportunity to connect, skate, and grow in faith together. 
   All skill levels welcome!
 x.home.bbq.sign-up-now: Sign Up Now
-x.category.biography: Biography
+x.category.bible-studies: Bible Studies
+x.category.bibles-and-bible-stories: Bibles & Bible Stories
+x.category.biographies-and-memoirs: Biographies & Memoirs
+x.category.children: Children
 x.category.christian-living: Christian Living
-x.category.comics: Comics
-x.category.family: Family
-x.category.kids: Kids
-x.category.life-support: Life Support
+x.category.comics-and-graphic-novels: Comics & Graphic Novels
+x.category.devotionals: Devotionals
+x.category.educational: Educational
+x.category.ethics-and-social-issues: Ethics & Social Issues
+x.category.family-and-relationships: Family & Relationships
+x.category.ministry-and-evangelism: Ministry & Evangelism
 x.category.novels: Novels
-x.category.studies: Studies
-x.category.teens: Teens
+x.category.sermons: Sermons
+x.category.spiritual-and-personal-growth: Spiritual & Personal Growth
+x.category.study-materials: Study Materials
+x.category.support-and-counseling: Support & Counseling
+x.category.teens-and-young-adults: Teens & Young Adults
 x.category.theology: Theology
 x.type.book: Book
 x.type.video: Video

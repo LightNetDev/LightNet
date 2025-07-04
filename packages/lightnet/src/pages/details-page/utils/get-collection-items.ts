@@ -1,5 +1,5 @@
 import { compareMediaCollectionItems } from "../../../content/compare-media-collection-items"
-import type { MediaItemEntry } from "../../../content/content-schema-internal"
+import type { MediaItemEntry } from "../../../content/content-schema"
 import { getMediaItems } from "../../../content/get-media-items"
 
 const groupItemsByCollections = async () => {

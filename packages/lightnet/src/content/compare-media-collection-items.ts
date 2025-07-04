@@ -1,4 +1,4 @@
-import type { MediaItemEntry } from "./content-schema-internal"
+import type { MediaItemEntry } from "./content-schema"
 
 export function compareMediaCollectionItems(
   item1: MediaItemEntry,

@@ -1,5 +1,5 @@
 import { compareMediaCollectionItems } from "./compare-media-collection-items"
-import type { MediaItemEntry } from "./content-schema-internal"
+import type { MediaItemEntry } from "./content-schema"
 
 export type MediaItemQuery<TMediaItem extends MediaItemEntry> = {
   /**

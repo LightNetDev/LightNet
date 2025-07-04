@@ -1,7 +1,7 @@
 ---
 import config from "virtual:lightnet/config"
 
-import { getCategories } from "../../content/get-categories"
+import { getUsedCategories } from "../../content/get-categories"
 import { contentLanguages } from "../../content/get-languages"
 import { getMediaTypes } from "../../content/get-media-types"
 import Page from "../../layouts/Page.astro"
@@ -13,7 +13,7 @@ export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
 const { t, currentLocale } = Astro.locals.i18n
 
 const categories: Record<string, string> = {}
-for (const { id, name } of await getCategories(currentLocale, t)) {
+for (const { id, name } of await getUsedCategories(currentLocale, t)) {
   categories[id] = name
 }
 

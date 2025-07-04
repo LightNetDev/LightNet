@@ -1,6 +1,6 @@
 ---
+import { getCategory } from "../../../../content/get-categories"
 import { getMediaItem } from "../../../../content/get-media-items"
-import { resolveCategoryLabel } from "../../../../content/resolve-category-label"
 import { searchPagePath } from "../../../../utils/paths"
 import Label from "./Label.astro"
 
@@ -10,8 +10,11 @@ interface Props {
 
 const item = await getMediaItem(Astro.props.mediaId)
 
-const categories = item.data.categories?.map(({ id }) => id)
 const { t } = Astro.locals.i18n
+
+const categories = await Promise.all(
+  item.data.categories?.map(({ id }) => getCategory(id)) ?? [],
+)
 ---
 
 {
@@ -21,8 +24,12 @@ const { t } = Astro.locals.i18n
       <ul class="flex flex-wrap gap-2">
         {categories.map(async (category) => (
           <li class="flex rounded-lg bg-gray-200 px-4 py-1 text-gray-500 hover:bg-gray-300">
-            <a href={searchPagePath(Astro.currentLocale, { category })}>
-              {resolveCategoryLabel(Astro.locals.i18n.t, category)}
+            <a
+              href={searchPagePath(Astro.currentLocale, {
+                category: category.id,
+              })}
+            >
+              {t(category.label)}
             </a>
           </li>
         ))}

@@ -12,3 +12,13 @@ export const astroImage = (image: ImageFunction) =>
     .string()
     .transform((path) => (path.startsWith("./") ? path : `./${path}`))
     .pipe(image())
+
+/**
+ * The Astro image function resolves to this schema.
+ */
+export const imageSchema = z.object({
+  src: z.string(),
+  width: z.number(),
+  height: z.number(),
+  format: z.enum(["png", "jpg", "jpeg", "tiff", "webp", "gif", "svg", "avif"]),
+})
