@@ -1,38 +1,41 @@
 ---
-import { Icon } from "../../exports/components"
-import { getCategories } from "../content/get-categories"
+import { getUsedCategories } from "../content/get-categories"
 import { searchPagePath } from "../utils/paths"
 import Section from "./Section.astro"
 
 interface Props {
   title?: string
+  layout?: "button-grid" | "image-tiles"
 }
 
-const { title } = Astro.props
+const { title, layout = "button-grid" } = Astro.props
 const { t, currentLocale } = Astro.locals.i18n
 
-const categories = await getCategories(currentLocale, t)
+const categories = await getUsedCategories(currentLocale, t)
 ---
 
 {
   categories.length && (
     <Section title={title ?? t("ln.categories")}>
-      <ul class="grid w-full grid-cols-2 flex-wrap gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {categories.map((category) => (
-          <li class="grow">
-            <a
-              class="flex h-20 w-full items-center justify-center rounded-2xl bg-gray-200 p-3 text-gray-600 shadow-sm transition-colors ease-in-out hover:bg-gray-300"
-              href={searchPagePath(currentLocale, {
-                category: category.id,
-              })}
-            >
-              <div class="line-clamp-3 overflow-hidden text-balance text-center text-xs font-bold">
-                {category.name}
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {layout === "button-grid" && (
+        <ul class="grid w-full grid-cols-2 flex-wrap gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {categories.map((category) => (
+            <li class="grow">
+              <a
+                class="flex h-20 w-full items-center justify-center rounded-2xl bg-gray-200 p-3 text-gray-600 shadow-sm transition-colors ease-in-out hover:bg-gray-300"
+                href={searchPagePath(currentLocale, {
+                  category: category.id,
+                })}
+              >
+                <div class="line-clamp-3 overflow-hidden text-balance text-center text-xs font-bold">
+                  {category.name}
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      {layout === "image-tiles" && {}}
     </Section>
   )
 }

@@ -1,7 +1,7 @@
 import { getCollection, getEntry } from "astro:content"
 
 import { verifySchema } from "../utils/verify-schema"
-import { mediaTypeEntrySchema } from "./content-schema-internal"
+import { mediaTypeEntrySchema } from "./content-schema"
 
 export const getMediaType = async (id: string) => {
   return verifySchema(
