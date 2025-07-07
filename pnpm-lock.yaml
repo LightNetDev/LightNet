@@ -75,7 +75,7 @@ importers:
         specifier: ^5.10.1
         version: 5.10.1(@types/node@24.0.8)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.44.1)(terser@5.39.0)(typescript@5.8.3)(yaml@2.8.0)
       lightnet:
-        specifier: ^3.4.6
+        specifier: ^3.5.0
         version: link:../../packages/lightnet
       react:
         specifier: ^19.1.0
@@ -202,7 +202,7 @@ importers:
         specifier: ^5.10.1
         version: 5.10.1(@types/node@24.0.8)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.44.1)(terser@5.39.0)(typescript@5.8.3)(yaml@2.8.0)
       lightnet:
-        specifier: ^3.4.6
+        specifier: ^3.5.0
         version: link:../../..
       react:
         specifier: ^19.1.0
