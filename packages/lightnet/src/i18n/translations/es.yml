@@ -8,7 +8,7 @@ ln.languages: Idiomas
 ln.type: Tipo
 ln.external-link: Enlace externo
 ln.search.title: Buscar
-ln.search.placeholder: Buscar por título, autor o descripción...
+ln.search.placeholder: Buscar medios...
 ln.search.all-languages: Todos los idiomas
 ln.search.all-types: Todos los tipos
 ln.search.all-categories: Todas las categorías
