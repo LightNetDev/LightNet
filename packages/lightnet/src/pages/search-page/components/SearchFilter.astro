@@ -1,0 +1,65 @@
+---
+import config from "virtual:lightnet/config"
+
+import { getCategories } from "../../../content/get-categories"
+import { contentLanguages } from "../../../content/get-languages"
+import { getMediaTypes } from "../../../content/get-media-types"
+import { provideTranslations } from "../utils/search-filter-translations"
+import SearchFilterReact from "./SearchFilter.tsx"
+
+const { t, currentLocale } = Astro.locals.i18n
+
+const sortByName = (array: { id: string; name: string }[]) =>
+  array.sort((a, b) => a.name.localeCompare(b.name, currentLocale))
+
+const categories = (await getCategories(currentLocale, t)).map(
+  ({ id, name }) => ({ id, name }),
+)
+
+const mediaTypes = sortByName(
+  (await getMediaTypes()).map((type) => ({
+    id: type.id,
+    name: t(type.data.label),
+  })),
+)
+
+const languages = sortByName(
+  contentLanguages.map((language) => ({
+    id: language.code,
+    name: t(language.label),
+  })),
+)
+
+const languageFilterEnabled = contentLanguages.length > 1
+const typesFilterEnabled = mediaTypes.length > 1
+// Not every media item has a category. So it makes
+// sense to have the filter when there is only one category.
+const categoriesFilterEnabled = categories.length > 0
+
+const filterByLocale = !!config.searchPage?.filterByLocale
+let initialLanguageFilter: string | undefined = undefined
+const hasContentLanguage = contentLanguages.find(
+  ({ code }) => code === currentLocale,
+)
+if (
+  filterByLocale &&
+  currentLocale &&
+  hasContentLanguage &&
+  languageFilterEnabled
+) {
+  initialLanguageFilter = currentLocale
+}
+const translations = provideTranslations(t)
+---
+
+<SearchFilterReact
+  client:load
+  languages={languages}
+  mediaTypes={mediaTypes}
+  categories={categories}
+  translations={translations}
+  languageFilterEnabled={languageFilterEnabled}
+  typesFilterEnabled={typesFilterEnabled}
+  categoriesFilterEnabled={categoriesFilterEnabled}
+  initialLanguage={initialLanguageFilter}
+/>

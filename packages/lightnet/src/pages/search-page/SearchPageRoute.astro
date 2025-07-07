@@ -1,51 +1,21 @@
 ---
-import config from "virtual:lightnet/config"
-
-import { getUsedCategories } from "../../content/get-categories"
-import { contentLanguages } from "../../content/get-languages"
-import { getMediaTypes } from "../../content/get-media-types"
 import Page from "../../layouts/Page.astro"
-import Search from "./Search"
-import { provideTranslations } from "./utils/search-translations"
+import SearchFilter from "./components/SearchFilter.astro"
+import SearchList from "./components/SearchList.astro"
 
 export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
 
-const { t, currentLocale } = Astro.locals.i18n
-
-const categories: Record<string, string> = {}
-for (const { id, name } of await getUsedCategories(currentLocale, t)) {
-  categories[id] = name
-}
-
-const mediaTypes = (await getMediaTypes())
-  .map((type) => ({
-    id: type.id,
-    label: t(type.data.label),
-    icon: type.data.icon,
-  }))
-  .sort((a, b) => a.label.localeCompare(b.label, currentLocale))
-
-const translatedContentLanguages = contentLanguages
-  .map((language) => ({
-    ...language,
-    name: t(language.label),
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name, currentLocale))
-
-const filterByLocale = !!config.searchPage?.filterByLocale
+const { t } = Astro.locals.i18n
 ---
 
 <Page>
   <div class="mx-auto max-w-screen-md">
-    <Search
-      client:only="react"
-      contentLanguages={translatedContentLanguages}
-      mediaTypes={mediaTypes}
-      translations={provideTranslations(t)}
-      locale={currentLocale}
-      direction={Astro.locals.i18n.direction}
-      categories={categories}
-      filterByLocale={filterByLocale}
-    />
+    <div class="px-4 md:px-8">
+      <h1 class="mb-4 mt-8 text-4xl md:mb-8 md:mt-12 md:text-5xl">
+        {t("ln.search.title")}
+      </h1>
+      <SearchFilter />
+    </div>
+    <SearchList />
   </div>
 </Page>

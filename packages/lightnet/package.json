@@ -2,7 +2,7 @@
   "name": "lightnet",
   "type": "module",
   "license": "MIT",
-  "version": "3.4.6",
+  "version": "3.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet",
@@ -49,16 +49,17 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.16",
-    "@types/react": "^19.1.6",
+    "@tanstack/react-virtual": "^3.13.12",
+    "@types/react": "^19.1.8",
     "daisyui": "^4.12.24",
     "fuse.js": "^7.1.0",
-    "i18next": "^25.2.1",
-    "marked": "^15.0.12",
+    "i18next": "^25.3.0",
+    "marked": "^16.0.0",
     "yaml": "^2.8.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.29",
-    "vitest": "^3.1.4"
+    "@playwright/test": "^1.53.2",
+    "@types/node": "^22.15.34",
+    "vitest": "^3.2.4"
   }
 }
