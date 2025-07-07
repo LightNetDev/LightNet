@@ -7,6 +7,7 @@ export { getLocalePaths as getStaticPaths } from "lightnet/i18n"
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
 import {
+  CategoriesSection,
   HeroSection,
   HighlightSection,
   MediaGallerySection,
@@ -51,6 +52,9 @@ const learnSkateboardingItems = await getMediaItems({
  * having to write Astro.locals.i18n.t every time.
  */
 const t = Astro.locals.i18n.t
+
+// todo remove ContentSection
+// todo revert faithful-freestyle
 ---
 
 {
@@ -77,6 +81,8 @@ const t = Astro.locals.i18n.t
     subtitleSize="xl"
     showSearch={true}
   />
+
+  <CategoriesSection />
 
   {
     /* 
