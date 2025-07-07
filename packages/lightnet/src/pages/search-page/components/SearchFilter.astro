@@ -1,7 +1,7 @@
 ---
 import config from "virtual:lightnet/config"
 
-import { getCategories } from "../../../content/get-categories"
+import { getUsedCategories } from "../../../content/get-categories"
 import { contentLanguages } from "../../../content/get-languages"
 import { getMediaTypes } from "../../../content/get-media-types"
 import { provideTranslations } from "../utils/search-filter-translations"
@@ -12,7 +12,7 @@ const { t, currentLocale } = Astro.locals.i18n
 const sortByName = (array: { id: string; name: string }[]) =>
   array.sort((a, b) => a.name.localeCompare(b.name, currentLocale))
 
-const categories = (await getCategories(currentLocale, t)).map(
+const categories = (await getUsedCategories(currentLocale, t)).map(
   ({ id, name }) => ({ id, name }),
 )
 

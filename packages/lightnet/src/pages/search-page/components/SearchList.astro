@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content"
 
-import { getCategories } from "../../../content/get-categories"
+import { getUsedCategories } from "../../../content/get-categories"
 import { contentLanguages } from "../../../content/get-languages"
 import { getMediaTypes } from "../../../content/get-media-types"
 import { provideTranslations } from "../utils/search-translations"
@@ -10,7 +10,7 @@ import SearchListReact from "./SearchList.tsx"
 const { t, currentLocale, direction } = Astro.locals.i18n
 
 const categories: Record<string, string> = {}
-for (const { id, name } of await getCategories(currentLocale, t)) {
+for (const { id, name } of await getUsedCategories(currentLocale, t)) {
   categories[id] = name
 }
 
