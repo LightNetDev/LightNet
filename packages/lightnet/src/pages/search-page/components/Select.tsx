@@ -1,8 +1,8 @@
 type Props = {
   label: string
-  initialValue: string
+  initialValue: string | undefined
   valueChange: (value: string) => void
-  options: { id: string; label: string }[]
+  options: { id: string; name: string }[]
 }
 
 export default function Select({
@@ -17,13 +17,13 @@ export default function Select({
         {label}
       </span>
       <select
-        className="dy-select dy-select-bordered sm:dy-select-sm w-full"
+        className="dy-select dy-select-bordered sm:dy-select-sm w-full rounded-xl"
         value={initialValue}
         onChange={(e) => valueChange(e.currentTarget.value)}
       >
-        {options.map(({ id, label }) => (
+        {options.map(({ id, name }) => (
           <option key={id} value={id}>
-            {label}
+            {name}
           </option>
         ))}
       </select>

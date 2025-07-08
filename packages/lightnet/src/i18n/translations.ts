@@ -6,6 +6,7 @@ const builtInTranslations = {
   de: () => import("./translations/de.yml?raw"),
   en: () => import("./translations/en.yml?raw"),
   es: () => import("./translations/es.yml?raw"),
+  fi: () => import("./translations/fi.yml?raw"),
   fr: () => import("./translations/fr.yml?raw"),
   hi: () => import("./translations/hi.yml?raw"),
   pt: () => import("./translations/pt.yml?raw"),
@@ -73,7 +74,6 @@ export type LightNetTranslationKey =
   | "ln.search.all-categories"
   | "ln.search.all-languages"
   | "ln.search.all-types"
-  | "ln.search.more-results"
   | "ln.search.no-results"
   | "ln.search.placeholder"
   | "ln.search.title"

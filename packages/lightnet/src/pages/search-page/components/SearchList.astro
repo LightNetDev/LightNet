@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content"
+
+import { getCategories } from "../../../content/get-categories"
+import { contentLanguages } from "../../../content/get-languages"
+import { getMediaTypes } from "../../../content/get-media-types"
+import { provideTranslations } from "../utils/search-translations"
+import SearchListReact from "./SearchList.tsx"
+
+const { t, currentLocale, direction } = Astro.locals.i18n
+
+const categories: Record<string, string> = {}
+for (const { id, name } of await getCategories(currentLocale, t)) {
+  categories[id] = name
+}
+
+const mediaTypes = Object.fromEntries(
+  (await getMediaTypes()).map((type) => [
+    type.id,
+    {
+      name: t(type.data.label),
+      icon: type.data.icon,
+    },
+  ]),
+)
+
+const languages = Object.fromEntries(
+  contentLanguages.map((language) => [
+    language.code,
+    { direction: language.direction, name: t(language.label) },
+  ]),
+)
+
+const mediaItemsTotal = (await getCollection("media")).length
+
+const translations = provideTranslations(t)
+const showLanguage = contentLanguages.length > 1
+---
+
+<SearchListReact
+  client:load
+  currentLocale={currentLocale}
+  direction={direction}
+  translations={translations}
+  categories={categories}
+  mediaTypes={mediaTypes}
+  languages={languages}
+  showLanguage={showLanguage}
+  mediaItemsTotal={mediaItemsTotal}
+/>

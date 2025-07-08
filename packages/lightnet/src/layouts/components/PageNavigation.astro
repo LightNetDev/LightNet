@@ -32,13 +32,19 @@ const t = Astro.locals.i18n.t
 ---
 
 <nav class="-me-3 flex items-center">
-  <a
-    class="hover:text-primary flex p-3 text-gray-600"
-    aria-label={t("ln.search.title")}
-    data-astro-prefetch="viewport"
-    href={searchPagePath(Astro.currentLocale)}
-    ><Icon className="mdi--magnify" ariaLabel="" /></a
-  >
+  {
+    !config.searchPage?.hideHeaderSearchIcon && (
+      <a
+        class="hover:text-primary flex p-3 text-gray-600"
+        aria-label={t("ln.search.title")}
+        data-astro-prefetch="viewport"
+        href={searchPagePath(Astro.currentLocale)}
+      >
+        <Icon className="mdi--magnify" ariaLabel="" />
+      </a>
+    )
+  }
+
   <LanguagePicker />
 
   {

@@ -1,5 +1,47 @@
 # lightnet
 
+## 3.5.0
+
+### Minor Changes
+
+- [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Add `disableHorizontalPadding` option to `Section` component.
+
+- [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Add lightnet config option `searchPage.hideHeaderSearchIcon`
+
+  Set to true, this will remove the search magnifier icon from the header bar. For example this option can
+  be useful if a site directly provides the search on the homepage.
+
+- [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Implement infinite scroll for search results.
+
+- [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Add `SearchSection` component.
+
+  Add the search to your homepage as simple as:
+
+  ```astro
+  ---
+  import { Page, SearchSection } from "lightnet/components"
+  ---
+
+  <Page>
+    <SearchSection />
+  </Page>
+  ```
+
+- [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Add optional search input to `HeroSection`.
+
+  Enable it by setting the HeroSection's `showSearch` property to `true`.
+  By default `showSearch` is set to `false`.
+
+- [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Add fields to search index
+
+  The search text input also searches language, type and categories of a media item in the current site language.
+
+  Pro tip: Search for "theology | book" to find theology books. The [extended search syntax](https://www.fusejs.io/examples.html#extended-search) can do even more...
+
+- [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Update Translations
+  - remove `ln.search.more-results`. Because search now uses infinite scroll there is no need for this button label anymore 🎉.
+  - change value of `ln.search.placeholder` from "Search by title, author or description..." to "Search media...". Search now also searches on categories, type, language and id of a media item.
+
 ## 3.4.6
 
 ### Patch Changes
@@ -37,7 +79,6 @@
 ### Patch Changes
 
 - [#254](https://github.com/LightNetDev/LightNet/pull/254) [`46c0f7c`](https://github.com/LightNetDev/LightNet/commit/46c0f7c693a46a7a2e06e72c4a333368aa8f7485) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve responsive image variants:
-
   - Improve image quality on search result items
   - Limit the size of the media list image
   - Streamline details page cover image variants
@@ -120,7 +161,6 @@
 - [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Renames custom details pages prop `slug` to `mediaId`.
 
 - [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Streamline handling of components. Make sure all components including a section are suffixed with `Section`.
-
   - Removes `Gallery` export
   - Adds `MediaGallerySection` that includes the section component
   - Renames `Hero` to `HeroSection`
@@ -128,7 +168,6 @@
   - Renames `MediaItemList` to `MediaList`
 
 - [#234](https://github.com/LightNetDev/LightNet/pull/234) [`1cb0dc0`](https://github.com/LightNetDev/LightNet/commit/1cb0dc0ef2d7a3ecb5d2a37a36f2f2e8fa97a756) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve Section
-
   - rename maxWidth values: `full` => `wide`, `prose` => `narrow`
   - add marginTop settings: `none`, `sm`, `lg`
 
@@ -159,7 +198,6 @@
 ### Minor Changes
 
 - [#228](https://github.com/LightNetDev/LightNet/pull/228) [`b3bb5cc`](https://github.com/LightNetDev/LightNet/commit/b3bb5cc97a4f14ccb46c68f9dcdbe73d74563452) Thanks [@smn-cds](https://github.com/smn-cds)! - Add builtin languages
-
   - Russian
   - Ukrainian
 
@@ -186,7 +224,6 @@
 ### Minor Changes
 
 - [#220](https://github.com/LightNetDev/LightNet/pull/220) [`e10c96f`](https://github.com/LightNetDev/LightNet/commit/e10c96fb850db6d043c9bc0c929170c271979492) Thanks [@smn-cds](https://github.com/smn-cds)! - Update Tailwind CSS to v4
-
   - updates `tailwindcss` dependency to version ^4.
   - `@astro/tailwindcss` dependency has been replaced with `@tailwindcss/vite`
   - removes the use of `tailwind.config.js` inside site projects
@@ -224,7 +261,6 @@
   This update introduces major changes on our translation system.
 
   Changes:
-
   - Translations are now stored inside `.yml` files.
   - Added i18next as our translation engine
   - Translations now support a flat i18next syntax including (pluralization, contextualization, interpolation)
@@ -292,7 +328,6 @@
 - [#183](https://github.com/LightNetDev/lightnet/pull/183) [`9c0bb8d`](https://github.com/LightNetDev/lightnet/commit/9c0bb8d2508f8bfbb18dd224a36e7f5d75f89268) Thanks [@smn-cds](https://github.com/si-fab)! - Makes logo config optional.
 
 - [#183](https://github.com/LightNetDev/lightnet/pull/183) [`9c0bb8d`](https://github.com/LightNetDev/lightnet/commit/9c0bb8d2508f8bfbb18dd224a36e7f5d75f89268) Thanks [@smn-cds](https://github.com/si-fab)! - Rename `Section` component properties
-
   - change property name `width` to `maxWidth`
   - change property value `content` to `prose`
 
@@ -305,7 +340,6 @@
   Prefixing custom translation strings with `custom.` is non mandatory but recommended as it improves validation.
 
   This is changed:
-
   - rename translate parameter `fallbackToKey` to `allowFixedStrings`.
   - change behavior of the translate function. If `allowFixedStrings` is set to `true`, return the translation key if no translation is found. But fail if the key starts with `custom.` or `ln.` prefix.
   - change example to reflect the new convention of prefixing custom translation keys with `custom.`.
@@ -375,7 +409,6 @@
 - [#176](https://github.com/LightNetDev/lightnet/pull/176) [`6b4a664`](https://github.com/LightNetDev/lightnet/commit/6b4a66490079b0688577e6052ab9d7f2d0686170) Thanks [@smn-cds](https://github.com/si-fab)! - Extend Astro.locals.i18n object
 
   Provide:
-
   - `defaultLocale`
   - `currentLocale`
   - `locales`
@@ -396,7 +429,6 @@
 - [#174](https://github.com/LightNetDev/lightnet/pull/174) [`bb011bf`](https://github.com/LightNetDev/lightnet/commit/bb011bfef8c2d7745e3c3417f7f6ef608867e184) Thanks [@smn-cds](https://github.com/si-fab)! - Update Astro to version 5.
 
   Fix your project by doing this:
-
   - move `/src/content/config.ts` to `/src/content.config.ts`.
   - update tsconfig.json to match the following:
 

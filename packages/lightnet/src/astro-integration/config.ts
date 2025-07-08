@@ -203,11 +203,14 @@ export const configSchema = z.object({
   searchPage: z
     .object({
       /**
-       * When this is set to true, search results will be initially
-       * filtered by site language. The filter will only be set when there
-       * is any media item in the site language.
+       * Set this to true, to initially filter search results by current site language.
+       * The filter will only be set when there is any media item in the site language.
        */
       filterByLocale: z.boolean().default(false),
+      /**
+       * Set this to true, to remove the search magnifier icon from the header bar.
+       */
+      hideHeaderSearchIcon: z.boolean().default(false),
     })
     .optional(),
 })

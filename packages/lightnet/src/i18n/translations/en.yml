@@ -61,11 +61,11 @@ ln.external-link: External link
 # Used on: https://sk8-ministries.pages.dev/en/media/ (not visible)
 ln.search.title: Search
 
-# Placeholder text for the main search box.
-# English: Search by title, author or description...
+# Placeholder text for the search input to search for media items.
+# English: Search media...
 #
 # Used on: https://sk8-ministries.pages.dev/en/media/
-ln.search.placeholder: Search by title, author or description...
+ln.search.placeholder: Search media...
 
 # Filter option to display content in all languages.
 #
@@ -84,11 +84,6 @@ ln.search.all-types: All types
 # English: All categories
 # Used on: https://sk8-ministries.pages.dev/en/media/
 ln.search.all-categories: All categories
-
-# Button label to load more search results.
-#
-# English: More results
-ln.search.more-results: More results
 
 # Message displayed when no search results are found.
 #
