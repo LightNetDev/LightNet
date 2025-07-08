@@ -13,7 +13,18 @@ const categoriesById = Object.fromEntries(
 const contentCategories = Object.fromEntries(
   (await getMediaItems())
     .flatMap((item) => item.data.categories ?? [])
-    .map((c) => [c.id, categoriesById[c.id]]),
+    .map((c) => {
+      const category = categoriesById[c.id]
+      if (!category) {
+        throw new AstroError(
+          "Missing Category",
+          `A media item references a non-existent category: "${c.id}".\n` +
+            `To fix this, create a category file at:\n` +
+            `src/content/categories/${c.id}.json`,
+        )
+      }
+      return [c.id, category]
+    }),
 )
 
 /**
