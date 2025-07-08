@@ -1,17 +1,31 @@
 ---
 import { getUsedCategories } from "../content/get-categories"
 import { searchPagePath } from "../utils/paths"
+import { Image } from "astro:assets"
 import Section from "./Section.astro"
+import { AstroError } from "astro/errors"
+import Icon from "./Icon"
 
 interface Props {
   title?: string
-  layout?: "button-grid" | "image-tiles"
+  layout?: "button-grid" | "image-grid"
 }
 
 const { title, layout = "button-grid" } = Astro.props
 const { t, currentLocale } = Astro.locals.i18n
 
 const categories = await getUsedCategories(currentLocale, t)
+type Category = (typeof categories)[number]
+
+function getImage({ image, id }: Category) {
+  if (!image) {
+    throw new AstroError(
+      `Missing image for category ${id}`,
+      `To fix this, set an image path inside /src/content/categories/${id}.json`,
+    )
+  }
+  return image
+}
 ---
 
 {
@@ -35,7 +49,39 @@ const categories = await getUsedCategories(currentLocale, t)
           ))}
         </ul>
       )}
-      {layout === "image-tiles" && {}}
+      {layout === "image-grid" && (
+        <ol class="grid grid-cols-2 items-end justify-between gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-5">
+          {categories.map((category) => (
+            <li>
+              <a
+                href={searchPagePath(currentLocale, { category: category.id })}
+                class="group flex flex-col gap-3"
+              >
+                <div class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline">
+                  <Image
+                    class="h-full w-full object-contain"
+                    src={getImage(category)}
+                    alt=""
+                    widths={[256, 512, 768, 1024]}
+                    sizes={
+                      "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
+                      "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
+                      "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
+                      "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
+                      "217px"
+                    }
+                  />
+                  <div class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 via-30% to-transparent to-65% p-4 text-gray-50">
+                    <span class="line-clamp-3 text-balance font-bold">
+                      {category.name}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
     </Section>
   )
 }
