@@ -20,8 +20,8 @@ type Category = (typeof categories)[number]
 function getImage({ image, id }: Category) {
   if (!image) {
     throw new AstroError(
-      `Missing image for category ${id}`,
-      `To fix this, set an image path inside /src/content/categories/${id}.json`,
+      `The CategorySection with layout="image-grid" requires an image for category "${id}".`,
+      `To resolve this issue, either change the layout to "button-grid" or provide an image path in /src/content/categories/${id}.json.`,
     )
   }
   return image
