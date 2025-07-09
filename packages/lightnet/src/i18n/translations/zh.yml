@@ -2,9 +2,9 @@ ln.header.open-main-menu: 打开主菜单
 ln.header.select-language: 选择语言
 ln.home.title: 首页
 ln.category: 分类
-ln.categories: 多个分类
+ln.categories: 分类
 ln.language: 语言
-ln.languages: 多种语言
+ln.languages: 语言
 ln.type: 类型
 ln.external-link: 外部链接
 ln.search.title: 搜索
@@ -15,7 +15,7 @@ ln.search.all-categories: 所有分类
 ln.search.no-results: 没有结果
 ln.details.open: 打开
 ln.details.share: 分享
-ln.details.part-of-collection: 系列的一部分
+ln.details.part-of-collection: 属于一个合集
 ln.details.download: 下载
 ln.share.url-copied-to-clipboard: 链接已复制到剪贴板
 ln.404.page-not-found: 页面未找到
