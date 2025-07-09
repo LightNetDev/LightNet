@@ -1,10 +1,16 @@
 ---
 import Page from "./Page.astro"
+
+// prettier-ignore
+type Props = {
+  className?: string
+};
 ---
 
 <Page>
   <article
-    class="prose prose-gray mx-auto mt-8 max-w-screen-md px-4 sm:mt-16 md:px-8"
+    class="prose prose-img:rounded-md mx-auto mt-8 max-w-screen-md px-4 sm:mt-16 md:px-8"
+    class:list={[Astro.props.className]}
   >
     <slot />
   </article>
