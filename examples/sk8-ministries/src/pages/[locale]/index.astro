@@ -52,9 +52,6 @@ const learnSkateboardingItems = await getMediaItems({
  * having to write Astro.locals.i18n.t every time.
  */
 const t = Astro.locals.i18n.t
-
-// todo remove ContentSection
-// todo revert faithful-freestyle
 ---
 
 {
@@ -81,10 +78,6 @@ const t = Astro.locals.i18n.t
     subtitleSize="xl"
     showSearch={true}
   />
-
-  <CategoriesSection />
-
-  <CategoriesSection layout="image-grid" />
 
   {
     /* 
