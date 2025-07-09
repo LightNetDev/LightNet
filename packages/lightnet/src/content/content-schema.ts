@@ -19,7 +19,14 @@ export const categorySchema = z.object({
    */
   label: z.string(),
 
-  // todo docs
+  /* Relative path to the thumbnail image of this category.
+   *
+   * The image is expected to be inside the `images` folder next to category definition json.
+   * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
+   * We suggest to give it a size of at least 1000px for it's longer side.
+   *
+   * @example "./images/devotionals.jpg"
+   */
   image: imageSchema.optional(),
 })
 
@@ -120,7 +127,7 @@ export const mediaItemSchema = z.object({
    *
    * The image is expected to be inside the `images` folder next to the media item definition json.
    * This image will be used for previews and on the media item detail page.
-   * It can have on of this file types: png, jpg, tiff, webp, gif, svg, avif.
+   * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
    * We suggest to give it a size of at least 1000px for it's longer side.
    *
    * @example "./images/a-book-about-love--en.jpg"

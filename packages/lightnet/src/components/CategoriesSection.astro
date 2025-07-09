@@ -1,10 +1,10 @@
 ---
+import { AstroError } from "astro/errors"
+import { Image } from "astro:assets"
+
 import { getUsedCategories } from "../content/get-categories"
 import { searchPagePath } from "../utils/paths"
-import { Image } from "astro:assets"
 import Section from "./Section.astro"
-import { AstroError } from "astro/errors"
-import Icon from "./Icon"
 
 interface Props {
   title?: string
