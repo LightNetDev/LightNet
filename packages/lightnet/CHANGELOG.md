@@ -1,5 +1,30 @@
 # lightnet
 
+## 3.6.0
+
+### Minor Changes
+
+- [#280](https://github.com/LightNetDev/LightNet/pull/280) [`b7a9fea`](https://github.com/LightNetDev/LightNet/commit/b7a9fea1b599458838ae96866ee0910f93b6f56e) Thanks [@smn-cds](https://github.com/smn-cds)! - Feature: Category Image Grid Enhancement
+  - Introduced an optional `image` property for categories, allowing for enhanced visual representation.
+  - Updated the `CategorySection` component to support the display of category images.
+  - To utilize this feature, set the `layout` attribute to `image-grid`, enabling a visually appealing grid layout for category images.
+
+- [#275](https://github.com/LightNetDev/LightNet/pull/275) [`d4bc7d4`](https://github.com/LightNetDev/LightNet/commit/d4bc7d4888b1282d9809e2451f7d867961d2dc07) Thanks [@sayedtenkanen](https://github.com/sayedtenkanen)! - Add Finnish translation
+
+- [#281](https://github.com/LightNetDev/LightNet/pull/281) [`ed115b6`](https://github.com/LightNetDev/LightNet/commit/ed115b6a515cb22dfbf644103025c5ceb06cef1d) Thanks [@ajjn](https://github.com/ajjn)! - Add translation files for Arabic, Chinese, French, Spanish, Hindi, Bengali, and Portuguese
+
+- [#280](https://github.com/LightNetDev/LightNet/pull/280) [`b7a9fea`](https://github.com/LightNetDev/LightNet/commit/b7a9fea1b599458838ae96866ee0910f93b6f56e) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve MarkdownPage
+  - add rounded corners for images for more consistency with other images on LightNet
+  - add `className` property to apply your own classes to the component
+
+- [#280](https://github.com/LightNetDev/LightNet/pull/280) [`b7a9fea`](https://github.com/LightNetDev/LightNet/commit/b7a9fea1b599458838ae96866ee0910f93b6f56e) Thanks [@smn-cds](https://github.com/smn-cds)! - Add reusable SearchInput component
+
+### Patch Changes
+
+- [#280](https://github.com/LightNetDev/LightNet/pull/280) [`b7a9fea`](https://github.com/LightNetDev/LightNet/commit/b7a9fea1b599458838ae96866ee0910f93b6f56e) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve text wrap behavior for titles by setting `text-wrap:balance`
+
+- [#280](https://github.com/LightNetDev/LightNet/pull/280) [`b7a9fea`](https://github.com/LightNetDev/LightNet/commit/b7a9fea1b599458838ae96866ee0910f93b6f56e) Thanks [@smn-cds](https://github.com/smn-cds)! - Update translations: Remove ellipsis from search placeholder
+
 ## 3.5.0
 
 ### Minor Changes
