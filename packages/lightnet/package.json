@@ -53,13 +53,13 @@
     "@types/react": "^19.1.8",
     "daisyui": "^4.12.24",
     "fuse.js": "^7.1.0",
-    "i18next": "^25.3.0",
+    "i18next": "^25.3.2",
     "marked": "^16.0.0",
     "yaml": "^2.8.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.53.2",
-    "@types/node": "^22.15.34",
+    "@types/node": "^22.16.2",
     "vitest": "^3.2.4"
   }
 }

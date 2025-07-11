@@ -1,7 +1,7 @@
 import { getCollection, getEntry } from "astro:content"
 
 import { verifySchemaAsync } from "../utils/verify-schema"
-import { mediaItemEntrySchema } from "./content-schema-internal"
+import { mediaItemEntrySchema } from "./content-schema"
 
 /**
  * Internal API to get media items. Since this package is a Astro integration

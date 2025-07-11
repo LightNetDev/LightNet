@@ -71,14 +71,14 @@ const mediaTypes = Object.fromEntries(
             class="ms-5 flex grow flex-col justify-center sm:ms-8"
             lang={item.data.language}
           >
-            <p class="mb-1 line-clamp-3 font-bold text-gray-700 md:mb-3">
+            <p class="mb-1 line-clamp-3 text-balance font-bold text-gray-700 md:mb-3">
               <Icon
                 className={`${mediaTypes[item.data.type.id].icon} me-2 align-bottom text-2xl text-gray-700`}
                 ariaLabel={mediaTypes[item.data.type.id].name}
               />
               <span>{item.data.title}</span>
             </p>
-            <div class="mb-3 flex flex-col flex-wrap items-start gap-2 md:flex-row md:items-center md:gap-3">
+            <div class="mb-3 flex flex-col flex-wrap items-start gap-2 text-balance md:flex-row md:items-center md:gap-3">
               {!!item.data.authors?.length && (
                 <p class="mb-1 md:mb-0 md:text-base">
                   {item.data.authors.join(", ")}

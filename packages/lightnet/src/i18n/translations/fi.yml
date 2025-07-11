@@ -8,7 +8,7 @@ ln.languages: Kielet
 ln.type: Mediatyyppi
 ln.external-link: Ulkoinen linkki
 ln.search.title: Haku
-ln.search.placeholder: Hae mediaa...
+ln.search.placeholder: Hae mediaa
 ln.search.all-languages: Kaikki kielet
 ln.search.all-types: Kaikki mediatyypit
 ln.search.all-categories: Kaikki kategoriat

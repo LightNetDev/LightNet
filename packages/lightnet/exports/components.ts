@@ -4,6 +4,7 @@ export { default as HighlightSection } from "../src/components/HighlightSection.
 export { default as Icon } from "../src/components/Icon"
 export { default as MediaGallerySection } from "../src/components/MediaGallerySection.astro"
 export { default as MediaList } from "../src/components/MediaList.astro"
+export { default as SearchInput } from "../src/components/SearchInput.astro"
 export { default as SearchSection } from "../src/components/SearchSection.astro"
 export { default as Section } from "../src/components/Section.astro"
 export { default as VideoPlayer } from "../src/components/VideoPlayer.astro"

@@ -3,7 +3,7 @@ import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
 
-import { astroImage } from "./astro-image"
+import { astroImage, imageSchema } from "./astro-image"
 
 /**
  * Category Schema
@@ -18,6 +18,16 @@ export const categorySchema = z.object({
    * @example "category.biography"
    */
   label: z.string(),
+
+  /* Relative path to the thumbnail image of this category.
+   *
+   * The image is expected to be inside the `images` folder next to category definition json.
+   * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
+   * We suggest to give it a size of at least 1000px for it's longer side.
+   *
+   * @example "./images/devotionals.jpg"
+   */
+  image: imageSchema.optional(),
 })
 
 /**
@@ -117,12 +127,12 @@ export const mediaItemSchema = z.object({
    *
    * The image is expected to be inside the `images` folder next to the media item definition json.
    * This image will be used for previews and on the media item detail page.
-   * It can have on of this file types: png, jpg, tiff, webp, gif, svg, avif.
+   * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
    * We suggest to give it a size of at least 1000px for it's longer side.
    *
    * @example "./images/a-book-about-love--en.jpg"
    */
-  image: z.string(),
+  image: imageSchema,
   /**
    * List of objects defining the content of this media item.
    */
@@ -160,9 +170,14 @@ export const mediaItemSchema = z.object({
  * @param schemaContext that is passed by astro's defineCollection schema.
  * @returns schema with image mixed in.
  */
-export const mediaSchema = ({ image }: SchemaContext) =>
+export const createMediaItemSchema = ({ image }: SchemaContext) =>
   mediaItemSchema.extend({
     image: astroImage(image),
+  })
+
+export const createCategorySchema = ({ image }: SchemaContext) =>
+  categorySchema.extend({
+    image: astroImage(image).optional(),
   })
 
 /**
@@ -246,7 +261,7 @@ export const mediaTypeSchema = z.object({
 export const LIGHTNET_COLLECTIONS = {
   categories: defineCollection({
     loader: glob({ pattern: "*.json", base: "./src/content/categories" }),
-    schema: categorySchema,
+    schema: createCategorySchema,
   }),
   "media-collections": defineCollection({
     loader: glob({
@@ -260,7 +275,7 @@ export const LIGHTNET_COLLECTIONS = {
       pattern: "*.json",
       base: "./src/content/media",
     }),
-    schema: mediaSchema,
+    schema: createMediaItemSchema,
   }),
   "media-types": defineCollection({
     loader: glob({
@@ -270,3 +285,20 @@ export const LIGHTNET_COLLECTIONS = {
     schema: mediaTypeSchema,
   }),
 }
+
+export const mediaItemEntrySchema = z.object({
+  id: z.string(),
+  data: mediaItemSchema,
+})
+
+export type MediaItemEntry = z.infer<typeof mediaItemEntrySchema>
+
+export const mediaTypeEntrySchema = z.object({
+  id: z.string(),
+  data: mediaTypeSchema,
+})
+
+export const categoryEntrySchema = z.object({
+  id: z.string(),
+  data: categorySchema,
+})

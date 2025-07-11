@@ -1,37 +1,87 @@
 ---
-import { getCategories } from "../content/get-categories"
+import { AstroError } from "astro/errors"
+import { Image } from "astro:assets"
+
+import { getUsedCategories } from "../content/get-categories"
 import { searchPagePath } from "../utils/paths"
 import Section from "./Section.astro"
 
 interface Props {
   title?: string
+  layout?: "button-grid" | "image-grid"
 }
 
-const { title } = Astro.props
+const { title, layout = "button-grid" } = Astro.props
 const { t, currentLocale } = Astro.locals.i18n
 
-const categories = await getCategories(currentLocale, t)
+const categories = await getUsedCategories(currentLocale, t)
+type Category = (typeof categories)[number]
+
+function getImage({ image, id }: Category) {
+  if (!image) {
+    throw new AstroError(
+      `The CategorySection with layout="image-grid" requires an image for category "${id}".`,
+      `To resolve this issue, either change the layout to "button-grid" or provide an image path in /src/content/categories/${id}.json.`,
+    )
+  }
+  return image
+}
 ---
 
 {
   categories.length && (
     <Section title={title ?? t("ln.categories")}>
-      <ul class="flex w-full flex-wrap gap-2 sm:gap-3">
-        {categories.map((category) => (
-          <li class="flex max-w-56 grow">
-            <a
-              class="flex h-12 w-full items-center justify-center rounded-xl bg-gray-200 p-2 px-8 shadow-sm hover:bg-gray-300 sm:h-14"
-              href={searchPagePath(currentLocale, {
-                category: category.id,
-              })}
-            >
-              <span class="line-clamp-2 block text-xs font-bold uppercase text-gray-600">
-                {category.name}
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {layout === "button-grid" && (
+        <ul class="grid w-full grid-cols-2 flex-wrap gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {categories.map((category) => (
+            <li class="grow">
+              <a
+                class="flex h-20 w-full items-center justify-center rounded-2xl bg-gray-200 p-3 text-gray-600 shadow-sm transition-colors ease-in-out hover:bg-gray-300"
+                href={searchPagePath(currentLocale, {
+                  category: category.id,
+                })}
+              >
+                <div class="line-clamp-3 overflow-hidden text-balance text-center text-xs font-bold">
+                  {category.name}
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      {layout === "image-grid" && (
+        <ol class="grid grid-cols-2 items-end justify-between gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-5">
+          {categories.map((category) => (
+            <li>
+              <a
+                href={searchPagePath(currentLocale, { category: category.id })}
+                class="group flex flex-col gap-3"
+              >
+                <div class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline">
+                  <Image
+                    class="h-full w-full object-contain"
+                    src={getImage(category)}
+                    alt=""
+                    widths={[256, 512, 768, 1024]}
+                    sizes={
+                      "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
+                      "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
+                      "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
+                      "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
+                      "217px"
+                    }
+                  />
+                  <div class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 via-30% to-transparent to-65% p-4 text-gray-50">
+                    <span class="line-clamp-3 text-balance font-bold">
+                      {category.name}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
     </Section>
   )
 }

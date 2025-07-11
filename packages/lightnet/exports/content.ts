@@ -1,8 +1,18 @@
 export {
-  categorySchema,
+  createCategorySchema as categorySchema,
   LIGHTNET_COLLECTIONS,
   mediaCollectionSchema,
-  mediaSchema,
+  createMediaItemSchema as mediaItemSchema,
   mediaTypeSchema,
 } from "../src/content/content-schema"
-export { getMediaItems } from "../src/content/external-api"
+
+import { type CollectionEntry, getCollection } from "astro:content"
+
+import {
+  type MediaItemQuery,
+  queryMediaItems,
+} from "../src/content/query-media-items"
+
+export const getMediaItems = (
+  query?: MediaItemQuery<CollectionEntry<"media">>,
+) => queryMediaItems(getCollection("media"), query ?? {})
