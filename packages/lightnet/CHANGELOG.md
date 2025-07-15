@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.6.1
+
+### Patch Changes
+
+- [#286](https://github.com/LightNetDev/LightNet/pull/286) [`4c3b137`](https://github.com/LightNetDev/LightNet/commit/4c3b13762357d63f486261ba8eb8202e666dfb55) Thanks [@NorthernMoodler](https://github.com/NorthernMoodler)! - Refine de, ru and uk language strings
+
 ## 3.6.0
 
 ### Minor Changes
