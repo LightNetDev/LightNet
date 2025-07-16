@@ -18,7 +18,7 @@ const audioSrc = (await getMediaItem(mediaId)).data.content[0].url
 ---
 
 <DetailsPage mediaId={mediaId}>
-  <MainDetailsSection mediaId={mediaId} />
+  <MainDetailsSection thumbnailSize="md" mediaId={mediaId} />
   <AudioPlayer src={audioSrc} className="mt-10 w-full" />
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} />

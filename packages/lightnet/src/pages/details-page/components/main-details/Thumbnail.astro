@@ -6,12 +6,23 @@ import { getMediaItem } from "../../../../content/get-media-items"
 interface Props {
   mediaId: string
   style?: "default" | "book"
+  size?: "md" | "lg"
 }
-const { mediaId, style = "default" } = Astro.props
+const { mediaId, style = "default", size = "lg" } = Astro.props
 
 const item = await getMediaItem(mediaId)
 const image = item.data.image
 const isPortraitImage = image.height > image.width
+const imageSizes = {
+  md: {
+    css: isPortraitImage ? "h-52 w-auto sm:h-56" : "h-auto w-52 sm:w-56",
+    query: "(max-width: 640px) 13rem, 14rem",
+  },
+  lg: {
+    css: isPortraitImage ? "h-52 w-auto sm:h-72" : "h-auto w-52 sm:w-72",
+    query: "(max-width: 640px) 13rem, 18rem",
+  },
+}
 ---
 
 <div
@@ -19,10 +30,10 @@ const isPortraitImage = image.height > image.width
   class:list={style === "book" ? "rounded-sm" : "rounded-md"}
 >
   <Image
-    class:list={isPortraitImage ? "h-52 w-auto sm:h-72" : "h-auto w-52 sm:w-72"}
+    class:list={imageSizes[size].css}
     alt=""
     widths={[256, 512, 768, 1024]}
-    sizes="(max-width: 640px) 13rem, 18rem"
+    sizes={imageSizes[size].query}
     src={image}
     quality="high"
     loading="eager"
