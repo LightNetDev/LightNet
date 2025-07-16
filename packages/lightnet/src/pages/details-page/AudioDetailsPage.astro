@@ -18,7 +18,7 @@ const { mediaId } = Astro.props
   <MainDetailsSection thumbnailSize="md" mediaId={mediaId} />
   <AudioPanel mediaId={mediaId} className="mt-10" />
   <DescriptionSection mediaId={mediaId} />
-  <ContentSection mediaId={mediaId} />
+  <ContentSection mediaId={mediaId} minimumItems={1} />
   <MediaCollectionsSection mediaId={mediaId} />
   <MoreDetailsSection mediaId={mediaId} />
 </DetailsPage>

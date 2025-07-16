@@ -8,11 +8,14 @@ import {
 
 interface Props {
   mediaId: string
+  minimumItems?: number
 }
 
-const item = await getMediaItem(Astro.props.mediaId)
+const { mediaId, minimumItems = 2 } = Astro.props
 
-if (item.data.content.length < 2) {
+const item = await getMediaItem(mediaId)
+
+if (item.data.content.length < minimumItems) {
   return
 }
 
