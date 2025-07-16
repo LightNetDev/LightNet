@@ -29,6 +29,7 @@ if (!content.length) {
 <ol
   class="mx-auto mt-10 flex max-w-screen-md flex-col gap-10 px-4 md:px-8"
   class:list={[className]}
+  id="audio-panel"
 >
   {
     content.map((c) => (
@@ -39,3 +40,33 @@ if (!content.length) {
     ))
   }
 </ol>
+<script>
+  document.addEventListener("astro:after-swap", () => {
+    initAudioPanel()
+  })
+  initAudioPanel()
+  function initAudioPanel() {
+    const audioPanel = document.getElementById("audio-panel")
+    if (!audioPanel) {
+      return
+    }
+    const audios = Array.from(audioPanel.querySelectorAll("audio"))
+
+    audios.forEach((audio, index) => {
+      audio.addEventListener("play", () => {
+        audios.forEach((otherAudio) => {
+          if (otherAudio !== audio) {
+            otherAudio.pause()
+          }
+        })
+      })
+
+      audio.addEventListener("ended", () => {
+        const nextAudio = audios[index + 1]
+        if (nextAudio) {
+          nextAudio.play()
+        }
+      })
+    })
+  }
+</script>
