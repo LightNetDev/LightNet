@@ -15,8 +15,8 @@ const image = item.data.image
 const isPortraitImage = image.height > image.width
 const imageSizes = {
   md: {
-    css: isPortraitImage ? "h-52 w-auto sm:h-56" : "h-auto w-52 sm:w-56",
-    query: "(max-width: 640px) 13rem, 14rem",
+    css: isPortraitImage ? "h-52 w-auto" : "h-auto w-52",
+    query: "13rem",
   },
   lg: {
     css: isPortraitImage ? "h-52 w-auto sm:h-72" : "h-auto w-52 sm:w-72",

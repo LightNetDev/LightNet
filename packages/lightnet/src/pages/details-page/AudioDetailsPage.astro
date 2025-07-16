@@ -1,25 +1,22 @@
 ---
-import { getMediaItem } from "../../content/get-media-items"
 import ContentSection from "./components/ContentSection.astro"
 import DescriptionSection from "./components/DescriptionSection.astro"
 import DetailsPage from "./components/DetailsPage.astro"
-import AudioPlayer from "./components/main-details/AudioPlayer.astro"
-import ShareButton from "./components/main-details/ShareButton.astro"
 import MainDetailsSection from "./components/MainDetailsSection.astro"
 import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
 import MoreDetailsSection from "./components/MoreDetailsSection.astro"
+import AudioPanel from "./components/AudioPanel.astro"
 
 export type Props = {
   mediaId: string
 }
 
 const { mediaId } = Astro.props
-const audioSrc = (await getMediaItem(mediaId)).data.content[0].url
 ---
 
 <DetailsPage mediaId={mediaId}>
   <MainDetailsSection thumbnailSize="md" mediaId={mediaId} />
-  <AudioPlayer src={audioSrc} className="mt-10 w-full" />
+  <AudioPanel mediaId={mediaId} className="mt-10" />
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} />
   <MediaCollectionsSection mediaId={mediaId} />
