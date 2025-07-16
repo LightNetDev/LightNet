@@ -6,8 +6,9 @@ import { createContentMetadata } from "../../utils/create-content-metadata"
 interface Props {
   mediaId: string
   openActionLabel: string
+  className?: string
 }
-const { mediaId, openActionLabel } = Astro.props
+const { mediaId, openActionLabel, className } = Astro.props
 const item = await getMediaItem(mediaId)
 const content = createContentMetadata(item.data.content[0])
 ---
@@ -17,6 +18,7 @@ const content = createContentMetadata(item.data.content[0])
   href={content.url}
   target={content.target}
   hreflang={item.data.language}
+  class:list={[className]}
 >
   {
     content.isExternal && (

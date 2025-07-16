@@ -1,6 +1,7 @@
 ---
 import Authors from "./main-details/Authors.astro"
 import Cover from "./main-details/Cover.astro"
+import ShareButton from "./main-details/ShareButton.astro"
 import Title from "./main-details/Title.astro"
 
 export type Props = {
@@ -17,7 +18,8 @@ const { mediaId, coverStyle = "default" } = Astro.props
   <Cover mediaId={mediaId} style={coverStyle} />
   <div class="flex w-full grow flex-col items-center sm:items-start">
     <Title className="text-center sm:text-start" mediaId={mediaId} />
-    <Authors className="text-center sm:text-start" mediaId={mediaId} />
+    <Authors className="mt-2" mediaId={mediaId} />
+    <ShareButton className="mt-3" />
     <slot />
   </div>
 </div>

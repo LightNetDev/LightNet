@@ -19,10 +19,11 @@ const { mediaId, coverStyle, openActionLabel = "ln.details.open" } = Astro.props
 
 <DetailsPage mediaId={mediaId}>
   <MainDetailsSection mediaId={mediaId} coverStyle={coverStyle}>
-    <div class="mt-10 flex flex-col justify-center gap-4 sm:justify-start">
-      <OpenButton mediaId={mediaId} openActionLabel={openActionLabel} />
-      <ShareButton />
-    </div>
+    <OpenButton
+      className="mt-8"
+      mediaId={mediaId}
+      openActionLabel={openActionLabel}
+    />
   </MainDetailsSection>
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} />
