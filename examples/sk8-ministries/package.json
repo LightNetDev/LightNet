@@ -14,6 +14,7 @@
     "astro": "^5.11.0",
     "lightnet": "^3.6.0",
     "@lightnet/decap-admin": "^3.1.1",
+    "sharp": "^0.33.5",
     "@astrojs/react": "^4.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
