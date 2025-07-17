@@ -36,21 +36,18 @@
     "./pages/api/search.ts": "./src/pages/api/search.ts"
   },
   "peerDependencies": {
-    "@astrojs/react": "^4.1.0",
-    "@astrojs/tailwind": "^6.0.0",
     "astro": "^5.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sharp": "^0.33.4",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.5.3"
+    "tailwindcss": ">=3.4.0 <4.0.0"
   },
   "dependencies": {
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
+    "@astrojs/react": "^4.1.0",
+    "@astrojs/tailwind": "^6.0.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-virtual": "^3.13.12",
-    "@types/react": "^19.1.8",
     "daisyui": "^4.12.24",
     "fuse.js": "^7.1.0",
     "i18next": "^25.3.2",
@@ -58,6 +55,8 @@
     "yaml": "^2.8.0"
   },
   "devDependencies": {
+    "typescript": "^5.5.3",
+    "@types/react": "^19.1.8",
     "@playwright/test": "^1.53.2",
     "@types/node": "^22.16.2",
     "vitest": "^3.2.4"

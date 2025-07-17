@@ -15,7 +15,7 @@
     "version": "pnpm changeset version && pnpm i --no-frozen-lockfile",
     "translation-status": "pnpm --silent -F cli translation-status"
   },
-  "packageManager": "pnpm@10.3.0+sha512.ee592eda8815a8a293c206bb0917c4bb0ff274c50def7cbc17be05ec641fc2d1b02490ce660061356bd0d126a4d7eb2ec8830e6959fb8a447571c631d5a2442d",
+  "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet"
