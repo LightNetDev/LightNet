@@ -1,5 +1,28 @@
 # lightnet
 
+## 3.7.0
+
+### Minor Changes
+
+- [#288](https://github.com/LightNetDev/LightNet/pull/288) [`008553f`](https://github.com/LightNetDev/LightNet/commit/008553f7c016931b617ba2c632e0b473e32bad8d) Thanks [@smn-cds](https://github.com/smn-cds)! - Improves support for media items with more than one audio file
+  - Audio details page shows embedded player for each mp3 inside the media item's content array
+  - Audio player stops playing a mp3 when the next is started
+  - Audio player resumes with next mp3 when one mp3 ends
+
+### Patch Changes
+
+- [#288](https://github.com/LightNetDev/LightNet/pull/288) [`008553f`](https://github.com/LightNetDev/LightNet/commit/008553f7c016931b617ba2c632e0b473e32bad8d) Thanks [@smn-cds](https://github.com/smn-cds)! - Reorganized dependencies
+
+  If you are using npm as the package manager, you can remove these
+  dependencies from your `package.json`.
+  - sharp
+  - @astrojs/react
+  - @astrojs/tailwind
+
+- [#288](https://github.com/LightNetDev/LightNet/pull/288) [`008553f`](https://github.com/LightNetDev/LightNet/commit/008553f7c016931b617ba2c632e0b473e32bad8d) Thanks [@smn-cds](https://github.com/smn-cds)! - ‼️ Breaking changes on experimental custom details page components
+  - Design of `ShareButton` has changed from a gray button to a underlined text
+  - `MainDetailsSection` now already contains the `ShareButton`
+
 ## 3.6.1
 
 ### Patch Changes

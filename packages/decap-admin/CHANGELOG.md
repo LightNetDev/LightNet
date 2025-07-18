@@ -1,5 +1,17 @@
 # @lightnet/decap-admin
 
+## 3.1.2
+
+### Patch Changes
+
+- [#288](https://github.com/LightNetDev/LightNet/pull/288) [`008553f`](https://github.com/LightNetDev/LightNet/commit/008553f7c016931b617ba2c632e0b473e32bad8d) Thanks [@smn-cds](https://github.com/smn-cds)! - Reorganized dependencies
+
+  If you are using npm as the package manager, you can remove these
+  dependencies from your `package.json`.
+  - sharp
+  - @astrojs/react
+  - @astrojs/tailwind
+
 ## 3.1.1
 
 ### Patch Changes
@@ -44,7 +56,6 @@
   This update introduces major changes on our translation system.
 
   Changes:
-
   - Translations are now stored inside `.yml` files.
   - Added i18next as our translation engine
   - Translations now support a flat i18next syntax including (pluralization, contextualization, interpolation)
@@ -102,7 +113,6 @@
 - [#174](https://github.com/LightNetDev/lightnet/pull/174) [`bb011bf`](https://github.com/LightNetDev/lightnet/commit/bb011bfef8c2d7745e3c3417f7f6ef608867e184) Thanks [@smn-cds](https://github.com/si-fab)! - Update Astro to version 5.
 
   Fix your project by doing this:
-
   - move `/src/content/config.ts` to `/src/content.config.ts`.
   - update tsconfig.json to match the following:
 
