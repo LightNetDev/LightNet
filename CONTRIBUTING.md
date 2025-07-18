@@ -37,7 +37,7 @@ This repo is a “monorepo,” meaning it contains several projects in one. It c
 
 ### Setting up a development environment
 
-**Prerequisites:** Developing LightNet requires [Node.js](https://nodejs.org/en) (use the version inside the [.nvmrc](./.nvmrc) file) and [pnpm](https://pnpm.io/) (use the version from `packageManager` inside the [package.json](./package.json) file). Make sure you have these installed before following these steps.
+**Prerequisites:** Developing LightNet requires [Node.js](https://nodejs.org/en) **22 or later** (use the version inside the [.nvmrc](./.nvmrc) file) and [pnpm](https://pnpm.io/) (use the version from `packageManager` inside the [package.json](./package.json) file). Make sure you have these installed before following these steps.
 
 **Code Editor:** We recommend using VS-Code with these extensions:
 

@@ -48,5 +48,8 @@
       "esbuild",
       "sharp"
     ]
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

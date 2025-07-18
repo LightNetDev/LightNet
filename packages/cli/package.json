@@ -24,5 +24,8 @@
   },
   "dependencies": {
     "yaml": "^2.8.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
