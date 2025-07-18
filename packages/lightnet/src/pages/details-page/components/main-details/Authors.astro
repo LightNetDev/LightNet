@@ -12,8 +12,8 @@ const authors = item.data.authors?.join(", ")
 
 {
   authors && (
-    <p class="mt-2 text-xl sm:text-2xl" class:list={Astro.props.className}>
+    <div class="text-xl sm:text-2xl" class:list={Astro.props.className}>
       {authors}
-    </p>
+    </div>
   )
 }

@@ -23,10 +23,12 @@
   "peerDependencies": {
     "astro": "^5.1.0",
     "lightnet": "^3.0.0",
-    "sharp": "^0.33.4",
-    "typescript": "^5.5.3"
+    "sharp": "^0.33.4"
   },
   "dependencies": {
     "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3"
   }
 }

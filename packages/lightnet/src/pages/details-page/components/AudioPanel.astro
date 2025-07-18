@@ -1,0 +1,73 @@
+---
+import { AstroError } from "astro/errors"
+
+import { getMediaItem } from "../../../content/get-media-items"
+import { createContentMetadata } from "../utils/create-content-metadata"
+import AudioPlayer from "./AudioPlayer.astro"
+
+interface Props {
+  mediaId: string
+  className?: string
+}
+
+const { mediaId, className } = Astro.props
+const { t } = Astro.locals.i18n
+
+const item = await getMediaItem(mediaId)
+
+const content = item.data.content
+  .map((c) => createContentMetadata(c))
+  .filter((c) => c.extension === "mp3")
+
+if (!content.length) {
+  throw new AstroError(
+    `Missing mp3 content for ${mediaId}`,
+    `Add at least one mp3 file to the content array of /src/media/${mediaId}.json`,
+  )
+}
+---
+
+<ol
+  class="mx-auto mt-10 flex max-w-screen-md flex-col gap-10 px-4 md:px-8"
+  class:list={[className]}
+  id="audio-panel"
+>
+  {
+    content.map((c) => (
+      <li>
+        {content.length > 1 && <div class="mb-3 font-bold">{t(c.label)}</div>}
+        <AudioPlayer className="w-full" src={c.url} />
+      </li>
+    ))
+  }
+</ol>
+<script>
+  document.addEventListener("astro:after-swap", () => {
+    initAudioPanel()
+  })
+  initAudioPanel()
+  function initAudioPanel() {
+    const audioPanel = document.getElementById("audio-panel")
+    if (!audioPanel) {
+      return
+    }
+    const audios = Array.from(audioPanel.querySelectorAll("audio"))
+
+    audios.forEach((audio, index) => {
+      audio.addEventListener("play", () => {
+        audios.forEach((otherAudio) => {
+          if (otherAudio !== audio) {
+            otherAudio.pause()
+          }
+        })
+      })
+
+      audio.addEventListener("ended", () => {
+        const nextAudio = audios[index + 1]
+        if (nextAudio) {
+          nextAudio.play()
+        }
+      })
+    })
+  }
+</script>

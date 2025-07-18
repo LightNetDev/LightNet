@@ -3,7 +3,6 @@ import ContentSection from "./components/ContentSection.astro"
 import DescriptionSection from "./components/DescriptionSection.astro"
 import DetailsPage from "./components/DetailsPage.astro"
 import OpenButton from "./components/main-details/OpenButton.astro"
-import ShareButton from "./components/main-details/ShareButton.astro"
 import MainDetailsSection from "./components/MainDetailsSection.astro"
 import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
 import MoreDetailsSection from "./components/MoreDetailsSection.astro"
@@ -18,11 +17,12 @@ const { mediaId, coverStyle, openActionLabel = "ln.details.open" } = Astro.props
 ---
 
 <DetailsPage mediaId={mediaId}>
-  <MainDetailsSection mediaId={mediaId} coverStyle={coverStyle}>
-    <div class="mt-10 flex flex-col justify-center gap-4 sm:justify-start">
-      <OpenButton mediaId={mediaId} openActionLabel={openActionLabel} />
-      <ShareButton />
-    </div>
+  <MainDetailsSection mediaId={mediaId} thumbnailStyle={coverStyle}>
+    <OpenButton
+      className="mt-8"
+      mediaId={mediaId}
+      openActionLabel={openActionLabel}
+    />
   </MainDetailsSection>
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} />
