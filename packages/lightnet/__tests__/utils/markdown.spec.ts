@@ -52,3 +52,7 @@ test("Should remove block quotes", () => {
     "block quote\nmore quote",
   )
 })
+
+test("Should return undefined when markdown is undefined", () => {
+  expect(markdownToText(undefined)).toBeUndefined()
+})
