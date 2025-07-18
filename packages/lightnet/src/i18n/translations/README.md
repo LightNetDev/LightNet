@@ -8,7 +8,7 @@ Check the [translation status](TRANSLATION-STATUS.md) for an overview of complet
 Have you translated LightNet into a new language? Have you fixed a incorrect translation? Great! How about sharing
 your work with others, by adding it to this folder?
 
-This are the ways how you can contribute your translations:
+These are the ways you can contribute your translations:
 
 - [Open a GitHub pull-request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project), if you are a git-native. 🤓
 - [Use the translation-update form](https://github.com/LightNetDev/LightNet/issues/new?template=---03-translations-update.yml) to share your work. ⭐️
