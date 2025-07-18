@@ -68,6 +68,6 @@ function parseCategory(item: unknown) {
     categoryEntrySchema,
     item,
     (id) => `Invalid category: ${id}`,
-    (id) => `Fix these issues inside "src/content/category/${id}.json":`,
+    (id) => `Fix these issues inside "src/content/categories/${id}.json":`,
   )
 }
