@@ -1,8 +1,8 @@
+import config from "virtual:lightnet/config"
+import projectContext from "virtual:lightnet/project-context"
 import { expect, test } from "vitest"
 
 import { isExternalUrl } from "../../src/utils/urls"
-import config from "virtual:lightnet/config"
-import projectContext from "virtual:lightnet/project-context"
 
 // relative path should be treated as internal
 test("Should treat relative paths as internal", () => {
