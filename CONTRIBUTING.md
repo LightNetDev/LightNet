@@ -75,6 +75,13 @@ Non-package (`examples/*`) changes do not need changesets.
 pnpm changeset
 ```
 
+Before opening your pull request, format your code and fix any lint errors:
+
+```sh
+pnpm format
+pnpm lint --fix
+```
+
 ## Testing
 
 ### Testing visual changes while you work
