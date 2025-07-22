@@ -52,6 +52,12 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         })
 
         injectRoute({
+          pattern: "/api/versions.json",
+          entrypoint: "lightnet/pages/api/versions.ts",
+          prerender: true,
+        })
+
+        injectRoute({
           pattern: "/[locale]/media/[mediaId]",
           entrypoint: "lightnet/pages/DetailsPageRoute.astro",
           prerender: true,

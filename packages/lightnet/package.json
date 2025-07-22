@@ -33,7 +33,8 @@
     "./pages/RootRoute.astro": "./src/pages/RootRoute.astro",
     "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
     "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
-    "./pages/api/search.ts": "./src/pages/api/search.ts"
+    "./pages/api/search.ts": "./src/pages/api/search.ts",
+    "./pages/api/versions.ts": "./src/pages/api/versions.ts"
   },
   "peerDependencies": {
     "astro": "^5.1.0",
