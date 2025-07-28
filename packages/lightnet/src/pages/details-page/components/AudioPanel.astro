@@ -43,10 +43,7 @@ if (!content.length) {
 </ol>
 <script>
   const audioPanel = document.getElementById("audio-panel")
-  if (!audioPanel) {
-    return
-  }
-  const audios = Array.from(audioPanel.querySelectorAll("audio"))
+  const audios = Array.from(audioPanel?.querySelectorAll("audio") ?? [])
 
   audios.forEach((audio, index) => {
     audio.addEventListener("play", () => {
