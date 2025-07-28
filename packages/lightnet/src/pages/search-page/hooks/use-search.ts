@@ -4,29 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import type { SearchItem, SearchResponse } from "../../api/search-response"
 import { observeSearchQuery, type SearchQuery } from "../utils/search-query"
 
-declare global {
-  interface Window {
-    lnSearchState?: {
-      fuse: Fuse<SearchItem>
-      items: SearchItem[]
-      locale?: string
-    }
-  }
-}
-
 interface Context {
   categories: Record<string, string>
   mediaTypes: Record<string, { name: string }>
   languages: Record<string, { name: string }>
-  currentLocale?: string
 }
 
-export function useSearch({
-  currentLocale,
-  categories,
-  mediaTypes,
-  languages,
-}: Context) {
+export function useSearch({ categories, mediaTypes, languages }: Context) {
   const fuse = useRef<Fuse<SearchItem>>(undefined)
   const [allItems, setAllItems] = useState<SearchItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -83,29 +67,12 @@ export function useSearch({
           ignoreLocation: true,
         })
         setAllItems(items)
-        window.lnSearchState = {
-          locale: currentLocale,
-          items,
-          fuse: fuse.current,
-        }
       } catch (error) {
         console.error(error)
       }
       setIsLoading(false)
     }
-    // try restore old search index only if
-    // locale is still the same because we add translated values to the
-    // search index
-    const { lnSearchState } = window
-    if (lnSearchState && lnSearchState.locale === currentLocale) {
-      fuse.current = lnSearchState.fuse
-      setAllItems(lnSearchState.items)
-      setIsLoading(false)
-      console.log("reused old state")
-    } else {
-      fetchData()
-      console.log("create new search state")
-    }
+    fetchData()
     return removeSearchQueryObserver
   }, [])
 
