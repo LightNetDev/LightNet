@@ -42,32 +42,26 @@ if (!content.length) {
   }
 </ol>
 <script>
-  document.addEventListener("astro:after-swap", () => {
-    initAudioPanel()
-  })
-  initAudioPanel()
-  function initAudioPanel() {
-    const audioPanel = document.getElementById("audio-panel")
-    if (!audioPanel) {
-      return
-    }
-    const audios = Array.from(audioPanel.querySelectorAll("audio"))
+  const audioPanel = document.getElementById("audio-panel")
+  if (!audioPanel) {
+    return
+  }
+  const audios = Array.from(audioPanel.querySelectorAll("audio"))
 
-    audios.forEach((audio, index) => {
-      audio.addEventListener("play", () => {
-        audios.forEach((otherAudio) => {
-          if (otherAudio !== audio) {
-            otherAudio.pause()
-          }
-        })
-      })
-
-      audio.addEventListener("ended", () => {
-        const nextAudio = audios[index + 1]
-        if (nextAudio) {
-          nextAudio.play()
+  audios.forEach((audio, index) => {
+    audio.addEventListener("play", () => {
+      audios.forEach((otherAudio) => {
+        if (otherAudio !== audio) {
+          otherAudio.pause()
         }
       })
     })
-  }
+
+    audio.addEventListener("ended", () => {
+      const nextAudio = audios[index + 1]
+      if (nextAudio) {
+        nextAudio.play()
+      }
+    })
+  })
 </script>
