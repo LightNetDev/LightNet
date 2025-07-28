@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from "astro:transitions"
 import CustomFooter from "virtual:lightnet/components/CustomFooter"
 import CustomHead from "virtual:lightnet/components/CustomHead"
 import config from "virtual:lightnet/config"
@@ -8,6 +7,7 @@ import { resolveLanguage } from "../i18n/resolve-language"
 import Favicon from "./components/Favicon.astro"
 import Header from "./components/Header.astro"
 import PreloadReact from "./components/PreloadReact"
+import ViewTransition from "./components/ViewTransition.astro"
 
 interface Props {
   title?: string
@@ -32,7 +32,7 @@ const language = resolveLanguage(currentLocale)
     {config.manifest && <link rel="manifest" href={config.manifest} />}
     <link rel="prefetch" href="/api/search.json" />
     <Favicon />
-    <ClientRouter />
+    <ViewTransition />
   </head>
   <body
     transition:animate="none"
