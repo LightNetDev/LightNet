@@ -101,8 +101,10 @@ export function useSearch({
       fuse.current = lnSearchState.fuse
       setAllItems(lnSearchState.items)
       setIsLoading(false)
+      console.log("reused old state")
     } else {
       fetchData()
+      console.log("create new search state")
     }
     return removeSearchQueryObserver
   }, [])
