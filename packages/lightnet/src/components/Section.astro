@@ -24,13 +24,6 @@ export interface Props {
    */
   marginTop?: "sm" | "lg" | "none"
   /**
-   * Remove padding from the left and right side of the content.
-   * This will not apply to the section title.
-   *
-   * @default false
-   */
-  disableHorizontalPadding?: boolean
-  /**
    * Title on top of the section.
    */
   title?: string
@@ -38,24 +31,27 @@ export interface Props {
    * Css classes to set to the section element.
    */
   className?: string
+  /**
+   * Css classes to set to the title element.
+   */
+  titleClass?: string
 }
 
 const {
   id,
   maxWidth = "wide",
   marginTop = "lg",
-  disableHorizontalPadding = false,
   title,
   className,
+  titleClass,
 } = Astro.props
 ---
 
 <section
-  class="mx-auto"
+  class="mx-auto px-4 md:px-8"
   class:list={[
     sectionMaxWidths[maxWidth],
     sectionMarginTopValues[marginTop],
-    !disableHorizontalPadding && "px-4 md:px-8",
     className,
   ]}
   id={id}
@@ -64,7 +60,7 @@ const {
     title && (
       <h2
         class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-12 sm:text-3xl"
-        class:list={[disableHorizontalPadding && "px-4 md:px-8"]}
+        class:list={[titleClass]}
       >
         {title}
       </h2>

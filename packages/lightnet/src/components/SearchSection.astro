@@ -3,12 +3,17 @@ import SearchFilter from "../pages/search-page/components/SearchFilter.astro"
 import SearchList from "../pages/search-page/components/SearchList.astro"
 import Section, { type Props as SectionProps } from "./Section.astro"
 
-// we need the semi-colon for the astro compiler :(
-// prettier-ignore
-type Props = Omit<SectionProps, "disableHorizontalPadding" | "maxWidth">;
+type Props = Omit<SectionProps, "maxWidth">
+
+const { className = "", titleClass = "" } = Astro.props
 ---
 
-<Section {...Astro.props} disableHorizontalPadding={true} maxWidth="narrow">
+<Section
+  {...Astro.props}
+  className={"px-0 md:px-0 " + className}
+  titleClass={"px-4 md:px-8 " + titleClass}
+  maxWidth="narrow"
+>
   <div class="px-4 md:px-8">
     <SearchFilter />
   </div>
