@@ -1,5 +1,5 @@
 ---
-import { sectionMarginTopValues,sectionMaxWidths } from "./constants"
+import { sectionMarginTopValues, sectionMaxWidths } from "./constants"
 import Icon from "./Icon"
 
 export interface Props {
@@ -67,16 +67,15 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
       </h2>
     )
   }
-  <div class="mb-3 hidden justify-end gap-1 sm:flex">
-    <!-- todo translate aria labels -->
+  <div class="mb-3 hidden justify-end gap-2 sm:flex">
     <button
       data-button-prev
-      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-400 disabled:hover:outline-none"
+      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
       ><Icon className="mdi--chevron-left" ariaLabel="Previous" /></button
     >
     <button
       data-button-next
-      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-400 disabled:hover:outline-none"
+      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
       ><Icon className="mdi--chevron-right" ariaLabel="Next" /></button
     >
   </div>
