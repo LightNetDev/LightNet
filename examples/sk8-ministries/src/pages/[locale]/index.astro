@@ -52,6 +52,24 @@ const learnSkateboardingItems = await getMediaItems({
  * having to write Astro.locals.i18n.t every time.
  */
 const t = Astro.locals.i18n.t
+
+const items = [
+  "blue",
+  "green",
+  "pink",
+  "yellow",
+  "orange",
+  "cyan",
+  "blue",
+  "red",
+  "blue",
+  "blue",
+  "blue",
+  "black",
+  "blue",
+  "cyan",
+  "blue",
+]
 ---
 
 {
@@ -79,7 +97,17 @@ const t = Astro.locals.i18n.t
     showSearch={true}
   />
 
-  <CarouselSection title="Some lengthy title" />
+  <CarouselSection title="Some lengthy title"
+    >{
+      items.map((item) => (
+        <li
+          class="carousel-item--wide"
+          style={`background-color:${item};`}
+          class:list={[item === "cyan" ? "h-96" : "h-72"]}
+        />
+      ))
+    }</CarouselSection
+  >
 
   {
     /* 

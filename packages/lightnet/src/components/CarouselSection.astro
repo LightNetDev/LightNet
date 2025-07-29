@@ -41,24 +41,6 @@ const {
   title,
   className,
 } = Astro.props
-
-const items = [
-  "blue",
-  "green",
-  "pink",
-  "yellow",
-  "orange",
-  "cyan",
-  "blue",
-  "red",
-  "blue",
-  "blue",
-  "blue",
-  "black",
-  "blue",
-  "cyan",
-  "blue",
-]
 ---
 
 <section
@@ -98,15 +80,7 @@ const items = [
 
   <div data-slider class="overflow-hidden">
     <ol class="flex items-end gap-4 transition-[height] duration-200 sm:gap-8">
-      {
-        items.map((item) => (
-          <li
-            class="carousel-item--wide"
-            style={`background-color:${item};`}
-            class:list={[item === "cyan" ? "h-96" : "h-72"]}
-          />
-        ))
-      }
+      <slot />
     </ol>
   </div>
 
@@ -122,6 +96,7 @@ const items = [
           loop: false,
           align: "start",
           dragFree: true,
+          duration: 40,
           slidesToScroll: "auto",
         },
         [AutoHeight()],
