@@ -21,11 +21,25 @@ export function detailsPagePath(
  */
 export function searchPagePath(
   locale: string | undefined,
-  filter?: { category: string },
+  filter?: {
+    category?: string
+    language?: string
+    search?: string
+    type?: string
+  },
 ) {
   const searchParams = new URLSearchParams()
   if (filter?.category) {
     searchParams.append("category", filter.category)
+  }
+  if (filter?.language) {
+    searchParams.append("language", filter.language)
+  }
+  if (filter?.search) {
+    searchParams.append("search", filter.search)
+  }
+  if (filter?.type) {
+    searchParams.append("type", filter.type)
   }
   const query = searchParams.size ? `?${searchParams.toString()}` : ""
   return `/${locale}/media${query}`
