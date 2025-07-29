@@ -11,6 +11,7 @@ import {
   HighlightSection,
   MediaGallerySection,
   Page,
+  SliderSection,
 } from "lightnet/components"
 import { getMediaItems } from "lightnet/content"
 
@@ -77,6 +78,8 @@ const t = Astro.locals.i18n.t
     subtitleSize="lg"
     showSearch={true}
   />
+
+  <SliderSection title="Some lengthy title" />
 
   {
     /* 

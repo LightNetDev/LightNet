@@ -147,6 +147,12 @@ importers:
       daisyui:
         specifier: ^4.12.24
         version: 4.12.24(postcss@8.5.6)
+      embla-carousel:
+        specifier: ^8.6.0
+        version: 8.6.0
+      embla-carousel-auto-height:
+        specifier: ^8.6.0
+        version: 8.6.0(embla-carousel@8.6.0)
       fuse.js:
         specifier: ^7.1.0
         version: 7.1.0
@@ -1635,6 +1641,14 @@ packages:
 
   electron-to-chromium@1.5.180:
     resolution: {integrity: sha512-ED+GEyEh3kYMwt2faNmgMB0b8O5qtATGgR4RmRsIp4T6p7B8vdMbIedYndnvZfsaXvSzegtpfqRMDNCjjiSduA==}
+
+  embla-carousel-auto-height@8.6.0:
+    resolution: {integrity: sha512-/HrJQOEM6aol/oF33gd2QlINcXy3e19fJWvHDuHWp2bpyTa+2dm9tVVJak30m2Qy6QyQ6Fc8DkImtv7pxWOJUQ==}
+    peerDependencies:
+      embla-carousel: 8.6.0
+
+  embla-carousel@8.6.0:
+    resolution: {integrity: sha512-SjWyZBHJPbqxHOzckOfo8lHisEaJWmwd23XppYFYVh10bU66/Pn5tkVkbkCMZVdbUE5eTCI2nD8OyIP4Z+uwkA==}
 
   emmet@2.4.11:
     resolution: {integrity: sha512-23QPJB3moh/U9sT4rQzGgeyyGIrcM+GH5uVYg2C6wZIxAIJq7Ng3QLT79tl8FUwDXhyq9SusfknOrofAKqvgyQ==}
@@ -5785,6 +5799,12 @@ snapshots:
   eastasianwidth@0.2.0: {}
 
   electron-to-chromium@1.5.180: {}
+
+  embla-carousel-auto-height@8.6.0(embla-carousel@8.6.0):
+    dependencies:
+      embla-carousel: 8.6.0
+
+  embla-carousel@8.6.0: {}
 
   emmet@2.4.11:
     dependencies:

@@ -49,6 +49,8 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-virtual": "^3.13.12",
     "daisyui": "^4.12.24",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-auto-height": "^8.6.0",
     "fuse.js": "^7.1.0",
     "i18next": "^25.3.2",
     "marked": "^16.0.0",

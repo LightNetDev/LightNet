@@ -1,4 +1,5 @@
 export { default as CategoriesSection } from "../src/components/CategoriesSection.astro"
+export { default as SliderSection } from "../src/components/SliderSection.astro"
 export { default as HeroSection } from "../src/components/HeroSection.astro"
 export { default as HighlightSection } from "../src/components/HighlightSection.astro"
 export { default as Icon } from "../src/components/Icon"
