@@ -1,5 +1,6 @@
 ---
-import { sectionMarginTopValues,sectionMaxWidths } from "./constants"
+import { sectionMarginTopValues, sectionMaxWidths } from "./constants"
+import Icon from "./Icon"
 
 export interface Props {
   /**
@@ -28,6 +29,13 @@ export interface Props {
    */
   title?: string
   /**
+   * A link to show more content belonging to this section. This link will be behind the section title
+   * with a chevron.
+   *
+   * The link will not be transformed. You need to make sure to prepend the current locale.
+   */
+  showMoreLink?: string
+  /**
    * Css classes to set to the section element.
    */
   className?: string
@@ -41,6 +49,7 @@ const {
   id,
   maxWidth = "wide",
   marginTop = "lg",
+  showMoreLink,
   title,
   className,
   titleClass,
@@ -62,7 +71,17 @@ const {
         class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-12 sm:text-3xl"
         class:list={[titleClass]}
       >
-        {title}
+        {showMoreLink ? (
+          <a href={showMoreLink} class="group flex items-center">
+            {title}
+            <Icon
+              className="mdi--chevron-right group-hover:text-primary text-5xl -ms-2"
+              ariaLabel=""
+            />
+          </a>
+        ) : (
+          <>{title}</>
+        )}
       </h2>
     )
   }

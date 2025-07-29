@@ -5,11 +5,11 @@ import Section, { type Props as SectionProps } from "./Section.astro"
 
 type Props = Omit<SectionProps, "maxWidth">
 
-const { className = "", titleClass = "" } = Astro.props
+const { className = "", titleClass = "", ...props } = Astro.props
 ---
 
 <Section
-  {...Astro.props}
+  {...props}
   className={"px-0 md:px-0 " + className}
   titleClass={"px-4 md:px-8 " + titleClass}
   maxWidth="narrow"

@@ -1,70 +1,14 @@
 ---
-import { sectionMarginTopValues, sectionMaxWidths } from "./constants"
 import Icon from "./Icon"
 
-export interface Props {
-  /**
-   * Id to set to the section element.
-   * For example this can be used to reference it inside anchors.
-   */
-  id?: string
-  /**
-   * Maximum width of the section container. This limits how wide the section grows
-   * on bigger screens. After reaching this width the section will be centered horizontally.
-   *
-   * - "wide" (1280 px) is the maximum homepage width.
-   * - "narrow" (768 px) is the maximum details page width. Optimized for good text readability.
-   *
-   * @default "wide"
-   */
-  maxWidth?: "wide" | "narrow"
-  /**
-   * Gap to the component above.
-   *
-   * @default "lg"
-   */
-  marginTop?: "sm" | "lg" | "none"
-  /**
-   * Title on top of the section.
-   */
-  title?: string
-  /**
-   * Css classes to set to the section element.
-   */
-  className?: string
-}
+import Section, { type Props as SectionProps } from "./Section.astro"
 
-const {
-  id,
-  maxWidth = "wide",
-  marginTop = "lg",
-  title,
-  className,
-} = Astro.props
+type Props = SectionProps
+
+const { titleClass = "", ...props } = Astro.props
 ---
 
-<section
-  class="mx-auto px-4 md:px-8"
-  class:list={[
-    sectionMaxWidths[maxWidth],
-    sectionMarginTopValues[marginTop],
-    className,
-  ]}
-  id={id}
->
-  {
-    title && (
-      <h2 class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-1 sm:text-3xl">
-        <a href="/en/media">
-          {title}
-          <Icon
-            className="mdi--chevron-right align-bottom text-4xl"
-            ariaLabel=""
-          />
-        </a>
-      </h2>
-    )
-  }
+<Section {...props} titleClass={"md:mb-1 " + titleClass}>
   <div class="mb-3 hidden justify-end gap-2 sm:flex">
     <button
       data-button-prev
@@ -128,7 +72,7 @@ const {
         .on("reInit", updateArrowButtons)
     }
   </script>
-</section>
+</Section>
 <style is:global>
   .carousel-item--wide {
     flex: 0 0 auto;
