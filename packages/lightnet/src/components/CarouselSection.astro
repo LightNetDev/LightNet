@@ -42,7 +42,23 @@ const {
   className,
 } = Astro.props
 
-const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
+const items = [
+  "blue",
+  "green",
+  "pink",
+  "yellow",
+  "orange",
+  "cyan",
+  "blue",
+  "red",
+  "blue",
+  "blue",
+  "blue",
+  "black",
+  "blue",
+  "cyan",
+  "blue",
+]
 ---
 
 <section
@@ -106,6 +122,7 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
           loop: false,
           align: "start",
           dragFree: true,
+          slidesToScroll: "auto",
         },
         [AutoHeight()],
       )
@@ -117,7 +134,7 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
       prevBtn?.addEventListener("click", () => carousel.scrollPrev())
       nextBtn?.addEventListener("click", () => carousel.scrollNext())
 
-      const updateButtons = () => {
+      const updateArrowButtons = () => {
         if (carousel.canScrollPrev()) {
           prevBtn?.removeAttribute("disabled")
         } else {
@@ -131,9 +148,9 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
         }
       }
       carousel
-        .on("init", updateButtons)
-        .on("select", updateButtons)
-        .on("reInit", updateButtons)
+        .on("init", updateArrowButtons)
+        .on("select", updateArrowButtons)
+        .on("reInit", updateArrowButtons)
     }
   </script>
 </section>
