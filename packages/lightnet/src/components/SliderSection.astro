@@ -112,9 +112,9 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
       )
       const prevBtn =
         document.querySelector<HTMLButtonElement>("[data-button-prev]")
-
       const nextBtn =
         document.querySelector<HTMLButtonElement>("[data-button-next]")
+
       prevBtn?.addEventListener("click", () => embla.scrollPrev())
       nextBtn?.addEventListener("click", () => embla.scrollNext())
 
@@ -138,31 +138,30 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
     }
   </script>
 </section>
-<style>
+<style is:global>
   .scroll-item {
     flex: 0 0 auto;
-    border-radius: 8px;
-    width: calc((100% - 6rem) / 4); /* 4 items view - default */
+    width: 85%;
   }
 
-  /* Medium devices - show 3 columns */
-  @media (max-width: 1024px) {
-    .scroll-item {
-      width: calc((100% - 4rem) / 3); /* 3 gaps of 16px */
-    }
-  }
-
-  /* Small devices - show 2 full items + part of the next */
-  @media (max-width: 768px) {
+  /* sm - show 2 full items + part of the next */
+  @media (min-width: 640px) {
     .scroll-item {
       width: calc((100% - 2rem) / 2.3); /* 2 full + part of third */
     }
   }
 
-  /* Extra small devices - show 1.2 items */
-  @media (max-width: 500px) {
+  /* md - show 3 columns */
+  @media (min-width: 768px) {
     .scroll-item {
-      width: 80%;
+      width: calc((100% - 4rem) / 3); /* 3 gaps of 16px */
+    }
+  }
+
+  /* lg - show 4 columns */
+  @media (min-width: 1024px) {
+    .scroll-item {
+      width: calc((100% - 6rem) / 4); /* 4 items view - default */
     }
   }
 </style>
