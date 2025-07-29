@@ -82,11 +82,11 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
   </div>
 
   <div data-slider class="overflow-hidden">
-    <ol class="flex items-end gap-8 transition-[height] duration-200">
+    <ol class="flex items-end gap-4 transition-[height] duration-200 sm:gap-8">
       {
         items.map((item) => (
           <li
-            class="scroll-item"
+            class="carousel-item--wide"
             style={`background-color:${item};`}
             class:list={[item === "cyan" ? "h-96" : "h-72"]}
           />
@@ -101,7 +101,7 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
 
     const slider: HTMLElement | null = document.querySelector("[data-slider]")
     if (slider) {
-      const embla = EmblaCarousel(
+      const carousel = EmblaCarousel(
         slider,
         {
           loop: false,
@@ -115,23 +115,23 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
       const nextBtn =
         document.querySelector<HTMLButtonElement>("[data-button-next]")
 
-      prevBtn?.addEventListener("click", () => embla.scrollPrev())
-      nextBtn?.addEventListener("click", () => embla.scrollNext())
+      prevBtn?.addEventListener("click", () => carousel.scrollPrev())
+      nextBtn?.addEventListener("click", () => carousel.scrollNext())
 
       const updateButtons = () => {
-        if (embla.canScrollPrev()) {
+        if (carousel.canScrollPrev()) {
           prevBtn?.removeAttribute("disabled")
         } else {
           prevBtn?.setAttribute("disabled", "disabled")
         }
 
-        if (embla.canScrollNext()) {
+        if (carousel.canScrollNext()) {
           nextBtn?.removeAttribute("disabled")
         } else {
           nextBtn?.setAttribute("disabled", "disabled")
         }
       }
-      embla
+      carousel
         .on("init", updateButtons)
         .on("select", updateButtons)
         .on("reInit", updateButtons)
@@ -139,29 +139,51 @@ const items = ["blue", "green", "pink", "yellow", "orange", "cyan"]
   </script>
 </section>
 <style is:global>
-  .scroll-item {
+  .carousel-item--wide {
     flex: 0 0 auto;
+    /* 1 column + part of the next */
     width: 85%;
   }
 
-  /* sm - show 2 full items + part of the next */
+  .carousel-item--narrow {
+    flex: 0 0 auto;
+    /* 2 columns + part of the next */
+    width: calc((100% - 1rem) / 2.3);
+  }
+
+  /* sm */
   @media (min-width: 640px) {
-    .scroll-item {
-      width: calc((100% - 2rem) / 2.3); /* 2 full + part of third */
+    .carousel-item--wide {
+      /* 2 columns */
+      width: calc((100% - 2rem) / 2);
+    }
+    .carousel-item--narrow {
+      /* 3 columns */
+      width: calc((100% - 4rem) / 3);
     }
   }
 
-  /* md - show 3 columns */
+  /* md */
   @media (min-width: 768px) {
-    .scroll-item {
-      width: calc((100% - 4rem) / 3); /* 3 gaps of 16px */
+    .carousel-item--wide {
+      /* 3 columns */
+      width: calc((100% - 4rem) / 3);
+    }
+    .carousel-item--narrow {
+      /* 4 columns */
+      width: calc((100% - 6rem) / 4);
     }
   }
 
-  /* lg - show 4 columns */
+  /* lg */
   @media (min-width: 1024px) {
-    .scroll-item {
-      width: calc((100% - 6rem) / 4); /* 4 items view - default */
+    .carousel-item--wide {
+      /* 4 columns */
+      width: calc((100% - 6rem) / 4);
+    }
+    .carousel-item--narrow {
+      /* 5 columns */
+      width: calc((100% - 8rem) / 5);
     }
   }
 </style>
