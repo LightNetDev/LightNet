@@ -14,7 +14,6 @@ import {
   Page,
 } from "lightnet/components"
 import { getMediaItems } from "lightnet/content"
-import { CarouselSection } from "lightnet/experimental-components"
 
 import eventImage from "../../assets/event.webp"
 import heroImage from "../../assets/hero.webp"
@@ -53,24 +52,6 @@ const learnSkateboardingItems = await getMediaItems({
  * having to write Astro.locals.i18n.t every time.
  */
 const t = Astro.locals.i18n.t
-
-const items = [
-  "blue",
-  "green",
-  "pink",
-  "yellow",
-  "orange",
-  "cyan",
-  "blue",
-  "red",
-  "blue",
-  "blue",
-  "blue",
-  "black",
-  "blue",
-  "cyan",
-  "blue",
-]
 ---
 
 {
@@ -99,25 +80,6 @@ const items = [
   />
 
   <CategoriesSection layout="carousel" moreLink="/en/media" />
-
-  <CarouselSection title={t("ln.categories")} moreLink="/en/media">
-    {
-      items.map((item) => (
-        <li
-          class="carousel-item--wide"
-          class:list={[item === "cyan" ? "h-96" : "h-72"]}
-          style={`background-color:${item};`}
-          role="group"
-          aria-roledescription="slide"
-        >
-          <a
-            href="/en/media"
-            class="block h-full w-full outline-gray-400 focus:outline"
-          />
-        </li>
-      ))
-    }
-  </CarouselSection>
 
   {
     /* 
