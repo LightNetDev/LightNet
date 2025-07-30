@@ -92,12 +92,12 @@ const items = [
     image={heroImage}
     title={t("x.site.title")}
     subtitle={t("x.ministry.slogan")}
-    titleSize="xl"
+    titleSize="lg"
     subtitleSize="lg"
     showSearch={true}
   />
 
-  <CarouselSection title="Some lengthy title" showMoreLink="/en/media">
+  <CarouselSection title={t("ln.categories")} showMoreLink="/en/media">
     {
       items.map((item) => (
         <li
