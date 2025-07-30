@@ -40,7 +40,7 @@ function getImage({ image, id }: Category) {
               class="group flex h-full flex-col gap-3"
             >
               <div
-                class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+                class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-colors ease-in-out sm:group-hover:outline"
                 class:list={[!category.image && "h-full"]}
               >
                 {category.image ? (
@@ -88,7 +88,7 @@ function getImage({ image, id }: Category) {
             class="group flex h-full flex-col gap-3"
           >
             <div
-              class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+              class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all ease-in-out sm:group-hover:outline"
               class:list={[!category.image && "h-full"]}
             >
               {category.image ? (
