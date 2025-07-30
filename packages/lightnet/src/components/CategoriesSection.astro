@@ -1,10 +1,11 @@
 ---
-import { getUsedCategories } from "../content/get-categories"
-import Section, { type Props as SectionProps } from "./Section.astro"
-import CarouselSection from "./CarouselSection.astro"
 import { AstroError } from "astro/errors"
-import { searchPagePath } from "../utils/paths"
 import { Image } from "astro:assets"
+
+import { getUsedCategories } from "../content/get-categories"
+import { searchPagePath } from "../utils/paths"
+import CarouselSection from "./CarouselSection.astro"
+import Section, { type Props as SectionProps } from "./Section.astro"
 
 type Props = SectionProps & {
   layout?: "grid" | "carousel"
