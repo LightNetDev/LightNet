@@ -52,25 +52,33 @@ function getImage({ image, id }: Category) {
       {layout === "image-grid" && (
         <ol class="grid grid-cols-2 items-end justify-between gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-5">
           {categories.map((category) => (
-            <li>
+            <li class="h-full">
               <a
                 href={searchPagePath(currentLocale, { category: category.id })}
-                class="group flex flex-col gap-3"
+                class="group flex h-full flex-col gap-3"
               >
-                <div class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline">
-                  <Image
-                    class="h-full w-full object-contain"
-                    src={getImage(category)}
-                    alt=""
-                    widths={[256, 512, 768, 1024]}
-                    sizes={
-                      "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
-                      "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
-                      "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
-                      "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
-                      "217px"
-                    }
-                  />
+                <div
+                  class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+                  class:list={[!category.image && "h-full"]}
+                >
+                  {category.image ? (
+                    <Image
+                      class="h-full w-full object-contain"
+                      src={getImage(category)}
+                      alt=""
+                      widths={[256, 512, 768, 1024]}
+                      sizes={
+                        "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
+                        "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
+                        "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
+                        "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
+                        "217px"
+                      }
+                    />
+                  ) : (
+                    <div class="h-full w-full bg-gray-400"> </div>
+                  )}
+
                   <div class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 via-30% to-transparent to-65% p-4 text-gray-50">
                     <span class="line-clamp-3 text-balance font-bold">
                       {category.name}
