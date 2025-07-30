@@ -2,4 +2,4 @@
 "lightnet": minor
 ---
 
-Adds a `showMoreLink` property to Section
+Adds a `moreLink` property to Section

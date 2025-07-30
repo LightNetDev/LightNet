@@ -33,7 +33,7 @@ export interface Props {
    *
    * The link will not be transformed. You need to make sure to prepend the current locale.
    */
-  showMoreLink?: string
+  moreLink?: string
   /**
    * Css classes to set to the section element.
    */
@@ -48,7 +48,7 @@ const {
   id,
   maxWidth = "wide",
   marginTop = "lg",
-  showMoreLink,
+  moreLink,
   title,
   className,
   titleClass,
@@ -78,8 +78,8 @@ const marginTopValues = {
         class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-12 sm:text-3xl"
         class:list={[titleClass]}
       >
-        {showMoreLink ? (
-          <a href={showMoreLink} class="group flex items-center">
+        {moreLink ? (
+          <a href={moreLink} class="group flex items-center">
             {title}
             <Icon
               className="mdi--chevron-right group-hover:text-primary text-5xl -ms-2"
