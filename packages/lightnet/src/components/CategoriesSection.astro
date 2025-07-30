@@ -41,9 +41,11 @@ function getImage({ image, id }: Category) {
             >
               <div
                 class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-colors ease-in-out sm:group-hover:outline"
-                class:list={[!category.image && "h-full"]}
+                class:list={[
+                  !category.image && "h-full min-h-28 w-full bg-gray-900",
+                ]}
               >
-                {category.image ? (
+                {category.image && (
                   <Image
                     class="h-full w-full object-contain"
                     src={getImage(category)}
@@ -57,8 +59,6 @@ function getImage({ image, id }: Category) {
                       "217px"
                     }
                   />
-                ) : (
-                  <div class="h-full min-h-28 w-full bg-gray-300" />
                 )}
 
                 <div class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-black/80 via-black/30 via-50% to-transparent p-4 text-gray-50">
@@ -89,9 +89,11 @@ function getImage({ image, id }: Category) {
           >
             <div
               class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all ease-in-out sm:group-hover:outline"
-              class:list={[!category.image && "h-full"]}
+              class:list={[
+                !category.image && "h-full min-h-28 w-full bg-gray-300",
+              ]}
             >
-              {category.image ? (
+              {category.image && (
                 <Image
                   class="h-full w-full object-contain"
                   src={getImage(category)}
@@ -105,10 +107,7 @@ function getImage({ image, id }: Category) {
                     "217px"
                   }
                 />
-              ) : (
-                <div class="h-full min-h-28 w-full bg-gray-300" />
               )}
-
               <div class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-black/80 via-black/30 via-50% to-transparent p-4 text-gray-50">
                 <span class="line-clamp-3 text-balance font-bold">
                   {category.name}

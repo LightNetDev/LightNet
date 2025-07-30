@@ -8,7 +8,7 @@ const { titleClass = "", ...props } = Astro.props
 const { t, direction } = Astro.locals.i18n
 ---
 
-<Section {...props} titleClass={"mb-8 sm:mb-0 " + titleClass}>
+<Section {...props} titleClass={"!mb-8 sm:!mb-0 " + titleClass}>
   <ln-carousel data-direction={direction} aria-roledescription="carousel">
     <div class="mb-2 hidden justify-end gap-2 sm:flex">
       <button
