@@ -34,9 +34,9 @@ const { t, direction } = Astro.locals.i18n
       >
     </div>
 
-    <div data-carousel class="overflow-hidden">
+    <div data-carousel class="-m-2 overflow-hidden p-2">
       <ol
-        class="flex items-end gap-4 sm:gap-8"
+        class="flex items-end gap-4 md:gap-8"
         aria-atomic="false"
         aria-live="polite"
       >
@@ -115,11 +115,11 @@ const { t, direction } = Astro.locals.i18n
   @media (min-width: 640px) {
     .carousel-item--wide {
       /* 2 columns */
-      width: calc((100% - 2rem) / 2);
+      width: calc((100% - 1rem) / 2);
     }
     .carousel-item--narrow {
       /* 3 columns */
-      width: calc((100% - 4rem) / 3);
+      width: calc((100% - 2rem) / 3);
     }
   }
 
