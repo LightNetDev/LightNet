@@ -6,6 +6,7 @@ import Section, { type Props as SectionProps } from "./Section.astro"
 type Props = SectionProps
 
 const { titleClass = "", ...props } = Astro.props
+const { t } = Astro.locals.i18n
 ---
 
 <Section {...props} titleClass={"md:mb-1 " + titleClass}>
@@ -13,13 +14,15 @@ const { titleClass = "", ...props } = Astro.props
     <div class="mb-3 hidden justify-end gap-2 sm:flex">
       <button
         data-button-prev
+        aria-label={t("ln.previous")}
         class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
-        ><Icon className="mdi--chevron-left" ariaLabel="Previous" /></button
+        ><Icon className="mdi--chevron-left" ariaLabel="" /></button
       >
       <button
         data-button-next
+        aria-label={t("ln.next")}
         class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
-        ><Icon className="mdi--chevron-right" ariaLabel="Next" /></button
+        ><Icon className="mdi--chevron-right" ariaLabel="" /></button
       >
     </div>
 
@@ -44,7 +47,6 @@ const { titleClass = "", ...props } = Astro.props
           {
             loop: false,
             align: "start",
-            dragFree: true,
             duration: 40,
             slidesToScroll: "auto",
           },

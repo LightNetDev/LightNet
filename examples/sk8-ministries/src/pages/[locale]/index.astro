@@ -97,8 +97,8 @@ const items = [
     showSearch={true}
   />
 
-  <CarouselSection title="Some lengthy title" showMoreLink="/en/media"
-    >{
+  <CarouselSection title="Some lengthy title" showMoreLink="/en/media">
+    {
       items.map((item) => (
         <li
           class="carousel-item--wide"
@@ -106,8 +106,8 @@ const items = [
           class:list={[item === "cyan" ? "h-96" : "h-72"]}
         />
       ))
-    }</CarouselSection
-  >
+    }
+  </CarouselSection>
 
   {
     /* 
