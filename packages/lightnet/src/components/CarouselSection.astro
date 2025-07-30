@@ -9,68 +9,77 @@ const { titleClass = "", ...props } = Astro.props
 ---
 
 <Section {...props} titleClass={"md:mb-1 " + titleClass}>
-  <div class="mb-3 hidden justify-end gap-2 sm:flex">
-    <button
-      data-button-prev
-      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
-      ><Icon className="mdi--chevron-left" ariaLabel="Previous" /></button
-    >
-    <button
-      data-button-next
-      class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
-      ><Icon className="mdi--chevron-right" ariaLabel="Next" /></button
-    >
-  </div>
+  <ln-carousel>
+    <div class="mb-3 hidden justify-end gap-2 sm:flex">
+      <button
+        data-button-prev
+        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
+        ><Icon className="mdi--chevron-left" ariaLabel="Previous" /></button
+      >
+      <button
+        data-button-next
+        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
+        ><Icon className="mdi--chevron-right" ariaLabel="Next" /></button
+      >
+    </div>
 
-  <div data-slider class="overflow-hidden">
-    <ol class="flex items-end gap-4 sm:gap-8">
-      <slot />
-    </ol>
-  </div>
+    <div data-carousel class="overflow-hidden">
+      <ol class="flex items-end gap-4 sm:gap-8">
+        <slot />
+      </ol>
+    </div>
+  </ln-carousel>
 
   <script>
     import EmblaCarousel from "embla-carousel"
     import AutoHeight from "embla-carousel-auto-height"
 
-    const slider: HTMLElement | null = document.querySelector("[data-slider]")
-    if (slider) {
-      const carousel = EmblaCarousel(
-        slider,
-        {
-          loop: false,
-          align: "start",
-          dragFree: true,
-          duration: 40,
-          slidesToScroll: "auto",
-        },
-        [AutoHeight()],
-      )
-      const prevBtn =
-        document.querySelector<HTMLButtonElement>("[data-button-prev]")
-      const nextBtn =
-        document.querySelector<HTMLButtonElement>("[data-button-next]")
+    class Carousel extends HTMLElement {
+      connectedCallback() {
+        const carouselNode = this.querySelector(
+          "[data-carousel]",
+        ) as HTMLElement
+        const carousel = EmblaCarousel(
+          carouselNode,
+          {
+            loop: false,
+            align: "start",
+            dragFree: true,
+            duration: 40,
+            slidesToScroll: "auto",
+          },
+          [AutoHeight()],
+        )
+        const prevBtn = this.querySelector(
+          "[data-button-prev]",
+        ) as HTMLButtonElement
+        const nextBtn = this.querySelector(
+          "[data-button-next]",
+        ) as HTMLButtonElement
 
-      prevBtn?.addEventListener("click", () => carousel.scrollPrev())
-      nextBtn?.addEventListener("click", () => carousel.scrollNext())
+        prevBtn.addEventListener("click", () => carousel.scrollPrev())
+        nextBtn.addEventListener("click", () => carousel.scrollNext())
 
-      const updateArrowButtons = () => {
-        if (carousel.canScrollPrev()) {
-          prevBtn?.removeAttribute("disabled")
-        } else {
-          prevBtn?.setAttribute("disabled", "disabled")
+        const updateArrowButtons = () => {
+          if (carousel.canScrollPrev()) {
+            prevBtn.removeAttribute("disabled")
+          } else {
+            prevBtn.setAttribute("disabled", "disabled")
+          }
+
+          if (carousel.canScrollNext()) {
+            nextBtn.removeAttribute("disabled")
+          } else {
+            nextBtn.setAttribute("disabled", "disabled")
+          }
         }
-
-        if (carousel.canScrollNext()) {
-          nextBtn?.removeAttribute("disabled")
-        } else {
-          nextBtn?.setAttribute("disabled", "disabled")
-        }
+        carousel
+          .on("init", updateArrowButtons)
+          .on("select", updateArrowButtons)
+          .on("reInit", updateArrowButtons)
       }
-      carousel
-        .on("init", updateArrowButtons)
-        .on("select", updateArrowButtons)
-        .on("reInit", updateArrowButtons)
     }
+    customElements.define("ln-carousel", Carousel)
   </script>
 </Section>
 <style is:global>
