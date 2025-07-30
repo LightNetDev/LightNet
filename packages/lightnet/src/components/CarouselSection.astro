@@ -10,7 +10,7 @@ const { t, direction } = Astro.locals.i18n
 ---
 
 <Section {...props} titleClass={"md:mb-1 " + titleClass}>
-  <ln-carousel data-direction={direction}>
+  <ln-carousel data-direction={direction} aria-roledescription="carousel">
     <div class="mb-3 hidden justify-end gap-2 sm:flex">
       <button
         data-button-prev
@@ -35,7 +35,11 @@ const { t, direction } = Astro.locals.i18n
     </div>
 
     <div data-carousel class="overflow-hidden">
-      <ol class="flex items-end gap-4 sm:gap-8">
+      <ol
+        class="flex items-end gap-4 sm:gap-8"
+        aria-atomic="false"
+        aria-live="polite"
+      >
         <slot />
       </ol>
     </div>
