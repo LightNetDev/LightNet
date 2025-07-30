@@ -76,7 +76,7 @@ function getImage({ image, id }: Category) {
 }
 {
   !!categories.length && layout === "carousel" && (
-    <CarouselSection title={resolvedTitle}>
+    <CarouselSection {...props} title={resolvedTitle}>
       {categories.map((category) => (
         <li
           class="carousel-item--narrow h-full"
