@@ -8,23 +8,24 @@ type Props = {
 const { t } = Astro.locals.i18n
 ---
 
-<form
-  action={`/${Astro.currentLocale}/media`}
-  method="get"
-  class="dy-join group w-full rounded-2xl shadow-md outline-2 outline-offset-2 outline-gray-400 group-focus-within:outline"
-  class:list={[Astro.props.className]}
->
-  <input
-    class="dy-input dy-join-item grow rounded-2xl bg-gray-100/95 text-gray-900 placeholder-gray-500 shadow-inner focus:outline-none"
-    enterkeyhint="search"
-    type="search"
-    name="search"
-    placeholder={t("ln.search.placeholder")}
-  />
-  <button
-    type="submit"
-    class="dy-btn dy-join-item rounded-2xl border-gray-100/95 bg-gray-800 text-gray-50 hover:bg-gray-950 hover:text-gray-300"
+<search class="w-full" class:list={[Astro.props.className]}>
+  <form
+    action={`/${Astro.currentLocale}/media`}
+    method="get"
+    class="dy-join group w-full rounded-2xl shadow-md outline-2 outline-offset-2 outline-gray-400 group-focus-within:outline"
   >
-    <Icon className="mdi--magnify" ariaLabel={t("ln.search.title")} />
-  </button>
-</form>
+    <input
+      class="dy-input dy-join-item grow rounded-2xl bg-gray-100/95 text-gray-900 placeholder-gray-500 shadow-inner focus:outline-none"
+      enterkeyhint="search"
+      type="search"
+      name="search"
+      placeholder={t("ln.search.placeholder")}
+    />
+    <button
+      type="submit"
+      class="dy-btn dy-join-item rounded-2xl border-gray-100/95 bg-gray-800 text-gray-50 hover:bg-gray-950 hover:text-gray-300"
+    >
+      <Icon className="mdi--magnify" ariaLabel={t("ln.search.title")} />
+    </button>
+  </form>
+</search>
