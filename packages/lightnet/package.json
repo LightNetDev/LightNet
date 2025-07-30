@@ -24,6 +24,7 @@
     "./content": "./exports/content.ts",
     "./utils": "./exports/utils.ts",
     "./components": "./exports/components.ts",
+    "./experimental-components": "./exports/experimental-components.ts",
     "./experimental-details-page": "./exports/details-page.ts",
     "./i18n": "./exports/i18n.ts",
     "./locals": "./src/i18n/locals.ts",

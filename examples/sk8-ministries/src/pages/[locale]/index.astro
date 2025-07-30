@@ -7,12 +7,12 @@ export { getLocalePaths as getStaticPaths } from "lightnet/i18n"
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
 import {
-  CarouselSection,
   HeroSection,
   HighlightSection,
   MediaGallerySection,
   Page,
 } from "lightnet/components"
+import { CarouselSection } from "lightnet/experimental-components"
 import { getMediaItems } from "lightnet/content"
 
 import eventImage from "../../assets/event.webp"
