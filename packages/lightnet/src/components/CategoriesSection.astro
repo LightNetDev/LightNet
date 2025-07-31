@@ -65,7 +65,7 @@ function getImage({ image, id }: Category) {
                 class="relative overflow-hidden rounded-2xl shadow-md outline-2 outline-gray-400 transition-colors duration-75 ease-in-out sm:group-hover:outline"
                 class:list={[
                   !category.image && "h-full min-h-28 w-full",
-                  !category.image && (backgroundClass || "bg-primary"),
+                  !category.image && (backgroundClass || "bg-gray-300"),
                 ]}
               >
                 {category.image && (
@@ -89,7 +89,7 @@ function getImage({ image, id }: Category) {
                   class:list={[
                     category.image
                       ? "from-black/80 via-black/30 via-50% to-transparent"
-                      : "from-black/30 to-transparent",
+                      : "from-black/35 to-transparent",
                   ]}
                 >
                   <span class="line-clamp-3 select-none text-balance font-bold">
@@ -121,12 +121,12 @@ function getImage({ image, id }: Category) {
               class="relative overflow-hidden rounded-2xl shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
               class:list={[
                 !category.image && "h-full min-h-28 w-full",
-                !category.image && (backgroundClass || "bg-primary"),
+                !category.image && (backgroundClass || "bg-gray-300"),
               ]}
             >
               {category.image && (
                 <Image
-                  class="h-full w-full bg-gray-500 object-contain"
+                  class="h-full w-full bg-gray-300 object-contain"
                   src={getImage(category)}
                   loading="eager"
                   alt=""
@@ -145,7 +145,7 @@ function getImage({ image, id }: Category) {
                 class:list={[
                   category.image
                     ? "from-black/80 via-black/30 via-50% to-transparent"
-                    : "from-black/30 to-transparent",
+                    : "from-black/35 to-transparent",
                 ]}
               >
                 <span class="line-clamp-3 select-none text-balance font-bold">
