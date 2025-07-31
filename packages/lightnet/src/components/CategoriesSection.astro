@@ -73,7 +73,7 @@ function getImage({ image, id }: Category) {
                     class="h-full w-full bg-gray-500 object-contain"
                     src={getImage(category)}
                     alt=""
-                    widths={[256, 512, 768, 1024]}
+                    widths={[128, 256, 388, 512, 768]}
                     sizes={
                       "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
                       "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
@@ -130,9 +130,9 @@ function getImage({ image, id }: Category) {
                   src={getImage(category)}
                   loading="eager"
                   alt=""
-                  widths={[256, 512, 768, 1024]}
+                  widths={[128, 256, 388, 512, 768]}
                   sizes={
-                    "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
+                    "(max-width: 640px) calc(calc(100vw - 3rem ) / 2.3), " +
                     "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
                     "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
                     "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
