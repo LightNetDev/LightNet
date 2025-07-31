@@ -10,7 +10,7 @@ const { t, direction } = Astro.locals.i18n
 
 <Section {...props} titleClass={"!mb-8 sm:!mb-0 " + titleClass}>
   <ln-carousel data-direction={direction} aria-roledescription="carousel">
-    <div class="mb-2 hidden justify-end gap-2 sm:flex">
+    <div class="mb-4 hidden justify-end gap-2 sm:flex">
       <button
         data-button-prev
         aria-label={t("ln.previous")}
@@ -33,7 +33,7 @@ const { t, direction } = Astro.locals.i18n
       >
     </div>
 
-    <div data-carousel class="-mb-2 overflow-hidden pb-2 sm:-m-2 sm:p-2">
+    <div data-carousel class="-m-4 overflow-hidden p-4">
       <ol
         class="flex items-end gap-4 md:gap-8"
         aria-atomic="false"
@@ -57,9 +57,8 @@ const { t, direction } = Astro.locals.i18n
         const carousel = EmblaCarousel(
           carouselNode,
           {
-            loop: false,
-            align: "start",
             slidesToScroll: "auto",
+            skipSnaps: true,
             direction,
           },
           [AutoHeight()],
