@@ -2,7 +2,9 @@
 "lightnet": minor
 ---
 
-Improve CategorySection
+Improved CategorySection
 
-- add carousel view
-- replace `image-grid` and `button-grid` options with `grid`
+- added `carousel` layout
+- replaced `image-grid` layout with `grid`
+- added `backgroundClass` property for all layouts
+- ⚠️ changed the default layout from `button-grid` to `carousel`

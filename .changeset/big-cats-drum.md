@@ -2,4 +2,6 @@
 "lightnet": minor
 ---
 
-Adds a `moreLink` property to Section
+Added a new `moreLink` prop to the `Section` component.
+
+This enables section titles to act as anchors, allowing navigation to dedicated pages for expanded content. Useful for situations where content previews need to link to full listings.

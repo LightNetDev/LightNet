@@ -2,7 +2,7 @@
 "lightnet": minor
 ---
 
-Add new translations
+⚠️ Added new translations
 
 - ln.previous: "Previous"
 - ln.next: "Next"
