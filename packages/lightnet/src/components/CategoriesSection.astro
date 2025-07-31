@@ -42,12 +42,12 @@ function getImage({ image, id }: Category) {
               <div
                 class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-colors ease-in-out sm:group-hover:outline"
                 class:list={[
-                  !category.image && "h-full min-h-28 w-full bg-gray-300",
+                  !category.image && "bg-primary h-full min-h-28 w-full",
                 ]}
               >
                 {category.image && (
                   <Image
-                    class="h-full w-full object-contain"
+                    class="h-full w-full bg-gray-500 object-contain"
                     src={getImage(category)}
                     alt=""
                     widths={[256, 512, 768, 1024]}
@@ -90,13 +90,14 @@ function getImage({ image, id }: Category) {
             <div
               class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all ease-in-out sm:group-hover:outline"
               class:list={[
-                !category.image && "h-full min-h-28 w-full bg-gray-300",
+                !category.image && "bg-primary h-full min-h-28 w-full",
               ]}
             >
               {category.image && (
                 <Image
-                  class="h-full w-full object-contain"
+                  class="h-full w-full bg-gray-500 object-contain"
                   src={getImage(category)}
+                  loading="eager"
                   alt=""
                   widths={[256, 512, 768, 1024]}
                   sizes={
