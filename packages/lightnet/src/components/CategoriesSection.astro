@@ -8,7 +8,7 @@ import CarouselSection from "./CarouselSection.astro"
 import Section, { type Props as SectionProps } from "./Section.astro"
 
 type Props = SectionProps & {
-  layout?: "button-grid" | "grid" | "carousel"
+  layout?: "grid" | "carousel"
   backgroundClass?: string
 }
 
@@ -30,27 +30,6 @@ function getImage({ image, id }: Category) {
 }
 ---
 
-{
-  !!categories.length && layout === "button-grid" && (
-    <Section {...props} title={resolvedTitle}>
-      <ul class="grid w-full grid-cols-2 flex-wrap gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {categories.map((category) => (
-          <li class="grow">
-            <a
-              class="flex h-20 w-full items-center justify-center rounded-2xl p-3 text-gray-600 shadow-sm outline-2 outline-gray-400 transition-colors duration-75 ease-in-out hover:outline"
-              class:list={[backgroundClass || "bg-gray-200"]}
-              href={searchPagePath(currentLocale, { category: category.id })}
-            >
-              <div class="line-clamp-3 overflow-hidden text-balance text-center text-xs font-bold">
-                {category.name}
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </Section>
-  )
-}
 {
   !!categories.length && layout === "grid" && (
     <Section {...props} title={resolvedTitle}>
