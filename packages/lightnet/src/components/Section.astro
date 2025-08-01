@@ -28,12 +28,12 @@ export interface Props {
    */
   title?: string
   /**
-   * A link to show more content belonging to this section. This link will be behind the section title
-   * with a chevron.
+   * A link to add to the section title. This link can be used to show
+   * more content related to the section.
    *
    * The link will not be transformed. You need to make sure to prepend the current locale.
    */
-  moreLink?: string
+  titleHref?: string
   /**
    * Css classes to set to the section element.
    */
@@ -48,7 +48,7 @@ const {
   id,
   maxWidth = "wide",
   marginTop = "lg",
-  moreLink,
+  titleHref,
   title,
   className,
   titleClass,
@@ -78,11 +78,11 @@ const marginTopValues = {
         class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-12 sm:text-3xl"
         class:list={[titleClass]}
       >
-        {moreLink ? (
-          <a href={moreLink} class="group flex items-center">
+        {titleHref ? (
+          <a href={titleHref} class="group flex items-center">
             {title}
             <Icon
-              className="mdi--chevron-right group-hover:text-primary transition-colors ease-in-out duration-75 text-5xl -ms-2"
+              className="mdi--chevron-right group-hover:text-primary transition-colors ease-in-out duration-75 text-4xl sm:text-5xl -ms-2"
               ariaLabel=""
               flipIcon={Astro.locals.i18n.direction === "rtl"}
             />
