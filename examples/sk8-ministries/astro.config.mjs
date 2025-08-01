@@ -20,6 +20,11 @@ const languages = [
     label: "Deutsch", // Display name for German
     isSiteLanguage: true, // Sets German as an site language
   },
+  {
+    code: "ar",
+    label: "Arabic",
+    isSiteLanguage: true,
+  },
 ]
 
 export default defineConfig({

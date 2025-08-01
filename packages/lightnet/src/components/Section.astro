@@ -1,4 +1,6 @@
 ---
+import Icon from "./Icon"
+
 export interface Props {
   /**
    * Id to set to the section element.
@@ -22,29 +24,34 @@ export interface Props {
    */
   marginTop?: "sm" | "lg" | "none"
   /**
-   * Remove padding from the left and right side of the content.
-   * This will not apply to the section title.
-   *
-   * @default false
-   */
-  disableHorizontalPadding?: boolean
-  /**
    * Title on top of the section.
    */
   title?: string
   /**
+   * A link to add to the section title. This link can be used to show
+   * more content related to the section.
+   *
+   * The link will not be transformed. You need to make sure to prepend the current locale.
+   */
+  titleHref?: string
+  /**
    * Css classes to set to the section element.
    */
   className?: string
+  /**
+   * Css classes to set to the title element.
+   */
+  titleClass?: string
 }
 
 const {
   id,
   maxWidth = "wide",
   marginTop = "lg",
-  disableHorizontalPadding = false,
+  titleHref,
   title,
   className,
+  titleClass,
 } = Astro.props
 
 const maxWidths = {
@@ -60,22 +67,29 @@ const marginTopValues = {
 ---
 
 <section
-  class="mx-auto"
-  class:list={[
-    maxWidths[maxWidth],
-    marginTopValues[marginTop],
-    !disableHorizontalPadding && "px-4 md:px-8",
-    className,
-  ]}
+  class="mx-auto px-4 md:px-8"
+  class:list={[maxWidths[maxWidth], marginTopValues[marginTop], className]}
   id={id}
+  aria-label={title}
 >
   {
     title && (
       <h2
         class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-12 sm:text-3xl"
-        class:list={[disableHorizontalPadding && "px-4 md:px-8"]}
+        class:list={[titleClass]}
       >
-        {title}
+        {titleHref ? (
+          <a href={titleHref} class="group flex items-center">
+            {title}
+            <Icon
+              className="mdi--chevron-right group-hover:text-primary transition-colors ease-in-out duration-75 text-4xl sm:text-5xl -ms-2"
+              ariaLabel=""
+              flipIcon={Astro.locals.i18n.direction === "rtl"}
+            />
+          </a>
+        ) : (
+          <>{title}</>
+        )}
       </h2>
     )
   }

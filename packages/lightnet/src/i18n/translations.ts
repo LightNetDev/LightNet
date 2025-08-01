@@ -64,6 +64,8 @@ export type LightNetTranslationKey =
   | "ln.languages"
   | "ln.external-link"
   | "ln.type"
+  | "ln.previous"
+  | "ln.next"
   | "ln.details.open"
   | "ln.details.share"
   | "ln.details.part-of-collection"
