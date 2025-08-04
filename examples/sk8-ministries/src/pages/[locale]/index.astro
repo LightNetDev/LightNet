@@ -106,7 +106,7 @@ const t = Astro.locals.i18n.t
     }}
   />
 
-  <CategoriesSection titleHref="/en/media" />
+  <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
 
   {
     /* 
