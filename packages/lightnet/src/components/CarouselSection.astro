@@ -8,13 +8,13 @@ const { titleClass = "", ...props } = Astro.props
 const { t, direction } = Astro.locals.i18n
 ---
 
-<Section {...props} titleClass={"!mb-8 sm:!mb-0 " + titleClass}>
+<Section {...props} titleClass={"!mb-8 sm:!-mb-1 " + titleClass}>
   <ln-carousel data-direction={direction} aria-roledescription="carousel">
-    <div class="mb-4 hidden justify-end gap-2 sm:flex">
+    <div class="mb-2 hidden justify-end gap-1 sm:flex">
       <button
         data-button-prev
         aria-label={t("ln.previous")}
-        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
+        class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
         ><Icon
           className="mdi--chevron-left"
           ariaLabel=""
@@ -24,7 +24,7 @@ const { t, direction } = Astro.locals.i18n
       <button
         data-button-next
         aria-label={t("ln.next")}
-        class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-200 text-gray-600 hover:outline hover:outline-gray-300 disabled:bg-transparent disabled:text-gray-300 disabled:hover:outline-none"
+        class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
         ><Icon
           className="mdi--chevron-right"
           ariaLabel=""
