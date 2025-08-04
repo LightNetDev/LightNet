@@ -6,5 +6,5 @@ Improved CategorySection
 
 - added `carousel` layout
 - replaced `image-grid` layout with `grid`
-- added `backgroundClass` property for all layouts
+- ⚠️ removed `button-grid`
 - ⚠️ changed the default layout from `button-grid` to `carousel`

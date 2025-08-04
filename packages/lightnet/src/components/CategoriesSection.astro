@@ -9,10 +9,9 @@ import Section, { type Props as SectionProps } from "./Section.astro"
 
 type Props = SectionProps & {
   layout?: "grid" | "carousel"
-  backgroundClass?: string
 }
 
-const { title, layout = "carousel", backgroundClass, ...props } = Astro.props
+const { title, layout = "carousel", ...props } = Astro.props
 const { t, currentLocale } = Astro.locals.i18n
 const resolvedTitle = title ?? t("ln.categories")
 
@@ -43,8 +42,7 @@ function getImage({ image, id }: Category) {
               <div
                 class="relative overflow-hidden rounded-2xl shadow-md outline-2 outline-gray-400 transition-colors duration-75 ease-in-out sm:group-hover:outline"
                 class:list={[
-                  !category.image && "h-full min-h-28 w-full",
-                  !category.image && (backgroundClass || "bg-gray-300"),
+                  !category.image && "h-full min-h-28 w-full bg-gray-300",
                 ]}
               >
                 {category.image && (
@@ -99,8 +97,7 @@ function getImage({ image, id }: Category) {
             <div
               class="relative overflow-hidden rounded-2xl shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
               class:list={[
-                !category.image && "h-full min-h-28 w-full",
-                !category.image && (backgroundClass || "bg-gray-300"),
+                !category.image && "h-full min-h-28 w-full bg-gray-300",
               ]}
             >
               {category.image && (
