@@ -38,6 +38,7 @@ const { t, direction } = Astro.locals.i18n
         class="flex items-end gap-4 md:gap-8"
         aria-atomic="false"
         aria-live="polite"
+        data-carousel-container
       >
         <slot />
       </ol>
@@ -49,6 +50,8 @@ const { t, direction } = Astro.locals.i18n
     import AutoHeight from "embla-carousel-auto-height"
 
     class Carousel extends HTMLElement {
+      preloadIndex = 0
+
       connectedCallback() {
         const carouselNode = this.querySelector(
           "[data-carousel]",
@@ -90,6 +93,38 @@ const { t, direction } = Astro.locals.i18n
           .on("init", updateArrowButtons)
           .on("select", updateArrowButtons)
           .on("reInit", updateArrowButtons)
+
+        // when images are set to loading=lazy, safari and
+        // firefox fail to preload them before they are
+        // visible. We improve the browser heuristics
+        // by setting the next chunk of images to load
+        // eagerly.
+        const slideNodes =
+          this.querySelector("[data-carousel-container]")?.children ?? []
+        const preloadNextSlides = () => {
+          const slidesInView = carousel.slidesInView()
+          slidesInView.forEach((slideIndex) => {
+            const preloadIndex = slideIndex + slidesInView.length
+            if (preloadIndex > this.preloadIndex) {
+              this.preloadIndex = preloadIndex
+              const node = slideNodes[preloadIndex]
+              node?.querySelectorAll("img").forEach((img) => {
+                img.loading = "eager"
+              })
+            }
+          })
+        }
+
+        // start preloading once the carousel enters the viewport
+        const observer = new IntersectionObserver(([target]) => {
+          if (!target.isIntersecting) {
+            return
+          }
+          preloadNextSlides()
+          carousel.on("slidesInView", () => preloadNextSlides())
+          observer.unobserve(target.target)
+        })
+        observer.observe(carouselNode)
       }
     }
     customElements.define("ln-carousel", Carousel)
