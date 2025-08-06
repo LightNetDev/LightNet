@@ -22,37 +22,25 @@ interface Props {
   </div>
 </div>
 <script>
-  document.addEventListener("astro:after-swap", () => {
-    initShareButton()
-  })
-  initShareButton()
-
-  function initShareButton() {
-    const btn = document.querySelector("#share-btn")
-    if (!btn) {
-      return
+  const btn = document.querySelector("#share-btn")
+  btn?.addEventListener("click", () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          url: window.location.href,
+        })
+        .catch((e) => console.debug("Could not share", e))
+    } else {
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          const toast = document.querySelector<HTMLElement>("#share-success")!
+          toast.style.opacity = "100%"
+          setTimeout(() => {
+            toast.style.opacity = "0%"
+          }, 3000)
+        })
+        .catch((error) => console.log("Error copying URL to clipboard:", error))
     }
-    btn?.addEventListener("click", () => {
-      if (navigator.share) {
-        navigator
-          .share({
-            url: window.location.href,
-          })
-          .catch((e) => console.debug("Could not share", e))
-      } else {
-        navigator.clipboard
-          .writeText(window.location.href)
-          .then(() => {
-            const toast = document.querySelector<HTMLElement>("#share-success")!
-            toast.style.opacity = "100%"
-            setTimeout(() => {
-              toast.style.opacity = "0%"
-            }, 3000)
-          })
-          .catch((error) =>
-            console.log("Error copying URL to clipboard:", error),
-          )
-      }
-    })
-  }
+  })
 </script>
