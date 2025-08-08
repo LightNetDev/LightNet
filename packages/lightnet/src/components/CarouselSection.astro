@@ -1,0 +1,182 @@
+---
+import Icon from "./Icon"
+import Section, { type Props as SectionProps } from "./Section.astro"
+
+type Props = SectionProps
+
+const { titleClass = "", ...props } = Astro.props
+const { t, direction } = Astro.locals.i18n
+---
+
+<Section {...props} titleClass={"!mb-8 sm:!-mb-1 " + titleClass}>
+  <ln-carousel data-direction={direction} aria-roledescription="carousel">
+    <div class="mb-2 hidden justify-end gap-1 sm:flex">
+      <button
+        data-button-prev
+        aria-label={t("ln.previous")}
+        class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
+        ><Icon
+          className="mdi--chevron-left"
+          ariaLabel=""
+          flipIcon={direction === "rtl"}
+        /></button
+      >
+      <button
+        data-button-next
+        aria-label={t("ln.next")}
+        class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
+        ><Icon
+          className="mdi--chevron-right"
+          ariaLabel=""
+          flipIcon={direction === "rtl"}
+        /></button
+      >
+    </div>
+
+    <div data-carousel class="-m-4 overflow-hidden p-4">
+      <ol
+        class="flex items-end gap-4 md:gap-8"
+        aria-atomic="false"
+        aria-live="polite"
+        data-carousel-container
+      >
+        <slot />
+      </ol>
+    </div>
+  </ln-carousel>
+
+  <script>
+    import EmblaCarousel from "embla-carousel"
+    import AutoHeightPlugin from "embla-carousel-auto-height"
+    import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
+
+    class Carousel extends HTMLElement {
+      preloadIndex = 0
+
+      connectedCallback() {
+        const carouselNode = this.querySelector(
+          "[data-carousel]",
+        ) as HTMLElement
+        const direction = this.dataset.direction as "ltr" | "rtl"
+        const carousel = EmblaCarousel(
+          carouselNode,
+          {
+            slidesToScroll: "auto",
+            skipSnaps: true,
+            direction,
+          },
+          [AutoHeightPlugin(), WheelGesturesPlugin({ forceWheelAxis: "x" })],
+        )
+        const prevBtn = this.querySelector(
+          "[data-button-prev]",
+        ) as HTMLButtonElement
+        const nextBtn = this.querySelector(
+          "[data-button-next]",
+        ) as HTMLButtonElement
+
+        prevBtn.addEventListener("click", () => carousel.scrollPrev())
+        nextBtn.addEventListener("click", () => carousel.scrollNext())
+
+        const updateArrowButtons = () => {
+          if (carousel.canScrollPrev()) {
+            prevBtn.removeAttribute("disabled")
+          } else {
+            prevBtn.setAttribute("disabled", "disabled")
+          }
+
+          if (carousel.canScrollNext()) {
+            nextBtn.removeAttribute("disabled")
+          } else {
+            nextBtn.setAttribute("disabled", "disabled")
+          }
+        }
+        carousel
+          .on("init", updateArrowButtons)
+          .on("select", updateArrowButtons)
+          .on("reInit", updateArrowButtons)
+
+        // when images are set to loading=lazy, safari and
+        // firefox fail to preload them before they are
+        // visible. We improve the browser heuristics
+        // by setting the next chunk of images to load
+        // eagerly.
+        const slideNodes =
+          this.querySelector("[data-carousel-container]")?.children ?? []
+        const preloadNextSlides = () => {
+          const slidesInView = carousel.slidesInView()
+          slidesInView.forEach((slideIndex) => {
+            const preloadIndex = slideIndex + slidesInView.length
+            if (preloadIndex > this.preloadIndex) {
+              this.preloadIndex = preloadIndex
+              const node = slideNodes[preloadIndex]
+              node?.querySelectorAll("img").forEach((img) => {
+                img.loading = "eager"
+              })
+            }
+          })
+        }
+
+        // start preloading once the carousel enters the viewport
+        const observer = new IntersectionObserver(([target]) => {
+          if (!target.isIntersecting) {
+            return
+          }
+          preloadNextSlides()
+          carousel.on("slidesInView", () => preloadNextSlides())
+          observer.unobserve(target.target)
+        })
+        observer.observe(carouselNode)
+      }
+    }
+    customElements.define("ln-carousel", Carousel)
+  </script>
+</Section>
+<style is:global>
+  .carousel-item--wide {
+    flex: 0 0 auto;
+    /* 1 column + part of the next */
+    width: 85%;
+  }
+
+  .carousel-item--narrow {
+    flex: 0 0 auto;
+    /* 2 columns + part of the next */
+    width: calc((100% - 1rem) / 2.3);
+  }
+
+  /* sm */
+  @media (min-width: 640px) {
+    .carousel-item--wide {
+      /* 2 columns */
+      width: calc((100% - 1rem) / 2);
+    }
+    .carousel-item--narrow {
+      /* 3 columns */
+      width: calc((100% - 2rem) / 3);
+    }
+  }
+
+  /* md */
+  @media (min-width: 768px) {
+    .carousel-item--wide {
+      /* 3 columns */
+      width: calc((100% - 4rem) / 3);
+    }
+    .carousel-item--narrow {
+      /* 4 columns */
+      width: calc((100% - 6rem) / 4);
+    }
+  }
+
+  /* lg */
+  @media (min-width: 1024px) {
+    .carousel-item--wide {
+      /* 4 columns */
+      width: calc((100% - 6rem) / 4);
+    }
+    .carousel-item--narrow {
+      /* 5 columns */
+      width: calc((100% - 8rem) / 5);
+    }
+  }
+</style>

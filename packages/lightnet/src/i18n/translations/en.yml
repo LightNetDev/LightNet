@@ -48,6 +48,18 @@ ln.languages: Languages
 # Used on: https://sk8-ministries.pages.dev/en/media
 ln.type: Type
 
+# Accessibility label for buttons to show the previous items.
+# This is used on the carousel arrow button.
+#
+# English: Previous
+ln.previous: Previous
+
+# Accessibility label for buttons to show the next items.
+# This is used on the carousel arrow button.
+#
+# English: Next
+ln.next: Next
+
 # Accessibility label for an external link.
 # This is only "visible" to a screen-reader.
 #

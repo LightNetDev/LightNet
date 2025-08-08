@@ -1,12 +1,10 @@
 ---
-/**
- * Provide the paths for the supported locales (site languages).
- */
 export { getLocalePaths as getStaticPaths } from "lightnet/i18n"
 
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
 import {
+  CategoriesSection,
   HeroSection,
   HighlightSection,
   MediaGallerySection,
@@ -17,84 +15,42 @@ import { getMediaItems } from "lightnet/content"
 import eventImage from "../../assets/event.webp"
 import heroImage from "../../assets/hero.webp"
 
-/**
- * Fetch the latest books.
- * Order them by the date they were created.
- */
 const latestBooks = await getMediaItems({
   where: { type: "book" },
   orderBy: "dateCreated",
 })
 
-/**
- * Fetch the learn skateboarding collection meta data.
- */
 const learnSkateboarding = await getEntry(
   "media-collections",
   "learn-skateboarding",
 )
-/**
- * If the learn skateboarding collection does not exist, throw an error.
- */
 if (!learnSkateboarding) {
   throw new AstroError("Media Collection 'learn-skateboarding' not found")
 }
-/**
- * Fetch the items of the learn skateboarding collection.
- */
+
 const learnSkateboardingItems = await getMediaItems({
   where: { collection: "learn-skateboarding" },
 })
 
-/**
- * Reference the translation function to avoid
- * having to write Astro.locals.i18n.t every time.
- */
-const t = Astro.locals.i18n.t
+const { t } = Astro.locals.i18n
 ---
 
-{
-  /* 
-  Render a lightnet page. This will automatically include the
-  page structure, header, menu system...
-   */
-}
 <Page>
-  {
-    /* 
-    The hero section is the big image of two skateboarders at the top of the page.
-    Also it shows the ministry name (Sk8 Ministries) and slogan (Living faith, building 
-    community).
-
-    The both text are translated to the current locale using the i18n.t function.
-     */
-  }
   <HeroSection
     image={heroImage}
     title={t("x.site.title")}
     subtitle={t("x.ministry.slogan")}
-    titleSize="xl"
+    titleSize="lg"
     subtitleSize="lg"
     showSearch={true}
   />
 
-  {
-    /* 
-    This section shows the latest books that have been added to the library.
-     */
-  }
   <MediaGallerySection
     title={t("x.home.our-latest-books")}
     items={latestBooks}
     layout="book"
   />
 
-  {
-    /* 
-    This section shows the BBQ event. It includes an image, a title, some description text and a link
-    to sign up for the event.
-     */
-  }
   <HighlightSection
     image={eventImage}
     title={t("x.home.bbq.title")}
@@ -105,11 +61,8 @@ const t = Astro.locals.i18n.t
     }}
   />
 
-  {
-    /* 
-    This section shows the learn skateboarding collection. It uses the collection name as the title.
-     */
-  }
+  <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
+
   <MediaGallerySection
     title={learnSkateboarding.data.label}
     items={learnSkateboardingItems}

@@ -11,6 +11,7 @@ const { t } = Astro.locals.i18n
 <form
   action={`/${Astro.currentLocale}/media`}
   method="get"
+  role="search"
   class="dy-join group w-full rounded-2xl shadow-md outline-2 outline-offset-2 outline-gray-400 group-focus-within:outline"
   class:list={[Astro.props.className]}
 >

@@ -4,15 +4,16 @@ import { Image } from "astro:assets"
 
 import { getUsedCategories } from "../content/get-categories"
 import { searchPagePath } from "../utils/paths"
-import Section from "./Section.astro"
+import CarouselSection from "./CarouselSection.astro"
+import Section, { type Props as SectionProps } from "./Section.astro"
 
-interface Props {
-  title?: string
-  layout?: "button-grid" | "image-grid"
+type Props = SectionProps & {
+  layout?: "grid" | "carousel"
 }
 
-const { title, layout = "button-grid" } = Astro.props
+const { title, layout = "carousel", ...props } = Astro.props
 const { t, currentLocale } = Astro.locals.i18n
+const resolvedTitle = title ?? t("ln.categories")
 
 const categories = await getUsedCategories(currentLocale, t)
 type Category = (typeof categories)[number]
@@ -20,8 +21,8 @@ type Category = (typeof categories)[number]
 function getImage({ image, id }: Category) {
   if (!image) {
     throw new AstroError(
-      `The CategorySection with layout="image-grid" requires an image for category "${id}".`,
-      `To resolve this issue, either change the layout to "button-grid" or provide an image path in /src/content/categories/${id}.json.`,
+      `Expected an image for category "${id}".`,
+      `To resolve this issue, provide a valid image path in /src/content/categories/${id}.json.`,
     )
   }
   return image
@@ -29,40 +30,27 @@ function getImage({ image, id }: Category) {
 ---
 
 {
-  categories.length && (
-    <Section title={title ?? t("ln.categories")}>
-      {layout === "button-grid" && (
-        <ul class="grid w-full grid-cols-2 flex-wrap gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {categories.map((category) => (
-            <li class="grow">
-              <a
-                class="flex h-20 w-full items-center justify-center rounded-2xl bg-gray-200 p-3 text-gray-600 shadow-sm transition-colors ease-in-out hover:bg-gray-300"
-                href={searchPagePath(currentLocale, {
-                  category: category.id,
-                })}
+  !!categories.length && layout === "grid" && (
+    <Section {...props} title={resolvedTitle}>
+      <ol class="grid grid-cols-2 items-end justify-between gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-5">
+        {categories.map((category) => (
+          <li class="h-full">
+            <a
+              href={searchPagePath(currentLocale, { category: category.id })}
+              class="group flex h-full flex-col gap-3"
+            >
+              <div
+                class="relative overflow-hidden rounded-2xl shadow-md outline-2 outline-gray-400 transition-colors duration-75 ease-in-out sm:group-hover:outline"
+                class:list={[
+                  !category.image && "h-full min-h-28 w-full bg-gray-300",
+                ]}
               >
-                <div class="line-clamp-3 overflow-hidden text-balance text-center text-xs font-bold">
-                  {category.name}
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-      {layout === "image-grid" && (
-        <ol class="grid grid-cols-2 items-end justify-between gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-5">
-          {categories.map((category) => (
-            <li>
-              <a
-                href={searchPagePath(currentLocale, { category: category.id })}
-                class="group flex flex-col gap-3"
-              >
-                <div class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline">
+                {category.image && (
                   <Image
-                    class="h-full w-full object-contain"
+                    class="h-full w-full bg-gray-500 object-contain"
                     src={getImage(category)}
                     alt=""
-                    widths={[256, 512, 768, 1024]}
+                    widths={[128, 256, 388, 512, 768]}
                     sizes={
                       "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
                       "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
@@ -71,17 +59,78 @@ function getImage({ image, id }: Category) {
                       "217px"
                     }
                   />
-                  <div class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 via-30% to-transparent to-65% p-4 text-gray-50">
-                    <span class="line-clamp-3 text-balance font-bold">
-                      {category.name}
-                    </span>
-                  </div>
+                )}
+
+                <div
+                  class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t p-4 text-gray-50"
+                  class:list={[
+                    category.image
+                      ? "from-black/80 via-black/30 via-50% to-transparent"
+                      : "from-black/35 to-transparent",
+                  ]}
+                >
+                  <span class="line-clamp-3 select-none text-balance font-bold">
+                    {category.name}
+                  </span>
                 </div>
-              </a>
-            </li>
-          ))}
-        </ol>
-      )}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ol>
     </Section>
+  )
+}
+{
+  !!categories.length && layout === "carousel" && (
+    <CarouselSection {...props} title={resolvedTitle}>
+      {categories.map((category) => (
+        <li
+          class="carousel-item--narrow h-full"
+          role="group"
+          aria-roledescription="slide"
+        >
+          <a
+            href={searchPagePath(currentLocale, { category: category.id })}
+            class="group flex h-full flex-col gap-3"
+          >
+            <div
+              class="relative overflow-hidden rounded-2xl shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+              class:list={[
+                !category.image && "h-full min-h-28 w-full bg-gray-300",
+              ]}
+            >
+              {category.image && (
+                <Image
+                  class="h-full w-full bg-gray-300 object-contain"
+                  src={getImage(category)}
+                  alt=""
+                  widths={[128, 256, 388, 512, 768]}
+                  sizes={
+                    "(max-width: 640px) calc(calc(100vw - 3rem ) / 2.3), " +
+                    "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
+                    "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
+                    "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
+                    "217px"
+                  }
+                />
+              )}
+              <div
+                class="absolute start-0 top-0 flex h-full w-full flex-col justify-end bg-gradient-to-t p-4 text-gray-50"
+                class:list={[
+                  category.image
+                    ? "from-black/80 via-black/30 via-50% to-transparent"
+                    : "from-black/35 to-transparent",
+                ]}
+              >
+                <span class="line-clamp-3 select-none text-balance font-bold">
+                  {category.name}
+                </span>
+              </div>
+            </div>
+          </a>
+        </li>
+      ))}
+    </CarouselSection>
   )
 }

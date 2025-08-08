@@ -11,14 +11,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.11.0",
-    "lightnet": "^3.7.0",
-    "@lightnet/decap-admin": "^3.1.1",
-    "sharp": "^0.33.5",
     "@astrojs/react": "^4.3.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
     "@astrojs/tailwind": "^6.0.2",
+    "@lightnet/decap-admin": "^3.1.2",
+    "astro": "^5.12.5",
+    "lightnet": "^3.7.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "sharp": "^0.33.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
   },
