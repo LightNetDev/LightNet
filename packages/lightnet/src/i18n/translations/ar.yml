@@ -6,6 +6,8 @@ ln.categories: الفئات
 ln.language: اللغة
 ln.languages: اللغات
 ln.type: النوع
+ln.previous: السابق
+ln.next: التالي
 ln.external-link: رابط خارجي
 ln.search.title: بحث
 ln.search.placeholder: ابحث في الوسائط

@@ -6,6 +6,8 @@ ln.categories: 分类
 ln.language: 语言
 ln.languages: 语言
 ln.type: 类型
+ln.previous: 上一个
+ln.next: 下一个
 ln.external-link: 外部链接
 ln.search.title: 搜索
 ln.search.placeholder: 搜索媒体…

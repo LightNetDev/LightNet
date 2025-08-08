@@ -6,6 +6,8 @@ ln.categories: Kategoriat
 ln.language: Kieli
 ln.languages: Kielet
 ln.type: Mediatyyppi
+ln.previous: Edellinen
+ln.next: Seuraava
 ln.external-link: Ulkoinen linkki
 ln.search.title: Haku
 ln.search.placeholder: Hae mediaa

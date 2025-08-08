@@ -6,6 +6,8 @@ ln.categories: Категории
 ln.language: Язык
 ln.languages: Языки
 ln.type: Тип
+ln.previous: Предыдущий
+ln.next: Следующий
 ln.external-link: Внешняя ссылка
 ln.search.title: Поиск
 ln.search.placeholder: Поиск медиа

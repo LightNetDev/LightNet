@@ -6,6 +6,8 @@ ln.categories: Catégories
 ln.language: Langue
 ln.languages: Langues
 ln.type: Type
+ln.previous: Précédent
+ln.next: Suivant
 ln.external-link: Lien externe
 ln.search.title: Recherche
 ln.search.placeholder: Rechercher des médias
