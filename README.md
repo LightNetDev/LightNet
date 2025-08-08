@@ -1,4 +1,4 @@
-# LightNet
+![LightNet](./lightnet-banner.webp)
 
 Share the gospel and strengthen believers in your community.
 
