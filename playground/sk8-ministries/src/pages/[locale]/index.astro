@@ -11,10 +11,10 @@ import {
   Page,
 } from "lightnet/components"
 import { getMediaItems } from "lightnet/content"
+import { searchPagePath } from "lightnet/utils"
 
 import eventImage from "../../assets/event.webp"
 import heroImage from "../../assets/hero.webp"
-import { searchPagePath } from "lightnet/utils"
 
 const latestBooks = await getMediaItems({
   where: { type: "book" },
