@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.8.1
+
+### Patch Changes
+
+- [#305](https://github.com/LightNetDev/LightNet/pull/305) [`0b61c57`](https://github.com/LightNetDev/LightNet/commit/0b61c578d8813cb05d8b91d78dc84755d77e8f1a) Thanks [@smn-cds](https://github.com/smn-cds)! - MediaGallerySection passes all properties to its section component.
+
 ## 3.8.0
 
 ### Minor Changes
