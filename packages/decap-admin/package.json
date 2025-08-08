@@ -26,10 +26,10 @@
     "sharp": "^0.33.4"
   },
   "dependencies": {
-    "yaml": "^2.8.0"
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=22"
