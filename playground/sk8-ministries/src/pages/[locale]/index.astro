@@ -11,6 +11,7 @@ import {
   Page,
 } from "lightnet/components"
 import { getMediaItems } from "lightnet/content"
+import { searchPagePath } from "lightnet/utils"
 
 import eventImage from "../../assets/event.webp"
 import heroImage from "../../assets/hero.webp"
@@ -32,7 +33,7 @@ const learnSkateboardingItems = await getMediaItems({
   where: { collection: "learn-skateboarding" },
 })
 
-const { t } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
 ---
 
 <Page>
@@ -47,6 +48,7 @@ const { t } = Astro.locals.i18n
 
   <MediaGallerySection
     title={t("x.home.our-latest-books")}
+    titleHref={searchPagePath(currentLocale, { type: "book" })}
     items={latestBooks}
     layout="book"
   />
