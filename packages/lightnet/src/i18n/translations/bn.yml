@@ -6,6 +6,8 @@ ln.categories: বিভাগসমূহ
 ln.language: ভাষা
 ln.languages: ভাষাসমূহ
 ln.type: ধরন
+ln.previous: পূর্ববর্তী
+ln.next: পরবর্তী
 ln.external-link: বহিরাগত লিঙ্ক
 ln.search.title: অনুসন্ধান
 ln.search.placeholder: মিডিয়া অনুসন্ধান করুন
