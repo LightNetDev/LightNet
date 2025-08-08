@@ -1,5 +1,41 @@
 # lightnet
 
+## 3.8.0
+
+### Minor Changes
+
+- [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - Added a new `titleHref` prop to the `Section` component.
+
+  This enables section titles to act as anchors, allowing navigation to dedicated pages for expanded content. Useful for situations where content previews need to link to full listings.
+
+- [#297](https://github.com/LightNetDev/LightNet/pull/297) [`537f6e5`](https://github.com/LightNetDev/LightNet/commit/537f6e50c8bbf7d9a22a17773acddf79fbd11c21) Thanks [@smn-cds](https://github.com/smn-cds)! - Add /api/versions.json endpoint to return the LightNet version.
+
+- [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - Added filter parameters (`type`, `language`, `search`) to `searchPagePath` function.
+
+- [#298](https://github.com/LightNetDev/LightNet/pull/298) [`b5c3c7a`](https://github.com/LightNetDev/LightNet/commit/b5c3c7a6637b9973acdbd34af3db1de5ed01c9f5) Thanks [@smn-cds](https://github.com/smn-cds)! - Remove client router
+
+  We have been relying on [Astro's ClientRouter](https://docs.astro.build/en/reference/modules/astro-transitions/#clientrouter-) for
+  view transitions between different pages.
+  With this release we remove the use of ClientRouter and switch to the browser built-in [ViewTransitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API).
+
+- [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - ⚠️ Added new translations
+  - ln.previous: "Previous"
+  - ln.next: "Next"
+
+- [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - Improved CategorySection
+  - added `carousel` layout
+  - replaced `image-grid` layout with `grid`
+  - ⚠️ removed `button-grid`
+  - ⚠️ changed the default layout from `button-grid` to `carousel`
+
+### Patch Changes
+
+- [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - ⚠️ Removed `disableHorizontalPadding` property from Section component.
+
+- [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - Accessibility improvements
+  - set `role=search` for SearchInput component
+  - set aria-label for Section component
+
 ## 3.7.0
 
 ### Minor Changes
