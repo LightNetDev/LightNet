@@ -1,10 +1,10 @@
-![LightNet](./lightnet-banner.webp)
+![LightNet](https://github.com/LightNetDev/lightnet/blob/main/lightnet-banner.webp)
 
 Share the gospel and strengthen believers in your community.
 
-LightNet makes it easy to run your own digital media library, so more people can find what they need and grow in faith.
+LightNet makes it easy to **run your own digital media library**, so more people can find what they need and grow in faith.
 
-Built as an integration for the [Astro framework](https://astro.build), LightNet enables the creation of fast, statically generated websites that can be easily hosted on any file server. These sites are optimized for performance, easily extendable, and fully support internationalization.
+Built as an integration for the [Astro framework](https://astro.build), LightNet enables the creation of fast, statically generated websites that can be easily hosted on any file server.
 
 Learn more on the [LightNet homepage](https://lightnet.community).
 
@@ -18,7 +18,7 @@ To get started, simply run the following command in your terminal:
 npm create astro@latest -- --template LightNetDev/example-template
 ```
 
-This will set up a demo site that you can customize and expand to meet your community’s needs.
+This will set up the demo site that you can customize and expand to meet your community’s needs.
 
 ## Documentation
 
