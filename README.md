@@ -10,9 +10,9 @@ It is built as an integration for the [Astro framework](https://astro.build), en
 
 [Read the LightNet docs](https://docs.lightnet.community) to learn how to use LightNet.
 
-## Example site
+## Playground site
 
-[Check out the example site](/examples/sk8-ministries/) showcasing LightNet in action for a fictional skateboard ministry.
+[Check out the playground site](/playground/sk8-ministries/) showcasing LightNet in action for a fictional skateboard ministry.
 
 ## Contributing
 

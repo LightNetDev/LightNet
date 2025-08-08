@@ -23,7 +23,7 @@
     "lightnet": "^3.0.0"
   },
   "dependencies": {
-    "yaml": "^2.8.0"
+    "yaml": "^2.8.1"
   },
   "engines": {
     "node": ">=22"

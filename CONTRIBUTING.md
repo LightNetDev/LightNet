@@ -33,7 +33,7 @@ We encourage you to:
 
 ## About this repo
 
-This repo is a “monorepo,” meaning it contains several projects in one. It contains the LightNet examples site in [`examples/`](./examples/) and the packages that make up LightNet in [`packages/`](./packages/).
+This repo is a “monorepo,” meaning it contains several projects in one. It contains the LightNet playground sites in [`playground/`](./playground/) and the packages that make up LightNet in [`packages/`](./packages/).
 
 ### Setting up a development environment
 
@@ -69,7 +69,7 @@ This repo is a “monorepo,” meaning it contains several projects in one. It c
 ### Making a Pull Request
 
 When making a pull request containing changes impacting users to LightNet or any related packages (`packages/*`), be sure to [add a changeset](https://github.com/changesets/changesets/blob/main/docs/adding-a-changeset.md#i-am-in-a-multi-package-repository-a-mono-repo) that will describe the changes to users.
-Non-package (`examples/*`) changes do not need changesets.
+Non-package (`playground/*`) changes do not need changesets.
 
 ```sh
 pnpm changeset
