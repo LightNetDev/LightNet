@@ -1,161 +1,175 @@
-# Contributor Manual
+# Contributing to LightNet
 
-We welcome contributions of any size and contributors of any skill level.
-As an open source project, we believe in giving back to our contributors.
-We are happy to help with guidance on PRs, technical writing, and turning any feature idea into a reality.
+Thank you for your interest in contributing to **LightNet**! 🎉
+We welcome contributions of all kinds—whether you’re fixing a typo, writing documentation, improving tests, or adding new features.
 
-> **Tip for new contributors:**
-> Take a look at [GitHub's Docs](https://docs.github.com/en/get-started/quickstart/hello-world) for helpful information on working with GitHub.
+This guide will help you get started and explains how to make your contributions effective and easy to review.
 
-This document is an active work in progress — like LightNet itself!
+## Table of contents
 
-## Types of contributions
+1. [Ways to contribute](#ways-to-contribute)
+2. [Quickstart for new contributors](#quickstart-for-new-contributors)
+3. [Development setup](#development-setup)
+4. [Making changes](#making-changes)
+5. [Testing](#testing)
+6. [Translations](#translations)
+7. [Understanding LightNet](#understanding-lightnet)
+8. [Thank you](#thank-you)
 
-There are lots of ways to contribute to LightNet.
+## Ways to contribute
 
-Maintaining LightNet requires writing Astro code, as well as addressing accessibility, styling, and UX concerns.
-Help writing docs, catching typos and errors, as well as translating docs into other languages is always welcome.
+There are many ways to help LightNet grow:
 
-You can also get involved by leaving feedback on [issues](https://github.com/LightNetDev/LightNet/issues) or reviewing [pull requests](https://github.com/LightNetDev/LightNet/pulls) by other contributors.
+- **Report bugs**: [Open an issue](https://github.com/LightNetDev/LightNet/issues/new/choose).
+- **Fix issues**: Browse [open issues](https://github.com/LightNetDev/LightNet/issues) (look for [“good first issue”](https://github.com/LightNetDev/LightNet/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)).
+- **Improve docs**: Fix typos, clarify instructions, or add examples.
+- **Translate**: Add or improve UI translations.
+- **Review pull requests**: Help maintain quality by reviewing contributions from others.
 
-We encourage you to:
+> 💡 **Tip for beginners:** New to GitHub? Check out [GitHub’s Hello World guide](https://docs.github.com/en/get-started/quickstart/hello-world).
 
-- [**Open an issue**](https://github.com/LightNetDev/LightNet/issues/new/choose) to let us know of bugs & other issues in LightNet or propose a new feature.
+## Quickstart for new contributors
 
-- [**Look at existing issues**](https://github.com/LightNetDev/LightNet/issues) (especially those labelled [“good first issue”](https://github.com/LightNetDev/LightNet//issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+)) to find ways to contribute.
-
-- **Make a pull request (PR)** to address an open issue or to fix obvious problems.
-  Read more about [making a PR in GitHub’s docs](https://docs.github.com/en/get-started/quickstart/contributing-to-projects)
-
-- [**Review existing PRs**](https://github.com/LightNetDev/LightNet/pulls) to help us merge contributions sooner.
-
-- [**Add or update translations**](#translations). We need help translating LightNet’s UI.
-
-## About this repo
-
-This repo is a “monorepo,” meaning it contains several projects in one. It contains the LightNet playground sites in [`playground/`](./playground/) and the packages that make up LightNet in [`packages/`](./packages/).
-
-### Setting up a development environment
-
-**Prerequisites:** Developing LightNet requires [Node.js](https://nodejs.org/en) **22 or later** (use the version inside the [.nvmrc](./.nvmrc) file) and [pnpm](https://pnpm.io/) (use the version from `packageManager` inside the [package.json](./package.json) file). Make sure you have these installed before following these steps.
-
-**Code Editor:** We recommend using VS-Code with these extensions:
-
-- [Astro](https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode) adds support for working with Astro projects.
-- [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) adds TailwindCSS support.
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) checks the code style of your files while editing them.
-- [Prettier - Code formatting](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) reformats your code according to the formatting config.
-
-1. **Fork LightNet** to your personal GitHub account by clicking <kbd>Fork</kbd> on the [main LightNet repo page](https://github.com/lightnetdev/lightnet).
-
-2. **Clone your fork** of LightNet to your computer. Replace `YOUR-USERNAME` in the command below with your GitHub username to clone in a Terminal:
+1. **Fork** the repo from [LightNet on GitHub](https://github.com/LightNetDev/LightNet).
+2. **Clone** your fork locally:
 
    ```sh
    git clone https://github.com/YOUR-USERNAME/lightnet.git
-   ```
-
-3. **Change directory** to the cloned repo:
-
-   ```sh
    cd lightnet
    ```
 
-4. **Install dependencies** with `pnpm`:
+3. **Install dependencies** (requires Node.js 22+ and pnpm):
 
    ```sh
-   pnpm i
+   pnpm install
    ```
 
-### Making a Pull Request
+4. **Start the dev server**:
 
-When making a pull request containing changes impacting users to LightNet or any related packages (`packages/*`), be sure to [add a changeset](https://github.com/changesets/changesets/blob/main/docs/adding-a-changeset.md#i-am-in-a-multi-package-repository-a-mono-repo) that will describe the changes to users.
-Non-package (`playground/*`) changes do not need changesets.
+   ```sh
+   pnpm dev
+   ```
 
-```sh
-pnpm changeset
-```
+   Open [http://localhost:4321](http://localhost:4321) to preview changes.
 
-Before opening your pull request, format your code and fix any lint errors:
+## Development setup
 
-```sh
-pnpm format
-pnpm lint --fix
-```
+### Prerequisites
+
+- **Node.js**: v22+ (use version in [`.nvmrc`](./.nvmrc))
+- **pnpm**: version specified in `packageManager` inside [`package.json`](./package.json)
+
+### Recommended editor
+
+We recommend **VS Code** with these extensions:
+
+- [Astro](https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode)
+- [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+> A `.vscode/extensions.json` file is included to help set this up.
+
+### Repo structure
+
+This is a **monorepo**, containing:
+
+- `packages/` → Core LightNet packages
+- `playground/` → Example playground sites
+
+## Making changes
+
+### Workflow
+
+1. Create a branch for your changes:
+
+   ```sh
+   git checkout -b feature/my-change
+   ```
+
+2. Make edits and commit them (clear, descriptive messages encouraged).
+3. Run checks:
+
+   ```sh
+   pnpm format
+   pnpm lint --fix
+   ```
+
+4. Add a [changeset](https://github.com/changesets/changesets/blob/main/docs/adding-a-changeset.md#i-am-in-a-multi-package-repository-a-mono-repo) if your change affects published packages:
+
+   ```sh
+   pnpm changeset
+   ```
+
+5. Push your branch and open a pull request (PR).
+
+### PR guidelines
+
+- Link related issues in your PR description.
+- Include screenshots for UI changes if applicable.
+- Keep PRs focused and small when possible.
 
 ## Testing
 
-### Testing visual changes while you work
+### Visual testing
 
-Run the Astro dev server on the sk8-ministries site to see how changes you make impact a project using LightNet.
-
-To do this run `pnpm dev` from the root of the repsitory:
+Run the dev server to see changes live:
 
 ```sh
 pnpm dev
 ```
 
-You should then be able to open <http://localhost:4321> and see your changes.
-
 ### Unit tests
 
-The LightNet package includes unit tests in [`packages/lightnet/__tests__/`](./packages/lightnet/__tests__/), which are run using [Vitest](https://vitest.dev/).
-
-To run tests, move into the LightNet package and then run `pnpm test`:
+Located in [`packages/lightnet/__tests__/`](./packages/lightnet/__tests__/).
+Run with:
 
 ```sh
 cd packages/lightnet
 pnpm test
 ```
 
-This will run tests and then listen for changes, re-running tests when files change.
-
 ### End-to-end (E2E) tests
 
-LightNet also includes E2E tests in [`packages/lightnet/__e2e__/`](./packages/lightnet/__e2e__/), which are run using [Playwright](https://playwright.dev/).
-
-To run these tests, move into the LightNet package and then run `pnpm e2e`:
+Located in [`packages/lightnet/__e2e__/`](./packages/lightnet/__e2e__/).
+Run with:
 
 ```sh
 cd packages/lightnet
 pnpm e2e
 ```
 
-#### Test fixtures
-
-Each subdirectory of `packages/lightnet/__e2e__/fixtures` should contain the basic files needed to run LightNet (`package.json`, `astro.config.mjs`, a content collection configuration in `src/content.config.ts` and some content to render in `src/content/media/`).
-
-The `lightnetTest()` helper can be used in a test file to define the fixture which will be built and loaded in a preview server during a set of tests.
-
-```ts
-// packages/lightnet/__e2e__/feature.test.ts
-import { lightnetTest } from "./test-utils"
-
-const test = await lightnetTest("./fixtures/basics/")
-```
-
-This allows you to run tests against different combinations of Astro and LightNet configuration options for various content.
-
-#### When to add E2E tests?
-
-E2E are most useful for testing what happens on a page after it has been loaded by a browser. They run slower than unit tests so they should be used sparingly when unit tests aren’t sufficient.
+> Use E2E tests sparingly—they are slower than unit tests, but great for testing real browser interactions.
 
 ## Translations
 
-Translations help make LightNet accessible to more people.
+LightNet’s UI supports multiple languages.
 
-### Translating LightNet’s UI
+- Translation files live in: [`packages/lightnet/src/i18n/translations`](./packages/lightnet/src/i18n/translations/)
+- Add or edit YAML files to improve translations.
+- Test locally by running:
 
-LightNet’s UI comes with some built-in text elements. For example, the search page has a heading of “Search” and the language filter on this page shows “All languages” labels. LightNet aims to provide these in as many languages as possible.
+  ```sh
+  pnpm dev
+  ```
 
-Help out by adding or updating translation files in [`packages/lightnet/src/i18n/translations`](./packages/lightnet/src/i18n/translations/).
-In this folder you find more information on how to contribute translations.
+  Then switch languages in the UI.
 
 ## Understanding LightNet
 
-- LightNet is built as an Astro integration.
-  Read the [Astro Integration API docs](https://docs.astro.build/en/reference/integrations-reference/) to learn more about how integrations work.
+LightNet’s core lives in the [packages/lightnet](packages/lightnet) workspace and is exposed as an Astro integration. The entry point `exports/index.ts` re‑exports the integration function and its configuration types. During `astro:config:setup`, the integration injects all built‑in routes (root, search, details, API endpoints), registers middleware, and augments the project’s Vite and i18n settings.
 
-  The LightNet integration is exported from [`packages/lightnet/exports/index.ts`](./packages/lightnet/exports/index.ts).
-  It sets up LightNet’s routing logic, parses user config, and adds configuration to a LightNet user’s Astro project.
+Content is modeled with Zod schemas under `src/content`. `LIGHTNET_COLLECTIONS` wires these schemas into Astro’s content collection system, allowing LightNet to query categories, media, media types, and collections in a consistent way. A middleware in `src/i18n/locals.ts` attaches translation helpers and locale metadata to Astro.locals, so any component can access locals.i18n without extra imports. For example, the `/api/search.json` endpoint reads all media entries via `getMediaItems()` and returns a pre‑sorted search index.
 
-- LightNet consumes a user’s content from the [content collection](https://docs.astro.build/en/guides/content-collections/) folder.
+Directory overview
+
+- `src/astro-integration/` – integration setup, config schema, Vite plugin.
+- `src/content/` – Zod schemas and helpers for categories, media items, media types, and collections.
+- `src/pages/` – Astro pages and API handlers (RootRoute, SearchPageRoute, DetailsPageRoute, api/search.ts, api/versions.ts).
+- `src/components/` & `src/layouts/` – reusable UI blocks.
+- `src/i18n/` – translation files and locale utilities.
+- `__tests__/` & `__e2e__/` – Vitest and Playwright test suites.
+
+## Thank you ❤️
+
+Every contribution—big or small—helps make LightNet better.
+We deeply appreciate your time, effort, and creativity.

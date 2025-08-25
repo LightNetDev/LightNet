@@ -36,7 +36,7 @@ jobs:
             echo "changes=false" >> $GITHUB_OUTPUT
           fi
       - if: steps.check_changes.outputs.changes == 'true'
-        name: Create pull request
+        name: Create PR
         uses: peter-evans/create-pull-request@v7
         with:
           title: Update translation status report

@@ -33,10 +33,10 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: pnpm i
 
-      - name: Create Release Pull Request
+      - name: Create release PR
         id: changesets
         uses: changesets/action@v1
         with:
