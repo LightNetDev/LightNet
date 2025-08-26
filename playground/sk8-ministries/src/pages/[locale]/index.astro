@@ -18,7 +18,6 @@ import heroImage from "../../assets/hero.webp"
 
 const latestBooks = await getMediaItems({
   where: { type: "book" },
-  orderBy: "dateCreated",
 })
 
 const learnSkateboarding = await getEntry(
