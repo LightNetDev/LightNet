@@ -64,8 +64,8 @@ const { t, direction } = Astro.locals.i18n
             slidesToScroll: "auto",
             skipSnaps: true,
             direction,
-          },
-          [AutoHeightPlugin(), WheelGesturesPlugin({ forceWheelAxis: "x" })],
+          }, // todo: AutoHeightPlugin()
+          [WheelGesturesPlugin({ forceWheelAxis: "x" })],
         )
         const prevBtn = this.querySelector(
           "[data-button-prev]",
