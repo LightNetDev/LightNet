@@ -47,7 +47,6 @@ const { t, direction } = Astro.locals.i18n
 
   <script>
     import EmblaCarousel from "embla-carousel"
-    import AutoHeightPlugin from "embla-carousel-auto-height"
     import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
 
     class Carousel extends HTMLElement {
@@ -64,7 +63,7 @@ const { t, direction } = Astro.locals.i18n
             slidesToScroll: "auto",
             skipSnaps: true,
             direction,
-          }, // todo: AutoHeightPlugin()
+          },
           [WheelGesturesPlugin({ forceWheelAxis: "x" })],
         )
         const prevBtn = this.querySelector(
