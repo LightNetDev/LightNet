@@ -44,7 +44,7 @@ export default function SearchListItem({
       <div className="flex h-full w-36 shrink-0 flex-col items-start justify-center">
         <CoverImageDecorator style={mediaTypes[item.type].coverImageStyle}>
           <img
-            className="max-h-40 w-auto max-w-36 rounded-sm object-contain shadow-md"
+            className="max-h-40 w-auto max-w-36 object-contain"
             src={item.image.src}
             width={item.image.width}
             height={item.image.height}
