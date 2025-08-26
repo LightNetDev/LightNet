@@ -10,7 +10,7 @@ Learn more on the [LightNet homepage](https://lightnet.community).
 
 Quickly launch your own media library with LightNet. [Follow the getting started guide](https://docs.lightnet.community/start-here/getting-started/) to spin up a template, then customize and expand it to fit your community’s needs.
 
-## 🌍 Real-world Example
+## 🌍 Real-world example
 
 Curious what LightNet looks like in action? [Check out the MediaWorks digital library](https://library.mediaworks.global)
 to see how it powers a live site.
