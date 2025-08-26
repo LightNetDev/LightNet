@@ -1,5 +1,5 @@
-import Icon from "../../../components/Icon"
 import CoverImageDecorator from "../../../components/CoverImageDecorator"
+import Icon from "../../../components/Icon"
 import { detailsPagePath } from "../../../utils/paths"
 import type { SearchItem } from "../../api/search-response"
 
