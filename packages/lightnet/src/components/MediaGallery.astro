@@ -7,6 +7,8 @@ import { detailsPagePath } from "../utils/paths"
 import Icon from "./Icon"
 import CoverImageDecorator from "./CoverImageDecorator"
 
+type ItemStyle = "book" | "video" | "portrait" | "landscape"
+
 type MediaItem = {
   id: string
   data: {
@@ -14,6 +16,11 @@ type MediaItem = {
     type: { id: string }
     image: ImageMetadata
   }
+}
+
+interface Props {
+  items: (MediaItem | undefined)[]
+  layout: ItemStyle
 }
 
 const t = Astro.locals.i18n.t
@@ -25,63 +32,55 @@ const types = Object.fromEntries(
   ]),
 )
 
-interface Props {
-  items: (MediaItem | undefined)[]
-  layout: "book" | "video" | "portrait" | "landscape"
-}
+const { items: itemsInput, layout: itemStyle } = Astro.props
 
-const { items: itemsInput, layout } = Astro.props
-// We allow users to pass undefined values because
+// We allow for undefined values because
 // this is in the return type of getEntry
 const items = itemsInput.filter((item) => !!item)
+
+const itemWidth = (
+  {
+    book: "narrow",
+    portrait: "narrow",
+    video: "wide",
+    landscape: "wide",
+  } as const
+)[itemStyle]
+
+const imageWidths = {
+  narrow: [256, 512, 768, 1024],
+  wide: [120, 160, 240, 320, 640],
+}
+
+const imageSizes = {
+  narrow:
+    "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
+    "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
+    "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
+    "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
+    "217px",
+  wide:
+    "(max-width: 640px) calc(calc(100vw - 2rem ) / 1), " +
+    "(max-width: 768px) calc(calc(100vw - 3.5rem ) / 2), " +
+    "(max-width: 1024px) calc(calc(100vw - 8.5rem ) / 3), " +
+    "(max-width: 1280px) calc(calc(100vw - 10.5rem ) / 4), " +
+    "280px",
+} as const
+
+const gridLayouts = {
+  narrow: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
+  wide: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+} as const
+
+const coverImageStyle =
+  (["book", "video"] as const).find((style) => itemStyle === style) ?? "default"
 ---
 
 {
-  (layout === "book" || layout === "portrait") && (
-    <ol class="grid grid-cols-2 items-end justify-between gap-x-7 gap-y-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-5">
-      {items.map((item) => (
-        <li>
-          <a
-            href={detailsPagePath(Astro.currentLocale, item)}
-            class="group flex flex-col gap-3"
-          >
-            <CoverImageDecorator
-              style={layout === "book" ? "book" : "default"}
-              className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
-            >
-              <Image
-                class="h-full w-full object-contain"
-                src={item.data.image}
-                alt=""
-                widths={[256, 512, 768, 1024]}
-                sizes={
-                  "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
-                  "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
-                  "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
-                  "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
-                  "217px"
-                }
-              />
-            </CoverImageDecorator>
-
-            <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
-              <Icon
-                className={`${types[item.data.type.id].icon} me-2 align-bottom`}
-                ariaLabel={types[item.data.type.id].name}
-              />
-              {item.data.title}
-            </span>
-          </a>
-        </li>
-      ))}
-    </ol>
-  )
-}
-{
-  (layout === "video" || layout === "landscape") && (
+  (
     <ol
-      class="grid grid-cols-1 justify-between gap-x-7 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-8 lg:grid-cols-4"
-      class:list={[layout === "landscape" && "items-end"]}
+      class="grid items-end justify-between gap-x-7 gap-y-4 md:gap-8"
+      class:list={[gridLayouts[itemWidth]]}
     >
       {items.map((item) => (
         <li>
@@ -89,25 +88,20 @@ const items = itemsInput.filter((item) => !!item)
             href={detailsPagePath(Astro.currentLocale, item)}
             class="group flex flex-col gap-3"
           >
-            <div
-              class="relative overflow-hidden rounded-md shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
-              class:list={[layout === "video" && "aspect-video bg-gray-950"]}
+            <CoverImageDecorator
+              style={coverImageStyle}
+              className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
             >
               <Image
                 class="h-full w-full object-contain"
-                class:list={[layout === "video" && "absolute top-0"]}
+                class:list={[itemStyle === "video" && "absolute top-0"]}
                 src={item.data.image}
                 alt=""
-                widths={[120, 160, 240, 320, 640]}
-                sizes={
-                  "(max-width: 640px) calc(calc(100vw - 2rem ) / 1), " +
-                  "(max-width: 768px) calc(calc(100vw - 3.5rem ) / 2), " +
-                  "(max-width: 1024px) calc(calc(100vw - 8.5rem ) / 3), " +
-                  "(max-width: 1280px) calc(calc(100vw - 10.5rem ) / 4), " +
-                  "280px"
-                }
+                widths={imageWidths[itemWidth]}
+                sizes={imageSizes[itemWidth]}
               />
-            </div>
+            </CoverImageDecorator>
+
             <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
               <Icon
                 className={`${types[item.data.type.id].icon} me-2 align-bottom`}

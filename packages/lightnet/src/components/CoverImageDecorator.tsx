@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 
-type ImageStyle = "default" | "book"
+type ImageStyle = "default" | "book" | "video"
 
 type Props = {
   children: ReactNode
@@ -8,16 +8,17 @@ type Props = {
   className?: string
 }
 
-const rounded: { [key in ImageStyle]: string } = {
+const containerClass: { [key in ImageStyle]: string } = {
   default: "rounded-md",
   book: "rounded-sm",
+  video: "rounded-md aspect-video bg-gray-950",
 }
 
 export default function CoverImageDecorator(props: Props) {
   const { children, style = "default", className = "" } = props
   return (
     <div
-      className={`relative overflow-hidden ${rounded[style]} shadow-md ${className}`}
+      className={`relative overflow-hidden ${containerClass[style]} shadow-md ${className}`}
     >
       {children}
       {style === "book" && (

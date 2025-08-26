@@ -196,7 +196,7 @@ export const mediaTypeSchema = z
     /**
      * TODO: docs
      */
-    coverImageStyle: z.enum(["default", "book"]).default("default"),
+    coverImageStyle: z.enum(["default", "book", "video"]).default("default"),
     /**
      * What media item details page to use for media items with this type.
      *
