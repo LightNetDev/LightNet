@@ -7,6 +7,7 @@ import { detailsPagePath } from "../utils/paths"
 import CoverImageDecorator from "./CoverImageDecorator"
 import Icon from "./Icon"
 import Section, { type Props as SectionProps } from "./Section.astro"
+import CarouselSection from "./CarouselSection.astro"
 
 type ItemStyle = "book" | "video" | "portrait" | "landscape"
 
@@ -22,9 +23,15 @@ type MediaItem = {
 type Props = SectionProps & {
   items: (MediaItem | undefined)[]
   layout: ItemStyle
+  viewLayout?: "grid" | "carousel"
 }
 
-const { items: itemsInput, layout: itemStyle, ...sectionProps } = Astro.props
+const {
+  items: itemsInput,
+  layout: itemStyle,
+  viewLayout = "grid",
+  ...sectionProps
+} = Astro.props
 
 const t = Astro.locals.i18n.t
 
@@ -77,17 +84,59 @@ const coverImageStyle =
   (["book", "video"] as const).find((style) => itemStyle === style) ?? "default"
 ---
 
-<Section {...sectionProps}>
-  <ol
-    class="grid items-end justify-between gap-x-7 gap-y-4 md:gap-8"
-    class:list={[gridLayouts[itemWidth]]}
-  >
-    {
-      items.map((item) => (
-        <li>
+{
+  viewLayout === "grid" && (
+    <Section {...sectionProps}>
+      <ol
+        class="grid items-end justify-between gap-x-7 gap-y-4 md:gap-8"
+        class:list={[gridLayouts[itemWidth]]}
+      >
+        {items.map((item) => (
+          <li>
+            <a
+              href={detailsPagePath(Astro.currentLocale, item)}
+              class="group flex flex-col gap-3"
+            >
+              <CoverImageDecorator
+                style={coverImageStyle}
+                className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+              >
+                <Image
+                  class="h-full w-full object-contain"
+                  class:list={[itemStyle === "video" && "absolute top-0"]}
+                  src={item.data.image}
+                  alt=""
+                  widths={imageWidths[itemWidth]}
+                  sizes={imageSizes[itemWidth]}
+                />
+              </CoverImageDecorator>
+
+              <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
+                <Icon
+                  className={`${types[item.data.type.id].icon} me-2 align-bottom`}
+                  ariaLabel={types[item.data.type.id].name}
+                />
+                {item.data.title}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  )
+}
+{
+  viewLayout === "carousel" && (
+    <CarouselSection {...sectionProps}>
+      {items.map((item) => (
+        <li
+          class={`carousel-item--${itemWidth} h-full`}
+          role="group"
+          aria-roledescription="slide"
+        >
           <a
             href={detailsPagePath(Astro.currentLocale, item)}
-            class="group flex flex-col gap-3"
+            class="group flex h-full flex-col justify-end gap-3"
           >
             <CoverImageDecorator
               style={coverImageStyle}
@@ -112,7 +161,7 @@ const coverImageStyle =
             </span>
           </a>
         </li>
-      ))
-    }
-  </ol>
-</Section>
+      ))}
+    </CarouselSection>
+  )
+}

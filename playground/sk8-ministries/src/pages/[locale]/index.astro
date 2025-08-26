@@ -50,6 +50,7 @@ const { t, currentLocale } = Astro.locals.i18n
     titleHref={searchPagePath(currentLocale, { type: "book" })}
     items={latestBooks}
     layout="book"
+    viewLayout="carousel"
   />
 
   <HighlightSection
