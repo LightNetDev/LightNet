@@ -6,7 +6,7 @@ import type { SearchItem } from "../../api/search-response"
 export type MediaType = {
   name: string
   icon: string
-  coverImageStyle: "default" | "book"
+  coverImageStyle: "default" | "book" | "video"
 }
 
 export type TranslatedLanguage = {
