@@ -5,6 +5,7 @@ import { Image } from "astro:assets"
 import { getMediaTypes } from "../content/get-media-types"
 import { detailsPagePath } from "../utils/paths"
 import Icon from "./Icon"
+import CoverImageDecorator from "./CoverImageDecorator"
 
 type MediaItem = {
   id: string
@@ -44,9 +45,9 @@ const items = itemsInput.filter((item) => !!item)
             href={detailsPagePath(Astro.currentLocale, item)}
             class="group flex flex-col gap-3"
           >
-            <div
-              class="relative overflow-hidden shadow-md outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
-              class:list={layout === "book" ? "rounded-sm" : "rounded-md"}
+            <CoverImageDecorator
+              style={layout === "book" ? "book" : "default"}
+              className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
             >
               <Image
                 class="h-full w-full object-contain"
@@ -61,10 +62,8 @@ const items = itemsInput.filter((item) => !!item)
                   "217px"
                 }
               />
-              {layout === "book" && (
-                <span class="absolute start-[3px] top-0 h-full w-[4px] bg-gradient-to-r from-gray-500/20 to-transparent" />
-              )}
-            </div>
+            </CoverImageDecorator>
+
             <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
               <Icon
                 className={`${types[item.data.type.id].icon} me-2 align-bottom`}
