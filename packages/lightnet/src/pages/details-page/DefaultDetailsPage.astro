@@ -9,15 +9,14 @@ import MoreDetailsSection from "./components/MoreDetailsSection.astro"
 
 export type Props = {
   mediaId: string
-  coverStyle?: "default" | "book"
   openActionLabel?: string
 }
 
-const { mediaId, coverStyle, openActionLabel = "ln.details.open" } = Astro.props
+const { mediaId, openActionLabel = "ln.details.open" } = Astro.props
 ---
 
 <DetailsPage mediaId={mediaId}>
-  <MainDetailsSection mediaId={mediaId} thumbnailStyle={coverStyle}>
+  <MainDetailsSection mediaId={mediaId}>
     <OpenButton
       className="mt-8"
       mediaId={mediaId}

@@ -18,7 +18,7 @@ export default function CoverImageDecorator(props: Props) {
   const { children, style = "default", className = "" } = props
   return (
     <div
-      className={`relative overflow-hidden ${containerClass[style]} shadow-md ${className}`}
+      className={`relative overflow-hidden ${containerClass[style]} shadow-sm ${className}`}
     >
       {children}
       {style === "book" && (
