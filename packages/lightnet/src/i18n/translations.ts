@@ -9,6 +9,7 @@ const builtInTranslations = {
   fi: () => import("./translations/fi.yml?raw"),
   fr: () => import("./translations/fr.yml?raw"),
   hi: () => import("./translations/hi.yml?raw"),
+  kk: () => import("./translations/kk.yml?raw"),
   pt: () => import("./translations/pt.yml?raw"),
   ru: () => import("./translations/ru.yml?raw"),
   uk: () => import("./translations/uk.yml?raw"),
