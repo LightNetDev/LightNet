@@ -77,6 +77,14 @@ const { t, direction } = Astro.locals.i18n
         nextBtn.addEventListener("click", () => carousel.scrollNext())
 
         const updateArrowButtons = () => {
+          if (!carousel.canScrollPrev() && !carousel.canScrollNext()) {
+            prevBtn.style.visibility = "hidden"
+            nextBtn.style.visibility = "hidden"
+          } else {
+            prevBtn.style.visibility = "visible"
+            nextBtn.style.visibility = "visible"
+          }
+
           if (carousel.canScrollPrev()) {
             prevBtn.removeAttribute("disabled")
           } else {
