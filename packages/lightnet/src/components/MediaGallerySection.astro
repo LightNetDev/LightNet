@@ -55,23 +55,28 @@ const itemWidth = (
   } as const
 )[itemStyle]
 
-const imageWidths = {
-  narrow: [256, 512, 768, 1024],
-  wide: [120, 160, 240, 320, 640],
-}
-
 const imageSizes = {
   narrow:
-    "(max-width: 640px) calc(calc(100vw - 3.5rem ) / 2), " +
-    "(max-width: 768px) calc(calc(100vw - 5rem ) / 3), " +
+    // 2 columns
+    "(max-width: 640px) calc(calc(100vw - 3rem ) / 2), " +
+    // 3 columns
+    "(max-width: 768px) calc(calc(100vw - 4rem ) / 3), " +
+    // 4 columns
     "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
+    // 5 columns
     "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
+    // 5 columns - full size
     "217px",
   wide:
+    // 1 column
     "(max-width: 640px) calc(calc(100vw - 2rem ) / 1), " +
-    "(max-width: 768px) calc(calc(100vw - 3.5rem ) / 2), " +
-    "(max-width: 1024px) calc(calc(100vw - 8.5rem ) / 3), " +
-    "(max-width: 1280px) calc(calc(100vw - 10.5rem ) / 4), " +
+    // 2 columns
+    "(max-width: 768px) calc(calc(100vw - 3rem ) / 2), " +
+    // 3 columns
+    "(max-width: 1024px) calc(calc(100vw - 8rem ) / 3), " +
+    // 4 columns
+    "(max-width: 1280px) calc(calc(100vw - 10rem ) / 4), " +
+    // 5 columns - full size
     "280px",
 } as const
 
@@ -89,7 +94,7 @@ const coverImageStyle =
     <Section {...sectionProps}>
       <ol
         class="grid items-end justify-between gap-4 md:gap-8"
-        class:list={[gridLayouts[itemWidth]]}
+        class:list={gridLayouts[itemWidth]}
       >
         {items.map((item) => (
           <li>
@@ -106,7 +111,7 @@ const coverImageStyle =
                   class:list={[itemStyle === "video" && "absolute top-0"]}
                   src={item.data.image}
                   alt=""
-                  widths={imageWidths[itemWidth]}
+                  widths={[128, 256, 512, 768]}
                   sizes={imageSizes[itemWidth]}
                 />
               </CoverImageDecorator>
@@ -147,7 +152,7 @@ const coverImageStyle =
                 class:list={[itemStyle === "video" && "absolute top-0"]}
                 src={item.data.image}
                 alt=""
-                widths={imageWidths[itemWidth]}
+                widths={[128, 256, 512, 768]}
                 sizes={imageSizes[itemWidth]}
               />
             </CoverImageDecorator>
