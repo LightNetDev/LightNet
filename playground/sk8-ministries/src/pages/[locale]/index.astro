@@ -45,6 +45,8 @@ const { t, currentLocale } = Astro.locals.i18n
     showSearch={true}
   />
 
+  <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
+
   <MediaGallerySection
     title={t("x.home.our-latest-books")}
     titleHref={searchPagePath(currentLocale, { type: "book" })}
@@ -62,8 +64,6 @@ const { t, currentLocale } = Astro.locals.i18n
       text: t("x.home.bbq.sign-up-now"),
     }}
   />
-
-  <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
 
   <MediaGallerySection
     title={learnSkateboarding.data.label}
