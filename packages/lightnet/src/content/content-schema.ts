@@ -193,7 +193,16 @@ export const mediaTypeSchema = z
      * @example "media-type.book"
      */
     label: z.string(),
-    // TODO: docs
+    /**
+     * Defines how the cover image for a media item of this type is rendered.
+     *
+     * Options:
+     * - `"default"` — Renders the media item image with no modifications.
+     * - `"book"` — Adds a book fold effect and sharper edges, styled like a book cover.
+     * - `"video"` — Constrains the image to a 16:9 aspect ratio with a black background.
+     *
+     * @default "default"
+     */
     coverImageStyle: z.enum(["default", "book", "video"]).default("default"),
     /**
      * What media item details page to use for media items with this type.
@@ -217,9 +226,16 @@ export const mediaTypeSchema = z
            */
           openActionLabel: z.string().optional(),
           /**
-           * What style to use for the cover image.
+           * (Deprecated) Specifies the style of the cover image.
+           *
+           * Use `coverImageStyle` instead. This option will be removed in a future major release.
+           *
+           * Supported values:
+           * - `"default"` — unmodified media item image
+           * - `"book"` — styled as a book cover (book fold, sharper edges)
            *
            * @example "book"
+           * @deprecated Use `coverImageStyle` instead
            */
           coverStyle: z.enum(["default", "book"]).default("default"),
         }),
