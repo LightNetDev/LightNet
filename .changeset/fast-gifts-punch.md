@@ -11,7 +11,7 @@ Supported values:
 
 - `"default"` — unmodified media item image (default)
 - `"book"` — styled as a book cover (book fold, sharper edges)
-- `"video"` — forced 16:9 aspect ratio with black background
+- `"video"` — forced 16:9 aspect ratio, ⚠️ removed filling up with a black background but scale the image to cover the whole cover area.
 
 #### Deprecation Notice
 

@@ -107,7 +107,7 @@ const coverImageStyle =
                 className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
               >
                 <Image
-                  class="h-full w-full object-contain"
+                  class="h-full w-full object-cover"
                   class:list={[itemStyle === "video" && "absolute top-0"]}
                   src={item.data.image}
                   alt=""
@@ -148,8 +148,7 @@ const coverImageStyle =
               className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
             >
               <Image
-                class="h-full w-full object-contain"
-                class:list={[itemStyle === "video" && "absolute top-0"]}
+                class="h-full w-full object-cover"
                 src={item.data.image}
                 alt=""
                 widths={[128, 256, 512, 768]}

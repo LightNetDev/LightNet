@@ -11,7 +11,7 @@ type Props = {
 const containerClass: { [key in ImageStyle]: string } = {
   default: "rounded-md",
   book: "rounded-sm",
-  video: "rounded-md aspect-video bg-gray-950",
+  video: "rounded-md aspect-video",
 }
 
 export default function CoverImageDecorator(props: Props) {
