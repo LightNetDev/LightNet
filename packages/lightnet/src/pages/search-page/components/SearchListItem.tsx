@@ -33,6 +33,7 @@ export default function SearchListItem({
   showLanguage,
   mediaTypes,
 }: Props) {
+  const coverImageStyle = mediaTypes[item.type].coverImageStyle
   return (
     <a
       href={detailsPagePath(currentLocale, {
@@ -42,9 +43,9 @@ export default function SearchListItem({
       className="group flex h-52 overflow-hidden py-2 transition-colors ease-in-out sm:h-64 md:rounded-sm md:hover:bg-gray-100"
     >
       <div className="flex h-full w-36 shrink-0 flex-col items-start justify-center">
-        <CoverImageDecorator style={mediaTypes[item.type].coverImageStyle}>
+        <CoverImageDecorator style={coverImageStyle}>
           <img
-            className="max-h-40 w-auto max-w-36 object-cover"
+            className={`max-h-40 w-auto max-w-36 object-cover ${coverImageStyle === "video" ? "aspect-video" : ""}`}
             src={item.image.src}
             width={item.image.width}
             height={item.image.height}

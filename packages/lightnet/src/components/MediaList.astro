@@ -65,7 +65,11 @@ const mediaTypes = Object.fromEntries(
               style={mediaTypes[item.data.type.id].coverImageStyle}
             >
               <Image
-                class="max-h-32 w-auto max-w-32 object-contain"
+                class="max-h-32 w-auto max-w-32 object-cover"
+                class:list={[
+                  mediaTypes[item.data.type.id].coverImageStyle === "video" &&
+                    "aspect-video",
+                ]}
                 src={item.data.image}
                 width={256}
                 alt=""
