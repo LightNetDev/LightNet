@@ -4,6 +4,7 @@ import { Image } from "astro:assets"
 
 import { getMediaTypes } from "../content/get-media-types"
 import { detailsPagePath } from "../utils/paths"
+import CoverImageDecorator from "./CoverImageDecorator"
 import Icon from "./Icon"
 
 type MediaItem = {
@@ -35,6 +36,7 @@ const mediaTypes = Object.fromEntries(
       id: type.id,
       name: t(type.data.label),
       icon: type.data.icon,
+      coverImageStyle: type.data.coverImageStyle,
     },
   ]),
 )
@@ -59,16 +61,24 @@ const mediaTypes = Object.fromEntries(
           tabindex={item.disabled ? -1 : 0}
         >
           <div class="flex h-32 w-32 shrink-0 flex-col items-start justify-center">
-            <Image
-              class="max-h-32 w-auto max-w-32 rounded-sm object-contain shadow-md"
-              src={item.data.image}
-              width={256}
-              alt=""
-            />
+            <CoverImageDecorator
+              style={mediaTypes[item.data.type.id].coverImageStyle}
+            >
+              <Image
+                class="max-h-32 w-auto max-w-32 object-cover"
+                class:list={[
+                  mediaTypes[item.data.type.id].coverImageStyle === "video" &&
+                    "aspect-video",
+                ]}
+                src={item.data.image}
+                width={256}
+                alt=""
+              />
+            </CoverImageDecorator>
           </div>
 
           <div
-            class="ms-5 flex grow flex-col justify-center sm:ms-8"
+            class="ms-4 flex grow flex-col justify-center sm:ms-6"
             lang={item.data.language}
           >
             <p class="mb-1 line-clamp-3 text-balance font-bold text-gray-700 md:mb-3">

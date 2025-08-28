@@ -2,7 +2,7 @@
 
 Many ministries struggle to share media content effectively. LightNet makes it easy to **run your own digital media library**, so more people can find what they need and grow in faith.
 
-Built as an integration for the [Astro framework](https://astro.build), LightNet makes it easy to create fast, static sites that run anywhere.
+Built as an integration for the [Astro framework](https://astro.build), LightNet creates fast, static sites that run anywhere.
 
 Learn more on the [LightNet homepage](https://lightnet.community).
 
@@ -10,7 +10,7 @@ Learn more on the [LightNet homepage](https://lightnet.community).
 
 Quickly launch your own media library with LightNet. [Follow the getting started guide](https://docs.lightnet.community/start-here/getting-started/) to spin up a template, then customize and expand it to fit your community’s needs.
 
-## 🌍 Real-world Example
+## 🌍 Real-world example
 
 Curious what LightNet looks like in action? [Check out the MediaWorks digital library](https://library.mediaworks.global)
 to see how it powers a live site.

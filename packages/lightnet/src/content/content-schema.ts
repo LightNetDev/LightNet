@@ -183,80 +183,111 @@ export const createCategorySchema = ({ image }: SchemaContext) =>
 /**
  * Media Type Schema
  */
-export const mediaTypeSchema = z.object({
-  /**
-   * Name of this media type that will be shown on the pages.
-   *
-   * This can either be a fixed string or a translation key.
-   *
-   * @example "media-type.book"
-   */
-  label: z.string(),
-  /**
-   * What media item details page to use for media items with this type.
-   *
-   */
-  detailsPage: z
-    .discriminatedUnion("layout", [
-      z.object({
-        /**
-         * Details page for all media types.
-         */
-        layout: z.literal("default"),
-        /**
-         * Label for the open action button. Use this if you want to change the text
-         * of the "Open" button to be more matching to your media item.
-         * For example you could change the text to be "Read" for a book media type.
-         *
-         * The label is a translation key.
-         *
-         * @example "ln.details.open"
-         */
-        openActionLabel: z.string().optional(),
-        /**
-         * What style to use for the cover image.
-         *
-         * @example "book"
-         */
-        coverStyle: z.enum(["default", "book"]).default("default"),
-      }),
-      z.object({
-        /**
-         * Custom details page.
-         */
-        layout: z.literal("custom"),
-        /**
-         * This references a custom component name to be used for the
-         * details page. The custom component has be located at src/details-pages/
-         *
-         * @example "MyArticleDetails.astro"
-         */
-        customComponent: z.string(),
-      }),
-      z.object({
-        /**
-         * Detail page for videos.
-         */
-        layout: z.literal("video"),
-      }),
-      z.object({
-        /**
-         * Detail page for audio files.
-         *
-         * This only supports mp3 files.
-         */
-        layout: z.literal("audio"),
-      }),
-    ])
-    .optional(),
-  /**
-   * Pick the media type's icon from https://pictogrammers.com/library/mdi/
-   * Prefix it's name with "mdi--"
-   *
-   * @example "mdi--ab-testing"
-   */
-  icon: z.string(),
-})
+export const mediaTypeSchema = z
+  .object({
+    /**
+     * Name of this media type that will be shown on the pages.
+     *
+     * This can either be a fixed string or a translation key.
+     *
+     * @example "media-type.book"
+     */
+    label: z.string(),
+    /**
+     * Defines how the cover image for a media item of this type is rendered.
+     *
+     * Options:
+     * - `"default"` — Renders the media item image with no modifications.
+     * - `"book"` — Adds a book fold effect and sharper edges, styled like a book cover.
+     * - `"video"` — Constrains the image to a 16:9 aspect ratio with a black background.
+     *
+     * @default "default"
+     */
+    coverImageStyle: z.enum(["default", "book", "video"]).default("default"),
+    /**
+     * What media item details page to use for media items with this type.
+     *
+     */
+    detailsPage: z
+      .discriminatedUnion("layout", [
+        z.object({
+          /**
+           * Details page for all media types.
+           */
+          layout: z.literal("default"),
+          /**
+           * Label for the open action button. Use this if you want to change the text
+           * of the "Open" button to be more matching to your media item.
+           * For example you could change the text to be "Read" for a book media type.
+           *
+           * The label is a translation key.
+           *
+           * @example "ln.details.open"
+           */
+          openActionLabel: z.string().optional(),
+          /**
+           * (Deprecated) Specifies the style of the cover image.
+           *
+           * Use `coverImageStyle` instead. This option will be removed in a future major release.
+           *
+           * Supported values:
+           * - `"default"` — unmodified media item image
+           * - `"book"` — styled as a book cover (book fold, sharper edges)
+           *
+           * @example "book"
+           * @deprecated Use `coverImageStyle` instead
+           */
+          coverStyle: z.enum(["default", "book"]).default("default"),
+        }),
+        z.object({
+          /**
+           * Custom details page.
+           */
+          layout: z.literal("custom"),
+          /**
+           * This references a custom component name to be used for the
+           * details page. The custom component has be located at src/details-pages/
+           *
+           * @example "MyArticleDetails.astro"
+           */
+          customComponent: z.string(),
+        }),
+        z.object({
+          /**
+           * Detail page for videos.
+           */
+          layout: z.literal("video"),
+        }),
+        z.object({
+          /**
+           * Detail page for audio files.
+           *
+           * This only supports mp3 files.
+           */
+          layout: z.literal("audio"),
+        }),
+      ])
+      .optional(),
+    /**
+     * Pick the media type's icon from https://pictogrammers.com/library/mdi/
+     * Prefix it's name with "mdi--"
+     *
+     * @example "mdi--ab-testing"
+     */
+    icon: z.string(),
+  })
+  .transform((mediaType) => {
+    // migrate old cover images style to new property
+    const hasDeprecatedBookCover =
+      mediaType.detailsPage?.layout === "default" &&
+      mediaType.detailsPage.coverStyle === "book"
+    return {
+      ...mediaType,
+      coverImageStyle: hasDeprecatedBookCover
+        ? "book"
+        : mediaType.coverImageStyle,
+    }
+  })
 
 export const LIGHTNET_COLLECTIONS = {
   categories: defineCollection({

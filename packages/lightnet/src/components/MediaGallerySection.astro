@@ -1,8 +1,15 @@
 ---
 import type { ImageMetadata } from "astro"
+import { Image } from "astro:assets"
 
-import MediaGallery from "./MediaGallery.astro"
+import { getMediaTypes } from "../content/get-media-types"
+import { detailsPagePath } from "../utils/paths"
+import CarouselSection from "./CarouselSection.astro"
+import CoverImageDecorator from "./CoverImageDecorator"
+import Icon from "./Icon"
 import Section, { type Props as SectionProps } from "./Section.astro"
+
+type ItemStyle = "book" | "video" | "portrait" | "landscape"
 
 type MediaItem = {
   id: string
@@ -15,12 +22,150 @@ type MediaItem = {
 
 type Props = SectionProps & {
   items: (MediaItem | undefined)[]
-  layout: "book" | "video" | "portrait" | "landscape"
+  layout: ItemStyle
+  viewLayout?: "grid" | "carousel"
 }
 
-const { items, layout, ...sectionProps } = Astro.props
+const {
+  items: itemsInput,
+  layout: itemStyle,
+  viewLayout = "grid",
+  ...sectionProps
+} = Astro.props
+
+const t = Astro.locals.i18n.t
+
+const types = Object.fromEntries(
+  (await getMediaTypes()).map((type) => [
+    type.id,
+    { ...type.data, name: t(type.data.label) },
+  ]),
+)
+
+// We allow for undefined values because
+// this is in the return type of getEntry
+const items = itemsInput.filter((item) => !!item)
+
+const itemWidth = (
+  {
+    book: "narrow",
+    portrait: "narrow",
+    video: "wide",
+    landscape: "wide",
+  } as const
+)[itemStyle]
+
+const imageSizes = {
+  narrow:
+    // 2 columns
+    "(max-width: 640px) calc(calc(100vw - 3rem ) / 2), " +
+    // 3 columns
+    "(max-width: 768px) calc(calc(100vw - 4rem ) / 3), " +
+    // 4 columns
+    "(max-width: 1024px) calc(calc(100vw - 10rem ) / 4), " +
+    // 5 columns
+    "(max-width: 1280px) calc(calc(100vw - 12rem ) / 5), " +
+    // 5 columns - full size
+    "217px",
+  wide:
+    // 1 column
+    "(max-width: 640px) calc(calc(100vw - 2rem ) / 1), " +
+    // 2 columns
+    "(max-width: 768px) calc(calc(100vw - 3rem ) / 2), " +
+    // 3 columns
+    "(max-width: 1024px) calc(calc(100vw - 8rem ) / 3), " +
+    // 4 columns
+    "(max-width: 1280px) calc(calc(100vw - 10rem ) / 4), " +
+    // 5 columns - full size
+    "280px",
+} as const
+
+const gridLayouts = {
+  narrow: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
+  wide: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+} as const
+
+const coverImageStyle =
+  (["book", "video"] as const).find((style) => itemStyle === style) ?? "default"
 ---
 
-<Section {...sectionProps}>
-  <MediaGallery items={items} layout={layout} />
-</Section>
+{
+  viewLayout === "grid" && (
+    <Section {...sectionProps}>
+      <ol
+        class="grid items-end justify-between gap-4 md:gap-8"
+        class:list={gridLayouts[itemWidth]}
+      >
+        {items.map((item) => (
+          <li>
+            <a
+              href={detailsPagePath(Astro.currentLocale, item)}
+              class="group flex flex-col gap-3"
+            >
+              <CoverImageDecorator
+                style={coverImageStyle}
+                className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+              >
+                <Image
+                  class="h-full w-full object-cover"
+                  class:list={[itemStyle === "video" && "absolute top-0"]}
+                  src={item.data.image}
+                  alt=""
+                  widths={[128, 256, 512, 768]}
+                  sizes={imageSizes[itemWidth]}
+                />
+              </CoverImageDecorator>
+
+              <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
+                <Icon
+                  className={`${types[item.data.type.id].icon} me-2 align-bottom`}
+                  ariaLabel={types[item.data.type.id].name}
+                />
+                {item.data.title}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  )
+}
+{
+  viewLayout === "carousel" && (
+    <CarouselSection {...sectionProps}>
+      {items.map((item) => (
+        <li
+          class={`carousel-item--${itemWidth} h-full`}
+          role="group"
+          aria-roledescription="slide"
+        >
+          <a
+            href={detailsPagePath(Astro.currentLocale, item)}
+            class="group flex h-full flex-col justify-end gap-3"
+          >
+            <CoverImageDecorator
+              style={coverImageStyle}
+              className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+            >
+              <Image
+                class="h-full w-full object-cover"
+                src={item.data.image}
+                alt=""
+                widths={[128, 256, 512, 768]}
+                sizes={imageSizes[itemWidth]}
+              />
+            </CoverImageDecorator>
+
+            <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
+              <Icon
+                className={`${types[item.data.type.id].icon} me-2 align-bottom`}
+                ariaLabel={types[item.data.type.id].name}
+              />
+              {item.data.title}
+            </span>
+          </a>
+        </li>
+      ))}
+    </CarouselSection>
+  )
+}

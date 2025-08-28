@@ -1,37 +1,29 @@
 ![LightNet](https://github.com/LightNetDev/lightnet/blob/main/lightnet-banner.webp)
 
-Share the gospel and strengthen believers in your community.
+Many ministries struggle to share media content effectively. LightNet makes it easy to **run your own digital media library**, so more people can find what they need and grow in faith.
 
-LightNet makes it easy to **run your own digital media library**, so more people can find what they need and grow in faith.
-
-Built as an integration for the [Astro framework](https://astro.build), LightNet enables the creation of fast, statically generated websites that can be easily hosted on any file server.
+Built as an integration for the [Astro framework](https://astro.build), LightNet creates fast, static sites that run anywhere.
 
 Learn more on the [LightNet homepage](https://lightnet.community).
 
-## Start Your Own Library
+## 🚀 Launch your own library
 
-Get up and running quickly with LightNet by exploring its features and best practices. You can build your own media library by starting with the [LightNet example template](https://github.com/LightNetDev/example-template), which creates a local copy of a demo site for a fictional skateboard ministry. This beginner-friendly template serves as a great starting point for developers.
+Quickly launch your own media library with LightNet. [Follow the getting started guide](https://docs.lightnet.community/start-here/getting-started/) to spin up a template, then customize and expand it to fit your community’s needs.
 
-To get started, simply run the following command in your terminal:
+## 🌍 Real-world example
 
-```bash
-npm create astro@latest -- --template LightNetDev/example-template
-```
+Curious what LightNet looks like in action? [Check out the MediaWorks digital library](https://library.mediaworks.global)
+to see how it powers a live site.
 
-This will set up the demo site that you can customize and expand to meet your community’s needs.
+## 👀 Want to learn more?
 
-## Documentation
+Take a look at the [LightNet developer docs](https://docs.lightnet.community).
 
-Need help? [Explore the LightNet developer docs](https://docs.lightnet.community) for everything you need to get started and make the most of LightNet.
+## 🤝 Contributing
 
-## Showcase
+Got ideas or improvements? We’d love your help! [See the contribution guide](https://github.com/LightNetDev/lightnet/blob/main/CONTRIBUTING.md) to get started.
 
-Want to see LightNet in action? [Visit the MediaWorks digital library](https://library.mediaworks.global) and see how it powers a real-world digital library.
+## 📄 License
 
-## Contributing
-
-Want to help improve LightNet? [Check out the contribution guide](https://github.com/LightNetDev/lightnet/blob/main/CONTRIBUTING.md) to learn how you can get involved and make a difference!
-
-## License
-
-LightNet is licensed under the MIT License. See the full details in the [LICENSE](https://github.com/LightNetDev/lightnet/blob/main/LICENSE) file.
+LightNet uses the MIT License. You can read the full details in the [LICENSE](https://github.com/LightNetDev/lightnet/blob/main/LICENSE)
+file.

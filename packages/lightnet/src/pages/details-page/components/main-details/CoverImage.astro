@@ -1,16 +1,18 @@
 ---
 import { Image } from "astro:assets"
 
+import CoverImageDecorator from "../../../../components/CoverImageDecorator"
 import { getMediaItem } from "../../../../content/get-media-items"
+import { getMediaType } from "../../../../content/get-media-types"
 
 interface Props {
   mediaId: string
-  style?: "default" | "book"
   size?: "md" | "lg"
 }
-const { mediaId, style = "default", size = "lg" } = Astro.props
+const { mediaId, size = "lg" } = Astro.props
 
 const item = await getMediaItem(mediaId)
+const type = await getMediaType(item.data.type.id)
 const image = item.data.image
 const isPortraitImage = image.height > image.width
 const imageSizes = {
@@ -25,10 +27,7 @@ const imageSizes = {
 }
 ---
 
-<div
-  class="relative shrink-0 overflow-hidden shadow-sm"
-  class:list={style === "book" ? "rounded-sm" : "rounded-md"}
->
+<CoverImageDecorator className="shrink-0" style={type.data.coverImageStyle}>
   <Image
     class:list={imageSizes[size].css}
     alt=""
@@ -39,9 +38,4 @@ const imageSizes = {
     loading="eager"
     fetchpriority="high"
   />
-  {
-    style === "book" && (
-      <span class="absolute start-[3px] top-0 h-full w-[4px] bg-gradient-to-r from-gray-500/20 to-transparent" />
-    )
-  }
-</div>
+</CoverImageDecorator>

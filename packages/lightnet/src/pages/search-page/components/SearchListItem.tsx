@@ -1,3 +1,4 @@
+import CoverImageDecorator from "../../../components/CoverImageDecorator"
 import Icon from "../../../components/Icon"
 import { detailsPagePath } from "../../../utils/paths"
 import type { SearchItem } from "../../api/search-response"
@@ -5,6 +6,7 @@ import type { SearchItem } from "../../api/search-response"
 export type MediaType = {
   name: string
   icon: string
+  coverImageStyle: "default" | "book" | "video"
 }
 
 export type TranslatedLanguage = {
@@ -31,6 +33,7 @@ export default function SearchListItem({
   showLanguage,
   mediaTypes,
 }: Props) {
+  const coverImageStyle = mediaTypes[item.type].coverImageStyle
   return (
     <a
       href={detailsPagePath(currentLocale, {
@@ -40,15 +43,17 @@ export default function SearchListItem({
       className="group flex h-52 overflow-hidden py-2 transition-colors ease-in-out sm:h-64 md:rounded-sm md:hover:bg-gray-100"
     >
       <div className="flex h-full w-36 shrink-0 flex-col items-start justify-center">
-        <img
-          className="max-h-36 w-auto max-w-36 rounded-sm object-contain shadow-md"
-          src={item.image.src}
-          width={item.image.width}
-          height={item.image.height}
-          alt=""
-          decoding="async"
-          loading="eager"
-        />
+        <CoverImageDecorator style={coverImageStyle}>
+          <img
+            className={`max-h-40 w-auto max-w-36 object-cover ${coverImageStyle === "video" ? "aspect-video" : ""}`}
+            src={item.image.src}
+            width={item.image.width}
+            height={item.image.height}
+            alt=""
+            decoding="async"
+            loading="eager"
+          />
+        </CoverImageDecorator>
       </div>
 
       <div className="ms-5 flex grow flex-col justify-center text-xs sm:ms-8">

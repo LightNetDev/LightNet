@@ -18,7 +18,6 @@ import heroImage from "../../assets/hero.webp"
 
 const latestBooks = await getMediaItems({
   where: { type: "book" },
-  orderBy: "dateCreated",
 })
 
 const learnSkateboarding = await getEntry(
@@ -46,11 +45,14 @@ const { t, currentLocale } = Astro.locals.i18n
     showSearch={true}
   />
 
+  <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
+
   <MediaGallerySection
     title={t("x.home.our-latest-books")}
     titleHref={searchPagePath(currentLocale, { type: "book" })}
     items={latestBooks}
     layout="book"
+    viewLayout="carousel"
   />
 
   <HighlightSection
@@ -62,8 +64,6 @@ const { t, currentLocale } = Astro.locals.i18n
       text: t("x.home.bbq.sign-up-now"),
     }}
   />
-
-  <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
 
   <MediaGallerySection
     title={learnSkateboarding.data.label}

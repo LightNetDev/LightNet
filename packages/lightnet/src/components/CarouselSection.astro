@@ -47,7 +47,6 @@ const { t, direction } = Astro.locals.i18n
 
   <script>
     import EmblaCarousel from "embla-carousel"
-    import AutoHeightPlugin from "embla-carousel-auto-height"
     import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures"
 
     class Carousel extends HTMLElement {
@@ -65,7 +64,7 @@ const { t, direction } = Astro.locals.i18n
             skipSnaps: true,
             direction,
           },
-          [AutoHeightPlugin(), WheelGesturesPlugin({ forceWheelAxis: "x" })],
+          [WheelGesturesPlugin({ forceWheelAxis: "x" })],
         )
         const prevBtn = this.querySelector(
           "[data-button-prev]",
@@ -78,6 +77,14 @@ const { t, direction } = Astro.locals.i18n
         nextBtn.addEventListener("click", () => carousel.scrollNext())
 
         const updateArrowButtons = () => {
+          if (!carousel.canScrollPrev() && !carousel.canScrollNext()) {
+            prevBtn.style.visibility = "hidden"
+            nextBtn.style.visibility = "hidden"
+          } else {
+            prevBtn.style.visibility = "visible"
+            nextBtn.style.visibility = "visible"
+          }
+
           if (carousel.canScrollPrev()) {
             prevBtn.removeAttribute("disabled")
           } else {
