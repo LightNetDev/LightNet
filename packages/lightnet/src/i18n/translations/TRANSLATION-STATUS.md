@@ -34,6 +34,13 @@ All keys have been translated. ✅
 
 All keys have been translated. ✅
 
+## **KK** ([kk.yml](./kk.yml))
+
+Missing keys:
+
+- ln.previous
+- ln.next
+
 ## **PT** ([pt.yml](./pt.yml))
 
 All keys have been translated. ✅
