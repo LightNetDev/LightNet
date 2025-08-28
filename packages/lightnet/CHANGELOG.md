@@ -1,5 +1,46 @@
 # lightnet
 
+## 3.9.0
+
+### Minor Changes
+
+- [#309](https://github.com/LightNetDev/LightNet/pull/309) [`5ea2c13`](https://github.com/LightNetDev/LightNet/commit/5ea2c139e52a20b951643530dd0a57e50ed04ad1) Thanks [@smn-cds](https://github.com/smn-cds)! - Media type config: Added `coverImageStyle`
+  - Introduced a new `coverImageStyle` option for media type configuration.
+  - Controls how cover images are rendered for media items.
+
+  Supported values:
+  - `"default"` — unmodified media item image (default)
+  - `"book"` — styled as a book cover (book fold, sharper edges)
+  - `"video"` — forced 16:9 aspect ratio, ⚠️ removed filling up with a black background but scale the image to cover the whole cover area.
+
+  #### Deprecation Notice
+
+  The existing `detailsPage.coverStyle` option is now deprecated and will be removed in a future major release. Use `coverImageStyle` instead.
+
+- [#309](https://github.com/LightNetDev/LightNet/pull/309) [`5ea2c13`](https://github.com/LightNetDev/LightNet/commit/5ea2c139e52a20b951643530dd0a57e50ed04ad1) Thanks [@smn-cds](https://github.com/smn-cds)! - `MediaGallerySection`: Added `carousel` layout option
+  - Introduced a new `viewLayout` prop for `MediaGallerySection`.
+  - Supported values:
+    - `"grid"` (default; existing behavior)
+    - `"carousel"` (new; renders items in a horizontal carousel)
+  - This change is **backwards-compatible**. Existing usages without `viewLayout` will continue to render as a grid.
+
+  ### Example
+
+  ```astro
+  <MediaGallerySection
+    title={t("x.home.our-latest-books")}
+    items={latestBooks}
+    layout="book"
+    viewLayout="carousel"
+  />
+  ```
+
+- [#309](https://github.com/LightNetDev/LightNet/pull/309) [`5ea2c13`](https://github.com/LightNetDev/LightNet/commit/5ea2c139e52a20b951643530dd0a57e50ed04ad1) Thanks [@smn-cds](https://github.com/smn-cds)! - Added Kazakh language.
+
+### Patch Changes
+
+- [#309](https://github.com/LightNetDev/LightNet/pull/309) [`5ea2c13`](https://github.com/LightNetDev/LightNet/commit/5ea2c139e52a20b951643530dd0a57e50ed04ad1) Thanks [@smn-cds](https://github.com/smn-cds)! - Improved page styling: shadows, spacing
+
 ## 3.8.1
 
 ### Patch Changes
