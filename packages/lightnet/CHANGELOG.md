@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.9.1
+
+### Patch Changes
+
+- [#312](https://github.com/LightNetDev/LightNet/pull/312) [`cda4af5`](https://github.com/LightNetDev/LightNet/commit/cda4af5e48d365ba7704c562874ba9fe7423ec79) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix SearchSection padding
+
 ## 3.9.0
 
 ### Minor Changes
