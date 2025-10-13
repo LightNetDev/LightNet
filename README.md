@@ -19,6 +19,10 @@ to see how it powers a live site.
 
 Take a look at the [LightNet developer docs](https://docs.lightnet.community).
 
+## 🛟 Getting support
+
+If you have questions about using LightNet or need guidance, visit [Getting support & getting involved](https://docs.lightnet.community/concepts/collaboration/#getting-support--getting-involved).
+
 ## 🤝 Contributing
 
 Got ideas or improvements? We’d love your help! [See the contribution guide](https://github.com/LightNetDev/lightnet/blob/main/CONTRIBUTING.md) to get started.
