@@ -8,6 +8,7 @@ import Favicon from "./components/Favicon.astro"
 import Header from "./components/Header.astro"
 import PreloadReact from "./components/PreloadReact"
 import ViewTransition from "./components/ViewTransition.astro"
+import Footer from "./components/Footer.astro"
 
 interface Props {
   title?: string
@@ -41,7 +42,7 @@ const language = resolveLanguage(currentLocale)
     <main class="grow pb-8 pt-14 sm:py-20">
       <slot />
     </main>
-    {CustomFooter && <CustomFooter />}
+    {CustomFooter ? <CustomFooter /> : <Footer />}
     <PreloadReact client:idle />
   </body>
 </html>

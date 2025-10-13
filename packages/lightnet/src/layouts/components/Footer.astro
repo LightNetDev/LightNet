@@ -1,0 +1,15 @@
+---
+import config from "virtual:lightnet/config"
+import LightNetLogo from "./LightNetLogo.svg"
+
+if (!config.credits) {
+  return
+}
+---
+
+<footer class="flex justify-center px-4 py-4 md:px-8">
+  <a class="text-xs hover:underline" href="https://lightnet.community">
+    <LightNetLogo class="inline-block h-4" />
+    {Astro.locals.i18n.t("ln.footer.powered-by-lightnet")}
+  </a>
+</footer>

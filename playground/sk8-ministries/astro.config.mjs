@@ -26,10 +26,13 @@ const languages = [
 
 export default defineConfig({
   site: "https://sk8-ministries.pages.dev",
-
+  devToolbar: {
+    enabled: false,
+  },
   integrations: [
     lightnet({
       title: "x.site.title",
+      credits: true,
       logo: { src: "./src/assets/logo.png" },
       languages,
       favicon: [
