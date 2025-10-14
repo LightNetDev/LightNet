@@ -81,4 +81,4 @@ export type LightNetTranslationKey =
   | "ln.search.placeholder"
   | "ln.search.title"
   | "ln.share.url-copied-to-clipboard"
-  | "ln.footer.powered-by-lightnet"
+  | "ln.footer.built-with-lightnet"

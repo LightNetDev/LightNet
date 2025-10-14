@@ -7,12 +7,12 @@ if (!config.credits) {
 }
 ---
 
-<footer class="flex justify-center px-4 py-2 md:px-8">
+<footer class="flex justify-center bg-gray-200 px-4 py-8 md:px-8">
   <a
-    class="flex items-center gap-1 py-2 text-xs hover:underline"
+    class="flex items-center gap-2 py-2 text-sm hover:underline"
     href="https://lightnet.community"
   >
-    <LightNetLogo class="h-4" />
-    {Astro.locals.i18n.t("ln.footer.powered-by-lightnet")}
+    <LightNetLogo class="h-6" />
+    {Astro.locals.i18n.t("ln.footer.built-with-lightnet")}
   </a>
 </footer>
