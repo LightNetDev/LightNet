@@ -1,6 +1,6 @@
 ---
 import config from "virtual:lightnet/config"
-import LightNetLogoUrl from "./LightNetLogo.svg?url"
+import LightNetLogo from "./LightNetLogo.svg"
 
 if (!config.credits) {
   return
@@ -16,7 +16,7 @@ if (!config.credits) {
       href="https://lightnet.community"
       target="_blank"
     >
-      <img src={LightNetLogoUrl} alt="" class="h-5 w-auto" loading="lazy" />
+      <img src={LightNetLogo.src} alt="" class="h-5 w-auto" loading="lazy" />
       {Astro.locals.i18n.t("ln.footer.built-with-lightnet")}
     </a>
   </div>
