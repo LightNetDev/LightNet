@@ -8,13 +8,17 @@ if (!config.credits) {
 }
 ---
 
-<footer class="flex justify-center border-t border-gray-300 px-4 py-8 md:px-8">
-  <a
-    class="flex items-center gap-2 py-2 text-sm text-gray-700 hover:underline"
-    href="https://lightnet.community"
-    target="_blank"
+<footer class="w-full border-t border-gray-300">
+  <div
+    class="mx-auto flex w-full max-w-screen-xl justify-end px-4 py-4 md:px-8"
   >
-    <LightNetLogo class="h-6" />
-    {Astro.locals.i18n.t("ln.footer.built-with-lightnet")}
-  </a>
+    <a
+      class="flex items-center gap-2 py-2 text-sm text-gray-900 hover:underline"
+      href="https://lightnet.community"
+      target="_blank"
+    >
+      <LightNetLogo class="h-5" />
+      {Astro.locals.i18n.t("ln.footer.built-with-lightnet")}
+    </a>
+  </div>
 </footer>
