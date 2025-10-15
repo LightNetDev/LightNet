@@ -13,7 +13,7 @@ const { mediaId } = Astro.props
   id="edit-btn"
   href={`/${Astro.currentLocale}/admin/media/${mediaId}`}
   ><Icon className="mdi--square-edit-outline" ariaLabel="" />
-  Edit</a
+  {Astro.locals.i18n.t("ln.admin.edit")}</a
 >
 <script>
   if (localStorage.getItem("ln-admin-enabled") === "true") {
