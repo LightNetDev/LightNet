@@ -4,5 +4,6 @@ category.teens: Teens
 category.theology: Theology
 type.book: Book
 type.video: Video
+type.audio: Audio
 details.action.read: Read
 details.action.watch: Watch

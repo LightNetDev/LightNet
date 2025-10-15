@@ -1,0 +1,7 @@
+{
+  "label": "type.audio",
+  "detailsPage": {
+    "layout": "audio"
+  },
+  "icon": "mdi--music-box-outline"
+}
