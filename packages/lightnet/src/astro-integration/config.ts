@@ -133,6 +133,10 @@ export const configSchema = z.object({
    */
   favicon: faviconSchema.array().optional(),
   /**
+   * Enable displaying a “Powered by LightNet” link in your site’s footer.
+   */
+  credits: z.boolean().default(false),
+  /**
    * Link to manifest file within public/ folder
    */
   manifest: z.string().transform(absolutePath).optional(),

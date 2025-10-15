@@ -143,3 +143,6 @@ ln.404.page-not-found: Page not found
 # English: Go to Home page
 # Used on: https://sk8-ministries.pages.dev/unexisting-path
 ln.404.go-to-the-home-page: Go to Home page
+
+# Footer text to give credits to LightNet
+ln.footer.powered-by-lightnet: Powered by LightNet

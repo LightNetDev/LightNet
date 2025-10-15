@@ -1,0 +1,24 @@
+---
+import config from "virtual:lightnet/config"
+
+import LightNetLogo from "./LightNetLogo.svg"
+
+if (!config.credits) {
+  return
+}
+---
+
+<footer class="w-full border-t border-gray-300">
+  <div
+    class="mx-auto flex w-full max-w-screen-xl justify-end px-4 py-4 md:px-8"
+  >
+    <a
+      class="flex items-center gap-2 py-2 text-sm text-gray-800 hover:underline"
+      href="https://lightnet.community"
+      target="_blank"
+    >
+      <img src={LightNetLogo.src} alt="" class="h-5 w-auto" loading="lazy" />
+      {Astro.locals.i18n.t("ln.footer.powered-by-lightnet")}
+    </a>
+  </div>
+</footer>
