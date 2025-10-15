@@ -1,0 +1,25 @@
+---
+import Icon from "../../../../components/Icon"
+import config from "virtual:lightnet/config"
+
+interface Props {
+  mediaId: string
+}
+
+const { mediaId } = Astro.props
+---
+
+<a
+  class="hidden cursor-pointer items-center gap-2 font-bold text-gray-700 underline"
+  id="edit-btn"
+  href={`/${Astro.currentLocale}/admin/media/${mediaId}`}
+  ><Icon className="mdi--square-edit-outline" ariaLabel="" />
+  Edit</a
+>
+<script>
+  if (localStorage.getItem("ln-admin-enabled") === "true") {
+    const btn = document.querySelector("#edit-btn")
+    btn?.classList.remove("hidden")
+    btn?.classList.add("flex")
+  }
+</script>

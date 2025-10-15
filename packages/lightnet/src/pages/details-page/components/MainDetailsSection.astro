@@ -1,6 +1,7 @@
 ---
 import Authors from "./main-details/Authors.astro"
 import CoverImage from "./main-details/CoverImage.astro"
+import EditButton from "./main-details/EditButton.astro"
 import ShareButton from "./main-details/ShareButton.astro"
 import Title from "./main-details/Title.astro"
 
@@ -19,7 +20,10 @@ const { mediaId, imageSize } = Astro.props
   <div class="flex w-full grow flex-col items-center sm:items-start">
     <Title className="text-center sm:text-start" mediaId={mediaId} />
     <Authors className="mt-2" mediaId={mediaId} />
-    <ShareButton className="mt-3" />
+    <div class="mt-4 flex gap-6">
+      <ShareButton />
+      <EditButton mediaId={mediaId} />
+    </div>
     <slot />
   </div>
 </div>

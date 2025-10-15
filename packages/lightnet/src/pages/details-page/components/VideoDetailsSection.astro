@@ -2,6 +2,7 @@
 import VideoPlayer from "../../../components/VideoPlayer.astro"
 import { getMediaItem } from "../../../content/get-media-items"
 import Authors from "./main-details/Authors.astro"
+import EditButton from "./main-details/EditButton.astro"
 import ShareButton from "./main-details/ShareButton.astro"
 import Title from "./main-details/Title.astro"
 
@@ -26,5 +27,8 @@ const item = await getMediaItem(mediaId)
 >
   <Title mediaId={mediaId} />
   <Authors mediaId={mediaId} />
-  <ShareButton className="mt-3" />
+  <div class="mt-4 flex gap-6">
+    <ShareButton />
+    <EditButton mediaId={mediaId} />
+  </div>
 </div>

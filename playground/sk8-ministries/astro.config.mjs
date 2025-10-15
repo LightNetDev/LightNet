@@ -53,12 +53,21 @@ export default defineConfig({
           label: "x.navigation.about",
         },
         {
+          href: "/admin",
+          label: "Admin",
+        },
+        {
           href: "https://www.om.org/eng/mediaworks/lightnet",
           label: "LightNet",
         },
       ],
       searchPage: {
         filterByLocale: true,
+      },
+      experimental: {
+        admin: {
+          enabled: true,
+        },
       },
     }),
     lightnetDecapAdmin({ languages }),

@@ -63,6 +63,19 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           prerender: true,
         })
 
+        if (config.experimental?.admin?.enabled) {
+          injectRoute({
+            pattern: "/[locale]/admin",
+            entrypoint: "lightnet/pages/AdminRoute.astro",
+            prerender: true,
+          })
+          injectRoute({
+            pattern: "/[locale]/admin/media/[mediaId]",
+            entrypoint: "lightnet/pages/MediaItemAdminRoute.astro",
+            prerender: true,
+          })
+        }
+
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
         astroConfig.integrations.push(tailwind(), react())
