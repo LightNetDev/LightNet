@@ -9,6 +9,7 @@ export default defineConfig({
     lightnet({
       title: "Basic Test",
       logo: { src: "./src/assets/logo.png" },
+      credits: true,
       languages: [
         {
           code: "en",
@@ -29,6 +30,11 @@ export default defineConfig({
         },
         { href: "/media", label: "ln.search.title" },
       ],
+      experimental: {
+        admin: {
+          enabled: true,
+        },
+      },
     }),
   ],
 })
