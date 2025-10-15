@@ -35,6 +35,9 @@ jobs:
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
 
+      - name: Update npm
+        run: npm install -g npm@11.6.2 # OIDC requires 11.5.1 or later
+
       - name: Install dependencies
         run: pnpm i
 
