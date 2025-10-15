@@ -1,5 +1,11 @@
 # @lightnet/decap-admin
 
+## 3.1.3
+
+### Patch Changes
+
+- [#318](https://github.com/LightNetDev/LightNet/pull/318) [`02deb44`](https://github.com/LightNetDev/LightNet/commit/02deb4400dd37d823280c5568c6435a837980833) Thanks [@smn-cds](https://github.com/smn-cds)! - Update sharp dependency to 34.0.0
+
 ## 3.1.2
 
 ### Patch Changes
