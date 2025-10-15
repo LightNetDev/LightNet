@@ -8,7 +8,7 @@
     "@astrojs/tailwind": "^6.0.2",
     "@lightnet/decap-admin": "^3.1.2",
     "astro": "^5.14.4",
-    "lightnet": "^3.9.1",
+    "lightnet": "^3.10.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sharp": "^0.34.4",

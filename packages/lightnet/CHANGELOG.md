@@ -1,5 +1,15 @@
 # lightnet
 
+## 3.10.0
+
+### Minor Changes
+
+- [#315](https://github.com/LightNetDev/LightNet/pull/315) [`f01fd72`](https://github.com/LightNetDev/LightNet/commit/f01fd728efe1577248db40111b9dfe5bd1a33423) Thanks [@smn-cds](https://github.com/smn-cds)! - Add optional LightNet credits footer
+  - Adds `credits: boolean` to LightNet config to show a “Built with LightNet” footer; default is `false`
+  - Footer includes LightNet logo/text and appears when no `CustomFooter` is provided
+  - Adds i18n key `ln.footer.powered-by-lightnet` (English + AI generated translations provided)
+  - Enable via `astro.config.mjs`, lightnet config: `credits: true` (PR #315)
+
 ## 3.9.1
 
 ### Patch Changes
