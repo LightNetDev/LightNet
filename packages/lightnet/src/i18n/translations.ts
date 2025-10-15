@@ -1,7 +1,8 @@
 import YAML from "yaml"
+
 import {
-  builtInAdminTranslations,
   type AdminTranslationKey,
+  builtInAdminTranslations,
 } from "../admin/i18n/translations"
 
 const builtInTranslations = {

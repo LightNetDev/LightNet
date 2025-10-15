@@ -79,7 +79,9 @@ test("Should show `Edit` button on audio details page after visiting `/en/admin/
   ).toBeVisible()
 
   await page.goto(ln.resolveURL("/en/media/skate-sounds--en"))
-  await expect(page.getByRole("heading", { name: "Skate Sounds" })).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "Skate Sounds" }),
+  ).toBeVisible()
 
   const editButton = page.locator("#edit-btn")
   await expect(editButton).toBeVisible()
