@@ -1,5 +1,6 @@
 import type { APIRoute, GetStaticPaths } from "astro"
 import { getCollection, getEntry } from "astro:content"
+
 import { getMediaItem } from "../../content/get-media-items"
 
 export const getStaticPaths = (async () => {
