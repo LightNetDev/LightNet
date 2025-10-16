@@ -46,6 +46,12 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         })
 
         injectRoute({
+          pattern: "/[locale]/media/[mediaId]",
+          entrypoint: "lightnet/pages/DetailsPageRoute.astro",
+          prerender: true,
+        })
+
+        injectRoute({
           pattern: "/api/internal/search.json",
           entrypoint: "lightnet/api/internal/search.ts",
           prerender: true,
@@ -58,8 +64,8 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         })
 
         injectRoute({
-          pattern: "/[locale]/media/[mediaId]",
-          entrypoint: "lightnet/pages/DetailsPageRoute.astro",
+          pattern: "/api/media/[mediaId].json",
+          entrypoint: "lightnet/api/media/[mediaId].ts",
           prerender: true,
         })
 
