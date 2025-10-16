@@ -1,5 +1,6 @@
 {
   "name": "lightnet",
+  "description": "LightNet makes it easy to run your own digital media library.",
   "type": "module",
   "license": "MIT",
   "version": "3.10.0",
