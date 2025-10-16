@@ -1,5 +1,10 @@
 import YAML from "yaml"
 
+import {
+  type AdminTranslationKey,
+  builtInAdminTranslations,
+} from "../admin/i18n/translations"
+
 const builtInTranslations = {
   ar: () => import("./translations/ar.yml?raw"),
   bn: () => import("./translations/bn.yml?raw"),
@@ -32,23 +37,30 @@ const userTranslations = Object.fromEntries(
 )
 
 export const loadTranslations = async (bcp47: string) => ({
-  ...(await loadBuiltInTranslations(bcp47)),
+  ...(await loadBuiltInTranslations(builtInTranslations, bcp47)),
+  ...(await loadBuiltInTranslations(builtInAdminTranslations, bcp47)),
   ...(await loadUserTranslations(bcp47)),
 })
 
-function isBuiltInLanguage(bcp47: string): bcp47 is BuiltInLanguage {
-  return Object.hasOwn(builtInTranslations, bcp47)
+function hasTranslations(
+  translationMap: Record<string, unknown>,
+  bcp47: string,
+): bcp47 is BuiltInLanguage {
+  return Object.hasOwn(translationMap, bcp47)
 }
 
-export const loadBuiltInTranslations = async (bcp47: string) => {
-  if (!isBuiltInLanguage(bcp47)) {
+const loadBuiltInTranslations = async (
+  translationMap: Record<string, () => Promise<typeof import("*?raw")>>,
+  bcp47: string,
+) => {
+  if (!hasTranslations(translationMap, bcp47)) {
     return {}
   }
-  const yml = (await builtInTranslations[bcp47]()).default
+  const yml = (await translationMap[bcp47]()).default
   return YAML.parse(yml)
 }
 
-export const loadUserTranslations = async (bcp47: string) => {
+const loadUserTranslations = async (bcp47: string) => {
   if (!userTranslations[bcp47]) {
     return {}
   }
@@ -82,3 +94,4 @@ export type LightNetTranslationKey =
   | "ln.search.title"
   | "ln.share.url-copied-to-clipboard"
   | "ln.footer.powered-by-lightnet"
+  | AdminTranslationKey

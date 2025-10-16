@@ -102,3 +102,24 @@ test("Should verify DE Detail media page url and title", async ({
   await expect(page.getByText("Sprache")).toBeVisible()
   await expect(page.getByText("Kategorie")).toBeVisible()
 })
+
+test("Should show `Powered by LightNet` in footer", async ({
+  page,
+  startLightnet,
+}) => {
+  await startLightnet()
+
+  const footerLink = page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: /LightNet/ })
+
+  await expect(footerLink).toHaveText("Powered by LightNet")
+  await expect(footerLink).toHaveAttribute("href", "https://lightnet.community")
+
+  await page.getByLabel("Select language").click()
+  await page.getByRole("link", { name: "Deutsch" }).click()
+
+  await expect(
+    page.getByRole("contentinfo").getByRole("link", { name: /LightNet/ }),
+  ).toHaveText("Ermöglicht durch LightNet")
+})

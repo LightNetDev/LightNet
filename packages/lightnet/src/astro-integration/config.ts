@@ -217,6 +217,21 @@ export const configSchema = z.object({
       hideHeaderSearchIcon: z.boolean().default(false),
     })
     .optional(),
+  /**
+   * Experimental features. Subject to change with any release.
+   */
+  experimental: z
+    .object({
+      /**
+       * Configure administration interface.
+       */
+      admin: z
+        .object({
+          enabled: z.boolean().default(false),
+        })
+        .optional(),
+    })
+    .optional(),
 })
 
 export type Language = z.input<typeof languageSchema>

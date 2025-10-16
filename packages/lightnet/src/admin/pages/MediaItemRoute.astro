@@ -1,0 +1,23 @@
+---
+import type { GetStaticPaths } from "astro"
+import { getCollection } from "astro:content"
+import config from "virtual:lightnet/config"
+
+import { resolveLocales } from "../../i18n/resolve-locales"
+import Page from "../../layouts/Page.astro"
+
+export const getStaticPaths = (async () => {
+  const mediaItems = await getCollection("media")
+  return resolveLocales(config).flatMap((locale) =>
+    mediaItems.map(({ id: mediaId }) => ({ params: { mediaId, locale } })),
+  )
+}) satisfies GetStaticPaths
+
+const { mediaId } = Astro.params
+---
+
+<Page>
+  <div class="flex h-96 w-full items-center justify-center">
+    Edit media item `{mediaId}`.
+  </div>
+</Page>

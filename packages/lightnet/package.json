@@ -35,7 +35,9 @@
     "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
     "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
     "./pages/api/search.ts": "./src/pages/api/search.ts",
-    "./pages/api/versions.ts": "./src/pages/api/versions.ts"
+    "./pages/api/versions.ts": "./src/pages/api/versions.ts",
+    "./admin/pages/AdminRoute.astro": "./src/admin/pages/AdminRoute.astro",
+    "./admin/pages/MediaItemRoute.astro": "./src/admin/pages/MediaItemRoute.astro"
   },
   "peerDependencies": {
     "astro": "^5.1.0",

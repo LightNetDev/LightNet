@@ -1,0 +1,16 @@
+---
+import Page from "../../layouts/Page.astro"
+
+export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
+---
+
+<Page>
+  <div
+    class="flex h-96 w-full items-center justify-center text-lg font-bold text-gray-500"
+  >
+    Admin features are enabled now.
+  </div>
+</Page>
+<script>
+  localStorage.setItem("ln-admin-enabled", "true")
+</script>
