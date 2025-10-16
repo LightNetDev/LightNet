@@ -31,7 +31,7 @@ const language = resolveLanguage(currentLocale)
     <title>{title ? `${title} | ${configTitle}` : configTitle}</title>
     {description && <meta name="description" content={description} />}
     {config.manifest && <link rel="manifest" href={config.manifest} />}
-    <link rel="prefetch" href="/api/search.json" />
+    <link rel="prefetch" href="/api/internal/search.json" />
     <Favicon />
     <ViewTransition />
   </head>

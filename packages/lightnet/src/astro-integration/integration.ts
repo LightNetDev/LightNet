@@ -46,14 +46,14 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         })
 
         injectRoute({
-          pattern: "/api/search.json",
-          entrypoint: "lightnet/pages/api/search.ts",
+          pattern: "/api/internal/search.json",
+          entrypoint: "lightnet/api/internal/search.ts",
           prerender: true,
         })
 
         injectRoute({
           pattern: "/api/versions.json",
-          entrypoint: "lightnet/pages/api/versions.ts",
+          entrypoint: "lightnet/api/versions.ts",
           prerender: true,
         })
 
