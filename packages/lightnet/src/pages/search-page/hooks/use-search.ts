@@ -1,7 +1,7 @@
 import Fuse from "fuse.js"
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import type { SearchItem, SearchResponse } from "../../api/search-response"
+import type { SearchItem, SearchResponse } from "../api/search-response"
 import { observeSearchQuery, type SearchQuery } from "../utils/search-query"
 
 interface Context {
@@ -28,10 +28,10 @@ export function useSearch({ categories, mediaTypes, languages }: Context) {
     })
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/search.json")
+        const response = await fetch("/api/internal/search.json")
         if (!response.ok) {
           throw new Error(
-            "Was not able to load search results from /api/search.json.",
+            "Was not able to load search results from /api/internal/search.json.",
           )
         }
         const { items }: SearchResponse = await response.json()

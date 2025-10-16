@@ -1,5 +1,6 @@
 {
   "name": "@lightnet/decap-admin",
+  "description": "Experimental Admin UI for LightNet based on Decap CMS.",
   "type": "module",
   "license": "MIT",
   "version": "3.1.3",

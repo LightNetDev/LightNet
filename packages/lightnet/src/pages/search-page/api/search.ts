@@ -1,9 +1,9 @@
 import type { APIRoute } from "astro"
 import { getImage } from "astro:assets"
 
-import type { MediaItemEntry } from "../../content/content-schema"
-import { getMediaItems } from "../../content/get-media-items"
-import { markdownToText } from "../../utils/markdown"
+import type { MediaItemEntry } from "../../../content/content-schema"
+import { getMediaItems } from "../../../content/get-media-items"
+import { markdownToText } from "../../../utils/markdown"
 import type { SearchItem } from "./search-response"
 
 export const GET: APIRoute = async () => {

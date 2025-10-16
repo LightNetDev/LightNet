@@ -1,5 +1,6 @@
 {
   "name": "lightnet",
+  "description": "LightNet makes it easy to run your own digital media library.",
   "type": "module",
   "license": "MIT",
   "version": "3.10.0",
@@ -34,8 +35,9 @@
     "./pages/RootRoute.astro": "./src/pages/RootRoute.astro",
     "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
     "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
-    "./pages/api/search.ts": "./src/pages/api/search.ts",
-    "./pages/api/versions.ts": "./src/pages/api/versions.ts",
+    "./api/internal/search.ts": "./src/pages/search-page/api/search.ts",
+    "./api/versions.ts": "./src/api/versions.ts",
+    "./api/media/[mediaId].ts": "./src/api/media/[mediaId].ts",
     "./admin/pages/AdminRoute.astro": "./src/admin/pages/AdminRoute.astro",
     "./admin/pages/MediaItemRoute.astro": "./src/admin/pages/MediaItemRoute.astro"
   },
