@@ -70,9 +70,22 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           prerender: true,
         })
 
+        if (config.experimental?.admin?.enabled) {
+          injectRoute({
+            pattern: "/[locale]/admin",
+            entrypoint: "lightnet/admin/pages/AdminRoute.astro",
+            prerender: true,
+          })
+          injectRoute({
+            pattern: "/[locale]/admin/media/[mediaId]",
+            entrypoint: "lightnet/admin/pages/MediaItemRoute.astro",
+            prerender: true,
+          })
+        }
+
         // During local development admin ui can use
         // this endpoints to write files.
-        if (command === "dev") {
+        if (config.experimental?.admin?.enabled && command === "dev") {
           injectRoute({
             pattern: "/api/internal/fs/writeFile",
             entrypoint: "lightnet/api/internal/fs/writeFile.ts",
@@ -86,19 +99,6 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           if (!astroConfig.adapter) {
             updateConfig({ adapter: {} })
           }
-        }
-
-        if (config.experimental?.admin?.enabled) {
-          injectRoute({
-            pattern: "/[locale]/admin",
-            entrypoint: "lightnet/admin/pages/AdminRoute.astro",
-            prerender: true,
-          })
-          injectRoute({
-            pattern: "/[locale]/admin/media/[mediaId]",
-            entrypoint: "lightnet/admin/pages/MediaItemRoute.astro",
-            prerender: true,
-          })
         }
 
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
