@@ -1,8 +1,9 @@
-import { root } from "astro:config/server"
-import { fileURLToPath } from "node:url"
-import { join, parse } from "node:path"
 import { mkdir, writeFile } from "node:fs/promises"
+import { join, parse } from "node:path"
+import { fileURLToPath } from "node:url"
+
 import type { APIRoute } from "astro"
+import { root } from "astro:config/server"
 
 export const prerender = false
 
