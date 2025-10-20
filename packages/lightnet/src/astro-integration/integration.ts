@@ -19,6 +19,7 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         updateConfig,
         logger,
         addMiddleware,
+        command,
       }) => {
         const config = verifySchema(
           configSchema,
@@ -68,6 +69,24 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           entrypoint: "lightnet/api/media/[mediaId].ts",
           prerender: true,
         })
+
+        // During local development admin ui can use
+        // this endpoints to write files.
+        if (command === "dev") {
+          injectRoute({
+            pattern: "/api/internal/fs/writeFile",
+            entrypoint: "lightnet/api/internal/fs/writeFile.ts",
+            prerender: false,
+          })
+          // Add empty adapter to avoid warning
+          // about missing adapter.
+          // This hack might break in the future :(
+          // We could also set the "node" adapter if no
+          // adapter has been set by user.
+          if (!astroConfig.adapter) {
+            updateConfig({ adapter: {} })
+          }
+        }
 
         if (config.experimental?.admin?.enabled) {
           injectRoute({
