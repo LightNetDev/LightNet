@@ -38,9 +38,9 @@
     "./api/internal/search.ts": "./src/pages/search-page/api/search.ts",
     "./api/versions.ts": "./src/api/versions.ts",
     "./api/media/[mediaId].ts": "./src/api/media/[mediaId].ts",
-    "./api/internal/fs/writeFile.ts": "./src/admin/api/fs/writeFile.ts",
+    "./api/internal/fs/writeText.ts": "./src/admin/api/fs/writeText.ts",
     "./admin/pages/AdminRoute.astro": "./src/admin/pages/AdminRoute.astro",
-    "./admin/pages/MediaItemRoute.astro": "./src/admin/pages/MediaItemRoute.astro"
+    "./admin/pages/media/EditRoute.astro": "./src/admin/pages/media/EditRoute.astro"
   },
   "peerDependencies": {
     "astro": "^5.1.0",

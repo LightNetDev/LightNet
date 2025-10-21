@@ -77,8 +77,8 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
             prerender: true,
           })
           injectRoute({
-            pattern: "/[locale]/admin/media/[mediaId]",
-            entrypoint: "lightnet/admin/pages/MediaItemRoute.astro",
+            pattern: "/[locale]/admin/media/edit",
+            entrypoint: "lightnet/admin/pages/media/EditRoute.astro",
             prerender: true,
           })
         }
@@ -87,8 +87,8 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         // this endpoints to write files.
         if (config.experimental?.admin?.enabled && command === "dev") {
           injectRoute({
-            pattern: "/api/internal/fs/writeFile",
-            entrypoint: "lightnet/api/internal/fs/writeFile.ts",
+            pattern: "/api/internal/fs/writeText",
+            entrypoint: "lightnet/api/internal/fs/writeText.ts",
             prerender: false,
           })
           // Add empty adapter to avoid warning
