@@ -2,9 +2,8 @@ import { QueryClient, useQuery } from "@tanstack/react-query"
 import React from "react"
 
 import { useAppForm } from "../../components/form"
-import { MediaItemStore } from "./MediaItemStore"
+import { loadMediaItem, updateMediaItem } from "./media-item-store"
 
-const { loadMediaItem, updateMediaItem } = MediaItemStore()
 const queryClient = new QueryClient()
 
 export default function EditForm() {

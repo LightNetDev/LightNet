@@ -11,7 +11,7 @@ export const getStaticPaths = (async () => {
 export const GET: APIRoute = async ({ params: { mediaId } }) => {
   return new Response(
     JSON.stringify(
-      { id: mediaId, data: await originalMediaItem(mediaId!) },
+      { id: mediaId, content: await originalMediaItem(mediaId!) },
       null,
       2,
     ),
