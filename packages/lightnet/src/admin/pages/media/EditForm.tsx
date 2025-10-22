@@ -1,15 +1,41 @@
 import React from "react"
 import { useAppForm } from "../../components/form"
+import { MediaItemStore } from "./MediaItemStore"
+import { QueryClient, useQuery } from "@tanstack/react-query"
+
+const { loadMediaItem, updateMediaItem } = MediaItemStore()
+const queryClient = new QueryClient()
 
 export default function EditForm() {
+  const mediaId = React.useMemo(() => {
+    if (typeof window === "undefined")
+      throw new Error("Cannot read media id of undefined window")
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get("id")
+    if (!id) throw new Error("No media id in query params")
+    return id
+  }, [])
+  const { data: mediaItem, isLoading } = useQuery(
+    {
+      queryKey: ["mediaItem", mediaId],
+      queryFn: async () => {
+        return loadMediaItem(mediaId)
+      },
+    },
+    queryClient,
+  )
   const form = useAppForm({
     defaultValues: {
-      title: "",
+      title: mediaItem?.title ?? "",
     },
-    onSubmit: ({ value }) => {
-      console.log("submit", value)
+    onSubmit: async ({ value }) => {
+      await updateMediaItem(mediaId, value)
     },
   })
+
+  if (isLoading) {
+    return null
+  }
 
   return (
     <form

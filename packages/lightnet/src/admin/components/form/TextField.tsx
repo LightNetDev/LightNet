@@ -5,7 +5,7 @@ export default function TextField({ label }: { label: string }) {
   const field = useFieldContext<string>()
   return (
     <>
-      <label className="dy-form-control w-full max-w-xs">
+      <label className="dy-form-control w-full max-w-sm">
         <div className="dy-label">
           <span className="dy-label-text">{label}</span>
         </div>
@@ -15,7 +15,7 @@ export default function TextField({ label }: { label: string }) {
           value={field.state.value}
           onChange={(e) => field.handleChange(e.target.value)}
           onBlur={field.handleBlur}
-          className="dy-input dy-input-bordered dy-input-sm w-full max-w-xs"
+          className="dy-input dy-input-bordered dy-input-sm w-full max-w-sm"
         />
         <FieldErrors meta={field.state.meta} />
       </label>
