@@ -24,19 +24,19 @@ interface Props {
   const toastId = "share-success"
 
   btn?.addEventListener("click", () => {
-    // if (navigator.share) {
-    //   navigator
-    //     .share({
-    //       url: window.location.href,
-    //     })
-    //     .catch((e) => console.debug("Could not share", e))
-    // } else {
-    navigator.clipboard
-      .writeText(window.location.href)
-      .then(() => {
-        showToastById(toastId)
-      })
-      .catch((error) => console.log("Error copying URL to clipboard:", error))
-    // }
+    if (navigator.share) {
+      navigator
+        .share({
+          url: window.location.href,
+        })
+        .catch((e) => console.debug("Could not share", e))
+    } else {
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          showToastById(toastId)
+        })
+        .catch((error) => console.log("Error copying URL to clipboard:", error))
+    }
   })
 </script>
