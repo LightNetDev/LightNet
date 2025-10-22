@@ -8,7 +8,7 @@ export const FieldErrors = ({ meta }: FieldErrorsProps) => {
   if (!meta.isTouched || meta.isValid) return null
 
   return (
-    <ul role="alert">
+    <ul className="my-2 flex flex-col gap-1" role="alert">
       {meta.errors.map((error) => (
         <li className="text-sm text-red-900" key={error}>
           {error}

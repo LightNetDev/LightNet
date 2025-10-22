@@ -1,9 +1,12 @@
 ---
 export { getLocalePaths as getStaticPaths } from "../../../i18n/get-locale-paths"
 import Page from "../../../layouts/Page.astro"
-import EditPage from "./EditPage"
+import EditForm from "./EditForm"
 ---
 
 <Page>
-  <EditPage client:load />
+  <div class="mx-auto max-w-screen-lg px-4 pt-12 md:px-8">
+    <h1 class="mb-4 text-lg">Edit media item</h1>
+    <EditForm client:load />
+  </div>
 </Page>

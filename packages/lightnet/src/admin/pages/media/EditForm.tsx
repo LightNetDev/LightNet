@@ -1,7 +1,7 @@
 import React from "react"
 import { useAppForm } from "../../components/form"
 
-export default function EditPage() {
+export default function EditForm() {
   const form = useAppForm({
     defaultValues: {
       title: "",
@@ -17,8 +17,8 @@ export default function EditPage() {
         e.preventDefault()
         form.handleSubmit()
       }}
+      className="flex flex-col items-start gap-6"
     >
-      <h1>Edit media item</h1>
       <form.AppField
         name="title"
         validators={{

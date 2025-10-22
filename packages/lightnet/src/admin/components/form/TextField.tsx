@@ -17,8 +17,8 @@ export default function TextField({ label }: { label: string }) {
           onBlur={field.handleBlur}
           className="dy-input dy-input-bordered dy-input-sm w-full max-w-xs"
         />
+        <FieldErrors meta={field.state.meta} />
       </label>
-      <FieldErrors meta={field.state.meta} />
     </>
   )
 }
