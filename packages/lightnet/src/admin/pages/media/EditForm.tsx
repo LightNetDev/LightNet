@@ -1,5 +1,5 @@
 import { QueryClient, useQuery } from "@tanstack/react-query"
-import React from "react"
+import React, { useMemo, useState } from "react"
 
 import { useAppForm } from "../../components/form"
 import { loadMediaItem, updateMediaItem } from "./media-item-store"
@@ -7,7 +7,7 @@ import { loadMediaItem, updateMediaItem } from "./media-item-store"
 const queryClient = new QueryClient()
 
 export default function EditForm() {
-  const mediaId = React.useMemo(() => {
+  const mediaId = useMemo(() => {
     if (typeof window === "undefined")
       throw new Error("Cannot read media id of undefined window")
     const params = new URLSearchParams(window.location.search)
@@ -24,12 +24,14 @@ export default function EditForm() {
     },
     queryClient,
   )
+  const [successSignal, setSuccessSignal] = useState(0)
   const form = useAppForm({
     defaultValues: {
       title: mediaItem?.title ?? "",
     },
     onSubmit: async ({ value }) => {
       await updateMediaItem(mediaId, value)
+      setSuccessSignal((count) => count + 1)
     },
   })
 
@@ -53,7 +55,10 @@ export default function EditForm() {
         children={(field) => <field.TextField label="Title" />}
       />
       <form.AppForm>
-        <form.SubmitButton label="Save" />
+        <form.SubmitButton
+          label="Save"
+          successSignal={successSignal > 0 ? successSignal : null}
+        />
       </form.AppForm>
     </form>
   )
