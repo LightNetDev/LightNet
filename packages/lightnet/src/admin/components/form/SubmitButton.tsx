@@ -53,7 +53,7 @@ export default function SubmitButton({
 
 function useSuccessIndicator(signal: number | string | null) {
   const [visible, setVisible] = useState(false)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const timeoutRef = useRef<number>(undefined)
 
   useEffect(() => {
     if (!signal) {
@@ -61,9 +61,9 @@ function useSuccessIndicator(signal: number | string | null) {
     }
     setVisible(true)
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
+      window.clearTimeout(timeoutRef.current)
     }
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       setVisible(false)
       timeoutRef.current = undefined
     }, SUCCESS_DURATION_MS)
