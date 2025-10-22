@@ -11,7 +11,7 @@
     "typecheck": "pnpm --filter='@playground/*' astro sync && astro check",
     "preview": "pnpm --filter=sk8* preview",
     "format": "prettier . --write --cache",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "version": "pnpm changeset version && pnpm i --no-frozen-lockfile",
     "translation-status": "pnpm --silent -F cli translation-status"
   },
