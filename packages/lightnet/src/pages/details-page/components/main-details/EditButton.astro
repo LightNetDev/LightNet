@@ -1,4 +1,5 @@
 ---
+import config from "virtual:lightnet/config"
 import Icon from "../../../../components/Icon"
 
 interface Props {
@@ -6,21 +7,24 @@ interface Props {
 }
 
 const { mediaId } = Astro.props
+const localAdminEnabled =
+  (import.meta.env.DEV && config.experimental?.admin?.enabled) || undefined
 ---
 
 <a
   class="hidden cursor-pointer items-center gap-2 font-bold text-gray-700 underline"
   id="edit-btn"
+  data-local-enabled={localAdminEnabled}
   href={`/${Astro.currentLocale}/admin/media/edit?id=${mediaId}`}
   ><Icon className="mdi--square-edit-outline" ariaLabel="" />
   {Astro.locals.i18n.t("ln.admin.edit")}</a
 >
 <script>
+  const btn: HTMLAnchorElement | null = document.querySelector("#edit-btn")
   if (
-    import.meta.env.DEV ||
+    btn?.dataset.localEnabled === "true" ||
     localStorage.getItem("ln-admin-enabled") === "true"
   ) {
-    const btn = document.querySelector("#edit-btn")
     btn?.classList.remove("hidden")
     btn?.classList.add("flex")
   }
