@@ -1,5 +1,6 @@
 ---
 import Icon from "../../../../components/Icon"
+import Toast from "../../../../components/Toast"
 
 interface Props {
   className?: string
@@ -13,34 +14,29 @@ interface Props {
   ><Icon className="mdi--share" ariaLabel="" />
   {Astro.locals.i18n.t("ln.details.share")}</button
 >
-<div
-  id="share-success"
-  class="dy-toast pointer-events-none opacity-0 transition-opacity duration-300"
->
-  <div class="dy-alert dy-alert-success">
-    <span>{Astro.locals.i18n.t("ln.share.url-copied-to-clipboard")}</span>
-  </div>
-</div>
+<Toast id="share-success" variant="success">
+  {Astro.locals.i18n.t("ln.share.url-copied-to-clipboard")}
+</Toast>
 <script>
+  import { showToastById } from "../../../../components/showToast"
+
   const btn = document.querySelector("#share-btn")
+  const toastId = "share-success"
+
   btn?.addEventListener("click", () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          url: window.location.href,
-        })
-        .catch((e) => console.debug("Could not share", e))
-    } else {
-      navigator.clipboard
-        .writeText(window.location.href)
-        .then(() => {
-          const toast = document.querySelector<HTMLElement>("#share-success")!
-          toast.style.opacity = "100%"
-          setTimeout(() => {
-            toast.style.opacity = "0%"
-          }, 3000)
-        })
-        .catch((error) => console.log("Error copying URL to clipboard:", error))
-    }
+    // if (navigator.share) {
+    //   navigator
+    //     .share({
+    //       url: window.location.href,
+    //     })
+    //     .catch((e) => console.debug("Could not share", e))
+    // } else {
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        showToastById(toastId)
+      })
+      .catch((error) => console.log("Error copying URL to clipboard:", error))
+    // }
   })
 </script>
