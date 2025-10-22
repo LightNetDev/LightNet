@@ -1,6 +1,5 @@
 import { mkdir, writeFile } from "node:fs/promises"
 import { dirname, isAbsolute, relative, resolve } from "node:path"
-
 import { fileURLToPath } from "node:url"
 
 import type { APIRoute } from "astro"
