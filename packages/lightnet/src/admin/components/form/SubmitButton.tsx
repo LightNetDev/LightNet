@@ -1,11 +1,11 @@
 import Icon from "../../../components/Icon"
+import { useStore } from "@tanstack/react-form"
 import { useEffect, useRef, useState } from "react"
 
 import { useFormContext } from "./form-context"
 
 type SubmitButtonProps = {
   label: string
-  successSignal?: number | string | null
   successLabel?: string
 }
 
@@ -20,59 +20,58 @@ const successButtonClass =
 
 export default function SubmitButton({
   label,
-  successSignal = null,
   successLabel = "Saved",
 }: SubmitButtonProps) {
   const form = useFormContext()
-  const visibleSuccess = useSuccessIndicator(successSignal)
+  const { canSubmit, isSubmitting, isSubmitSuccessful } = useStore(
+    form.store,
+    (state) => ({
+      canSubmit: state.canSubmit,
+      isSubmitting: state.isSubmitting,
+      isSubmitSuccessful: state.isSubmitSuccessful,
+    }),
+  )
+  const visibleSuccess = useSuccessIndicator(isSubmitSuccessful)
+  const displaySuccess = visibleSuccess && !isSubmitting
+  const buttonClass = `${baseButtonClass} ${
+    displaySuccess ? successButtonClass : idleButtonClass
+  }`
+  const text = displaySuccess ? successLabel : label
 
   return (
-    <form.Subscribe
-      selector={(state) => [state.canSubmit, state.isSubmitting]}
-      children={([canSubmit, isSubmitting]) => {
-        const displaySuccess = visibleSuccess && !isSubmitting
-        const buttonClass = `${baseButtonClass} ${
-          displaySuccess ? successButtonClass : idleButtonClass
-        }`
-        const text = displaySuccess ? successLabel : label
-
-        return (
-          <button
-            className={buttonClass}
-            type="submit"
-            disabled={!canSubmit || isSubmitting}
-          >
-            {displaySuccess && <Icon className="mdi--check" ariaLabel="" />}
-            {text}
-          </button>
-        )
-      }}
-    />
+    <button
+      className={buttonClass}
+      type="submit"
+      disabled={!canSubmit || isSubmitting}
+    >
+      {displaySuccess && <Icon className="mdi--check" ariaLabel="" />}
+      {text}
+    </button>
   )
 }
 
-function useSuccessIndicator(signal: number | string | null) {
+function useSuccessIndicator(isSubmitSuccessful: boolean) {
   const [visible, setVisible] = useState(false)
-  const timeoutRef = useRef<number>(undefined)
+  const timeoutRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
-    if (!signal) {
+    if (!isSubmitSuccessful) {
       return
     }
     setVisible(true)
-    if (timeoutRef.current) {
+    if (timeoutRef.current !== undefined) {
       window.clearTimeout(timeoutRef.current)
     }
     timeoutRef.current = window.setTimeout(() => {
       setVisible(false)
       timeoutRef.current = undefined
     }, SUCCESS_DURATION_MS)
-  }, [signal])
+  }, [isSubmitSuccessful])
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+      if (timeoutRef.current !== undefined) {
+        window.clearTimeout(timeoutRef.current)
       }
     }
   }, [])

@@ -1,5 +1,5 @@
 import { QueryClient, useQuery } from "@tanstack/react-query"
-import React, { useMemo, useState } from "react"
+import { useMemo } from "react"
 
 import { useAppForm } from "../../components/form"
 import { loadMediaItem, updateMediaItem } from "./media-item-store"
@@ -24,14 +24,12 @@ export default function EditForm() {
     },
     queryClient,
   )
-  const [successSignal, setSuccessSignal] = useState(0)
   const form = useAppForm({
     defaultValues: {
       title: mediaItem?.title ?? "",
     },
     onSubmit: async ({ value }) => {
       await updateMediaItem(mediaId, value)
-      setSuccessSignal((count) => count + 1)
     },
   })
 
@@ -55,10 +53,7 @@ export default function EditForm() {
         children={(field) => <field.TextField label="Title" />}
       />
       <form.AppForm>
-        <form.SubmitButton
-          label="Save"
-          successSignal={successSignal > 0 ? successSignal : null}
-        />
+        <form.SubmitButton label="Save" />
       </form.AppForm>
     </form>
   )
