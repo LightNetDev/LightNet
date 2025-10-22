@@ -1,7 +1,19 @@
+import { useFormContext } from "./form-context"
+
 export default function SubmitButton({ label }: { label: string }) {
+  const form = useFormContext()
   return (
-    <button className="dy-btn dy-btn-primary" type="submit">
-      {label}
-    </button>
+    <form.Subscribe
+      selector={(state) => [state.canSubmit, state.isSubmitting]}
+      children={([canSubmit]) => (
+        <button
+          className="dy-btn dy-btn-primary"
+          type="submit"
+          disabled={!canSubmit}
+        >
+          {label}
+        </button>
+      )}
+    />
   )
 }
