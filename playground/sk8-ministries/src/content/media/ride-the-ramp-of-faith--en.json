@@ -1,15 +1,28 @@
 {
-  "commonId": "ride-the-ramp-of-faith",
-  "title": "Ride the Ramp of Faith",
-  "type": "book",
-  "dateCreated": "2024-04-21",
-  "authors": ["Sk8 Ministries"],
-  "content": [
-    { "url": "/files/example.epub", "label": "eBook" },
-    { "url": "/files/example.pdf", "label": "Table of Contents" }
+  "authors": [
+    "Sk8 Ministries"
   ],
+  "collections": [
+    {
+      "collection": "how-to-articles",
+      "index": 1
+    }
+  ],
+  "commonId": "ride-the-ramp-of-faith",
+  "content": [
+    {
+      "label": "eBook",
+      "url": "/files/example.epub"
+    },
+    {
+      "label": "Table of Contents",
+      "url": "/files/example.pdf"
+    }
+  ],
+  "dateCreated": "2024-04-21",
+  "description": "*How to: Ride the Ramp of Faith* is your essential companion for navigating the exciting world of skateboarding as a committed Christian. This book provides:\n\n- **Step-by-step guidance** on merging faith with skate culture\n- **Personal testimonies** from skaters who live out their faith\n- **Scriptural insights** relevant to the skateboarding lifestyle\n- **Strategies for overcoming challenges** and staying true to your values\n\nWhether you’re a novice or a seasoned skater, this guide will help you ride the ramp of faith with confidence and grace.",
   "image": "./images/ride-the-ramp-of-faith--en.webp",
   "language": "en",
-  "collections": [{ "collection": "how-to-articles", "index": 1 }],
-  "description": "*How to: Ride the Ramp of Faith* is your essential companion for navigating the exciting world of skateboarding as a committed Christian. This book provides:\n\n- **Step-by-step guidance** on merging faith with skate culture\n- **Personal testimonies** from skaters who live out their faith\n- **Scriptural insights** relevant to the skateboarding lifestyle\n- **Strategies for overcoming challenges** and staying true to your values\n\nWhether you’re a novice or a seasoned skater, this guide will help you ride the ramp of faith with confidence and grace."
+  "title": "Ride the Ramp of Faith",
+  "type": "book"
 }

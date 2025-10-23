@@ -1,12 +1,22 @@
 {
+  "authors": [
+    "Sk8 Ministries"
+  ],
+  "collections": [
+    {
+      "collection": "how-to-articles"
+    }
+  ],
   "commonId": "shred-and-serve",
-  "title": "Shred and Serve",
-  "type": "book",
+  "content": [
+    {
+      "url": "/files/example.pdf"
+    }
+  ],
   "dateCreated": "2024-04-21",
-  "authors": ["Sk8 Ministries"],
-  "content": [{ "url": "/files/example.pdf" }],
+  "description": "In *How to: Shred and Serve*, discover how to seamlessly blend your passion for skateboarding with your Christian faith. This guide offers practical advice, inspiring stories, and biblical principles tailored for the skatepark. Learn how to:\n\n- **Live out your faith** while hitting the ramps\n- **Build a supportive community** of fellow Christian skaters\n- **Incorporate prayer and worship** into your skate sessions\n- **Serve others** through your love of skateboarding\n\nEmbrace your identity as a skater and a follower of Christ, and let your faith shine on and off the board.",
   "image": "./images/shred-and-serve--en.webp",
   "language": "en",
-  "collections": [{ "collection": "how-to-articles" }],
-  "description": "In *How to: Shred and Serve*, discover how to seamlessly blend your passion for skateboarding with your Christian faith. This guide offers practical advice, inspiring stories, and biblical principles tailored for the skatepark. Learn how to:\n\n- **Live out your faith** while hitting the ramps\n- **Build a supportive community** of fellow Christian skaters\n- **Incorporate prayer and worship** into your skate sessions\n- **Serve others** through your love of skateboarding\n\nEmbrace your identity as a skater and a follower of Christ, and let your faith shine on and off the board."
+  "title": "Shred and Serve",
+  "type": "book"
 }

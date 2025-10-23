@@ -1,11 +1,7 @@
 {
-  "commonId": "how-to-kickflip",
-  "title": "How to Kickflip",
-  "type": "video",
-  "dateCreated": "2024-04-21",
-  "content": [{ "url": "https://www.youtube.com/watch?v=tnpLkUQZODc" }],
-  "image": "./images/how-to-kickflip--en.webp",
-  "authors": ["Skiddy Skates"],
+  "authors": [
+    "Skiddy Skates"
+  ],
   "categories": [
     "bible-studies",
     "bibles-and-bible-stories",
@@ -26,7 +22,21 @@
     "support-and-counseling",
     "theology"
   ],
+  "collections": [
+    {
+      "collection": "learn-skateboarding"
+    }
+  ],
+  "commonId": "how-to-kickflip",
+  "content": [
+    {
+      "url": "https://www.youtube.com/watch?v=tnpLkUQZODc"
+    }
+  ],
+  "dateCreated": "2024-04-21",
+  "description": "This tutorial teaches you how to master the kickflip, covering stance, popping, flicking, timing, and landing. Perfect for all skill levels!",
+  "image": "./images/how-to-kickflip--en.webp",
   "language": "en",
-  "collections": [{ "collection": "learn-skateboarding" }],
-  "description": "This tutorial teaches you how to master the kickflip, covering stance, popping, flicking, timing, and landing. Perfect for all skill levels!"
+  "title": "How to Kickflip",
+  "type": "video"
 }
