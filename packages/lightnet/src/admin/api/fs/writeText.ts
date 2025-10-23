@@ -1,4 +1,4 @@
-import { mkdir, rename, open, unlink } from "node:fs/promises"
+import { mkdir, rename, rm, writeFile } from "node:fs/promises"
 import { dirname, isAbsolute, relative, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -30,36 +30,16 @@ export const POST: APIRoute = async ({ request }) => {
   const targetDir = dirname(targetPath)
   await mkdir(targetDir, { recursive: true })
 
-  const tmpPath = `${targetPath}.tmp-${Date.now()}`
-
-  // 1️⃣ Write to a temporary file
-  const handle = await open(tmpPath, "w")
+  const body = await request.text()
+  const timestamp = Date.now()
+  const tmpPath = `${targetPath}.tmp-${timestamp}`
   try {
-    await handle.writeFile(await request.text(), "utf-8")
-
-    // 2️⃣ Force the write to disk
-    await handle.sync()
-
-    // 3️⃣ Close the temp file
-    await handle.close()
-
-    // 4️⃣ Atomically replace the original file
+    const tmpPath = `${targetPath}.tmp-${Date.now()}`
+    await writeFile(tmpPath, body, "utf-8")
     await rename(tmpPath, targetPath)
-
-    // 5️⃣ Optional: flush the directory entry too
-    const dirHandle = await open(targetDir, "r")
-    await dirHandle.sync()
-    await dirHandle.close()
-  } catch (err) {
-    // Cleanup if something failed
-    await handle.close().catch(() => {})
-    await unlink(tmpPath).catch(() => {})
-    throw err
+  } finally {
+    await rm(tmpPath, { force: true }).catch(() => {})
   }
-
-  // await writeFile(tmpPath, await request.text(), "utf-8")
-
-  // await rename(tmpPath, targetPath)
 
   return new Response(JSON.stringify({ status: "ok" }), {
     status: 200,
