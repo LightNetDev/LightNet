@@ -1,7 +1,7 @@
-import Icon from "../../../components/Icon"
 import { useStore } from "@tanstack/react-form"
 import { useEffect, useRef, useState } from "react"
 
+import Icon from "../../../components/Icon"
 import { useFormContext } from "./form-context"
 
 type SubmitButtonProps = {

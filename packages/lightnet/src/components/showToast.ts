@@ -12,7 +12,10 @@ type ShowToastOptions = {
  * Shows a toast element by toggling its opacity and schedules it to hide again.
  * Works with markup rendered by the Toast component but can target any element.
  */
-export function showToast(element: HTMLElement, options: ShowToastOptions = {}) {
+export function showToast(
+  element: HTMLElement,
+  options: ShowToastOptions = {},
+) {
   const duration = options.duration ?? DEFAULT_DURATION_MS
   const existingTimeoutId = element.dataset[TIMEOUT_DATA_KEY]
   const hiddenTransform =

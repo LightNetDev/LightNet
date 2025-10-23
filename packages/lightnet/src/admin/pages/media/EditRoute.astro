@@ -1,10 +1,11 @@
 ---
+import type { GetStaticPaths } from "astro"
 import { getCollection } from "astro:content"
+import config from "virtual:lightnet/config"
+
+import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
-import { resolveLocales } from "../../../i18n/resolve-locales"
-import config from "virtual:lightnet/config"
-import type { GetStaticPaths } from "astro"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")

@@ -1,11 +1,6 @@
 {
-  "authors": [
-    "Sk8 Ministries"
-  ],
-  "categories": [
-    "christian-living",
-    "educational"
-  ],
+  "authors": ["Sk8 Ministries"],
+  "categories": ["christian-living", "educational"],
   "collections": [
     {
       "collection": "how-to-articles"
