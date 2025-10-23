@@ -1,13 +1,26 @@
 {
+  "authors": [
+    "Sk8 Ministries"
+  ],
+  "categories": [
+    "christian-living",
+    "educational"
+  ],
+  "collections": [
+    {
+      "collection": "how-to-articles"
+    }
+  ],
   "commonId": "faithful-freestyle",
-  "title": "Faithful Freestyle",
-  "type": "book",
+  "content": [
+    {
+      "url": "/files/example.pdf"
+    }
+  ],
   "dateCreated": "2024-04-21",
-  "authors": ["Sk8 Ministries"],
-  "content": [{ "url": "/files/example.pdf" }],
-  "categories": ["christian-living", "educational"],
+  "description": "*How to: Faithful Freestyle* empowers you to express your Christianity through the unique and creative outlet of skateboarding. This book includes:\n\n- **Creative ways to incorporate faith** into your skating routines\n- **Stories of freestyle skaters** who honor God through their sport\n- **Practical advice on witnessing** to others in the skateboarding scene\n- **Inspirational devotions** designed for skaters\n\nEmbrace a faithful freestyle and let every trick and turn reflect your devotion to Christ.",
   "image": "images/faithful-freestyle--en.webp",
   "language": "en",
-  "collections": [{ "collection": "how-to-articles" }],
-  "description": "*How to: Faithful Freestyle* empowers you to express your Christianity through the unique and creative outlet of skateboarding. This book includes:\n\n- **Creative ways to incorporate faith** into your skating routines\n- **Stories of freestyle skaters** who honor God through their sport\n- **Practical advice on witnessing** to others in the skateboarding scene\n- **Inspirational devotions** designed for skaters\n\nEmbrace a faithful freestyle and let every trick and turn reflect your devotion to Christ."
+  "title": "Faithful Freestyle",
+  "type": "book"
 }

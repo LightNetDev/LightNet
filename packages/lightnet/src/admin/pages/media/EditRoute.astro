@@ -1,12 +1,30 @@
 ---
-export { getLocalePaths as getStaticPaths } from "../../../i18n/get-locale-paths"
+import { getCollection } from "astro:content"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
+import { resolveLocales } from "../../../i18n/resolve-locales"
+import config from "virtual:lightnet/config"
+import type { GetStaticPaths } from "astro"
+
+export const getStaticPaths = (async () => {
+  const mediaItems = await getCollection("media")
+  return resolveLocales(config).flatMap((locale) =>
+    mediaItems.map(({ id: mediaId }) => ({ params: { mediaId, locale } })),
+  )
+}) satisfies GetStaticPaths
+
+const { mediaId } = Astro.params
 ---
 
 <Page>
   <div class="mx-auto max-w-screen-lg px-4 pt-12 md:px-8">
-    <h1 class="mb-4 text-lg">Edit media item</h1>
-    <EditForm client:only="react" />
+    <a
+      class="underline"
+      href=`/${Astro.currentLocale}/media/faithful-freestyle--en`
+      >Details page</a
+    >
+    <h1 class="mb-4 mt-8 text-lg">Edit media item</h1>
+
+    <EditForm mediaId={mediaId} client:load />
   </div>
 </Page>
