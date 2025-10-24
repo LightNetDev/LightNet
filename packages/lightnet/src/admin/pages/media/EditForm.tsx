@@ -14,7 +14,7 @@ export default function EditForm({
       title: mediaItem.title,
     },
     onSubmit: async ({ value }) => {
-      await updateMediaItem(mediaId, value)
+      await updateMediaItem(mediaId, { ...mediaItem, ...value })
     },
   })
 
