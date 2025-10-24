@@ -1,32 +1,22 @@
-import { QueryClient, useQuery } from "@tanstack/react-query"
-
 import { useAppForm } from "../../components/form"
-import { loadMediaItem, updateMediaItem } from "./media-item-store"
+import { updateMediaItem } from "./media-item-store"
+import type { MediaItem } from "../../types/media-item"
 
-const queryClient = new QueryClient()
-
-export default function EditForm({ mediaId }: { mediaId: string }) {
-  const { data: mediaItem, isLoading } = useQuery(
-    {
-      queryKey: ["mediaItem", mediaId],
-      queryFn: async () => {
-        return loadMediaItem(mediaId)
-      },
-    },
-    queryClient,
-  )
+export default function EditForm({
+  mediaId,
+  mediaItem,
+}: {
+  mediaId: string
+  mediaItem: MediaItem
+}) {
   const form = useAppForm({
     defaultValues: {
-      title: mediaItem?.title ?? "",
+      title: mediaItem.title,
     },
     onSubmit: async ({ value }) => {
       await updateMediaItem(mediaId, value)
     },
   })
-
-  if (isLoading) {
-    return null
-  }
 
   return (
     <form

@@ -6,6 +6,7 @@ import config from "virtual:lightnet/config"
 import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
+import { getRawMediaItem } from "../../../content/get-media-items"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
@@ -15,6 +16,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 const { mediaId } = Astro.params
+const mediaItemEntry = await getRawMediaItem(mediaId)
 ---
 
 <Page>
@@ -22,10 +24,10 @@ const { mediaId } = Astro.params
     <a
       class="underline"
       href=`/${Astro.currentLocale}/media/faithful-freestyle--en`
-      >Details page</a
+      >Back to details page</a
     >
     <h1 class="mb-4 mt-8 text-lg">Edit media item</h1>
 
-    <EditForm mediaId={mediaId} client:load />
+    <EditForm mediaId={mediaId} mediaItem={mediaItemEntry.data} client:load />
   </div>
 </Page>

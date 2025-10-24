@@ -1,4 +1,4 @@
-import { z } from "astro:content"
+import { z } from "astro/zod"
 
 /**
  * The Astro image function resolves to this schema.
