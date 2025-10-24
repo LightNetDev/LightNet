@@ -1,7 +1,7 @@
 import type { APIRoute, GetStaticPaths } from "astro"
-import { getCollection, getEntry } from "astro:content"
+import { getCollection } from "astro:content"
 
-import { getMediaItem } from "../../content/get-media-items"
+import { getRawMediaItem } from "../../content/get-media-items"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
@@ -9,38 +9,13 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 export const GET: APIRoute = async ({ params: { mediaId } }) => {
+  const entry = await getRawMediaItem(mediaId!)
   return new Response(
     JSON.stringify(
-      { id: mediaId, content: await originalMediaItem(mediaId!) },
+      { id: entry.id, content: entry.data },
       null,
       2,
     ),
   )
 }
 
-/**
- * Returns the media item like it is stored in the content collection json.
- * We need to revert Astro's modifications to references and images.
- *
- * @param mediaItem media item parsed by Astro
- * @returns media item like before parsing
- */
-async function originalMediaItem(mediaId: string) {
-  const mediaItem = (await getMediaItem(mediaId)).data
-
-  const type = mediaItem.type.id
-  const categories = mediaItem.categories?.map((category) => category.id)
-  const collections = mediaItem.collections?.map((collection) => ({
-    ...collection,
-    collection: collection.collection.id,
-  }))
-  const image = (await getEntry("internal-media-image-path", mediaId))?.data
-    .image
-  return {
-    ...mediaItem,
-    type,
-    categories,
-    collections,
-    image,
-  }
-}
