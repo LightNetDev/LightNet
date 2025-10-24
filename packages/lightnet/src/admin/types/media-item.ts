@@ -6,4 +6,3 @@ export const mediaItemSchema = z.object({
 })
 
 export type MediaItem = z.infer<typeof mediaItemSchema>
-

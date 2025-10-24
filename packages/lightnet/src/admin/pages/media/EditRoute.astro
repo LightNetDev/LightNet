@@ -3,10 +3,10 @@ import type { GetStaticPaths } from "astro"
 import { getCollection } from "astro:content"
 import config from "virtual:lightnet/config"
 
+import { getRawMediaItem } from "../../../content/get-media-items"
 import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
-import { getRawMediaItem } from "../../../content/get-media-items"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")

@@ -1,7 +1,7 @@
 import { getCollection, getEntry } from "astro:content"
 
 import { verifySchemaAsync } from "../utils/verify-schema"
-import { mediaItemEntrySchema, type MediaItemEntry } from "./content-schema"
+import { type MediaItemEntry, mediaItemEntrySchema } from "./content-schema"
 
 /**
  * Internal API to get media items. Since this package is a Astro integration
@@ -28,7 +28,7 @@ const prepareItem = async (item: unknown) => {
 }
 
 /**
- * Revert media items like they it is stored in the 
+ * Revert media items like they it is stored in the
  * content collection folder.
  */
 export const getRawMediaItem = async (id: string) => {
@@ -37,7 +37,7 @@ export const getRawMediaItem = async (id: string) => {
 }
 
 /**
- * Revert media items like they are stored in the 
+ * Revert media items like they are stored in the
  * content collection folder.
  */
 export const getRawMediaItems = async () => {
@@ -59,8 +59,7 @@ async function revertMediaItemEntry({ id, data: mediaItem }: MediaItemEntry) {
     ...collection,
     collection: collection.collection.id,
   }))
-  const image = (await getEntry("internal-media-image-path", id))?.data
-    .image
+  const image = (await getEntry("internal-media-image-path", id))?.data.image
   return {
     id,
     data: {
@@ -69,6 +68,6 @@ async function revertMediaItemEntry({ id, data: mediaItem }: MediaItemEntry) {
       categories,
       collections,
       image,
-    }
+    },
   }
 }
