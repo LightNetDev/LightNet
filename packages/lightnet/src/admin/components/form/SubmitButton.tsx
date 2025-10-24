@@ -39,11 +39,7 @@ export default function SubmitButton({
   const text = displaySuccess ? successLabel : label
 
   return (
-    <button
-      className={buttonClass}
-      type="submit"
-      disabled={!canSubmit || isSubmitting}
-    >
+    <button className={buttonClass} type="submit" disabled={isSubmitting}>
       {displaySuccess && <Icon className="mdi--check" ariaLabel="" />}
       {text}
     </button>

@@ -10,8 +10,8 @@ export const FieldErrors = ({ meta }: FieldErrorsProps) => {
   return (
     <ul className="my-2 flex flex-col gap-1" role="alert">
       {meta.errors.map((error) => (
-        <li className="text-sm text-red-900" key={error}>
-          {error}
+        <li className="text-sm text-red-900" key={error.code}>
+          {error.message}
         </li>
       ))}
     </ul>

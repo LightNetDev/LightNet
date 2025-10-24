@@ -1,6 +1,7 @@
 import { useAppForm } from "../../components/form"
 import { updateMediaItem } from "./media-item-store"
-import type { MediaItem } from "../../types/media-item"
+import { mediaItemSchema, type MediaItem } from "../../types/media-item"
+import { revalidateLogic } from "@tanstack/react-form"
 
 export default function EditForm({
   mediaId,
@@ -10,9 +11,14 @@ export default function EditForm({
   mediaItem: MediaItem
 }) {
   const form = useAppForm({
-    defaultValues: {
-      title: mediaItem.title,
+    defaultValues: mediaItem,
+    validators: {
+      onDynamic: mediaItemSchema,
     },
+    validationLogic: revalidateLogic({
+      mode: "blur",
+      modeAfterSubmission: "change",
+    }),
     onSubmit: async ({ value }) => {
       await updateMediaItem(mediaId, { ...mediaItem, ...value })
     },
@@ -27,10 +33,11 @@ export default function EditForm({
       className="flex flex-col items-start gap-6"
     >
       <form.AppField
+        name="commonId"
+        children={(field) => <field.TextField label="Common ID" />}
+      />
+      <form.AppField
         name="title"
-        validators={{
-          onChange: (value) => !value.value && "Field must not be empty",
-        }}
         children={(field) => <field.TextField label="Title" />}
       />
       <form.AppForm>
