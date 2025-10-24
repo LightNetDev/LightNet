@@ -4,73 +4,74 @@ import { useEffect, useRef, useState } from "react"
 import Icon from "../../../components/Icon"
 import { useFormContext } from "./form-context"
 
-type SubmitButtonProps = {
-  label: string
-  successLabel?: string
-}
-
 const SUCCESS_DURATION_MS = 2000
 
 const baseButtonClass =
   "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-6 py-3 font-bold uppercase shadow-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:cursor-not-allowed"
-const idleButtonClass =
-  "bg-gray-800 text-gray-100 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-600 disabled:text-gray-200"
-const successButtonClass =
-  "bg-emerald-600 text-white hover:bg-emerald-700 hover:text-white disabled:bg-emerald-500"
 
-export default function SubmitButton({
-  label,
-  successLabel = "Saved",
-}: SubmitButtonProps) {
+const buttonStateClasses = {
+  idle: "bg-gray-800 text-gray-100 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-600 disabled:text-gray-200",
+  error:
+    "bg-rose-700 text-white hover:bg-rose-800 hover:text-white disabled:bg-rose-600",
+  success:
+    "bg-emerald-600 text-white hover:bg-emerald-700 hover:text-white disabled:bg-emerald-500",
+} as const
+
+const buttonLabels = {
+  idle: "Save",
+  success: "Saved",
+  error: "Failed",
+} as const
+
+const icons = {
+  idle: undefined,
+  success: "mdi--check",
+  error: "mdi--error-outline",
+} as const
+
+export default function SubmitButton() {
   const form = useFormContext()
-  const { canSubmit, isSubmitting, isSubmitSuccessful } = useStore(
+  const { submissionAttempts, isSubmitting, isSubmitSuccessful } = useStore(
     form.store,
     (state) => ({
       canSubmit: state.canSubmit,
       isSubmitting: state.isSubmitting,
       isSubmitSuccessful: state.isSubmitSuccessful,
+      submissionAttempts: state.submissionAttempts,
     }),
   )
-  const visibleSuccess = useSuccessIndicator(isSubmitSuccessful)
-  const displaySuccess = visibleSuccess && !isSubmitting
-  const buttonClass = `${baseButtonClass} ${
-    displaySuccess ? successButtonClass : idleButtonClass
-  }`
-  const text = displaySuccess ? successLabel : label
+  const buttonState = useButtonState(isSubmitSuccessful, submissionAttempts)
+  const buttonClass = `${baseButtonClass} ${buttonStateClasses[buttonState]}`
+  const label = buttonLabels[buttonState]
+  const icon = icons[buttonState]
 
   return (
     <button className={buttonClass} type="submit" disabled={isSubmitting}>
-      {displaySuccess && <Icon className="mdi--check" ariaLabel="" />}
-      {text}
+      {icon && <Icon className={icon} ariaLabel="" />}
+      {label}
     </button>
   )
 }
 
-function useSuccessIndicator(isSubmitSuccessful: boolean) {
-  const [visible, setVisible] = useState(false)
+function useButtonState(
+  isSubmitSuccessful: boolean,
+  submissionAttempts: number,
+) {
+  const [state, setState] = useState<"success" | "error" | "idle">("idle")
   const timeoutRef = useRef<number | undefined>(undefined)
-
   useEffect(() => {
-    if (!isSubmitSuccessful) {
+    if (submissionAttempts === 0) {
       return
     }
-    setVisible(true)
+    setState(isSubmitSuccessful ? "success" : "error")
     if (timeoutRef.current !== undefined) {
       window.clearTimeout(timeoutRef.current)
     }
     timeoutRef.current = window.setTimeout(() => {
-      setVisible(false)
+      setState("idle")
       timeoutRef.current = undefined
     }, SUCCESS_DURATION_MS)
-  }, [isSubmitSuccessful])
+  }, [submissionAttempts, isSubmitSuccessful])
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current !== undefined) {
-        window.clearTimeout(timeoutRef.current)
-      }
-    }
-  }, [])
-
-  return visible
+  return state
 }

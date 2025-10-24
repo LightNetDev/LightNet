@@ -41,7 +41,7 @@ export default function EditForm({
         children={(field) => <field.TextField label="Title" />}
       />
       <form.AppForm>
-        <form.SubmitButton label="Save" />
+        <form.SubmitButton />
       </form.AppForm>
     </form>
   )
