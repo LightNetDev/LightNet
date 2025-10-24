@@ -15,7 +15,7 @@ export default function TextField({ label }: { label: string }) {
           value={field.state.value}
           onChange={(e) => field.handleChange(e.target.value)}
           onBlur={field.handleBlur}
-          className="dy-input dy-input-bordered dy-input-sm w-full max-w-sm"
+          className={`dy-input dy-input-bordered dy-input-sm w-full max-w-sm ${field.state.meta.errors.length ? "dy-input-error" : ""}`}
         />
         <FieldErrors meta={field.state.meta} />
       </label>

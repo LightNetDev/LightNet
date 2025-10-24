@@ -10,10 +10,10 @@ export type ToastProps = {
 }
 
 const variantClassName: Record<ToastVariant, string> = {
-  info: "border-slate-200 bg-white/95 text-slate-900",
-  success: "border-emerald-200 bg-emerald-50 text-emerald-900",
-  warning: "border-amber-200 bg-amber-50 text-amber-900",
-  error: "border-rose-200 bg-rose-50 text-rose-900",
+  info: "border-slate-400 bg-white/95",
+  success: "border-emerald-500 bg-emerald-100",
+  warning: "border-amber-500 bg-amber-100",
+  error: "border-rose-500 bg-rose-100",
 }
 
 export default function Toast({
@@ -27,13 +27,11 @@ export default function Toast({
   const hiddenTransform = "translateY(1.5rem)"
   const overshootTransform = "translateY(-0.25rem)"
   const visibleTransform = "translateY(0)"
-  const innerBaseClass =
-    "pointer-events-auto flex items-center gap-3 rounded-md border px-4 py-3 text-sm shadow-md backdrop-blur-sm"
 
   return (
     <div
       id={id}
-      className={`dy-toast pointer-events-none opacity-0 transition duration-300 will-change-transform ${className}`}
+      className={`pointer-events-none fixed bottom-4 end-0 flex justify-end px-4 opacity-0 transition duration-300 will-change-transform ${className}`}
       data-toast="true"
       data-variant={variant}
       data-toast-hidden-transform={hiddenTransform}
@@ -47,8 +45,10 @@ export default function Toast({
         transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
       }}
     >
-      <div className={`${innerBaseClass} ${alertClasses}`}>
-        <span>{children}</span>
+      <div
+        className={`pointer-events-auto flex max-w-sm flex-col items-start gap-1 rounded-2xl border p-4 text-base shadow-md backdrop-blur-sm ${alertClasses}`}
+      >
+        {children}
       </div>
     </div>
   )
