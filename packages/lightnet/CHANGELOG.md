@@ -1,5 +1,19 @@
 # lightnet
 
+## 3.10.1
+
+### Patch Changes
+
+- [#321](https://github.com/LightNetDev/LightNet/pull/321) [`87e0faf`](https://github.com/LightNetDev/LightNet/commit/87e0faf4ba7a6615d60e755385479092c5d2aa84) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
+- [#321](https://github.com/LightNetDev/LightNet/pull/321) [`87e0faf`](https://github.com/LightNetDev/LightNet/commit/87e0faf4ba7a6615d60e755385479092c5d2aa84) Thanks [@smn-cds](https://github.com/smn-cds)! - Start implementing integrated experimental Admin UI.
+
+- [#321](https://github.com/LightNetDev/LightNet/pull/321) [`87e0faf`](https://github.com/LightNetDev/LightNet/commit/87e0faf4ba7a6615d60e755385479092c5d2aa84) Thanks [@smn-cds](https://github.com/smn-cds)! - Astro 5.14.8 resolves relative image paths like `image/my-image.jpg` without a `./` prefix, so remove the manual prefixing in `packages/lightnet/src/content/astro-image.ts`. See [Astro's release notes for version 5.14.8](https://github.com/withastro/astro/releases/tag/astro%405.14.8).
+
+- [#323](https://github.com/LightNetDev/LightNet/pull/323) [`a2e6980`](https://github.com/LightNetDev/LightNet/commit/a2e6980b2866795b1517dc7a916698f5d92231b1) Thanks [@smn-cds](https://github.com/smn-cds)! - Remove the unsupported `maxWidth` option from `MediaGallerySection` and `CategoriesSection`.
+
+  The option never worked correctly, but our docs previously only mentioned that in a note. Tighten the typings and runtime guardrails so that consumers see explicit feedback instead of misconfiguring the component.
+
 ## 3.10.0
 
 ### Minor Changes

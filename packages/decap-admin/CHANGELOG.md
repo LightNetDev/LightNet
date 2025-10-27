@@ -1,5 +1,11 @@
 # @lightnet/decap-admin
 
+## 3.1.4
+
+### Patch Changes
+
+- [#321](https://github.com/LightNetDev/LightNet/pull/321) [`87e0faf`](https://github.com/LightNetDev/LightNet/commit/87e0faf4ba7a6615d60e755385479092c5d2aa84) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 3.1.3
 
 ### Patch Changes
