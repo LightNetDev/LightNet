@@ -20,7 +20,7 @@ type MediaItem = {
   }
 }
 
-type Props = SectionProps & {
+type Props = Omit<SectionProps, "maxWidth"> & {
   items: (MediaItem | undefined)[]
   layout: ItemStyle
   viewLayout?: "grid" | "carousel"
