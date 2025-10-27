@@ -64,13 +64,13 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           prerender: true,
         })
 
-        injectRoute({
-          pattern: "/api/media/[mediaId].json",
-          entrypoint: "lightnet/api/media/[mediaId].ts",
-          prerender: true,
-        })
-
         if (config.experimental?.admin?.enabled) {
+          injectRoute({
+            pattern: "/api/media/[mediaId].json",
+            entrypoint: "lightnet/api/media/[mediaId].ts",
+            prerender: true,
+          })
+
           injectRoute({
             pattern: "/[locale]/admin",
             entrypoint: "lightnet/admin/pages/AdminRoute.astro",
