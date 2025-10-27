@@ -19,6 +19,7 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         updateConfig,
         logger,
         addMiddleware,
+        command,
       }) => {
         const config = verifySchema(
           configSchema,
@@ -46,24 +47,30 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         })
 
         injectRoute({
-          pattern: "/api/search.json",
-          entrypoint: "lightnet/pages/api/search.ts",
-          prerender: true,
-        })
-
-        injectRoute({
-          pattern: "/api/versions.json",
-          entrypoint: "lightnet/pages/api/versions.ts",
-          prerender: true,
-        })
-
-        injectRoute({
           pattern: "/[locale]/media/[mediaId]",
           entrypoint: "lightnet/pages/DetailsPageRoute.astro",
           prerender: true,
         })
 
+        injectRoute({
+          pattern: "/api/internal/search.json",
+          entrypoint: "lightnet/api/internal/search.ts",
+          prerender: true,
+        })
+
+        injectRoute({
+          pattern: "/api/versions.json",
+          entrypoint: "lightnet/api/versions.ts",
+          prerender: true,
+        })
+
         if (config.experimental?.admin?.enabled) {
+          injectRoute({
+            pattern: "/api/media/[mediaId].json",
+            entrypoint: "lightnet/api/media/[mediaId].ts",
+            prerender: true,
+          })
+
           injectRoute({
             pattern: "/[locale]/admin",
             entrypoint: "lightnet/admin/pages/AdminRoute.astro",
@@ -71,9 +78,27 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           })
           injectRoute({
             pattern: "/[locale]/admin/media/[mediaId]",
-            entrypoint: "lightnet/admin/pages/MediaItemRoute.astro",
+            entrypoint: "lightnet/admin/pages/media/EditRoute.astro",
             prerender: true,
           })
+        }
+
+        // During local development admin ui can use
+        // this endpoints to write files.
+        if (config.experimental?.admin?.enabled && command === "dev") {
+          injectRoute({
+            pattern: "/api/internal/fs/writeText",
+            entrypoint: "lightnet/api/internal/fs/writeText.ts",
+            prerender: false,
+          })
+          // Add empty adapter to avoid warning
+          // about missing adapter.
+          // This hack might break in the future :(
+          // We could also set the "node" adapter if no
+          // adapter has been set by user.
+          if (!astroConfig.adapter) {
+            updateConfig({ adapter: {} })
+          }
         }
 
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })

@@ -4,3 +4,4 @@ dist/
 playwright-report/
 test-results/
 CHANGELOG.md
+playground/sk8-ministries/src/content/**/*.json

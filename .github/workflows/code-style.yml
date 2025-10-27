@@ -21,6 +21,6 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "pnpm"
       - run: pnpm i
-      - run: pnpm lint
+      - run: pnpm eslint . --report-unused-disable-directives --max-warnings 0
       - run: pnpm prettier . --check
       - run: pnpm typecheck

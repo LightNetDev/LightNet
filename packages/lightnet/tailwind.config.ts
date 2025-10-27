@@ -35,6 +35,7 @@ export function lightnetStyles({
             secondary: primary,
             accent: primary,
             neutral: "#030712",
+            error: "#9f1239",
             "base-100": "#f9fafb",
 
             "--rounded-box": "0.375rem", // border radius rounded-box utility class, used in card and other large boxes

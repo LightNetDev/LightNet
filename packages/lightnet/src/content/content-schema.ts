@@ -3,7 +3,7 @@ import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
 
-import { astroImage, imageSchema } from "./astro-image"
+import { imageSchema } from "./astro-image"
 
 /**
  * Category Schema
@@ -172,12 +172,12 @@ export const mediaItemSchema = z.object({
  */
 export const createMediaItemSchema = ({ image }: SchemaContext) =>
   mediaItemSchema.extend({
-    image: astroImage(image),
+    image: image(),
   })
 
 export const createCategorySchema = ({ image }: SchemaContext) =>
   categorySchema.extend({
-    image: astroImage(image).optional(),
+    image: image().optional(),
   })
 
 /**
@@ -314,6 +314,13 @@ export const LIGHTNET_COLLECTIONS = {
       base: "./src/content/media-types",
     }),
     schema: mediaTypeSchema,
+  }),
+  "internal-media-image-path": defineCollection({
+    loader: glob({
+      pattern: "*.json",
+      base: "./src/content/media",
+    }),
+    schema: z.object({ image: z.string() }),
   }),
 }
 

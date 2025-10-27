@@ -1,5 +1,6 @@
 {
   "name": "lightnet",
+  "description": "LightNet makes it easy to run your own digital media library.",
   "type": "module",
   "license": "MIT",
   "version": "3.10.0",
@@ -34,10 +35,12 @@
     "./pages/RootRoute.astro": "./src/pages/RootRoute.astro",
     "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
     "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
-    "./pages/api/search.ts": "./src/pages/api/search.ts",
-    "./pages/api/versions.ts": "./src/pages/api/versions.ts",
+    "./api/internal/search.ts": "./src/pages/search-page/api/search.ts",
+    "./api/versions.ts": "./src/api/versions.ts",
+    "./api/media/[mediaId].ts": "./src/api/media/[mediaId].ts",
+    "./api/internal/fs/writeText.ts": "./src/admin/api/fs/writeText.ts",
     "./admin/pages/AdminRoute.astro": "./src/admin/pages/AdminRoute.astro",
-    "./admin/pages/MediaItemRoute.astro": "./src/admin/pages/MediaItemRoute.astro"
+    "./admin/pages/media/EditRoute.astro": "./src/admin/pages/media/EditRoute.astro"
   },
   "peerDependencies": {
     "astro": "^5.1.0",
@@ -51,18 +54,20 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.19",
+    "@tanstack/react-form": "^1.23.7",
+    "@tanstack/react-query": "^5.90.5",
     "@tanstack/react-virtual": "^3.13.12",
     "daisyui": "^4.12.24",
     "embla-carousel": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "fuse.js": "^7.1.0",
     "i18next": "^25.6.0",
-    "marked": "^16.4.0",
+    "marked": "^16.4.1",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.0",
-    "@types/node": "^22.18.10",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^22.18.12",
     "@types/react": "^19.2.2",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"

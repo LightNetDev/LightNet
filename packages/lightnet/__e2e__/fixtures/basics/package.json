@@ -6,8 +6,8 @@
   "dependencies": {
     "@astrojs/react": "^4.4.0",
     "@astrojs/tailwind": "^6.0.2",
-    "@lightnet/decap-admin": "^3.1.2",
-    "astro": "^5.14.4",
+    "@lightnet/decap-admin": "^3.1.3",
+    "astro": "^5.14.8",
     "lightnet": "^3.10.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
