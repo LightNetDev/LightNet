@@ -12,13 +12,53 @@ export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
     >
   </div>
   <script>
-    const applicationId =
+    import pkceChallenge from "pkce-challenge"
+
+    const client_id =
       "9c3759420fd2f22cbcbcf16378d133acef7368a2ace8fcf1374c1285beb6be71"
+    const redirect_uri = "http://localhost:4321/en/admin/login"
+
+    console.log("Load page")
+    const locationParams = new URLSearchParams(window.location.search)
+    const code = locationParams.get("code")
+    const code_verifier = sessionStorage.getItem("gitlab_verifier")
+    if (code && code_verifier) {
+      console.log("request token")
+      sessionStorage.removeItem("gitlab_verifier")
+      const params = new URLSearchParams({
+        client_id,
+        code,
+        redirect_uri,
+        grant_type: "authorization_code",
+        code_verifier,
+      })
+      const token = await fetch("https://gitlab.com/oauth/token", {
+        method: "POST",
+        headers: {
+          Content_Type: "application/x-www-form-urlencoded",
+        },
+        body: params,
+      })
+      console.log("Received token", token)
+    }
 
     const loginButton =
       document.querySelector<HTMLButtonElement>("#login-button")
-    loginButton?.addEventListener("click", () => {
-      console.log("click button")
+
+    loginButton?.addEventListener("click", async () => {
+      const { code_challenge, code_verifier } = await pkceChallenge()
+      sessionStorage.setItem("gitlab_verifier", code_verifier)
+
+      const params = new URLSearchParams({
+        client_id,
+        redirect_uri,
+        response_type: "code",
+        code_challenge_method: "S256",
+        scope: "api", // todo
+        // state: "", //todo
+        code_challenge,
+      })
+      window.location.href = `https://gitlab.com/oauth/authorize?${params}`
     })
   </script>
 </Page>
