@@ -1,0 +1,24 @@
+---
+import Page from "../../layouts/Page.astro"
+
+export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
+---
+
+<Page>
+  <div class="flex h-96 w-full items-center justify-center">
+    <button
+      class="rounded-2xl bg-black px-8 py-2 text-white shadow-sm"
+      id="login-button">Login</button
+    >
+  </div>
+  <script>
+    const applicationId =
+      "9c3759420fd2f22cbcbcf16378d133acef7368a2ace8fcf1374c1285beb6be71"
+
+    const loginButton =
+      document.querySelector<HTMLButtonElement>("#login-button")
+    loginButton?.addEventListener("click", () => {
+      console.log("click button")
+    })
+  </script>
+</Page>

@@ -40,6 +40,7 @@
     "./api/media/[mediaId].ts": "./src/api/media/[mediaId].ts",
     "./api/internal/fs/writeText.ts": "./src/admin/api/fs/writeText.ts",
     "./admin/pages/AdminRoute.astro": "./src/admin/pages/AdminRoute.astro",
+    "./admin/pages/LoginRoute.astro": "./src/admin/pages/LoginRoute.astro",
     "./admin/pages/media/EditRoute.astro": "./src/admin/pages/media/EditRoute.astro"
   },
   "peerDependencies": {
