@@ -1,17 +1,17 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import { useEffect, useRef, useState } from "react"
 
+import {
+  createI18n,
+  type I18nConfig,
+  I18nContext,
+} from "../../../i18n/react/i18n-context"
 import { useSearch } from "../hooks/use-search"
 import LoadingSkeleton from "./LoadingSkeleton"
 import SearchListItem, {
   type MediaType,
   type TranslatedLanguage,
 } from "./SearchListItem"
-import {
-  createI18n,
-  I18nContext,
-  type I18nConfig,
-} from "../../../i18n/react/i18n-context"
 
 interface Props {
   i18nConfig: I18nConfig

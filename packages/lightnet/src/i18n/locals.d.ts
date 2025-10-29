@@ -9,10 +9,10 @@ declare namespace App {
 
 type I18n = {
   /**
-    * Translate a key to the language of the current locale.
-    *
-    * @param TranslationKey to be translated.
-    */
+   * Translate a key to the language of the current locale.
+   *
+   * @param TranslationKey to be translated.
+   */
   t: import("./translate").TranslateFn
 
   /**

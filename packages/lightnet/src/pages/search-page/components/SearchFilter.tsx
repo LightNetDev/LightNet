@@ -1,12 +1,11 @@
 import { useRef } from "react"
 
 import Icon from "../../../components/Icon"
+import { createI18n, type I18nConfig } from "../../../i18n/react/i18n-context"
 import { useDebounce } from "../hooks/use-debounce"
 import { useSearchQueryParam } from "../hooks/use-search-query-param"
-
 import { CATEGORY, LANGUAGE, SEARCH, TYPE } from "../utils/search-query"
 import Select from "./Select"
-import { createI18n, type I18nConfig } from "../../../i18n/react/i18n-context"
 
 type FilterValue = { id: string; name: string }
 

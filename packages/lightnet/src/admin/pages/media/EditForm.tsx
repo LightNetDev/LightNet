@@ -2,14 +2,14 @@ import { revalidateLogic } from "@tanstack/react-form"
 
 import { showToastById } from "../../../components/showToast"
 import Toast from "../../../components/Toast"
+import {
+  createI18n,
+  type I18nConfig,
+  I18nContext,
+} from "../../../i18n/react/i18n-context"
 import { useAppForm } from "../../components/form"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import { updateMediaItem } from "./media-item-store"
-import {
-  createI18n,
-  I18nContext,
-  type I18nConfig,
-} from "../../../i18n/react/i18n-context"
 
 export default function EditForm({
   mediaId,

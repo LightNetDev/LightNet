@@ -4,7 +4,7 @@ import config from "virtual:lightnet/config"
 import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLanguage } from "./resolve-language"
 import { resolveLocales } from "./resolve-locales"
-import { useTranslate, translationKeys } from "./translate"
+import { translationKeys, useTranslate } from "./translate"
 
 export const onRequest: MiddlewareHandler = (
   { locals, currentLocale: astroCurrentLocale },
@@ -22,7 +22,7 @@ export const onRequest: MiddlewareHandler = (
       defaultLocale,
       direction,
       locales,
-      translationKeys
+      translationKeys,
     }
   }
   return next()

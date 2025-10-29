@@ -4,10 +4,10 @@ import { getCollection } from "astro:content"
 import config from "virtual:lightnet/config"
 
 import { getRawMediaItem } from "../../../content/get-media-items"
+import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
-import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")

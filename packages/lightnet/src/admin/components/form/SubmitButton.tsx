@@ -2,8 +2,8 @@ import { useStore } from "@tanstack/react-form"
 import { useEffect, useRef, useState } from "react"
 
 import Icon from "../../../components/Icon"
-import { useFormContext } from "./form-context"
 import { useI18n } from "../../../i18n/react/useI18n"
+import { useFormContext } from "./form-context"
 
 const SUCCESS_DURATION_MS = 2000
 

@@ -24,9 +24,13 @@ const defaultLocale = resolveDefaultLocale(config)
 
 const translations = await prepareI18nextTranslations()
 export const translationKeys = [
-  ... new Set(Object.values(translations)
-    .map(({ translation }) => translation)
-    .flatMap(oneLanguageTranslations => Object.keys(oneLanguageTranslations)))
+  ...new Set(
+    Object.values(translations)
+      .map(({ translation }) => translation)
+      .flatMap((oneLanguageTranslations) =>
+        Object.keys(oneLanguageTranslations),
+      ),
+  ),
 ]
 
 const i18n = i18next.createInstance()
