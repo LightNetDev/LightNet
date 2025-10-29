@@ -33,6 +33,11 @@ declare namespace App {
        * The available locales as defined in the project configuration.
        */
       locales: string[]
+
+      /**
+       * All available translation keys.
+       */
+      translationKeys: string[]
     }
   }
 }

@@ -22,18 +22,26 @@ const languageCodes = [
 ]
 const defaultLocale = resolveDefaultLocale(config)
 
-await i18next.init({
+const translations = await prepareI18nextTranslations()
+export const translationKeys = [
+  ... new Set(Object.values(translations)
+    .map(({ translation }) => translation)
+    .flatMap(oneLanguageTranslations => Object.keys(oneLanguageTranslations)))
+]
+
+const i18n = i18next.createInstance()
+await i18n.init({
   lng: defaultLocale,
   // don't use name spacing
   nsSeparator: false,
   // only use flat keys
   keySeparator: false,
-  resources: await prepareI18nextTranslations(),
+  resources: translations,
 })
 
 export function useTranslate(bcp47: string | undefined): TranslateFn {
   const resolvedLocale = bcp47 ?? defaultLocale
-  const t = i18next.getFixedT<TranslationKey>(resolvedLocale)
+  const t = i18n.getFixedT<TranslationKey>(resolvedLocale)
   const fallbackLng = [
     ...resolveLanguage(resolvedLocale).fallbackLanguages,
     defaultLocale,

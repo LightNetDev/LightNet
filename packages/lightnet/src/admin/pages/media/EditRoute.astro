@@ -7,6 +7,7 @@ import { getRawMediaItem } from "../../../content/get-media-items"
 import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
+import { provideTranslations } from "../../i18n/provide-translations"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
@@ -17,6 +18,9 @@ export const getStaticPaths = (async () => {
 
 const { mediaId } = Astro.params
 const mediaItemEntry = await getRawMediaItem(mediaId)
+
+const { t, translationKeys } = Astro.locals.i18n
+const translations = provideTranslations(t, translationKeys)
 ---
 
 <Page>
@@ -28,6 +32,11 @@ const mediaItemEntry = await getRawMediaItem(mediaId)
     >
     <h1 class="mb-4 mt-8 text-lg">Edit media item</h1>
 
-    <EditForm mediaId={mediaId} mediaItem={mediaItemEntry.data} client:load />
+    <EditForm
+      mediaId={mediaId}
+      mediaItem={mediaItemEntry.data}
+      translations={translations}
+      client:load
+    />
   </div>
 </Page>

@@ -1,1 +1,6 @@
 ln.admin.edit: Edit
+ln.admin.save: Save
+ln.admin.saved: Saved
+ln.admin.failed: Failed
+ln.admin.toast.invalid-data.title: Invalid form data
+ln.admin.toast.invalid-data.hint: Check the fields and try again.

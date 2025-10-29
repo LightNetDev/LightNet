@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 
 import Icon from "../../../components/Icon"
 import { useFormContext } from "./form-context"
+import { useI18n } from "../../i18n/useI18n"
 
 const SUCCESS_DURATION_MS = 2000
 
@@ -18,9 +19,9 @@ const buttonStateClasses = {
 } as const
 
 const buttonLabels = {
-  idle: "Save",
-  success: "Saved",
-  error: "Failed",
+  idle: "ln.admin.save",
+  success: "ln.admin.saved",
+  error: "ln.admin.failed",
 } as const
 
 const icons = {
@@ -31,6 +32,7 @@ const icons = {
 
 export default function SubmitButton() {
   const form = useFormContext()
+  const { t } = useI18n()
   const { submissionAttempts, isSubmitting, isSubmitSuccessful } = useStore(
     form.store,
     (state) => ({
@@ -48,7 +50,7 @@ export default function SubmitButton() {
   return (
     <button className={buttonClass} type="submit" disabled={isSubmitting}>
       {icon && <Icon className={icon} ariaLabel="" />}
-      {label}
+      {t(label)}
     </button>
   )
 }
