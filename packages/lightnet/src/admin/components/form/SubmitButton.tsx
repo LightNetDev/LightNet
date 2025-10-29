@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 
 import Icon from "../../../components/Icon"
 import { useFormContext } from "./form-context"
-import { useI18n } from "../../i18n/useI18n"
+import { useI18n } from "../../../i18n/react/useI18n"
 
 const SUCCESS_DURATION_MS = 2000
 

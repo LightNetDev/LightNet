@@ -5,16 +5,20 @@ import Toast from "../../../components/Toast"
 import { useAppForm } from "../../components/form"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import { updateMediaItem } from "./media-item-store"
-import { createI18n, I18nContext } from "../../i18n/i18n-context"
+import {
+  createI18n,
+  I18nContext,
+  type I18nConfig,
+} from "../../../i18n/react/i18n-context"
 
 export default function EditForm({
   mediaId,
   mediaItem,
-  translations,
+  i18nConfig,
 }: {
   mediaId: string
   mediaItem: MediaItem
-  translations: Record<string, string>
+  i18nConfig: I18nConfig
 }) {
   const form = useAppForm({
     defaultValues: mediaItem,
@@ -32,7 +36,7 @@ export default function EditForm({
       showToastById("invalid-form-data-toast")
     },
   })
-  const i18n = createI18n(translations)
+  const i18n = createI18n(i18nConfig)
 
   return (
     <I18nContext.Provider value={i18n}>

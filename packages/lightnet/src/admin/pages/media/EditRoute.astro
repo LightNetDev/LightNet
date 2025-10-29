@@ -7,7 +7,7 @@ import { getRawMediaItem } from "../../../content/get-media-items"
 import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
-import { provideTranslations } from "../../i18n/provide-translations"
+import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
@@ -19,8 +19,7 @@ export const getStaticPaths = (async () => {
 const { mediaId } = Astro.params
 const mediaItemEntry = await getRawMediaItem(mediaId)
 
-const { t, translationKeys } = Astro.locals.i18n
-const translations = provideTranslations(t, translationKeys)
+const i18nConfig = prepareI18nConfig(Astro.locals.i18n, ["ln.admin.*"])
 ---
 
 <Page>
@@ -35,7 +34,7 @@ const translations = provideTranslations(t, translationKeys)
     <EditForm
       mediaId={mediaId}
       mediaItem={mediaItemEntry.data}
-      translations={translations}
+      i18nConfig={i18nConfig}
       client:load
     />
   </div>
