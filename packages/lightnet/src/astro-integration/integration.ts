@@ -76,6 +76,12 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
             entrypoint: "lightnet/admin/pages/AdminRoute.astro",
             prerender: true,
           })
+
+          injectRoute({
+            pattern: "/[locale]/admin/login",
+            entrypoint: "lightnet/admin/pages/LoginRoute.astro",
+            prerender: true,
+          })
           injectRoute({
             pattern: "/[locale]/admin/media/[mediaId]",
             entrypoint: "lightnet/admin/pages/media/EditRoute.astro",
