@@ -1,11 +1,13 @@
 /**
- * this is called inside astro component to create a data object holding all data
- * to initialize i18n inside the react component.
- * @param translationKeys to be translated. Can also use wildcards with "*"
- * @param i18n Astro.locals.i18n object
- * @returns 
+ * Prepares the configuration object passed from an Astro page to the React i18n context.
+ * Resolves every requested translation key (supporting wildcard suffixes like `ln.dashboard.*`)
+ * so the React island receives only the strings it needs.
+ * 
+ * @param i18n i18n helpers sourced from `Astro.locals`.
+ * @param translationKeys Specific keys (or wildcard groups) required by the React component.
+ * @returns A configuration object containing the resolved config.
  */
-export const prepareI18nConfig = ({ t, translationKeys: allKeys }: I18n, translationKeys: string[],) => {
+export const prepareI18nConfig = ({ t, translationKeys: allKeys, currentLocale, direction }: I18n, translationKeys: string[],) => {
   const resolveTranslations = (key: string) => {
     if (key.endsWith("*")) {
       const keyPrefix = key.slice(0, -1)
@@ -17,9 +19,10 @@ export const prepareI18nConfig = ({ t, translationKeys: allKeys }: I18n, transla
   return {
     translations: Object.fromEntries(
       translationKeys.flatMap(resolveTranslations),
-    ) as Record<string, string>
+    ) as Record<string, string>,
+    currentLocale,
+    direction
   }
 }
-
 
 

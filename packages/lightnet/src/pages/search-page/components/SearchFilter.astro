@@ -4,8 +4,8 @@ import config from "virtual:lightnet/config"
 import { getUsedCategories } from "../../../content/get-categories"
 import { contentLanguages } from "../../../content/get-languages"
 import { getMediaTypes } from "../../../content/get-media-types"
-import { provideTranslations } from "../utils/search-filter-translations"
 import SearchFilterReact from "./SearchFilter.tsx"
+import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 
 const { t, currentLocale } = Astro.locals.i18n
 
@@ -49,7 +49,16 @@ if (
 ) {
   initialLanguageFilter = currentLocale
 }
-const translations = provideTranslations(t)
+const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
+  "ln.search.title",
+  "ln.language",
+  "ln.search.placeholder",
+  "ln.search.all-languages",
+  "ln.type",
+  "ln.search.all-types",
+  "ln.category",
+  "ln.search.all-categories",
+])
 ---
 
 <SearchFilterReact
@@ -57,7 +66,7 @@ const translations = provideTranslations(t)
   languages={languages}
   mediaTypes={mediaTypes}
   categories={categories}
-  translations={translations}
+  i18nConfig={i18nConfig}
   languageFilterEnabled={languageFilterEnabled}
   typesFilterEnabled={typesFilterEnabled}
   categoriesFilterEnabled={categoriesFilterEnabled}
