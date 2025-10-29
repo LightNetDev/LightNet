@@ -5,10 +5,14 @@ export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
 ---
 
 <Page>
-  <div class="flex h-96 w-full items-center justify-center">
+  <div class="flex h-96 w-full flex-col items-center justify-center gap-8">
     <button
       class="rounded-2xl bg-black px-8 py-2 text-white shadow-sm"
       id="login-button">Login</button
+    >
+    <button
+      class="rounded-2xl bg-black px-8 py-2 text-white shadow-sm"
+      id="request-button">Request</button
     >
   </div>
   <script>
@@ -16,31 +20,29 @@ export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
 
     const client_id =
       "9c3759420fd2f22cbcbcf16378d133acef7368a2ace8fcf1374c1285beb6be71"
-    const redirect_uri =
-      "https://online-edit.sk8-ministries.pages.dev/en/admin/login"
+    const redirect_uri = "http://localhost:4321/en/admin/login"
 
-    console.log("Load page")
     const locationParams = new URLSearchParams(window.location.search)
     const code = locationParams.get("code")
     const code_verifier = sessionStorage.getItem("gitlab_verifier")
     if (code && code_verifier) {
       console.log("request token")
       sessionStorage.removeItem("gitlab_verifier")
-      const params = new URLSearchParams({
-        client_id,
-        code,
-        redirect_uri,
-        grant_type: "authorization_code",
-        code_verifier,
-      })
       const token = await fetch("https://gitlab.com/oauth/token", {
         method: "POST",
         headers: {
-          Content_Type: "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-        body: params,
+        body: JSON.stringify({
+          client_id,
+          code,
+          redirect_uri,
+          grant_type: "authorization_code",
+          code_verifier,
+        }),
       })
-      console.log("Received token", token)
+      sessionStorage.setItem("token", await token.text())
     }
 
     const loginButton =
@@ -55,11 +57,27 @@ export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
         redirect_uri,
         response_type: "code",
         code_challenge_method: "S256",
-        scope: "api", // todo
+        scope: "api",
         // state: "", //todo
         code_challenge,
       })
       window.location.href = `https://gitlab.com/oauth/authorize?${params}`
+    })
+
+    const requestButton =
+      document.querySelector<HTMLButtonElement>("#request-button")
+    requestButton?.addEventListener("click", async () => {
+      const token = sessionStorage.getItem("token")
+      if (!token) {
+        console.warn("Cannot send request without token.")
+        return
+      }
+      const { access_token } = JSON.parse(token)
+      console.log("access", access_token)
+      const projects = await fetch(
+        `https://gitlab.com/api/v4/groups/OM-MediaWorks/projects?access_token=${access_token}`,
+      )
+      console.log("projects", await projects.json())
     })
   </script>
 </Page>
