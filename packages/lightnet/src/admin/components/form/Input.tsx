@@ -28,12 +28,11 @@ export default function TextField({
           onBlur={field.handleBlur}
           className={`dy-input dy-input-bordered ${field.state.meta.errors.length ? "dy-input-error" : ""}`}
         />
+        <FieldErrors meta={field.state.meta} />
 
         <div className="flex h-8 w-full items-center justify-end">
           {hint && <span className="dy-label-text-alt">{hint}</span>}
         </div>
-
-        <FieldErrors meta={field.state.meta} />
       </label>
     </>
   )
