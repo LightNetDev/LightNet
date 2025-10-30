@@ -64,7 +64,11 @@ export default function EditForm({
         <form.AppField
           name="dateCreated"
           children={(field) => (
-            <field.Input type="date" label={t("ln.admin.created-on")} />
+            <field.Input
+              type="date"
+              label={t("ln.admin.created-on")}
+              hint={t("ln.admin.created-on-hint")}
+            />
           )}
         />
 
