@@ -20,6 +20,7 @@ const { mediaId } = Astro.params
 const mediaItemEntry = await getRawMediaItem(mediaId)
 
 const i18nConfig = prepareI18nConfig(Astro.locals.i18n, ["ln.admin.*"])
+const { t } = Astro.locals.i18n
 ---
 
 <Page>
@@ -27,9 +28,9 @@ const i18nConfig = prepareI18nConfig(Astro.locals.i18n, ["ln.admin.*"])
     <a
       class="underline"
       href=`/${Astro.currentLocale}/media/faithful-freestyle--en`
-      >Back to details page</a
+      >{t("ln.admin.back-to-details-page")}</a
     >
-    <h1 class="mb-4 mt-8 text-lg">Edit media item</h1>
+    <h1 class="mb-4 mt-8 text-lg">{t("ln.admin.edit-media-item")}</h1>
 
     <EditForm
       mediaId={mediaId}

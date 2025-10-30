@@ -37,6 +37,7 @@ export default function EditForm({
     },
   })
   const i18n = createI18n(i18nConfig)
+  const { t } = i18n
 
   return (
     <I18nContext.Provider value={i18n}>
@@ -49,19 +50,21 @@ export default function EditForm({
       >
         <form.AppField
           name="commonId"
-          children={(field) => <field.TextField label="Common ID" />}
+          children={(field) => (
+            <field.TextField label={t("ln.admin.common-id")} />
+          )}
         />
         <form.AppField
           name="title"
-          children={(field) => <field.TextField label="Title" />}
+          children={(field) => <field.TextField label={t("ln.admin.title")} />}
         />
         <form.AppForm>
           <form.SubmitButton />
           <Toast id="invalid-form-data-toast" variant="error">
             <div className="font-bold text-gray-700">
-              {i18n.t("ln.admin.toast.invalid-data.title")}
+              {t("ln.admin.toast.invalid-data.title")}
             </div>
-            {i18n.t("ln.admin.toast.invalid-data.hint")}
+            {t("ln.admin.toast.invalid-data.hint")}
           </Toast>
         </form.AppForm>
       </form>
