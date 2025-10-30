@@ -49,24 +49,30 @@ export default function EditForm({
         className="flex flex-col items-start gap-4"
       >
         <form.AppField
-          name="commonId"
-          children={(field) => (
-            <field.TextField label={t("ln.admin.common-id")} />
-          )}
-        />
-        <form.AppField
           name="title"
           children={(field) => <field.TextField label={t("ln.admin.title")} />}
         />
-        <form.AppForm>
-          <form.SubmitButton />
-          <Toast id="invalid-form-data-toast" variant="error">
-            <div className="font-bold text-gray-700">
-              {t("ln.admin.toast.invalid-data.title")}
-            </div>
-            {t("ln.admin.toast.invalid-data.hint")}
-          </Toast>
-        </form.AppForm>
+        <form.AppField
+          name="commonId"
+          children={(field) => (
+            <field.TextField
+              label={t("ln.admin.common-id")}
+              hint={t("ln.admin.common-id-hint")}
+            />
+          )}
+        />
+
+        <div className="mt-10">
+          <form.AppForm>
+            <form.SubmitButton />
+            <Toast id="invalid-form-data-toast" variant="error">
+              <div className="font-bold text-gray-700">
+                {t("ln.admin.toast.invalid-data.title")}
+              </div>
+              {t("ln.admin.toast.invalid-data.hint")}
+            </Toast>
+          </form.AppForm>
+        </div>
       </form>
     </I18nContext.Provider>
   )

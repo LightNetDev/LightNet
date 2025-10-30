@@ -1,11 +1,17 @@
 import { FieldErrors } from "./FieldErrors"
 import { useFieldContext } from "./form-context"
 
-export default function TextField({ label }: { label: string }) {
+export default function TextField({
+  label,
+  hint,
+}: {
+  label: string
+  hint?: string
+}) {
   const field = useFieldContext<string>()
   return (
     <>
-      <label className="dy-form-control w-full max-w-sm">
+      <label className="dy-form-control w-full">
         <div className="dy-label">
           <span className="dy-label-text">{label}</span>
         </div>
@@ -15,8 +21,13 @@ export default function TextField({ label }: { label: string }) {
           value={field.state.value}
           onChange={(e) => field.handleChange(e.target.value)}
           onBlur={field.handleBlur}
-          className={`dy-input dy-input-bordered dy-input-sm w-full max-w-sm ${field.state.meta.errors.length ? "dy-input-error" : ""}`}
+          className={`dy-input dy-input-bordered ${field.state.meta.errors.length ? "dy-input-error" : ""}`}
         />
+        {hint && (
+          <div className="dy-label">
+            <span className="dy-label-text-alt">{hint}</span>
+          </div>
+        )}
         <FieldErrors meta={field.state.meta} />
       </label>
     </>
