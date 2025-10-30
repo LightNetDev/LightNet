@@ -26,7 +26,7 @@ export const createI18n = ({
     if (!translated) {
       console.error(`Missing translation for key ${key}`)
     }
-    return translated
+    return translated ?? ""
   }
   return { t, currentLocale, direction }
 }
