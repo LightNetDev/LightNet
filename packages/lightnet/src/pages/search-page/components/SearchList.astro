@@ -4,10 +4,10 @@ import { getCollection } from "astro:content"
 import { getUsedCategories } from "../../../content/get-categories"
 import { contentLanguages } from "../../../content/get-languages"
 import { getMediaTypes } from "../../../content/get-media-types"
-import { provideTranslations } from "../utils/search-translations"
+import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchListReact from "./SearchList.tsx"
 
-const { t, currentLocale, direction } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
 
 const categories: Record<string, string> = {}
 for (const { id, name } of await getUsedCategories(currentLocale, t)) {
@@ -34,15 +34,16 @@ const languages = Object.fromEntries(
 
 const mediaItemsTotal = (await getCollection("media")).length
 
-const translations = provideTranslations(t)
 const showLanguage = contentLanguages.length > 1
+
+const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
+  "ln.search.no-results",
+])
 ---
 
 <SearchListReact
   client:load
-  currentLocale={currentLocale}
-  direction={direction}
-  translations={translations}
+  i18nConfig={i18nConfig}
   categories={categories}
   mediaTypes={mediaTypes}
   languages={languages}

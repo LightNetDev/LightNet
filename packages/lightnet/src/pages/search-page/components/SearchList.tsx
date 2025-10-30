@@ -1,8 +1,12 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
 import { useEffect, useRef, useState } from "react"
 
+import {
+  createI18n,
+  type I18nConfig,
+  I18nContext,
+} from "../../../i18n/react/i18n-context"
 import { useSearch } from "../hooks/use-search"
-import type { TranslationKey, Translations } from "../utils/search-translations"
 import LoadingSkeleton from "./LoadingSkeleton"
 import SearchListItem, {
   type MediaType,
@@ -10,9 +14,7 @@ import SearchListItem, {
 } from "./SearchListItem"
 
 interface Props {
-  currentLocale: string | undefined
-  translations: Translations
-  direction: "rtl" | "ltr"
+  i18nConfig: I18nConfig
   categories: Record<string, string>
   languages: Record<string, TranslatedLanguage>
   showLanguage: boolean
@@ -21,11 +23,9 @@ interface Props {
 }
 
 export default function SearchList({
-  currentLocale,
   categories,
-  translations,
+  i18nConfig,
   languages,
-  direction,
   showLanguage,
   mediaTypes,
   mediaItemsTotal,
@@ -63,11 +63,10 @@ export default function SearchList({
       observer.disconnect()
     }
   }, [])
-
-  const t = (key: TranslationKey) => translations[key]
+  const i18n = createI18n(i18nConfig)
 
   return (
-    <>
+    <I18nContext.Provider value={i18n}>
       <div ref={listRef} className="px-4 md:px-8">
         <ol
           className="relative w-full divide-y divide-gray-200"
@@ -89,13 +88,11 @@ export default function SearchList({
                 }}
               >
                 {isLoading ? (
-                  <LoadingSkeleton direction={direction} />
+                  <LoadingSkeleton />
                 ) : (
                   <SearchListItem
                     item={item}
-                    direction={direction}
                     showLanguage={showLanguage}
-                    currentLocale={currentLocale}
                     categories={categories}
                     languages={languages}
                     mediaTypes={mediaTypes}
@@ -108,9 +105,9 @@ export default function SearchList({
       </div>
       {!results.length && !isLoading && (
         <div className="mt-24 text-center font-bold text-gray-500">
-          {t("ln.search.no-results")}
+          {i18n.t("ln.search.no-results")}
         </div>
       )}
-    </>
+    </I18nContext.Provider>
   )
 }

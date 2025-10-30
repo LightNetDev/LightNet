@@ -1,12 +1,9 @@
 import { useRef } from "react"
 
 import Icon from "../../../components/Icon"
+import { createI18n, type I18nConfig } from "../../../i18n/react/i18n-context"
 import { useDebounce } from "../hooks/use-debounce"
 import { useSearchQueryParam } from "../hooks/use-search-query-param"
-import type {
-  TranslationKey,
-  Translations,
-} from "../utils/search-filter-translations"
 import { CATEGORY, LANGUAGE, SEARCH, TYPE } from "../utils/search-query"
 import Select from "./Select"
 
@@ -16,7 +13,7 @@ interface Props {
   languages: FilterValue[]
   categories: FilterValue[]
   mediaTypes: FilterValue[]
-  translations: Translations
+  i18nConfig: I18nConfig
   languageFilterEnabled: boolean
   typesFilterEnabled: boolean
   categoriesFilterEnabled: boolean
@@ -26,7 +23,7 @@ interface Props {
 export default function SearchFilter({
   categories,
   mediaTypes,
-  translations,
+  i18nConfig,
   languages,
   languageFilterEnabled,
   typesFilterEnabled,
@@ -40,7 +37,7 @@ export default function SearchFilter({
 
   const searchInput = useRef<HTMLInputElement | null>(null)
 
-  const t = (key: TranslationKey) => translations[key]
+  const { t } = createI18n(i18nConfig)
 
   const debouncedSetSearch = useDebounce((value: string) => {
     setSearch(value)

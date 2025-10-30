@@ -1,5 +1,6 @@
 import CoverImageDecorator from "../../../components/CoverImageDecorator"
 import Icon from "../../../components/Icon"
+import { useI18n } from "../../../i18n/react/useI18n"
 import { detailsPagePath } from "../../../utils/paths"
 import type { SearchItem } from "../api/search-response"
 
@@ -16,8 +17,6 @@ export type TranslatedLanguage = {
 
 interface Props {
   item: SearchItem
-  currentLocale: string | undefined
-  direction: "rtl" | "ltr"
   categories: Record<string, string>
   languages: Record<string, TranslatedLanguage>
   showLanguage: boolean
@@ -26,13 +25,12 @@ interface Props {
 
 export default function SearchListItem({
   item,
-  currentLocale,
   categories,
   languages,
-  direction,
   showLanguage,
   mediaTypes,
 }: Props) {
+  const { currentLocale, direction } = useI18n()
   const coverImageStyle = mediaTypes[item.type].coverImageStyle
   return (
     <a

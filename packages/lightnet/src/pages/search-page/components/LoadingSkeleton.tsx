@@ -1,6 +1,8 @@
 import Icon from "../../../components/Icon"
+import { useI18n } from "../../../i18n/react/useI18n"
 
-export default function LoadingSkeleton({ direction }: { direction: string }) {
+export default function LoadingSkeleton() {
+  const { direction } = useI18n()
   return (
     <div className="flex h-52 animate-pulse items-center overflow-hidden py-2 sm:h-64">
       <div className="h-36 w-36 shrink-0 rounded-md bg-gray-200"></div>

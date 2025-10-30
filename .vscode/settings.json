@@ -17,5 +17,6 @@
   ],
   "tailwindCSS.includeLanguages": {
     "astro": "html"
-  }
+  },
+  "eslint.workingDirectories": [{ "mode": "auto" }]
 }
