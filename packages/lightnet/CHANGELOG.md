@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.10.2
+
+### Patch Changes
+
+- [#325](https://github.com/LightNetDev/LightNet/pull/325) [`07b71f4`](https://github.com/LightNetDev/LightNet/commit/07b71f4d44f8e005aafb48bedc347f14c71e182a) Thanks [@smn-cds](https://github.com/smn-cds)! - Refactor internal react i18n logic.
+
 ## 3.10.1
 
 ### Patch Changes
