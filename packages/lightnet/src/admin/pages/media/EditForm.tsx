@@ -46,23 +46,29 @@ export default function EditForm({
           e.preventDefault()
           form.handleSubmit()
         }}
-        className="flex flex-col items-start gap-4"
+        className="flex flex-col items-start"
       >
         <form.AppField
           name="title"
-          children={(field) => <field.TextField label={t("ln.admin.title")} />}
+          children={(field) => <field.Input label={t("ln.admin.title")} />}
         />
         <form.AppField
           name="commonId"
           children={(field) => (
-            <field.TextField
+            <field.Input
               label={t("ln.admin.common-id")}
               hint={t("ln.admin.common-id-hint")}
             />
           )}
         />
+        <form.AppField
+          name="dateCreated"
+          children={(field) => (
+            <field.Input type="date" label={t("ln.admin.created-on")} />
+          )}
+        />
 
-        <div className="mt-10">
+        <div className="mt-4">
           <form.AppForm>
             <form.SubmitButton />
             <Toast id="invalid-form-data-toast" variant="error">
