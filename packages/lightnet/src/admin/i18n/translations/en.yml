@@ -12,3 +12,4 @@ ln.admin.common-id-hint: The english title, all lowercase, words separated with 
 ln.admin.toast.invalid-data.title: Invalid form data
 ln.admin.toast.invalid-data.hint: Check the fields and try again.
 ln.admin.errors.non-empty-string: String must contain at least 1 character(s)
+ln.admin.errors.invalid-date: Invalid date
