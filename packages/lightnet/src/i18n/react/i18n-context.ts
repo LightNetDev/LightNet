@@ -22,11 +22,15 @@ export const createI18n = ({
   direction,
 }: I18nConfig) => {
   const t = (key: string) => {
-    const translated = translations[key]
-    if (!translated) {
-      console.error(`Missing translation for key ${key}`)
+    const value = translations[key]
+    if (value) {
+      return value
     }
-    return translated ?? ""
+    if (key.match(/^(?:ln|x)\../i)) {
+      console.error(`Missing translation for key ${key}`)
+      return ""
+    }
+    return key
   }
   return { t, currentLocale, direction }
 }
