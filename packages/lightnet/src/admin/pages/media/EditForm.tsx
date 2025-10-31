@@ -50,14 +50,14 @@ export default function EditForm({
       >
         <form.AppField
           name="title"
-          children={(field) => <field.TextInput label={t("ln.admin.title")} />}
+          children={(field) => <field.TextInput label="ln.admin.title" />}
         />
         <form.AppField
           name="commonId"
           children={(field) => (
             <field.TextInput
-              label={t("ln.admin.common-id")}
-              hint={t("ln.admin.common-id-hint")}
+              label="ln.admin.common-id"
+              hint="ln.admin.common-id-hint"
             />
           )}
         />
@@ -66,13 +66,13 @@ export default function EditForm({
           children={(field) => (
             <field.TextInput
               type="date"
-              label={t("ln.admin.created-on")}
-              hint={t("ln.admin.created-on-hint")}
+              label="ln.admin.created-on"
+              hint="ln.admin.created-on-hint"
             />
           )}
         />
 
-        <div className="mt-4">
+        <div className="mt-8">
           <form.AppForm>
             <form.SubmitButton />
             <Toast id="invalid-form-data-toast" variant="error">
