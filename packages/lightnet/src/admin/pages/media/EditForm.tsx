@@ -50,12 +50,12 @@ export default function EditForm({
       >
         <form.AppField
           name="title"
-          children={(field) => <field.Input label={t("ln.admin.title")} />}
+          children={(field) => <field.TextInput label={t("ln.admin.title")} />}
         />
         <form.AppField
           name="commonId"
           children={(field) => (
-            <field.Input
+            <field.TextInput
               label={t("ln.admin.common-id")}
               hint={t("ln.admin.common-id-hint")}
             />
@@ -64,7 +64,7 @@ export default function EditForm({
         <form.AppField
           name="dateCreated"
           children={(field) => (
-            <field.Input
+            <field.TextInput
               type="date"
               label={t("ln.admin.created-on")}
               hint={t("ln.admin.created-on-hint")}
