@@ -23,10 +23,18 @@ const mediaItemEntry = await getRawMediaItem(mediaId)
 const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
   "ln.admin.*",
   "ln.type",
+  "ln.language",
 ])
 const { t } = Astro.locals.i18n
 
-const mediaTypes = (await getMediaTypes()).map(({ id }) => ({ id }))
+const mediaTypes = (await getMediaTypes()).map(({ id, data: { label } }) => ({
+  id,
+  label: t(label),
+}))
+const languages = config.languages.map(({ code, label }) => ({
+  id: code,
+  label: t(label),
+}))
 ---
 
 <Page>
@@ -45,6 +53,7 @@ const mediaTypes = (await getMediaTypes()).map(({ id }) => ({ id }))
       mediaItem={mediaItemEntry.data}
       i18nConfig={i18nConfig}
       mediaTypes={mediaTypes}
+      languages={languages}
       client:load
     />
   </div>

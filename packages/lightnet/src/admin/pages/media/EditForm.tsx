@@ -16,11 +16,13 @@ export default function EditForm({
   mediaItem,
   i18nConfig,
   mediaTypes,
+  languages,
 }: {
   mediaId: string
   mediaItem: MediaItem
   i18nConfig: I18nConfig
-  mediaTypes: { id: string }[]
+  mediaTypes: { id: string; label: string }[]
+  languages: { id: string; label: string }[]
 }) {
   const form = useAppForm({
     defaultValues: { ...mediaItem },
@@ -67,6 +69,12 @@ export default function EditForm({
           name="type"
           children={(field) => (
             <field.Select label="ln.type" options={mediaTypes} />
+          )}
+        />
+        <form.AppField
+          name="language"
+          children={(field) => (
+            <field.Select label="ln.language" options={languages} />
           )}
         />
         <form.AppField

@@ -8,6 +8,7 @@ export const mediaItemSchema = z.object({
   commonId: z.string().nonempty(NON_EMPTY_STRING),
   title: z.string().nonempty(NON_EMPTY_STRING),
   type: z.string().nonempty(REQUIRED),
+  language: z.string().nonempty(REQUIRED),
   dateCreated: z.string().date(INVALID_DATE)
 })
 
