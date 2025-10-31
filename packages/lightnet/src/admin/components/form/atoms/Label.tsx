@@ -4,7 +4,7 @@ export default function Label({ label }: { label: string }) {
   const { t } = useI18n()
   return (
     <div className="dy-label">
-      <span className="text-sm font-bold uppercase text-gray-500">
+      <span className="text-sm font-bold uppercase text-gray-600">
         {t(label)}
       </span>
     </div>

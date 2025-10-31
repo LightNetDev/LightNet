@@ -15,13 +15,15 @@ export default function EditForm({
   mediaId,
   mediaItem,
   i18nConfig,
+  mediaTypes,
 }: {
   mediaId: string
   mediaItem: MediaItem
   i18nConfig: I18nConfig
+  mediaTypes: { id: string }[]
 }) {
   const form = useAppForm({
-    defaultValues: mediaItem,
+    defaultValues: { ...mediaItem },
     validators: {
       onDynamic: mediaItemSchema,
     },
@@ -59,6 +61,12 @@ export default function EditForm({
               label="ln.admin.common-id"
               hint="ln.admin.common-id-hint"
             />
+          )}
+        />
+        <form.AppField
+          name="type"
+          children={(field) => (
+            <field.Select label="ln.type" options={mediaTypes} />
           )}
         />
         <form.AppField

@@ -16,7 +16,7 @@ export default function Select({
   const field = useFieldContext<string>()
   const { t } = useI18n()
   return (
-    <label className="dy-form-control">
+    <label className="dy-form-control w-full">
       <Label label={label} />
       <select
         id={field.name}
