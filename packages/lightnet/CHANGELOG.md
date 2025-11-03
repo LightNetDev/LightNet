@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.10.3
+
+### Patch Changes
+
+- [#327](https://github.com/LightNetDev/LightNet/pull/327) [`9f1e468`](https://github.com/LightNetDev/LightNet/commit/9f1e468cc296e62788586a3f3c6f245c8bc0cec9) Thanks [@smn-cds](https://github.com/smn-cds)! - Gracefully handle missing translations in React components to avoid runtime crashes.
+
 ## 3.10.2
 
 ### Patch Changes
