@@ -38,7 +38,7 @@
     "./api/internal/search.ts": "./src/pages/search-page/api/search.ts",
     "./api/versions.ts": "./src/api/versions.ts",
     "./api/media/[mediaId].ts": "./src/api/media/[mediaId].ts",
-    "./api/internal/fs/writeText.ts": "./src/admin/api/fs/writeText.ts",
+    "./api/internal/fs/write-file.ts": "./src/admin/api/fs/write-file.ts",
     "./admin/pages/AdminRoute.astro": "./src/admin/pages/AdminRoute.astro",
     "./admin/pages/media/EditRoute.astro": "./src/admin/pages/media/EditRoute.astro"
   },

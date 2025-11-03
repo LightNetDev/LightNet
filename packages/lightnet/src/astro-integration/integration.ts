@@ -87,8 +87,8 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         // this endpoints to write files.
         if (config.experimental?.admin?.enabled && command === "dev") {
           injectRoute({
-            pattern: "/api/internal/fs/writeText",
-            entrypoint: "lightnet/api/internal/fs/writeText.ts",
+            pattern: "/api/internal/fs/write-file",
+            entrypoint: "lightnet/api/internal/fs/write-file.ts",
             prerender: false,
           })
           // Add empty adapter to avoid warning

@@ -1,5 +1,7 @@
-import { mkdir, rename, rm, writeFile } from "node:fs/promises"
+import { createWriteStream } from "node:fs"
+import { mkdir, rename, rm } from "node:fs/promises"
 import { dirname, isAbsolute, relative, resolve } from "node:path"
+import { Writable } from "node:stream"
 import { fileURLToPath } from "node:url"
 
 import type { APIRoute } from "astro"
@@ -26,16 +28,17 @@ export const POST: APIRoute = async ({ request }) => {
   ) {
     throw new Error("Path escapes project root.")
   }
+  const { body } = request
+  if (!body) {
+    throw new Error("Request body missing.")
+  }
 
   const targetDir = dirname(targetPath)
   await mkdir(targetDir, { recursive: true })
 
-  const body = await request.text()
-  const timestamp = Date.now()
-  const tmpPath = `${targetPath}.tmp-${timestamp}`
+  const tmpPath = `${targetPath}.tmp-${Date.now()}`
   try {
-    const tmpPath = `${targetPath}.tmp-${Date.now()}`
-    await writeFile(tmpPath, body, "utf-8")
+    await body.pipeTo(Writable.toWeb(createWriteStream(tmpPath)))
     await rename(tmpPath, targetPath)
   } finally {
     await rm(tmpPath, { force: true }).catch(() => {})

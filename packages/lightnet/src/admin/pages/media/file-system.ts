@@ -1,6 +1,6 @@
-export const writeText = (path: string, body: string) => {
+export const writeFile = (path: string, body: string) => {
   return fetch(
-    `/api/internal/fs/writeText?path=${encodeURIComponent(path.replace(/^\//, ""))}`,
+    `/api/internal/fs/write-file?path=${encodeURIComponent(path.replace(/^\//, ""))}`,
     {
       method: "POST",
       headers: { "Content-Type": resolveContentType(path) },
@@ -10,7 +10,7 @@ export const writeText = (path: string, body: string) => {
 }
 
 export const writeJson = async (path: string, object: unknown) => {
-  return writeText(path, JSON.stringify(sortObject(object), null, 2))
+  return writeFile(path, JSON.stringify(sortObject(object), null, 2))
 }
 
 const resolveContentType = (path: string) => {

@@ -46,7 +46,7 @@ export default function Toast({
       }}
     >
       <div
-        className={`pointer-events-auto flex max-w-sm flex-col items-start gap-1 rounded-2xl border p-4 text-base shadow-md backdrop-blur-sm ${alertClasses}`}
+        className={`pointer-events-auto flex max-w-sm flex-col items-start gap-1 rounded-md border p-4 text-base shadow-md backdrop-blur-sm ${alertClasses}`}
       >
         {children}
       </div>

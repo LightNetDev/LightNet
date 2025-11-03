@@ -4,6 +4,7 @@ import { getCollection } from "astro:content"
 import config from "virtual:lightnet/config"
 
 import { getRawMediaItem } from "../../../content/get-media-items"
+import { getMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
@@ -19,23 +20,40 @@ export const getStaticPaths = (async () => {
 const { mediaId } = Astro.params
 const mediaItemEntry = await getRawMediaItem(mediaId)
 
-const i18nConfig = prepareI18nConfig(Astro.locals.i18n, ["ln.admin.*"])
+const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
+  "ln.admin.*",
+  "ln.type",
+  "ln.language",
+])
 const { t } = Astro.locals.i18n
+
+const mediaTypes = (await getMediaTypes()).map(({ id, data: { label } }) => ({
+  id,
+  label: t(label),
+}))
+const languages = config.languages.map(({ code, label }) => ({
+  id: code,
+  label: t(label),
+}))
 ---
 
 <Page>
-  <div class="mx-auto max-w-screen-lg px-4 pt-12 md:px-8">
+  <div class="mx-auto max-w-screen-md px-4 pt-12 md:px-8">
     <a
       class="underline"
       href=`/${Astro.currentLocale}/media/faithful-freestyle--en`
       >{t("ln.admin.back-to-details-page")}</a
     >
-    <h1 class="mb-4 mt-8 text-lg">{t("ln.admin.edit-media-item")}</h1>
+    <h1 class="mb-10 mt-10 text-2xl">
+      {t("ln.admin.edit-media-item")}
+    </h1>
 
     <EditForm
       mediaId={mediaId}
       mediaItem={mediaItemEntry.data}
       i18nConfig={i18nConfig}
+      mediaTypes={mediaTypes}
+      languages={languages}
       client:load
     />
   </div>
