@@ -34,11 +34,11 @@ export const POST: APIRoute = async ({ request }) => {
   const tmpPath = `${targetPath}.tmp-${timestamp}`
 
   try {
-    const tmpPath = `${targetPath}.tmp-${Date.now()}`;
+    const tmpPath = `${targetPath}.tmp-${Date.now()}`
     await writeFile(tmpPath, await request.bytes())
     await rename(tmpPath, targetPath)
   } finally {
-    await rm(tmpPath, { force: true }).catch(() => { })
+    await rm(tmpPath, { force: true }).catch(() => {})
   }
 
   return new Response(JSON.stringify({ status: "ok" }), {

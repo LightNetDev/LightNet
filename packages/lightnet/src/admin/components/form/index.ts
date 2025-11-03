@@ -8,7 +8,7 @@ import TextInput from "./TextInput"
 export const { useAppForm, withForm } = createFormHook({
   fieldComponents: {
     TextInput,
-    Select
+    Select,
   },
   formComponents: {
     SubmitButton,
