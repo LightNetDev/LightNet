@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
     await body.pipeTo(Writable.toWeb(createWriteStream(tmpPath)))
     await rename(tmpPath, targetPath)
   } finally {
-    await rm(tmpPath, { force: true }).catch(() => { })
+    await rm(tmpPath, { force: true }).catch(() => {})
   }
 
   return new Response(JSON.stringify({ status: "ok" }), {
