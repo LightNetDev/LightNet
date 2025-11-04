@@ -78,6 +78,23 @@ export default function EditForm({
           )}
         />
         <form.AppField
+          name="authors"
+          mode="array"
+          children={(field) => (
+            <fieldset>
+              <legend>Authors</legend>
+              {field.state.value?.map((_, i) => (
+                <form.AppField
+                  name={`authors[${i}]`}
+                  children={(field) => (
+                    <field.TextInput label={`Author ${i}`} />
+                  )}
+                />
+              ))}
+            </fieldset>
+          )}
+        />
+        <form.AppField
           name="dateCreated"
           children={(field) => (
             <field.TextInput
