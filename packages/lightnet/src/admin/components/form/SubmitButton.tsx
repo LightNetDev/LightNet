@@ -1,9 +1,9 @@
-import { useStore } from "@tanstack/react-form"
 import { useEffect, useRef, useState } from "react"
+import { type Control, useFormState } from "react-hook-form"
 
 import Icon from "../../../components/Icon"
 import { useI18n } from "../../../i18n/react/useI18n"
-import { useFormContext } from "./form-context"
+import type { MediaItem } from "../../types/media-item"
 
 const SUCCESS_DURATION_MS = 2000
 
@@ -30,25 +30,30 @@ const icons = {
   error: "mdi--error-outline",
 } as const
 
-export default function SubmitButton() {
-  const form = useFormContext()
+export default function SubmitButton({
+  control,
+  className,
+}: {
+  control: Control<MediaItem>
+  className?: string
+}) {
   const { t } = useI18n()
-  const { submissionAttempts, isSubmitting, isSubmitSuccessful } = useStore(
-    form.store,
-    (state) => ({
-      canSubmit: state.canSubmit,
-      isSubmitting: state.isSubmitting,
-      isSubmitSuccessful: state.isSubmitSuccessful,
-      submissionAttempts: state.submissionAttempts,
-    }),
-  )
-  const buttonState = useButtonState(isSubmitSuccessful, submissionAttempts)
-  const buttonClass = `${baseButtonClass} ${buttonStateClasses[buttonState]}`
+  const { isValid, isSubmitting, isSubmitSuccessful, submitCount } =
+    useFormState({
+      control,
+    })
+
+  const buttonState = useButtonState(isSubmitSuccessful, submitCount)
+  const buttonClass = `${baseButtonClass} ${buttonStateClasses[buttonState]} ${className}`
   const label = buttonLabels[buttonState]
   const icon = icons[buttonState]
 
   return (
-    <button className={buttonClass} type="submit" disabled={isSubmitting}>
+    <button
+      className={buttonClass}
+      type="submit"
+      disabled={!isValid || isSubmitting}
+    >
       {icon && <Icon className={icon} ariaLabel="" />}
       {t(label)}
     </button>

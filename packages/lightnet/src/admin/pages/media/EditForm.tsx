@@ -1,13 +1,14 @@
-import { revalidateLogic } from "@tanstack/react-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 
-import { showToastById } from "../../../components/showToast"
-import Toast from "../../../components/Toast"
 import {
   createI18n,
   type I18nConfig,
   I18nContext,
 } from "../../../i18n/react/i18n-context"
-import { useAppForm } from "../../components/form"
+import Input from "../../components/form/Input"
+import Select from "../../components/form/Select"
+import SubmitButton from "../../components/form/SubmitButton"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import { updateMediaItem } from "./media-item-store"
 
@@ -24,98 +25,60 @@ export default function EditForm({
   mediaTypes: { id: string; label: string }[]
   languages: { id: string; label: string }[]
 }) {
-  const form = useAppForm({
-    defaultValues: { ...mediaItem },
-    validators: {
-      onDynamic: mediaItemSchema,
-    },
-    validationLogic: revalidateLogic({
-      mode: "blur",
-      modeAfterSubmission: "change",
-    }),
-    onSubmit: async ({ value }) => {
-      await updateMediaItem(mediaId, { ...mediaItem, ...value })
-    },
-    onSubmitInvalid: () => {
-      showToastById("invalid-form-data-toast")
-    },
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<MediaItem>({
+    defaultValues: mediaItem,
+    mode: "onBlur",
+    resolver: zodResolver(mediaItemSchema),
   })
+  const onSubmit = handleSubmit(
+    async (data) => await updateMediaItem(mediaId, { ...mediaItem, ...data }),
+  )
   const i18n = createI18n(i18nConfig)
-  const { t } = i18n
-
   return (
     <I18nContext.Provider value={i18n}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          form.handleSubmit()
-        }}
-        className="flex flex-col items-start"
-      >
-        <form.AppField
+      <form onSubmit={onSubmit}>
+        <Input
           name="title"
-          children={(field) => <field.TextInput label="ln.admin.title" />}
+          label="ln.admin.title"
+          register={register}
+          error={errors.title}
         />
-        <form.AppField
+        <Input
           name="commonId"
-          children={(field) => (
-            <field.TextInput
-              label="ln.admin.common-id"
-              hint="ln.admin.common-id-hint"
-            />
-          )}
+          label="ln.admin.common-id"
+          hint="ln.admin.common-id-hint"
+          register={register}
+          error={errors.commonId}
         />
-        <form.AppField
+        <Select
           name="type"
-          children={(field) => (
-            <field.Select label="ln.type" options={mediaTypes} />
-          )}
+          label="ln.type"
+          options={mediaTypes}
+          register={register}
+          error={errors.type}
         />
-        <form.AppField
+        <Select
           name="language"
-          children={(field) => (
-            <field.Select label="ln.language" options={languages} />
-          )}
+          label="ln.language"
+          options={languages}
+          register={register}
+          error={errors.language}
         />
-        <form.AppField
-          name="authors"
-          mode="array"
-          children={(field) => (
-            <fieldset>
-              <legend>Authors</legend>
-              {field.state.value?.map((_, i) => (
-                <form.AppField
-                  name={`authors[${i}]`}
-                  children={(field) => (
-                    <field.TextInput label={`Author ${i}`} />
-                  )}
-                />
-              ))}
-            </fieldset>
-          )}
-        />
-        <form.AppField
+        <Input
           name="dateCreated"
-          children={(field) => (
-            <field.TextInput
-              type="date"
-              label="ln.admin.created-on"
-              hint="ln.admin.created-on-hint"
-            />
-          )}
+          label="ln.admin.created-on"
+          hint="ln.admin.created-on-hint"
+          register={register}
+          type="date"
+          error={errors.dateCreated}
         />
 
-        <div className="mt-8">
-          <form.AppForm>
-            <form.SubmitButton />
-            <Toast id="invalid-form-data-toast" variant="error">
-              <div className="font-bold text-gray-700">
-                {t("ln.admin.toast.invalid-data.title")}
-              </div>
-              {t("ln.admin.toast.invalid-data.hint")}
-            </Toast>
-          </form.AppForm>
-        </div>
+        <SubmitButton className="mt-8" control={control} />
       </form>
     </I18nContext.Provider>
   )
