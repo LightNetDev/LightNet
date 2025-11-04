@@ -55,7 +55,6 @@
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-form": "^1.23.8",
-    "@tanstack/react-query": "^5.90.6",
     "@tanstack/react-virtual": "^3.13.12",
     "daisyui": "^4.12.24",
     "embla-carousel": "^8.6.0",
