@@ -1,4 +1,4 @@
-import { createContext } from "react"
+import { createContext, useMemo } from "react"
 
 export type I18n = {
   t: (key: string) => string
@@ -21,16 +21,18 @@ export const createI18n = ({
   currentLocale,
   direction,
 }: I18nConfig) => {
-  const t = (key: string) => {
-    const value = translations[key]
-    if (value) {
-      return value
+  return useMemo(() => {
+    const t = (key: string) => {
+      const value = translations[key]
+      if (value) {
+        return value
+      }
+      if (key.match(/^(?:ln|x)\../i)) {
+        console.error(`Missing translation for key ${key}`)
+        return ""
+      }
+      return key
     }
-    if (key.match(/^(?:ln|x)\../i)) {
-      console.error(`Missing translation for key ${key}`)
-      return ""
-    }
-    return key
-  }
-  return { t, currentLocale, direction }
+    return { t, currentLocale, direction }
+  }, [])
 }
