@@ -39,8 +39,8 @@ export default function Authors({
       </legend>
       <div className="flex w-full flex-col divide-y divide-gray-300 rounded-lg border border-gray-300">
         {fields.map((author, index) => (
-          <div className="px-2 py-4" key={author.id}>
-            <div className="flex w-full items-center gap-4">
+          <div className="p-2" key={author.id}>
+            <div className="flex w-full items-center gap-2">
               <input
                 className="dy-input dy-input-sm grow"
                 {...register(`authors.${index}`)}
@@ -61,7 +61,7 @@ export default function Authors({
         ))}
         <button
           type="button"
-          className="p-6 text-sm font-bold text-gray-600 hover:bg-gray-200"
+          className="p-4 text-sm font-bold text-gray-600 hover:bg-gray-200"
           onClick={() => {
             append("")
             setTimeout(() => setFocus(`authors.${fields.length}`))
