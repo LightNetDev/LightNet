@@ -10,6 +10,7 @@ import Input from "../../components/form/Input"
 import Select from "../../components/form/Select"
 import SubmitButton from "../../components/form/SubmitButton"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
+import Authors from "./fields/Authors"
 import { updateMediaItem } from "./media-item-store"
 
 export default function EditForm({
@@ -29,6 +30,7 @@ export default function EditForm({
     register,
     handleSubmit,
     control,
+    setFocus,
     formState: { errors },
   } = useForm<MediaItem>({
     defaultValues: mediaItem,
@@ -69,6 +71,7 @@ export default function EditForm({
           register={register}
           error={errors.language}
         />
+        <Authors control={control} register={register} setFocus={setFocus} />
         <Input
           name="dateCreated"
           label="ln.admin.created-on"
