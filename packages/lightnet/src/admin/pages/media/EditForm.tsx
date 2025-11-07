@@ -71,7 +71,12 @@ export default function EditForm({
           register={register}
           error={errors.language}
         />
-        <Authors control={control} register={register} setFocus={setFocus} />
+        <Authors
+          control={control}
+          register={register}
+          setFocus={setFocus}
+          error={errors.authors}
+        />
         <Input
           name="dateCreated"
           label="ln.admin.created-on"

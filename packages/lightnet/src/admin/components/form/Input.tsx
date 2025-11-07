@@ -28,7 +28,7 @@ export default function Input({
         type={type}
         {...register(name)}
       />
-      <ErrorMessage error={error} />
+      <ErrorMessage message={error?.message} />
       <Hint hint={hint} />
     </label>
   )

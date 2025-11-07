@@ -35,7 +35,7 @@ export default function Select({
           </option>
         ))}
       </select>
-      <ErrorMessage error={error} />
+      <ErrorMessage message={error?.message} />
       <Hint hint={hint} />
     </label>
   )
