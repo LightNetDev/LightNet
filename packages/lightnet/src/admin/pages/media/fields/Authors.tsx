@@ -10,6 +10,7 @@ import {
 } from "react-hook-form"
 
 import Icon from "../../../../components/Icon"
+import { useI18n } from "../../../../i18n/react/useI18n"
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import Hint from "../../../components/form/atoms/Hint"
 import Label from "../../../components/form/atoms/Label"
@@ -30,6 +31,7 @@ export default function Authors({
     name: "authors",
     control,
   })
+  const { t } = useI18n()
   return (
     <fieldset>
       <legend>
@@ -37,7 +39,7 @@ export default function Authors({
       </legend>
       <div className="flex w-full flex-col divide-y divide-gray-300 rounded-lg border border-gray-300">
         {fields.map((author, index) => (
-          <div className="py-4 pe-4 ps-2" key={author.id}>
+          <div className="px-2 py-4" key={author.id}>
             <div className="flex w-full items-center gap-4">
               <input
                 className="dy-input dy-input-sm grow"
@@ -48,7 +50,10 @@ export default function Authors({
                 type="button"
                 onClick={() => remove(index)}
               >
-                <Icon className="mdi--remove" ariaLabel="Remove" />
+                <Icon
+                  className="mdi--remove"
+                  ariaLabel={t("ln.admin.remove")}
+                />
               </button>
             </div>
             <ErrorMessage message={error?.at?.(index)?.message} />
@@ -56,13 +61,13 @@ export default function Authors({
         ))}
         <button
           type="button"
-          className="w-full p-6 text-sm font-bold text-gray-600 hover:bg-gray-200"
+          className="p-6 text-sm font-bold text-gray-600 hover:bg-gray-200"
           onClick={() => {
             append("")
             setTimeout(() => setFocus(`authors.${fields.length}`))
           }}
         >
-          + Add Author
+          {t("ln.admin.add-author")}
         </button>
       </div>
       <ErrorMessage message={error?.message} />

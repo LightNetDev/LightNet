@@ -2,6 +2,8 @@ ln.admin.edit: Edit
 ln.admin.save: Save
 ln.admin.saved: Saved
 ln.admin.failed: Failed
+ln.admin.remove: Remove
+ln.admin.add-author: Add Author
 ln.admin.edit-media-item: Edit media item
 ln.admin.back-to-details-page: Back to details page
 ln.admin.title: Title
