@@ -9,7 +9,7 @@ export function useFieldError({
   name: string
   index?: number
 }) {
-  const { errors } = useFormState({ control, name })
+  const { errors } = useFormState({ control, name, exact: true })
   const error = errors[name]
   if (!error) {
     return undefined

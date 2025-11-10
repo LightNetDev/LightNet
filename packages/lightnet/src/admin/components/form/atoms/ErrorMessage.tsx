@@ -1,20 +1,17 @@
-import { useFormState, type Control } from "react-hook-form"
 import { ErrorMessage as RhfErrorMessage } from "@hookform/error-message"
+import { type Control, useFormState } from "react-hook-form"
 
 import { useI18n } from "../../../../i18n/react/useI18n"
-import { useFieldError } from "../hooks/use-field-error"
 
 export default function ErrorMessage({
   name,
   control,
-  index,
 }: {
   name: string
-  index?: number
   control: Control<any>
 }) {
   const { t } = useI18n()
-  const { errors } = useFormState({ control, name })
+  const { errors } = useFormState({ control, name, exact: true })
   return (
     <RhfErrorMessage
       errors={errors}

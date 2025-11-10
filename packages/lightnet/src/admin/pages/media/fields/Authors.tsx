@@ -1,19 +1,11 @@
-import {
-  type Control,
-  type FieldValues,
-  type Path,
-  useFieldArray,
-  type UseFormRegister,
-  type UseFormSetFocus,
-} from "react-hook-form"
+import { type Control, useFieldArray } from "react-hook-form"
 
 import Icon from "../../../../components/Icon"
 import { useI18n } from "../../../../i18n/react/useI18n"
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import Hint from "../../../components/form/atoms/Hint"
-import Label from "../../../components/form/atoms/Label"
-import type { MediaItem } from "../../../types/media-item"
 import Legend from "../../../components/form/atoms/Legend"
+import type { MediaItem } from "../../../types/media-item"
 
 export default function Authors({ control }: { control: Control<MediaItem> }) {
   const { fields, append, remove } = useFieldArray({
@@ -43,11 +35,7 @@ export default function Authors({ control }: { control: Control<MediaItem> }) {
                 />
               </button>
             </div>
-            <ErrorMessage
-              name={`authors.${index}.value`}
-              index={index}
-              control={control}
-            />
+            <ErrorMessage name={`authors.${index}.value`} control={control} />
           </div>
         ))}
         <button
