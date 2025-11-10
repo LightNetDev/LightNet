@@ -57,7 +57,7 @@ export default function SearchFilter({
           onInput={(e) => debouncedSetSearch(e.currentTarget.value)}
           onKeyDown={(e) => e.key === "Enter" && searchInput.current?.blur()}
         />
-        <Icon className="mdi--magnify text-xl" ariaLabel="" />
+        <Icon className="text-xl mdi--magnify" ariaLabel="" />
       </label>
       <div className="mb-8 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-6 md:mb-10">
         {languageFilterEnabled && (
