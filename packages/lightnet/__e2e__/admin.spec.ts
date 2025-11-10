@@ -120,28 +120,29 @@ test.describe("Edit button on details page", () => {
   })
 })
 
-const recordWriteFile = async (page: Page) => {
-  type WriteFileRequest = { url: string; body: unknown }
-  let resolveWriteFileRequest: ((value: WriteFileRequest) => void) | null = null
-  const writeFileRequestPromise = new Promise<WriteFileRequest>((resolve) => {
-    resolveWriteFileRequest = resolve
-  })
-  await page.route("**/api/internal/fs/write-file?*", async (route) => {
-    const request = route.request()
-    resolveWriteFileRequest?.({
-      url: request.url(),
-      body: JSON.parse(request.postData() ?? ""),
-    })
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ status: "ok" }),
-    })
-  })
-  return () => writeFileRequestPromise
-}
-
 test.describe("Media item edit page", () => {
+  const recordWriteFile = async (page: Page) => {
+    type WriteFileRequest = { url: string; body: unknown }
+    let resolveWriteFileRequest: ((value: WriteFileRequest) => void) | null =
+      null
+    const writeFileRequestPromise = new Promise<WriteFileRequest>((resolve) => {
+      resolveWriteFileRequest = resolve
+    })
+    await page.route("**/api/internal/fs/write-file?*", async (route) => {
+      const request = route.request()
+      resolveWriteFileRequest?.({
+        url: request.url(),
+        body: JSON.parse(request.postData() ?? ""),
+      })
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ status: "ok" }),
+      })
+    })
+    return () => writeFileRequestPromise
+  }
+
   test("should edit title", async ({ page, startLightnet }) => {
     const ln = await startLightnet()
 
@@ -169,6 +170,119 @@ test.describe("Media item edit page", () => {
     expect(body).toEqual({
       ...expectedMediaItem,
       title: updatedTitle,
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
+
+  test("Should update media type", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
+
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const typeSelect = page.getByLabel("Type")
+    await expect(typeSelect).toHaveValue("book")
+    await typeSelect.selectOption("video")
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      type: "video",
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
+
+  test("Should update author name", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
+
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const authorsFieldset = page.getByRole("group", { name: "Authors" })
+    const firstAuthorInput = authorsFieldset.getByRole("textbox").first()
+    const updatedAuthor = "Sk8 Ministries International"
+    await expect(firstAuthorInput).toHaveValue("Sk8 Ministries")
+    await firstAuthorInput.fill(updatedAuthor)
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      authors: [updatedAuthor],
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
+
+  test("Should add author", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
+
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const authorsFieldset = page.getByRole("group", { name: "Authors" })
+    const addAuthorButton = page.getByRole("button", { name: "Add Author" })
+    await addAuthorButton.click()
+    const newAuthorInput = authorsFieldset.getByRole("textbox").last()
+    const additionalAuthor = "Tony Hawk"
+    await newAuthorInput.fill(additionalAuthor)
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      authors: ["Sk8 Ministries", additionalAuthor],
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
+
+  test("Should remove author", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
+
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const authorsFieldset = page.getByRole("group", { name: "Authors" })
+    const addAuthorButton = page.getByRole("button", { name: "Add Author" })
+    const replacementAuthor = "Skate Evangelists"
+    await addAuthorButton.click()
+    const addedAuthorInput = authorsFieldset.getByRole("textbox").last()
+    await addedAuthorInput.fill(replacementAuthor)
+
+    const removeButtons = authorsFieldset.getByRole("button", {
+      name: "Remove",
+    })
+    await removeButtons.first().click()
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      authors: [replacementAuthor],
     })
     await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
   })
