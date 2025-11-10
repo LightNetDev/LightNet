@@ -22,7 +22,7 @@ export default function Select<TFieldValues extends FieldValues>({
   const { t } = useI18n()
   const hasError = !!useFieldError({ control, name })
   return (
-    <label className="dy-form-control w-full">
+    <label key={name} className="dy-form-control w-full">
       <Label label={label} />
       <select
         {...control.register(name)}

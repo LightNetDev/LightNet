@@ -29,7 +29,7 @@ export default function Authors({
   })
   const { t } = useI18n()
   return (
-    <fieldset>
+    <fieldset key="authors">
       <legend>
         <Label label="Authors" />
       </legend>
