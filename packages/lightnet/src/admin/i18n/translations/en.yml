@@ -8,6 +8,7 @@ ln.admin.edit-media-item: Edit media item
 ln.admin.back-to-details-page: Back to details page
 ln.admin.title: Title
 ln.admin.common-id: Common ID
+ln.admin.authors: Authors
 ln.admin.created-on: Created on
 ln.admin.created-on-hint: When has this item been created on this library?
 ln.admin.common-id-hint: The english title, all lowercase, words separated with hyphens.

@@ -14,16 +14,8 @@ import Hint from "../../../components/form/atoms/Hint"
 import Label from "../../../components/form/atoms/Label"
 import type { MediaItem } from "../../../types/media-item"
 
-export default function Authors({
-  control,
-  register,
-  setFocus,
-}: {
-  control: Control<MediaItem>
-  setFocus: UseFormSetFocus<MediaItem>
-  register: UseFormRegister<MediaItem>
-}) {
-  const { fields, append, remove } = useStringArray({
+export default function Authors({ control }: { control: Control<MediaItem> }) {
+  const { fields, append, remove } = useFieldArray({
     name: "authors",
     control,
   })
@@ -31,7 +23,7 @@ export default function Authors({
   return (
     <fieldset key="authors">
       <legend>
-        <Label label="Authors" />
+        <Label label="ln.admin.authors" />
       </legend>
       <div className="flex w-full flex-col divide-y divide-gray-300 rounded-lg border border-gray-300">
         {fields.map((author, index) => (
@@ -39,7 +31,7 @@ export default function Authors({
             <div className="flex w-full items-center gap-2">
               <input
                 className="dy-input dy-input-sm grow"
-                {...register(`authors.${index}`)}
+                {...control.register(`authors.${index}.value`)}
               />
               <button
                 className="flex items-center p-2 text-gray-600 hover:text-gray-900"
@@ -52,15 +44,21 @@ export default function Authors({
                 />
               </button>
             </div>
-            <ErrorMessage name="authors" index={index} control={control} />
+            <ErrorMessage
+              name={`authors.${index}.value`}
+              index={index}
+              control={control}
+            />
           </div>
         ))}
         <button
           type="button"
           className="p-4 text-sm font-bold text-gray-600 hover:bg-gray-200"
           onClick={() => {
-            append()
-            setTimeout(() => setFocus(`authors.${fields.length}`))
+            append(
+              { value: "" },
+              { focusName: `authors.${fields.length}.value` },
+            )
           }}
         >
           {t("ln.admin.add-author")}
@@ -70,24 +68,4 @@ export default function Authors({
       <Hint />
     </fieldset>
   )
-}
-
-function useStringArray<TFieldValues extends FieldValues>({
-  name,
-  control,
-}: {
-  name: Path<TFieldValues>
-  control: Control<TFieldValues>
-}) {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: name as any,
-  })
-  return {
-    fields,
-    append(value = "") {
-      append(value as any)
-    },
-    remove,
-  }
 }

@@ -26,9 +26,9 @@ export default function EditForm({
   mediaTypes: { id: string; label: string }[]
   languages: { id: string; label: string }[]
 }) {
-  const { register, handleSubmit, control, setFocus } = useForm<MediaItem>({
+  const { handleSubmit, control } = useForm({
     defaultValues: mediaItem,
-    mode: "onBlur",
+    mode: "onTouched",
     resolver: zodResolver(mediaItemSchema),
   })
   const onSubmit = handleSubmit(
@@ -57,7 +57,7 @@ export default function EditForm({
           options={languages}
           control={control}
         />
-        <Authors control={control} register={register} setFocus={setFocus} />
+        <Authors control={control} />
         <Input
           name="dateCreated"
           label="ln.admin.created-on"
