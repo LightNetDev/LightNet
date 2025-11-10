@@ -1,8 +1,6 @@
 import {
   type Control,
-  type FieldError,
   type FieldValues,
-  type Merge,
   type Path,
   useFieldArray,
   type UseFormRegister,
@@ -19,11 +17,9 @@ import type { MediaItem } from "../../../types/media-item"
 export default function Authors({
   control,
   register,
-  error,
   setFocus,
 }: {
   control: Control<MediaItem>
-  error?: Merge<FieldError, (FieldError | undefined)[]>
   setFocus: UseFormSetFocus<MediaItem>
   register: UseFormRegister<MediaItem>
 }) {
@@ -56,21 +52,21 @@ export default function Authors({
                 />
               </button>
             </div>
-            <ErrorMessage message={error?.at?.(index)?.message} />
+            <ErrorMessage name="authors" index={index} control={control} />
           </div>
         ))}
         <button
           type="button"
           className="p-4 text-sm font-bold text-gray-600 hover:bg-gray-200"
           onClick={() => {
-            append("")
+            append()
             setTimeout(() => setFocus(`authors.${fields.length}`))
           }}
         >
           {t("ln.admin.add-author")}
         </button>
       </div>
-      <ErrorMessage message={error?.message} />
+      <ErrorMessage name="authors" control={control} />
       <Hint />
     </fieldset>
   )
@@ -89,7 +85,7 @@ function useStringArray<TFieldValues extends FieldValues>({
   })
   return {
     fields,
-    append(value: string) {
+    append(value = "") {
       append(value as any)
     },
     remove,

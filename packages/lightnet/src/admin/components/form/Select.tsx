@@ -1,33 +1,33 @@
-import type { FieldError, Path, UseFormRegister } from "react-hook-form"
+import type { Control, FieldValues, Path } from "react-hook-form"
 
 import { useI18n } from "../../../i18n/react/useI18n"
-import type { MediaItem } from "../../types/media-item"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
+import { useFieldError } from "./hooks/use-field-error"
 
-export default function Select({
+export default function Select<TFieldValues extends FieldValues>({
   name,
   label,
-  register,
-  error,
+  control,
   hint,
   options,
 }: {
-  name: Path<MediaItem>
+  name: Path<TFieldValues>
   label: string
   hint?: string
-  register: UseFormRegister<MediaItem>
+  control: Control<TFieldValues>
   options: { id: string; label?: string }[]
-  error?: FieldError
 }) {
   const { t } = useI18n()
+  const hasError = !!useFieldError({ control, name })
   return (
     <label className="dy-form-control w-full">
       <Label label={label} />
       <select
-        {...register(name)}
-        className={`dy-select dy-select-bordered ${error ? "dy-select-error" : ""}"`}
+        {...control.register(name)}
+        aria-invalid={hasError}
+        className={`dy-select dy-select-bordered ${hasError ? "dy-select-error" : ""}"`}
       >
         {options.map(({ id, label }) => (
           <option key={id} value={id}>
@@ -35,7 +35,7 @@ export default function Select({
           </option>
         ))}
       </select>
-      <ErrorMessage message={error?.message} />
+      <ErrorMessage name={name} control={control} />
       <Hint hint={hint} />
     </label>
   )

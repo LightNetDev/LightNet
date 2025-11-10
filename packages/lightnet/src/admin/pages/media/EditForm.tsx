@@ -26,13 +26,7 @@ export default function EditForm({
   mediaTypes: { id: string; label: string }[]
   languages: { id: string; label: string }[]
 }) {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setFocus,
-    formState: { errors },
-  } = useForm<MediaItem>({
+  const { register, handleSubmit, control, setFocus } = useForm<MediaItem>({
     defaultValues: mediaItem,
     mode: "onBlur",
     resolver: zodResolver(mediaItemSchema),
@@ -44,46 +38,32 @@ export default function EditForm({
   return (
     <I18nContext.Provider value={i18n}>
       <form onSubmit={onSubmit}>
-        <Input
-          name="title"
-          label="ln.admin.title"
-          register={register}
-          error={errors.title}
-        />
+        <Input name="title" label="ln.admin.title" control={control} />
         <Input
           name="commonId"
           label="ln.admin.common-id"
           hint="ln.admin.common-id-hint"
-          register={register}
-          error={errors.commonId}
+          control={control}
         />
         <Select
           name="type"
           label="ln.type"
           options={mediaTypes}
-          register={register}
-          error={errors.type}
+          control={control}
         />
         <Select
           name="language"
           label="ln.language"
           options={languages}
-          register={register}
-          error={errors.language}
-        />
-        <Authors
           control={control}
-          register={register}
-          setFocus={setFocus}
-          error={errors.authors}
         />
+        <Authors control={control} register={register} setFocus={setFocus} />
         <Input
           name="dateCreated"
           label="ln.admin.created-on"
           hint="ln.admin.created-on-hint"
-          register={register}
           type="date"
-          error={errors.dateCreated}
+          control={control}
         />
 
         <SubmitButton className="mt-8" control={control} />

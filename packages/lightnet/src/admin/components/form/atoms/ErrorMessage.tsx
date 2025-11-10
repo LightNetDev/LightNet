@@ -1,12 +1,27 @@
-import { useI18n } from "../../../../i18n/react/useI18n"
+import { type Control } from "react-hook-form"
 
-export default function ErrorMessage({ message }: { message?: string }) {
+import { useI18n } from "../../../../i18n/react/useI18n"
+import { useFieldError } from "../hooks/use-field-error"
+
+export default function ErrorMessage({
+  name,
+  control,
+  index,
+}: {
+  name: string
+  index?: number
+  control: Control<any>
+}) {
   const { t } = useI18n()
-  if (!message) return null
+  const error = useFieldError({ control, name, index })
+
+  if (!error?.message) {
+    return null
+  }
 
   return (
     <p className="my-2 flex flex-col gap-1 text-sm text-rose-800" role="alert">
-      {t(message)}
+      {t(error.message)}
     </p>
   )
 }

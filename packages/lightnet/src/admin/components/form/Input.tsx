@@ -1,34 +1,34 @@
-import type { FieldError, Path, UseFormRegister } from "react-hook-form"
+import { type Control, type FieldValues, type Path } from "react-hook-form"
 
-import type { MediaItem } from "../../types/media-item"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
+import { useFieldError } from "./hooks/use-field-error"
 
-export default function Input({
+export default function Input<TFieldValues extends FieldValues>({
   name,
   label,
-  register,
-  error,
   hint,
+  control,
   type = "text",
 }: {
-  name: Path<MediaItem>
+  name: Path<TFieldValues>
   label: string
   hint?: string
-  register: UseFormRegister<MediaItem>
-  error?: FieldError
+  control: Control<TFieldValues>
   type?: "text" | "date"
 }) {
+  const hasError = !!useFieldError({ control, name })
   return (
-    <label className="dy-form-control w-full">
+    <label key={name} className="dy-form-control w-full">
       <Label label={label} />
       <input
-        className={`dy-input dy-input-bordered ${error ? "dy-input-error" : ""}`}
+        className={`dy-input dy-input-bordered ${hasError ? "dy-input-error" : ""}`}
         type={type}
-        {...register(name)}
+        aria-invalid={hasError}
+        {...control.register(name)}
       />
-      <ErrorMessage message={error?.message} />
+      <ErrorMessage name={name} control={control} />
       <Hint hint={hint} />
     </label>
   )
