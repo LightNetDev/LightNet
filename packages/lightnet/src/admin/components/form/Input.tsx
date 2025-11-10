@@ -25,6 +25,7 @@ export default function Input<TFieldValues extends FieldValues>({
       <input
         className={`dy-input dy-input-bordered ${hasError ? "dy-input-error" : ""}`}
         type={type}
+        id={name}
         aria-invalid={hasError}
         {...control.register(name)}
       />

@@ -26,6 +26,7 @@ export default function Select<TFieldValues extends FieldValues>({
       <Label for={name} label={label} />
       <select
         {...control.register(name)}
+        id={name}
         aria-invalid={hasError}
         className={`dy-select dy-select-bordered ${hasError ? "dy-select-error" : ""}"`}
       >
