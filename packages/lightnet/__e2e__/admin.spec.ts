@@ -286,4 +286,25 @@ test.describe("Media item edit page", () => {
     })
     await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
   })
+
+  test("should show error message if common id is set empty", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const commonIdInput = page.getByLabel("Common ID")
+    await expect(commonIdInput).toHaveValue("faithful-freestyle")
+
+    await commonIdInput.fill("")
+    await commonIdInput.blur()
+
+    await expect(
+      page
+        .getByRole("alert")
+        .filter({ hasText: "String must contain at least 1 character(s)" }),
+    ).toBeVisible()
+    await expect(page.getByRole("button", { name: "Save" })).toBeDisabled()
+  })
 })
