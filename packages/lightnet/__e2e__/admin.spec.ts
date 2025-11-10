@@ -1,8 +1,14 @@
-import { expect } from "@playwright/test"
+import { readFile } from "node:fs/promises"
+
+import { expect, type Page } from "@playwright/test"
 
 import { lightnetTest } from "./test-utils"
 
 const test = lightnetTest("./fixtures/basics/")
+const faithfulFreestyleMediaUrl = new URL(
+  "./fixtures/basics/src/content/media/faithful-freestyle--en.json",
+  import.meta.url,
+)
 
 test.describe("Edit button on details page", () => {
   test("Should not show `Edit` button on details page by default.", async ({
@@ -111,5 +117,59 @@ test.describe("Edit button on details page", () => {
     await expect(
       page.getByText("Edit media item", { exact: false }),
     ).toBeVisible()
+  })
+})
+
+const recordWriteFile = async (page: Page) => {
+  type WriteFileRequest = { url: string; body: unknown }
+  let resolveWriteFileRequest: ((value: WriteFileRequest) => void) | null = null
+  const writeFileRequestPromise = new Promise<WriteFileRequest>((resolve) => {
+    resolveWriteFileRequest = resolve
+  })
+  await page.route("**/api/internal/fs/write-file?*", async (route) => {
+    const request = route.request()
+    resolveWriteFileRequest?.({
+      url: request.url(),
+      body: JSON.parse(request.postData() ?? ""),
+    })
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ status: "ok" }),
+    })
+  })
+  return () => writeFileRequestPromise
+}
+
+test.describe("Media item edit page", () => {
+  test("should edit title", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+
+    const writeFileRequest = await recordWriteFile(page)
+
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const updatedTitle = "Faithful Freestyle (Edited)"
+    const titleInput = page.getByLabel("Title")
+    await expect(titleInput).toHaveValue("Faithful Freestyle")
+    await titleInput.fill(updatedTitle)
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { url, body } = await writeFileRequest()
+    expect(url).toContain(
+      "/api/internal/fs/write-file?path=src%2Fcontent%2Fmedia%2Ffaithful-freestyle--en.json",
+    )
+
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      title: updatedTitle,
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
   })
 })
