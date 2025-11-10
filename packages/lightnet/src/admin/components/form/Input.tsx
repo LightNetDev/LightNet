@@ -20,8 +20,8 @@ export default function Input<TFieldValues extends FieldValues>({
 }) {
   const hasError = !!useFieldError({ control, name })
   return (
-    <label key={name} className="dy-form-control w-full">
-      <Label label={label} />
+    <div key={name} className="flex w-full flex-col">
+      <Label for={name} label={label} />
       <input
         className={`dy-input dy-input-bordered ${hasError ? "dy-input-error" : ""}`}
         type={type}
@@ -30,6 +30,6 @@ export default function Input<TFieldValues extends FieldValues>({
       />
       <ErrorMessage name={name} control={control} />
       <Hint hint={hint} />
-    </label>
+    </div>
   )
 }

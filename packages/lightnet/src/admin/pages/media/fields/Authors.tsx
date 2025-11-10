@@ -13,6 +13,7 @@ import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import Hint from "../../../components/form/atoms/Hint"
 import Label from "../../../components/form/atoms/Label"
 import type { MediaItem } from "../../../types/media-item"
+import Legend from "../../../components/form/atoms/Legend"
 
 export default function Authors({ control }: { control: Control<MediaItem> }) {
   const { fields, append, remove } = useFieldArray({
@@ -22,9 +23,7 @@ export default function Authors({ control }: { control: Control<MediaItem> }) {
   const { t } = useI18n()
   return (
     <fieldset key="authors">
-      <legend>
-        <Label label="ln.admin.authors" />
-      </legend>
+      <Legend label="ln.admin.authors" />
       <div className="flex w-full flex-col divide-y divide-gray-300 rounded-lg border border-gray-300">
         {fields.map((author, index) => (
           <div className="p-2" key={author.id}>

@@ -22,8 +22,8 @@ export default function Select<TFieldValues extends FieldValues>({
   const { t } = useI18n()
   const hasError = !!useFieldError({ control, name })
   return (
-    <label key={name} className="dy-form-control w-full">
-      <Label label={label} />
+    <div key={name} className="flex w-full flex-col">
+      <Label for={name} label={label} />
       <select
         {...control.register(name)}
         aria-invalid={hasError}
@@ -37,6 +37,6 @@ export default function Select<TFieldValues extends FieldValues>({
       </select>
       <ErrorMessage name={name} control={control} />
       <Hint hint={hint} />
-    </label>
+    </div>
   )
 }
