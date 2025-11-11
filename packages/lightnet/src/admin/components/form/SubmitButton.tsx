@@ -38,10 +38,9 @@ export default function SubmitButton({
   className?: string
 }) {
   const { t } = useI18n()
-  const { isValid, isSubmitting, isSubmitSuccessful, submitCount } =
-    useFormState({
-      control,
-    })
+  const { isSubmitting, isSubmitSuccessful, submitCount } = useFormState({
+    control,
+  })
 
   const buttonState = useButtonState(isSubmitSuccessful, submitCount)
   const buttonClass = `${baseButtonClass} ${buttonStateClasses[buttonState]} ${className}`
@@ -49,11 +48,7 @@ export default function SubmitButton({
   const icon = icons[buttonState]
 
   return (
-    <button
-      className={buttonClass}
-      type="submit"
-      disabled={!isValid || isSubmitting}
-    >
+    <button className={buttonClass} type="submit" disabled={isSubmitting}>
       {icon && <Icon className={icon} ariaLabel="" />}
       {t(label)}
     </button>

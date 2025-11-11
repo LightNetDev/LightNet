@@ -34,6 +34,7 @@ export default function EditForm({
   const { handleSubmit, control } = useForm({
     defaultValues: mediaItem,
     mode: "onTouched",
+    shouldFocusError: true,
     resolver: zodResolver(mediaItemSchema),
   })
   const onSubmit = handleSubmit(
