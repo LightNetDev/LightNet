@@ -18,15 +18,15 @@ export default function Select<TFieldValues extends FieldValues>({
   control: Control<TFieldValues>
   options: { id: string; labelText?: string }[]
 }) {
-  const hasError = !!useFieldError({ control, name })
+  const errorMessage = useFieldError({ control, name })
   return (
     <div key={name} className="flex w-full flex-col">
       <Label for={name} label={label} />
       <select
         {...control.register(name)}
         id={name}
-        aria-invalid={hasError}
-        className={`dy-select dy-select-bordered ${hasError ? "dy-select-error" : ""}"`}
+        aria-invalid={!!errorMessage}
+        className={`dy-select dy-select-bordered ${errorMessage ? "dy-select-error" : ""}"`}
       >
         {options.map(({ id, labelText }) => (
           <option key={id} value={id}>
@@ -34,7 +34,7 @@ export default function Select<TFieldValues extends FieldValues>({
           </option>
         ))}
       </select>
-      <ErrorMessage name={name} control={control} />
+      <ErrorMessage message={errorMessage} />
       <Hint label={hint} />
     </div>
   )

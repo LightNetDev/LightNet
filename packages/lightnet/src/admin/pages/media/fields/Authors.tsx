@@ -3,6 +3,7 @@ import { type Control } from "react-hook-form"
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import DynamicArray from "../../../components/form/DynamicArray"
 import type { MediaItem } from "../../../types/media-item"
+import { useFieldError } from "../../../components/form/hooks/use-field-error"
 
 export default function Authors({ control }: { control: Control<MediaItem> }) {
   return (
@@ -10,20 +11,33 @@ export default function Authors({ control }: { control: Control<MediaItem> }) {
       control={control}
       name="authors"
       label="ln.admin.authors"
-      renderElement={(index) => (
-        <>
-          <input
-            className="dy-input dy-input-sm grow"
-            {...control.register(`authors.${index}.value`)}
-          />
-          <ErrorMessage name={`authors.${index}.value`} control={control} />
-        </>
-      )}
+      renderElement={(index) => <AuthorInput index={index} control={control} />}
       addButton={{
         label: "ln.admin.add-author",
         onClick: (append, index) =>
           append({ value: "" }, { focusName: `authors.${index}.value` }),
       }}
     />
+  )
+}
+
+function AuthorInput({
+  index,
+  control,
+}: {
+  index: number
+  control: Control<MediaItem>
+}) {
+  const name = `authors.${index}.value` as const
+  const errorMessage = useFieldError({ name, control })
+  return (
+    <>
+      <input
+        className={`dy-input dy-input-sm grow ${errorMessage ? "dy-input-error" : ""}`}
+        aria-invalid={!!errorMessage}
+        {...control.register(name)}
+      />
+      <ErrorMessage message={errorMessage} />
+    </>
   )
 }

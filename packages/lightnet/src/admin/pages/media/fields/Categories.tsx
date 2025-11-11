@@ -3,27 +3,62 @@ import { type Control } from "react-hook-form"
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import DynamicArray from "../../../components/form/DynamicArray"
 import type { MediaItem } from "../../../types/media-item"
+import { useFieldError } from "../../../components/form/hooks/use-field-error"
 
-export default function Authors({ control }: { control: Control<MediaItem> }) {
+export default function Categories({
+  control,
+  categories,
+}: {
+  control: Control<MediaItem>
+  categories: { id: string; labelText: string }[]
+}) {
   return (
     <DynamicArray
       control={control}
       name="categories"
       label="ln.categories"
       renderElement={(index) => (
-        <>
-          <input
-            className="dy-input dy-input-sm grow"
-            {...control.register(`authors.${index}.value`)}
-          />
-          <ErrorMessage name={`authors.${index}.value`} control={control} />
-        </>
+        <CategorySelect
+          categories={categories}
+          control={control}
+          index={index}
+        />
       )}
       addButton={{
-        label: "ln.admin.add-author",
+        label: "ln.admin.add-category",
         onClick: (append, index) =>
-          append({ value: "" }, { focusName: `authors.${index}.value` }),
+          append({ value: "" }, { focusName: `categories.${index}.value` }),
       }}
     />
+  )
+}
+
+function CategorySelect({
+  control,
+  categories,
+  index,
+}: {
+  control: Control<MediaItem>
+  categories: { id: string; labelText: string }[]
+  index: number
+}) {
+  const name = `categories.${index}.value` as const
+  const errorMessage = useFieldError({ name, control })
+  return (
+    <>
+      <select
+        {...control.register(name)}
+        id={name}
+        aria-invalid={!!errorMessage}
+        className={`dy-select ${errorMessage ? "dy-select-error" : ""}`}
+      >
+        {categories.map(({ id, labelText }) => (
+          <option key={id} value={id}>
+            {labelText}
+          </option>
+        ))}
+      </select>
+      <ErrorMessage message={errorMessage} />
+    </>
   )
 }

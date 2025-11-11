@@ -51,7 +51,6 @@
   "dependencies": {
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
-    "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.2.2",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",

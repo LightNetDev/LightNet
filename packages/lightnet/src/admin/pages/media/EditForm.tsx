@@ -12,6 +12,7 @@ import SubmitButton from "../../components/form/SubmitButton"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
 import { updateMediaItem } from "./media-item-store"
+import Categories from "./fields/Categories"
 
 type SelectOption = { id: string; labelText: string }
 
@@ -21,6 +22,7 @@ export default function EditForm({
   i18nConfig,
   mediaTypes,
   languages,
+  categories,
 }: {
   mediaId: string
   mediaItem: MediaItem
@@ -68,6 +70,7 @@ export default function EditForm({
           type="date"
           control={control}
         />
+        <Categories categories={categories} control={control} />
 
         <SubmitButton className="mt-8" control={control} />
       </form>
