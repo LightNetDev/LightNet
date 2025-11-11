@@ -48,7 +48,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
             <div className="flex w-full items-center gap-2">
               <div className="flex grow flex-col">{renderElement(index)}</div>
               <button
-                className="flex items-center p-2 text-gray-600 hover:text-gray-900"
+                className="flex items-center p-2 text-gray-600 hover:text-rose-800"
                 type="button"
                 onClick={() => remove(index)}
               >
