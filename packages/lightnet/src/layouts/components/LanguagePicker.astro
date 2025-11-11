@@ -9,7 +9,7 @@ const { t, locales } = Astro.locals.i18n
 const translations = locales
   .map((locale) => ({
     locale,
-    label: resolveTranslatedLanguage(locale, t).name,
+    label: resolveTranslatedLanguage(locale, t).labelText,
     active: locale === Astro.currentLocale,
     href: currentPathWithLocale(locale),
   }))

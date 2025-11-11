@@ -38,7 +38,7 @@ const t = Astro.locals.i18n.t
 const types = Object.fromEntries(
   (await getMediaTypes()).map((type) => [
     type.id,
-    { ...type.data, name: t(type.data.label) },
+    { ...type.data, labelText: t(type.data.label) },
   ]),
 )
 
@@ -119,7 +119,7 @@ const coverImageStyle =
               <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
                 <Icon
                   className={`${types[item.data.type.id].icon} me-2 align-bottom`}
-                  ariaLabel={types[item.data.type.id].name}
+                  ariaLabel={types[item.data.type.id].labelText}
                 />
                 {item.data.title}
               </span>
@@ -159,7 +159,7 @@ const coverImageStyle =
             <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
               <Icon
                 className={`${types[item.data.type.id].icon} me-2 align-bottom`}
-                ariaLabel={types[item.data.type.id].name}
+                ariaLabel={types[item.data.type.id].labelText}
               />
               {item.data.title}
             </span>

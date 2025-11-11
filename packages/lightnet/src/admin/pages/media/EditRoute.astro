@@ -40,16 +40,16 @@ const { t, currentLocale } = Astro.locals.i18n
 
 const mediaTypes = (await getMediaTypes()).map(({ id, data: { label } }) => ({
   id,
-  label: t(label),
+  labelText: t(label),
 }))
 
 const categories = (await getCategories(currentLocale, t)).map(
-  ({ id, name }) => ({ id, name }),
+  ({ id, labelText }) => ({ id, labelText }),
 )
 
 const languages = config.languages.map(({ code, label }) => ({
   id: code,
-  label: t(label),
+  labelText: t(label),
 }))
 ---
 
@@ -70,6 +70,7 @@ const languages = config.languages.map(({ code, label }) => ({
       i18nConfig={i18nConfig}
       mediaTypes={mediaTypes}
       languages={languages}
+      categories={categories}
       client:load
     />
   </div>

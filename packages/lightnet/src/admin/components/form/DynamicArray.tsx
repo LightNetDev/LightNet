@@ -71,7 +71,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         </button>
       </div>
       <ErrorMessage name={name} control={control} />
-      <Hint hint={hint} />
+      <Hint label={hint} />
     </fieldset>
   )
 }

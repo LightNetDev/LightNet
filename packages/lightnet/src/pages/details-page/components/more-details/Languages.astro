@@ -21,7 +21,7 @@ const { t } = Astro.locals.i18n
   <Label>{translations.length ? t("ln.languages") : t("ln.language")}</Label>
   <ul class="flex flex-wrap gap-2">
     <li class="py-1 pe-2 text-gray-800">
-      {resolveTranslatedLanguage(item.data.language, t).name}
+      {resolveTranslatedLanguage(item.data.language, t).labelText}
     </li>
     {
       translations.map((translation) => (
@@ -30,7 +30,7 @@ const { t } = Astro.locals.i18n
             href={detailsPagePath(Astro.currentLocale, translation)}
             hreflang={translation.language}
           >
-            {resolveTranslatedLanguage(translation.language, t).name}
+            {resolveTranslatedLanguage(translation.language, t).labelText}
           </a>
         </li>
       ))

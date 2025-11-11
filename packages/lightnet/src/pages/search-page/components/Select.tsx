@@ -2,7 +2,7 @@ type Props = {
   label: string
   initialValue: string | undefined
   valueChange: (value: string) => void
-  options: { id: string; name: string }[]
+  options: { id: string; labelText: string }[]
 }
 
 export default function Select({
@@ -21,9 +21,9 @@ export default function Select({
         value={initialValue}
         onChange={(e) => valueChange(e.currentTarget.value)}
       >
-        {options.map(({ id, name }) => (
+        {options.map(({ id, labelText }) => (
           <option key={id} value={id}>
-            {name}
+            {labelText}
           </option>
         ))}
       </select>

@@ -9,24 +9,24 @@ import SearchFilterReact from "./SearchFilter.tsx"
 
 const { t, currentLocale } = Astro.locals.i18n
 
-const sortByName = (array: { id: string; name: string }[]) =>
-  array.sort((a, b) => a.name.localeCompare(b.name, currentLocale))
+const sortByLabelText = (array: { id: string; labelText: string }[]) =>
+  array.sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 
 const categories = (await getUsedCategories(currentLocale, t)).map(
-  ({ id, name }) => ({ id, name }),
+  ({ id, labelText }) => ({ id, labelText }),
 )
 
-const mediaTypes = sortByName(
+const mediaTypes = sortByLabelText(
   (await getMediaTypes()).map((type) => ({
     id: type.id,
-    name: t(type.data.label),
+    labelText: t(type.data.label),
   })),
 )
 
-const languages = sortByName(
+const languages = sortByLabelText(
   contentLanguages.map((language) => ({
     id: language.code,
-    name: t(language.label),
+    labelText: t(language.label),
   })),
 )
 

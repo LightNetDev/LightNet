@@ -13,6 +13,8 @@ import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
 import { updateMediaItem } from "./media-item-store"
 
+type SelectOption = { id: string; labelText: string }
+
 export default function EditForm({
   mediaId,
   mediaItem,
@@ -23,8 +25,9 @@ export default function EditForm({
   mediaId: string
   mediaItem: MediaItem
   i18nConfig: I18nConfig
-  mediaTypes: { id: string; label: string }[]
-  languages: { id: string; label: string }[]
+  mediaTypes: SelectOption[]
+  languages: SelectOption[]
+  categories: SelectOption[]
 }) {
   const { handleSubmit, control } = useForm({
     defaultValues: mediaItem,

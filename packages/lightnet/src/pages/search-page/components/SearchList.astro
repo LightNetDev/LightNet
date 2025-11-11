@@ -10,15 +10,15 @@ import SearchListReact from "./SearchList.tsx"
 const { t, currentLocale } = Astro.locals.i18n
 
 const categories: Record<string, string> = {}
-for (const { id, name } of await getUsedCategories(currentLocale, t)) {
-  categories[id] = name
+for (const { id, labelText } of await getUsedCategories(currentLocale, t)) {
+  categories[id] = labelText
 }
 
 const mediaTypes = Object.fromEntries(
   (await getMediaTypes()).map((type) => [
     type.id,
     {
-      name: t(type.data.label),
+      labelText: t(type.data.label),
       icon: type.data.icon,
       coverImageStyle: type.data.coverImageStyle,
     },
@@ -28,7 +28,7 @@ const mediaTypes = Object.fromEntries(
 const languages = Object.fromEntries(
   contentLanguages.map((language) => [
     language.code,
-    { direction: language.direction, name: t(language.label) },
+    { direction: language.direction, labelText: t(language.label) },
   ]),
 )
 

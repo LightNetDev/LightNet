@@ -7,7 +7,7 @@ import { useSearchQueryParam } from "../hooks/use-search-query-param"
 import { CATEGORY, LANGUAGE, SEARCH, TYPE } from "../utils/search-query"
 import Select from "./Select"
 
-type FilterValue = { id: string; name: string }
+type FilterValue = { id: string; labelText: string }
 
 interface Props {
   languages: FilterValue[]
@@ -66,7 +66,7 @@ export default function SearchFilter({
             initialValue={language}
             valueChange={(val) => setLanguage(val)}
             options={[
-              { id: "", name: t("ln.search.all-languages") },
+              { id: "", labelText: t("ln.search.all-languages") },
               ...languages,
             ]}
           />
@@ -78,7 +78,7 @@ export default function SearchFilter({
             initialValue={type}
             valueChange={(val) => setType(val)}
             options={[
-              { id: "", name: t("ln.search.all-types") },
+              { id: "", labelText: t("ln.search.all-types") },
               ...mediaTypes,
             ]}
           />
@@ -90,7 +90,7 @@ export default function SearchFilter({
             initialValue={category}
             valueChange={(val) => setCategory(val)}
             options={[
-              { id: "", name: t("ln.search.all-categories") },
+              { id: "", labelText: t("ln.search.all-categories") },
               ...categories,
             ]}
           />

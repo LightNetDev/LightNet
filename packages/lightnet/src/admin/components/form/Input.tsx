@@ -30,7 +30,7 @@ export default function Input<TFieldValues extends FieldValues>({
         {...control.register(name)}
       />
       <ErrorMessage name={name} control={control} />
-      <Hint hint={hint} />
+      <Hint label={hint} />
     </div>
   )
 }

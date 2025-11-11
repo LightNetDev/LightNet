@@ -1,6 +1,5 @@
 import type { Control, FieldValues, Path } from "react-hook-form"
 
-import { useI18n } from "../../../i18n/react/useI18n"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
@@ -17,9 +16,8 @@ export default function Select<TFieldValues extends FieldValues>({
   label: string
   hint?: string
   control: Control<TFieldValues>
-  options: { id: string; label?: string }[]
+  options: { id: string; labelText?: string }[]
 }) {
-  const { t } = useI18n()
   const hasError = !!useFieldError({ control, name })
   return (
     <div key={name} className="flex w-full flex-col">
@@ -30,14 +28,14 @@ export default function Select<TFieldValues extends FieldValues>({
         aria-invalid={hasError}
         className={`dy-select dy-select-bordered ${hasError ? "dy-select-error" : ""}"`}
       >
-        {options.map(({ id, label }) => (
+        {options.map(({ id, labelText }) => (
           <option key={id} value={id}>
-            {label ? t(label) : id}
+            {labelText ?? id}
           </option>
         ))}
       </select>
       <ErrorMessage name={name} control={control} />
-      <Hint hint={hint} />
+      <Hint label={hint} />
     </div>
   )
 }
