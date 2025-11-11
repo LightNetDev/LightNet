@@ -2,8 +2,8 @@ import { type Control } from "react-hook-form"
 
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import DynamicArray from "../../../components/form/DynamicArray"
-import type { MediaItem } from "../../../types/media-item"
 import { useFieldError } from "../../../components/form/hooks/use-field-error"
+import type { MediaItem } from "../../../types/media-item"
 
 export default function Authors({ control }: { control: Control<MediaItem> }) {
   return (

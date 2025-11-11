@@ -11,8 +11,8 @@ import Select from "../../components/form/Select"
 import SubmitButton from "../../components/form/SubmitButton"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
-import { updateMediaItem } from "./media-item-store"
 import Categories from "./fields/Categories"
+import { updateMediaItem } from "./media-item-store"
 
 type SelectOption = { id: string; labelText: string }
 
