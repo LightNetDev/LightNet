@@ -26,7 +26,7 @@ export default function Select<TFieldValues extends FieldValues>({
         {...control.register(name)}
         id={name}
         aria-invalid={!!errorMessage}
-        className={`dy-select dy-select-bordered ${errorMessage ? "dy-select-error" : ""}"`}
+        className={`dy-select dy-select-bordered ${errorMessage ? "dy-select-error" : ""}`}
       >
         {options.map(({ id, labelText }) => (
           <option key={id} value={id}>
