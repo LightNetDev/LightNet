@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.10.4
+
+### Patch Changes
+
+- [#329](https://github.com/LightNetDev/LightNet/pull/329) [`1730ef6`](https://github.com/LightNetDev/LightNet/commit/1730ef6f769d4c0d8fb22acdb86eaf19c3a32b2c) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve performance of react i18n context.
+
 ## 3.10.3
 
 ### Patch Changes
