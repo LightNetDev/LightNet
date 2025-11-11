@@ -99,7 +99,7 @@ export default function SearchListItem({
         </div>
       </div>
       <Icon
-        className="mdi--chevron-right md:group-hover:text-primary my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 sm:block"
+        className="my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 mdi--chevron-right sm:block md:group-hover:text-primary"
         flipIcon={direction === "rtl"}
         ariaLabel=""
       />

@@ -1,113 +1,310 @@
-import { expect } from "@playwright/test"
+import { readFile } from "node:fs/promises"
+
+import { expect, type Page } from "@playwright/test"
 
 import { lightnetTest } from "./test-utils"
 
 const test = lightnetTest("./fixtures/basics/")
+const faithfulFreestyleMediaUrl = new URL(
+  "./fixtures/basics/src/content/media/faithful-freestyle--en.json",
+  import.meta.url,
+)
 
-test("Should not show `Edit` button on details page by default.", async ({
-  page,
-  startLightnet,
-}) => {
-  await startLightnet()
+test.describe("Edit button on details page", () => {
+  test("Should not show `Edit` button on details page by default.", async ({
+    page,
+    startLightnet,
+  }) => {
+    await startLightnet()
 
-  await page.getByRole("link", { name: "Faithful Freestyle" }).click()
-  await expect(
-    page.getByRole("heading", { name: "Faithful Freestyle" }),
-  ).toBeVisible()
+    await page.getByRole("link", { name: "Faithful Freestyle" }).click()
+    await expect(
+      page.getByRole("heading", { name: "Faithful Freestyle" }),
+    ).toBeVisible()
 
-  const editButton = page.locator("#edit-btn")
-  await expect(editButton).toBeHidden()
+    const editButton = page.locator("#edit-btn")
+    await expect(editButton).toBeHidden()
+  })
+
+  test("Should show `Edit` button on book details page after visiting `/en/admin/` path.", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+
+    await page.goto(ln.resolveURL("/en/admin/"))
+    await expect(
+      page.getByText("Admin features are enabled now.", { exact: true }),
+    ).toBeVisible()
+
+    await page.goto(ln.resolveURL("/en/media/faithful-freestyle--en"))
+    await expect(
+      page.getByRole("heading", { name: "Faithful Freestyle" }),
+    ).toBeVisible()
+
+    const editButton = page.locator("#edit-btn")
+    await expect(editButton).toBeVisible()
+    await expect(editButton).toHaveAttribute(
+      "href",
+      "/en/admin/media/faithful-freestyle--en",
+    )
+  })
+
+  test("Should show `Edit` button on video details page after visiting `/en/admin/` path.", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+
+    await page.goto(ln.resolveURL("/en/admin/"))
+    await expect(
+      page.getByText("Admin features are enabled now.", { exact: true }),
+    ).toBeVisible()
+
+    await page.goto(ln.resolveURL("/en/media/how-to-kickflip--de"))
+    await expect(
+      page.getByRole("heading", { name: "Kickflip Anleitung" }),
+    ).toBeVisible()
+
+    const editButton = page.locator("#edit-btn")
+    await expect(editButton).toBeVisible()
+    await expect(editButton).toHaveAttribute(
+      "href",
+      "/en/admin/media/how-to-kickflip--de",
+    )
+  })
+
+  test("Should show `Edit` button on audio details page after visiting `/en/admin/` path.", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+
+    await page.goto(ln.resolveURL("/en/admin/"))
+    await expect(
+      page.getByText("Admin features are enabled now.", { exact: true }),
+    ).toBeVisible()
+
+    await page.goto(ln.resolveURL("/en/media/skate-sounds--en"))
+    await expect(
+      page.getByRole("heading", { name: "Skate Sounds" }),
+    ).toBeVisible()
+
+    const editButton = page.locator("#edit-btn")
+    await expect(editButton).toBeVisible()
+    await expect(editButton).toHaveAttribute(
+      "href",
+      "/en/admin/media/skate-sounds--en",
+    )
+  })
+
+  test("Edit button on details page should navigate to media item edit page", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+
+    await page.goto(ln.resolveURL("/en/admin/"))
+    await page.goto(ln.resolveURL("/en/media/faithful-freestyle--en"))
+
+    const editButton = page.locator("#edit-btn")
+    await expect(editButton).toBeVisible()
+
+    await editButton.click()
+    await expect(page).toHaveURL(
+      ln.resolveURL("/en/admin/media/faithful-freestyle--en"),
+    )
+    await expect(
+      page.getByText("Edit media item", { exact: false }),
+    ).toBeVisible()
+  })
 })
 
-test("Should show `Edit` button on book details page after visiting `/en/admin/` path.", async ({
-  page,
-  startLightnet,
-}) => {
-  const ln = await startLightnet()
+test.describe("Media item edit page", () => {
+  const recordWriteFile = async (page: Page) => {
+    type WriteFileRequest = { url: string; body: unknown }
+    let resolveWriteFileRequest: ((value: WriteFileRequest) => void) | null =
+      null
+    const writeFileRequestPromise = new Promise<WriteFileRequest>((resolve) => {
+      resolveWriteFileRequest = resolve
+    })
+    await page.route("**/api/internal/fs/write-file?*", async (route) => {
+      const request = route.request()
+      resolveWriteFileRequest?.({
+        url: request.url(),
+        body: JSON.parse(request.postData() ?? ""),
+      })
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ status: "ok" }),
+      })
+    })
+    return () => writeFileRequestPromise
+  }
 
-  await page.goto(ln.resolveURL("/en/admin/"))
-  await expect(
-    page.getByText("Admin features are enabled now.", { exact: true }),
-  ).toBeVisible()
+  test("should edit title", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
 
-  await page.goto(ln.resolveURL("/en/media/faithful-freestyle--en"))
-  await expect(
-    page.getByRole("heading", { name: "Faithful Freestyle" }),
-  ).toBeVisible()
+    const writeFileRequest = await recordWriteFile(page)
 
-  const editButton = page.locator("#edit-btn")
-  await expect(editButton).toBeVisible()
-  await expect(editButton).toHaveAttribute(
-    "href",
-    "/en/admin/media/faithful-freestyle--en",
-  )
-})
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
-test("Should show `Edit` button on video details page after visiting `/en/admin/` path.", async ({
-  page,
-  startLightnet,
-}) => {
-  const ln = await startLightnet()
+    const updatedTitle = "Faithful Freestyle (Edited)"
+    const titleInput = page.getByLabel("Title")
+    await expect(titleInput).toHaveValue("Faithful Freestyle")
+    await titleInput.fill(updatedTitle)
 
-  await page.goto(ln.resolveURL("/en/admin/"))
-  await expect(
-    page.getByText("Admin features are enabled now.", { exact: true }),
-  ).toBeVisible()
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
 
-  await page.goto(ln.resolveURL("/en/media/how-to-kickflip--de"))
-  await expect(
-    page.getByRole("heading", { name: "Kickflip Anleitung" }),
-  ).toBeVisible()
+    const { url, body } = await writeFileRequest()
+    expect(url).toContain(
+      "/api/internal/fs/write-file?path=src%2Fcontent%2Fmedia%2Ffaithful-freestyle--en.json",
+    )
 
-  const editButton = page.locator("#edit-btn")
-  await expect(editButton).toBeVisible()
-  await expect(editButton).toHaveAttribute(
-    "href",
-    "/en/admin/media/how-to-kickflip--de",
-  )
-})
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      title: updatedTitle,
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
 
-test("Should show `Edit` button on audio details page after visiting `/en/admin/` path.", async ({
-  page,
-  startLightnet,
-}) => {
-  const ln = await startLightnet()
+  test("Should update media type", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
 
-  await page.goto(ln.resolveURL("/en/admin/"))
-  await expect(
-    page.getByText("Admin features are enabled now.", { exact: true }),
-  ).toBeVisible()
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
-  await page.goto(ln.resolveURL("/en/media/skate-sounds--en"))
-  await expect(
-    page.getByRole("heading", { name: "Skate Sounds" }),
-  ).toBeVisible()
+    const typeSelect = page.getByLabel("Type")
+    await expect(typeSelect).toHaveValue("book")
+    await typeSelect.selectOption("video")
 
-  const editButton = page.locator("#edit-btn")
-  await expect(editButton).toBeVisible()
-  await expect(editButton).toHaveAttribute(
-    "href",
-    "/en/admin/media/skate-sounds--en",
-  )
-})
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
 
-test("Edit button on details page should navigate to media item edit page", async ({
-  page,
-  startLightnet,
-}) => {
-  const ln = await startLightnet()
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      type: "video",
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
 
-  await page.goto(ln.resolveURL("/en/admin/"))
-  await page.goto(ln.resolveURL("/en/media/faithful-freestyle--en"))
+  test("Should update author name", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
 
-  const editButton = page.locator("#edit-btn")
-  await expect(editButton).toBeVisible()
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
-  await editButton.click()
-  await expect(page).toHaveURL(
-    ln.resolveURL("/en/admin/media/faithful-freestyle--en"),
-  )
-  await expect(
-    page.getByText("Edit media item", { exact: false }),
-  ).toBeVisible()
+    const authorsFieldset = page.getByRole("group", { name: "Authors" })
+    const firstAuthorInput = authorsFieldset.getByRole("textbox").first()
+    const updatedAuthor = "Sk8 Ministries International"
+    await expect(firstAuthorInput).toHaveValue("Sk8 Ministries")
+    await firstAuthorInput.fill(updatedAuthor)
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      authors: [updatedAuthor],
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
+
+  test("Should add author", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
+
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const authorsFieldset = page.getByRole("group", { name: "Authors" })
+    const addAuthorButton = page.getByRole("button", { name: "Add Author" })
+    await addAuthorButton.click()
+    const newAuthorInput = authorsFieldset.getByRole("textbox").last()
+    const additionalAuthor = "Tony Hawk"
+    await newAuthorInput.fill(additionalAuthor)
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      authors: ["Sk8 Ministries", additionalAuthor],
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
+
+  test("Should remove author", async ({ page, startLightnet }) => {
+    const ln = await startLightnet()
+    const writeFileRequest = await recordWriteFile(page)
+
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const authorsFieldset = page.getByRole("group", { name: "Authors" })
+    const addAuthorButton = page.getByRole("button", { name: "Add Author" })
+    const replacementAuthor = "Skate Evangelists"
+    await addAuthorButton.click()
+    const addedAuthorInput = authorsFieldset.getByRole("textbox").last()
+    await addedAuthorInput.fill(replacementAuthor)
+
+    const removeButtons = authorsFieldset.getByRole("button", {
+      name: "Remove",
+    })
+    await removeButtons.first().click()
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+
+    const { body } = await writeFileRequest()
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      authors: [replacementAuthor],
+    })
+    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+  })
+
+  test("should show error message if common id is set empty", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const commonIdInput = page.getByLabel("Common ID")
+    await expect(commonIdInput).toHaveValue("faithful-freestyle")
+
+    await commonIdInput.fill("")
+    await commonIdInput.blur()
+
+    await expect(
+      page
+        .getByRole("alert")
+        .filter({ hasText: "String must contain at least 1 character(s)" }),
+    ).toBeVisible()
+    await expect(page.getByRole("button", { name: "Save" })).toBeDisabled()
+  })
 })

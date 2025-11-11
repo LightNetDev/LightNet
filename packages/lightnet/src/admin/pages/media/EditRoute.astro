@@ -18,7 +18,12 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 const { mediaId } = Astro.params
-const mediaItemEntry = await getRawMediaItem(mediaId)
+const { data: mediaItem } = await getRawMediaItem(mediaId)
+
+const formData = {
+  ...mediaItem,
+  authors: mediaItem.authors?.map((value) => ({ value })) ?? [],
+}
 
 const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
   "ln.admin.*",
@@ -50,7 +55,7 @@ const languages = config.languages.map(({ code, label }) => ({
 
     <EditForm
       mediaId={mediaId}
-      mediaItem={mediaItemEntry.data}
+      mediaItem={formData}
       i18nConfig={i18nConfig}
       mediaTypes={mediaTypes}
       languages={languages}

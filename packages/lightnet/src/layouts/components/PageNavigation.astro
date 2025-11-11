@@ -35,7 +35,7 @@ const t = Astro.locals.i18n.t
   {
     !config.searchPage?.hideHeaderSearchIcon && (
       <a
-        class="hover:text-primary flex p-3 text-gray-600"
+        class="flex p-3 text-gray-600 hover:text-primary"
         aria-label={t("ln.search.title")}
         data-astro-prefetch="viewport"
         href={searchPagePath(Astro.currentLocale)}

@@ -12,7 +12,7 @@ export default function LoadingSkeleton() {
         <div className="h-4 w-5/6 rounded-md bg-gray-200 md:h-6"></div>
       </div>
       <Icon
-        className="mdi--chevron-right my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 sm:block"
+        className="my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 mdi--chevron-right sm:block"
         flipIcon={direction === "rtl"}
         ariaLabel=""
       />

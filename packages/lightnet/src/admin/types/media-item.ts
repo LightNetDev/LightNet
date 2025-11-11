@@ -9,7 +9,11 @@ export const mediaItemSchema = z.object({
   title: z.string().nonempty(NON_EMPTY_STRING),
   type: z.string().nonempty(REQUIRED),
   language: z.string().nonempty(REQUIRED),
+  authors: z
+    .object({ value: z.string().nonempty(NON_EMPTY_STRING) })
+    .array()
+    .min(1),
   dateCreated: z.string().date(INVALID_DATE),
 })
 
-export type MediaItem = z.infer<typeof mediaItemSchema>
+export type MediaItem = z.input<typeof mediaItemSchema>

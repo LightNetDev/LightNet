@@ -17,7 +17,7 @@ export default function Select({
         {label}
       </span>
       <select
-        className="dy-select dy-select-bordered sm:dy-select-sm w-full rounded-xl"
+        className="dy-select dy-select-bordered w-full rounded-xl sm:dy-select-sm"
         value={initialValue}
         onChange={(e) => valueChange(e.currentTarget.value)}
       >
