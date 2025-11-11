@@ -9,10 +9,10 @@ export const mediaItemSchema = z.object({
   title: z.string().nonempty(NON_EMPTY_STRING),
   type: z.string().nonempty(REQUIRED),
   language: z.string().nonempty(REQUIRED),
-  authors: z
+  authors: z.object({ value: z.string().nonempty(NON_EMPTY_STRING) }).array(),
+  categories: z
     .object({ value: z.string().nonempty(NON_EMPTY_STRING) })
-    .array()
-    .min(1),
+    .array(),
   dateCreated: z.string().date(INVALID_DATE),
 })
 

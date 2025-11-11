@@ -9,6 +9,7 @@ import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
 import EditForm from "./EditForm"
+import { getCategories } from "../../../content/get-categories"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
@@ -23,19 +24,29 @@ const { data: mediaItem } = await getRawMediaItem(mediaId)
 const formData = {
   ...mediaItem,
   authors: mediaItem.authors?.map((value) => ({ value })) ?? [],
+  categories:
+    mediaItem.categories?.map((value) => ({
+      value,
+    })) ?? [],
 }
 
 const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
   "ln.admin.*",
   "ln.type",
   "ln.language",
+  "ln.categories",
 ])
-const { t } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
 
 const mediaTypes = (await getMediaTypes()).map(({ id, data: { label } }) => ({
   id,
   label: t(label),
 }))
+
+const categories = (await getCategories(currentLocale, t)).map(
+  ({ id, name }) => ({ id, name }),
+)
+
 const languages = config.languages.map(({ code, label }) => ({
   id: code,
   label: t(label),

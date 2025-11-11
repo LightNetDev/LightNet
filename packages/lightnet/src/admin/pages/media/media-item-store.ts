@@ -8,6 +8,11 @@ export const updateMediaItem = async (id: string, item: MediaItem) => {
 const mapToContentSchema = (item: MediaItem) => {
   return {
     ...item,
-    authors: item.authors.map(({ value }) => value),
+    authors: flatten(item.authors),
+    categories: flatten(item.categories),
   }
+}
+
+const flatten = <TValue>(valueArray: { value: TValue }[]) => {
+  return valueArray.map(({ value }) => value)
 }

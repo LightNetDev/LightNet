@@ -41,6 +41,21 @@ export async function getUsedCategories(currentLocale: string, t: TranslateFn) {
     .sort((a, b) => a.name.localeCompare(b.name, currentLocale))
 }
 
+/**
+ * Get all categories. This includes categories that are not
+ * referenced by any media item. If you only need categories that are referenced
+ * by media items use `getUsedCategories`.
+ *
+ * @param currentLocale current locale
+ * @param t translate function
+ * @returns categories sorted by name
+ */
+export async function getCategories(currentLocale: string, t: TranslateFn) {
+  return [...Object.entries(categoriesById)]
+    .map(([id, data]) => ({ id, ...data, name: t(data.label) }))
+    .sort((a, b) => a.name.localeCompare(b.name, currentLocale))
+}
+
 export async function getCategory(id: string) {
   const category = categoriesById[id]
   if (!category) {
