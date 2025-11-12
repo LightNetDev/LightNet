@@ -305,6 +305,29 @@ test.describe("Media item edit page", () => {
         .getByRole("alert")
         .filter({ hasText: "String must contain at least 1 character(s)" }),
     ).toBeVisible()
-    await expect(page.getByRole("button", { name: "Save" })).toBeDisabled()
+  })
+
+  test("should focus invalid field when submitting invalid form data", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const categoriesFieldset = page.getByRole("group", { name: "Categories" })
+    await page.getByRole("button", { name: "Add Category" }).click()
+    const newCategorySelect = categoriesFieldset.getByRole("combobox").last()
+    await expect(newCategorySelect).toHaveValue("")
+
+    // move focus away so the submission handler needs to return focus
+    await page.getByLabel("Title").click()
+
+    const saveButton = page.getByRole("button", { name: "Save" })
+    await saveButton.click()
+
+    await expect(
+      page.getByRole("alert").filter({ hasText: "Required field" }),
+    ).toBeVisible()
+    await expect(newCategorySelect).toBeFocused()
   })
 })
