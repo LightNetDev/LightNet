@@ -11,7 +11,7 @@ export default function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className="pb-2 text-sm font-bold uppercase text-gray-600"
+      className="pb-2 text-sm font-bold uppercase text-gray-500"
     >
       {t(label)}
     </label>

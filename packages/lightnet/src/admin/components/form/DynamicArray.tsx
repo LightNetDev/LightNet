@@ -49,7 +49,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
           <div className="flex w-full items-center gap-2 p-2" key={field.id}>
             <div className="flex grow flex-col">{renderElement(index)}</div>
             <button
-              className="flex items-center p-2 text-gray-600 hover:text-rose-800"
+              className="flex items-center p-2 text-gray-600 transition-colors ease-in-out hover:text-rose-800"
               type="button"
               onClick={() => remove(index)}
             >
@@ -59,7 +59,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         ))}
         <button
           type="button"
-          className="p-4 text-sm font-bold text-gray-600 hover:bg-gray-200"
+          className="p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-gray-200"
           onClick={() => {
             addButton.onClick(append, fields.length)
           }}

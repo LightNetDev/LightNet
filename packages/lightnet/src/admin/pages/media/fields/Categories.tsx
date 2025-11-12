@@ -50,7 +50,7 @@ function CategorySelect({
         {...control.register(name)}
         id={name}
         aria-invalid={!!errorMessage}
-        className={`dy-select dy-select-bordered bg-gray-200 text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
+        className={`dy-select dy-select-bordered text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
       >
         {categories.map(({ id, labelText }) => (
           <option key={id} value={id}>
