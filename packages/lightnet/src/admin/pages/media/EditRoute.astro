@@ -54,18 +54,17 @@ const languages = config.languages.map(({ code, label }) => ({
 ---
 
 <Page mainClass="bg-gray-500">
-  <div
-    class="mx-auto mt-4 max-w-screen-md rounded-2xl bg-gray-200 px-4 py-8 shadow-md md:px-8"
-  >
+  <div class="mx-auto mt-2 block max-w-screen-md px-4 md:px-8">
     <a
-      class="text-sm underline"
+      class="block py-4 text-sm text-gray-50 underline"
       href=`/${Astro.currentLocale}/media/faithful-freestyle--en`
       >{t("ln.admin.back-to-details-page")}</a
     >
-    <h1 class="mb-10 mt-10 text-2xl">
-      {t("ln.admin.edit-media-item")}
-    </h1>
+  </div>
 
+  <div
+    class="mx-auto max-w-screen-md rounded-2xl bg-gray-200 px-4 py-8 shadow-md md:px-8"
+  >
     <EditForm
       mediaId={mediaId}
       mediaItem={formData}

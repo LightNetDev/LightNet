@@ -43,7 +43,12 @@ export default function EditForm({
   const i18n = createI18n(i18nConfig)
   return (
     <I18nContext.Provider value={i18n}>
-      <form onSubmit={onSubmit}>
+      <form className="flex flex-col" onSubmit={onSubmit}>
+        <div className="mb-8 flex items-end justify-between">
+          <h1 className="text-3xl">{i18n.t("ln.admin.edit-media-item")}</h1>
+          <SubmitButton control={control} />
+        </div>
+
         <Input name="title" label="ln.admin.title" control={control} />
         <Input
           name="commonId"
@@ -73,7 +78,7 @@ export default function EditForm({
         />
         <Categories categories={categories} control={control} />
 
-        <SubmitButton control={control} />
+        <SubmitButton className="self-end" control={control} />
       </form>
     </I18nContext.Provider>
   )

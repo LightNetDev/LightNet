@@ -1,6 +1,8 @@
 ln.admin.edit: Edit
-ln.admin.publish: Publish
+ln.admin.publish-changes: Publish Changes
 ln.admin.published: Published
+ln.admin.save-changes: Save Changes
+ln.admin.saved: Saved
 ln.admin.failed: Failed
 ln.admin.remove: Remove
 ln.admin.add-author: Add Author
