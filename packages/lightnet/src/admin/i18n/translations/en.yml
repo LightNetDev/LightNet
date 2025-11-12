@@ -5,9 +5,13 @@ ln.admin.save-changes: Save Changes
 ln.admin.saved: Saved
 ln.admin.failed: Failed
 ln.admin.remove: Remove
+ln.admin.name: Name
 ln.admin.add-author: Add Author
 ln.admin.add-category: Add Category
+ln.admin.collections: Collections
+ln.admin.add-collection: Add Collection
 ln.admin.edit-media-item: Edit media item
+ln.admin.position-in-collection: Position in Collection
 ln.admin.back-to-details-page: Back to details page
 ln.admin.title: Title
 ln.admin.common-id: Common ID
@@ -18,3 +22,4 @@ ln.admin.common-id-hint: The english title, all lowercase, words separated with 
 ln.admin.errors.non-empty-string: String must contain at least 1 character(s)
 ln.admin.errors.invalid-date: Invalid date
 ln.admin.errors.required: Required field
+ln.admin.errors.gte-0: Number must be greater than or equal to 0

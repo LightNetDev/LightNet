@@ -28,6 +28,7 @@ const formData = {
     mediaItem.categories?.map((value) => ({
       value,
     })) ?? [],
+  collections: mediaItem.collections ?? [],
 }
 
 const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
@@ -45,6 +46,10 @@ const mediaTypes = (await getMediaTypes()).map(({ id, data: { label } }) => ({
 
 const categories = (await getCategories(currentLocale, t)).map(
   ({ id, labelText }) => ({ id, labelText }),
+)
+
+const collections = (await getCollection("media-collections")).map(
+  ({ id, data: { label } }) => ({ id, labelText: t(label) }),
 )
 
 const languages = config.languages.map(({ code, label }) => ({
@@ -72,6 +77,7 @@ const languages = config.languages.map(({ code, label }) => ({
       mediaTypes={mediaTypes}
       languages={languages}
       categories={categories}
+      collections={collections}
       client:load
     />
   </div>
