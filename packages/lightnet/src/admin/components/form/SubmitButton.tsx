@@ -19,8 +19,8 @@ const buttonStateClasses = {
 } as const
 
 const buttonLabels = {
-  idle: "ln.admin.save",
-  success: "ln.admin.saved",
+  idle: "ln.admin.publish",
+  success: "ln.admin.published",
   error: "ln.admin.failed",
 } as const
 

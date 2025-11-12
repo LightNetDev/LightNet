@@ -73,7 +73,7 @@ export default function EditForm({
         />
         <Categories categories={categories} control={control} />
 
-        <SubmitButton className="mt-8" control={control} />
+        <SubmitButton control={control} />
       </form>
     </I18nContext.Provider>
   )
