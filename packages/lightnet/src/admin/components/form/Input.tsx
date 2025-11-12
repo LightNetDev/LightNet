@@ -23,7 +23,7 @@ export default function Input<TFieldValues extends FieldValues>({
     <div key={name} className="flex w-full flex-col">
       <Label for={name} label={label} />
       <input
-        className={`dy-input dy-input-bordered ${errorMessage ? "dy-input-error" : ""}`}
+        className={`dy-input dy-input-bordered bg-gray-100 shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
         type={type}
         id={name}
         aria-invalid={!!errorMessage}

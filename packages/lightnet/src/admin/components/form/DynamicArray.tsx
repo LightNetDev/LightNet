@@ -44,7 +44,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   return (
     <fieldset key={name}>
       <Legend label={label} />
-      <div className="flex w-full flex-col divide-y divide-gray-300 rounded-lg border border-gray-300">
+      <div className="flex w-full flex-col divide-y divide-gray-300 overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-sm">
         {fields.map((field, index) => (
           <div className="flex w-full items-center gap-2 p-2" key={field.id}>
             <div className="flex grow flex-col">{renderElement(index)}</div>

@@ -33,7 +33,7 @@ function AuthorInput({
   return (
     <>
       <input
-        className={`dy-input dy-input-sm grow ${errorMessage ? "dy-input-error" : ""}`}
+        className={`dy-input dy-input-bordered bg-gray-200 shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
         aria-invalid={!!errorMessage}
         {...control.register(name)}
       />
