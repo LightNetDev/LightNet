@@ -23,3 +23,4 @@ ln.admin.errors.non-empty-string: String must contain at least 1 character(s)
 ln.admin.errors.invalid-date: Invalid date
 ln.admin.errors.required: Required field
 ln.admin.errors.gte-0: Number must be greater than or equal to 0
+ln.admin.errors.unique-elements: Elements must be unique
