@@ -179,7 +179,7 @@ test.describe("Media item edit page", () => {
       ...expectedMediaItem,
       title: updatedTitle,
     })
-    await expect(page.getByRole("button", { name: "Published" })).toBeVisible()
+    await expectPublishedMessage(page)
   })
 
   test("Should update media type", async ({ page, startLightnet }) => {
@@ -311,7 +311,7 @@ test.describe("Media item edit page", () => {
     await expect(
       page
         .getByRole("alert")
-        .filter({ hasText: "String must contain at least 1 character(s)" }),
+        .filter({ hasText: "Please enter at least one character." }),
     ).toBeVisible()
   })
 
@@ -334,8 +334,36 @@ test.describe("Media item edit page", () => {
     await saveButton.click()
 
     await expect(
-      page.getByRole("alert").filter({ hasText: "Required field" }),
+      page.getByRole("alert").filter({ hasText: "This field is required." }),
     ).toBeVisible()
     await expect(newCategorySelect).toBeFocused()
+  })
+
+  test("should not allow assigning duplicate categories", async ({
+    page,
+    startLightnet,
+  }) => {
+    const ln = await startLightnet()
+    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+
+    const categoriesFieldset = page.getByRole("group", { name: "Categories" })
+    await page.getByRole("button", { name: "Add Category" }).click()
+
+    const categorySelects = categoriesFieldset.getByRole("combobox")
+    const firstCategoryValue = await categorySelects.first().inputValue()
+    const duplicateCategorySelect = categorySelects.last()
+    await duplicateCategorySelect.selectOption(firstCategoryValue)
+
+    const publishButton = getPublishButton(page)
+    await publishButton.click()
+
+    const duplicateCategoryError = categoriesFieldset
+      .getByRole("alert")
+      .filter({ hasText: "Each entry needs a unique value." })
+    await expect(duplicateCategoryError).toBeVisible()
+    await expect(duplicateCategorySelect).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    )
   })
 })
