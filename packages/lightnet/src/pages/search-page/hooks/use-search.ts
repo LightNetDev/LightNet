@@ -39,7 +39,7 @@ export function useSearch({ categories, mediaTypes, languages }: Context) {
           const translatedCategories =
             item.categories &&
             item.categories.map((categoryId) => categories[categoryId])
-          const translatedType = mediaTypes[item.type]
+          const translatedType = mediaTypes[item.type].labelText
           const translatedLanguage = languages[item.language].labelText
 
           return {
