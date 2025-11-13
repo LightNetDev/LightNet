@@ -33,12 +33,27 @@ const contentCategories = Object.fromEntries(
  *
  * @param currentLocale current locale
  * @param t translate function
- * @returns categories sorted by name
+ * @returns categories sorted by labelText
  */
 export async function getUsedCategories(currentLocale: string, t: TranslateFn) {
   return [...Object.entries(contentCategories)]
-    .map(([id, data]) => ({ id, ...data, name: t(data.label) }))
-    .sort((a, b) => a.name.localeCompare(b.name, currentLocale))
+    .map(([id, data]) => ({ id, ...data, labelText: t(data.label) }))
+    .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
+}
+
+/**
+ * Get all categories. This includes categories that are not
+ * referenced by any media item. If you only need categories that are referenced
+ * by media items use `getUsedCategories`.
+ *
+ * @param currentLocale current locale
+ * @param t translate function
+ * @returns categories sorted by labelText
+ */
+export async function getCategories(currentLocale: string, t: TranslateFn) {
+  return [...Object.entries(categoriesById)]
+    .map(([id, data]) => ({ id, ...data, labelText: t(data.label) }))
+    .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
 
 export async function getCategory(id: string) {

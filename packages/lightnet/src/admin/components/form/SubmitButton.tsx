@@ -8,7 +8,7 @@ import type { MediaItem } from "../../types/media-item"
 const SUCCESS_DURATION_MS = 2000
 
 const baseButtonClass =
-  "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-6 py-3 font-bold uppercase shadow-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:cursor-not-allowed"
+  "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-bold uppercase shadow-sm transition-colors easy-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:cursor-not-allowed"
 
 const buttonStateClasses = {
   idle: "bg-gray-800 text-gray-100 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-600 disabled:text-gray-200",
@@ -19,8 +19,10 @@ const buttonStateClasses = {
 } as const
 
 const buttonLabels = {
-  idle: "ln.admin.save",
-  success: "ln.admin.saved",
+  idle: import.meta.env.DEV
+    ? "ln.admin.save-changes"
+    : "ln.admin.publish-changes",
+  success: import.meta.env.DEV ? "ln.admin.saved" : "ln.admin.published",
   error: "ln.admin.failed",
 } as const
 
@@ -38,10 +40,9 @@ export default function SubmitButton({
   className?: string
 }) {
   const { t } = useI18n()
-  const { isValid, isSubmitting, isSubmitSuccessful, submitCount } =
-    useFormState({
-      control,
-    })
+  const { isSubmitting, isSubmitSuccessful, submitCount } = useFormState({
+    control,
+  })
 
   const buttonState = useButtonState(isSubmitSuccessful, submitCount)
   const buttonClass = `${baseButtonClass} ${buttonStateClasses[buttonState]} ${className}`
@@ -49,11 +50,7 @@ export default function SubmitButton({
   const icon = icons[buttonState]
 
   return (
-    <button
-      className={buttonClass}
-      type="submit"
-      disabled={!isValid || isSubmitting}
-    >
+    <button className={buttonClass} type="submit" disabled={isSubmitting}>
       {icon && <Icon className={icon} ariaLabel="" />}
       {t(label)}
     </button>

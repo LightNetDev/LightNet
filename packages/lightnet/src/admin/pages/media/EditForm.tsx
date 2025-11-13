@@ -11,7 +11,11 @@ import Select from "../../components/form/Select"
 import SubmitButton from "../../components/form/SubmitButton"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
+import Categories from "./fields/Categories"
+import Collections from "./fields/Collections"
 import { updateMediaItem } from "./media-item-store"
+
+type SelectOption = { id: string; labelText: string }
 
 export default function EditForm({
   mediaId,
@@ -19,16 +23,21 @@ export default function EditForm({
   i18nConfig,
   mediaTypes,
   languages,
+  categories,
+  collections,
 }: {
   mediaId: string
   mediaItem: MediaItem
   i18nConfig: I18nConfig
-  mediaTypes: { id: string; label: string }[]
-  languages: { id: string; label: string }[]
+  mediaTypes: SelectOption[]
+  languages: SelectOption[]
+  categories: SelectOption[]
+  collections: SelectOption[]
 }) {
   const { handleSubmit, control } = useForm({
     defaultValues: mediaItem,
     mode: "onTouched",
+    shouldFocusError: true,
     resolver: zodResolver(mediaItemSchema),
   })
   const onSubmit = handleSubmit(
@@ -37,7 +46,12 @@ export default function EditForm({
   const i18n = createI18n(i18nConfig)
   return (
     <I18nContext.Provider value={i18n}>
-      <form onSubmit={onSubmit}>
+      <form className="flex flex-col" onSubmit={onSubmit}>
+        <div className="mb-8 flex items-end justify-between">
+          <h1 className="text-3xl">{i18n.t("ln.admin.edit-media-item")}</h1>
+          <SubmitButton control={control} />
+        </div>
+
         <Input name="title" label="ln.admin.title" control={control} />
         <Input
           name="commonId"
@@ -65,8 +79,10 @@ export default function EditForm({
           type="date"
           control={control}
         />
+        <Categories categories={categories} control={control} />
+        <Collections collections={collections} control={control} />
 
-        <SubmitButton className="mt-8" control={control} />
+        <SubmitButton className="self-end" control={control} />
       </form>
     </I18nContext.Provider>
   )

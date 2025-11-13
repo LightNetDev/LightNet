@@ -18,19 +18,19 @@ export default function Input<TFieldValues extends FieldValues>({
   control: Control<TFieldValues>
   type?: "text" | "date"
 }) {
-  const hasError = !!useFieldError({ control, name })
+  const errorMessage = useFieldError({ control, name })
   return (
     <div key={name} className="flex w-full flex-col">
       <Label for={name} label={label} />
       <input
-        className={`dy-input dy-input-bordered ${hasError ? "dy-input-error" : ""}`}
+        className={`dy-input dy-input-bordered shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
         type={type}
         id={name}
-        aria-invalid={hasError}
+        aria-invalid={!!errorMessage}
         {...control.register(name)}
       />
-      <ErrorMessage name={name} control={control} />
-      <Hint hint={hint} />
+      <ErrorMessage message={errorMessage} />
+      <Hint label={hint} />
     </div>
   )
 }

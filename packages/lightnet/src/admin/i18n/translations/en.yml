@@ -1,17 +1,27 @@
 ln.admin.edit: Edit
-ln.admin.save: Save
+ln.admin.publish-changes: Publish Changes
+ln.admin.published: Published
+ln.admin.save-changes: Save Changes
 ln.admin.saved: Saved
 ln.admin.failed: Failed
 ln.admin.remove: Remove
+ln.admin.name: Name
 ln.admin.add-author: Add Author
+ln.admin.add-category: Add Category
+ln.admin.collections: Collections
+ln.admin.add-collection: Add Collection
 ln.admin.edit-media-item: Edit media item
+ln.admin.position-in-collection: Position in Collection
 ln.admin.back-to-details-page: Back to details page
 ln.admin.title: Title
 ln.admin.common-id: Common ID
 ln.admin.authors: Authors
 ln.admin.created-on: Created on
 ln.admin.created-on-hint: When has this item been created on this library?
-ln.admin.common-id-hint: The english title, all lowercase, words separated with hyphens.
-ln.admin.errors.non-empty-string: String must contain at least 1 character(s)
-ln.admin.errors.invalid-date: Invalid date
-ln.admin.errors.required: Required field
+ln.admin.common-id-hint: The English title, all lowercase, words separated with hyphens.
+ln.admin.errors.non-empty-string: Please enter at least one character.
+ln.admin.errors.invalid-date: That date doesn't look right.
+ln.admin.errors.required: This field is required.
+ln.admin.errors.gte-0: Use a number zero or greater.
+ln.admin.errors.unique-elements: Please choose a different value for each entry.
+ln.admin.errors.integer: Please enter a whole number.

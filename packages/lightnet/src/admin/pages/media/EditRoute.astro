@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro"
 import { getCollection } from "astro:content"
 import config from "virtual:lightnet/config"
 
+import { getCategories } from "../../../content/get-categories"
 import { getRawMediaItem } from "../../../content/get-media-items"
 import { getMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
@@ -23,42 +24,60 @@ const { data: mediaItem } = await getRawMediaItem(mediaId)
 const formData = {
   ...mediaItem,
   authors: mediaItem.authors?.map((value) => ({ value })) ?? [],
+  categories:
+    mediaItem.categories?.map((value) => ({
+      value,
+    })) ?? [],
+  collections: mediaItem.collections ?? [],
 }
 
 const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
   "ln.admin.*",
   "ln.type",
   "ln.language",
+  "ln.categories",
 ])
-const { t } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
 
 const mediaTypes = (await getMediaTypes()).map(({ id, data: { label } }) => ({
   id,
-  label: t(label),
+  labelText: t(label),
 }))
+
+const categories = (await getCategories(currentLocale, t)).map(
+  ({ id, labelText }) => ({ id, labelText }),
+)
+
+const collections = (await getCollection("media-collections")).map(
+  ({ id, data: { label } }) => ({ id, labelText: t(label) }),
+)
+
 const languages = config.languages.map(({ code, label }) => ({
   id: code,
-  label: t(label),
+  labelText: t(label),
 }))
 ---
 
-<Page>
-  <div class="mx-auto max-w-screen-md px-4 pt-12 md:px-8">
+<Page mainClass="bg-slate-500">
+  <div class="mx-auto block max-w-screen-md px-4 md:px-8">
     <a
-      class="underline"
+      class="block py-4 text-gray-200 underline"
       href=`/${Astro.currentLocale}/media/faithful-freestyle--en`
       >{t("ln.admin.back-to-details-page")}</a
     >
-    <h1 class="mb-10 mt-10 text-2xl">
-      {t("ln.admin.edit-media-item")}
-    </h1>
+  </div>
 
+  <div
+    class="mx-auto max-w-screen-md rounded-2xl bg-gray-200 px-4 py-8 shadow-md md:px-8"
+  >
     <EditForm
       mediaId={mediaId}
       mediaItem={formData}
       i18nConfig={i18nConfig}
       mediaTypes={mediaTypes}
       languages={languages}
+      categories={categories}
+      collections={collections}
       client:load
     />
   </div>

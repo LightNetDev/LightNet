@@ -34,7 +34,7 @@ const mediaTypes = Object.fromEntries(
     type.id,
     {
       id: type.id,
-      name: t(type.data.label),
+      labelText: t(type.data.label),
       icon: type.data.icon,
       coverImageStyle: type.data.coverImageStyle,
     },
@@ -84,7 +84,7 @@ const mediaTypes = Object.fromEntries(
             <p class="mb-1 line-clamp-3 text-balance font-bold text-gray-700 md:mb-3">
               <Icon
                 className={`${mediaTypes[item.data.type.id].icon} me-2 align-bottom text-2xl text-gray-700`}
-                ariaLabel={mediaTypes[item.data.type.id].name}
+                ariaLabel={mediaTypes[item.data.type.id].labelText}
               />
               <span>{item.data.title}</span>
             </p>

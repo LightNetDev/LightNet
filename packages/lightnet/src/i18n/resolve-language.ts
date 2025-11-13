@@ -27,6 +27,6 @@ export const resolveTranslatedLanguage = (bcp47: string, t: TranslateFn) => {
   const language = resolveLanguage(bcp47)
   return {
     ...language,
-    name: t(language.label),
+    labelText: t(language.label),
   }
 }

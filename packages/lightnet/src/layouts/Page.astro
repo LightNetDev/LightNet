@@ -13,9 +13,10 @@ import ViewTransition from "./components/ViewTransition.astro"
 interface Props {
   title?: string
   description?: string
+  mainClass?: string
 }
 
-const { title, description } = Astro.props
+const { title, description, mainClass } = Astro.props
 const configTitle = Astro.locals.i18n.t(config.title)
 
 const { currentLocale } = Astro.locals.i18n
@@ -39,7 +40,7 @@ const language = resolveLanguage(currentLocale)
     class="flex min-h-screen flex-col overflow-y-scroll bg-gray-50 text-gray-900"
   >
     <Header />
-    <main class="grow pb-8 pt-14 sm:py-20">
+    <main class={`grow pb-8 pt-14 sm:py-20 ${mainClass ?? ""}`}>
       <slot />
     </main>
     {CustomFooter ? <CustomFooter /> : <Footer />}

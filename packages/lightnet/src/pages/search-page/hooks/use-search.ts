@@ -6,8 +6,8 @@ import { observeSearchQuery, type SearchQuery } from "../utils/search-query"
 
 interface Context {
   categories: Record<string, string>
-  mediaTypes: Record<string, { name: string }>
-  languages: Record<string, { name: string }>
+  mediaTypes: Record<string, { labelText: string }>
+  languages: Record<string, { labelText: string }>
 }
 
 export function useSearch({ categories, mediaTypes, languages }: Context) {
@@ -39,8 +39,8 @@ export function useSearch({ categories, mediaTypes, languages }: Context) {
           const translatedCategories =
             item.categories &&
             item.categories.map((categoryId) => categories[categoryId])
-          const translatedType = mediaTypes[item.type].name
-          const translatedLanguage = languages[item.language].name
+          const translatedType = mediaTypes[item.type].labelText
+          const translatedLanguage = languages[item.language].labelText
 
           return {
             ...item,

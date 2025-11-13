@@ -5,13 +5,13 @@ import { detailsPagePath } from "../../../utils/paths"
 import type { SearchItem } from "../api/search-response"
 
 export type MediaType = {
-  name: string
+  labelText: string
   icon: string
   coverImageStyle: "default" | "book" | "video"
 }
 
 export type TranslatedLanguage = {
-  name: string
+  labelText: string
   direction: "rtl" | "ltr"
 }
 
@@ -58,7 +58,7 @@ export default function SearchListItem({
         <h2 className="mb-1 line-clamp-2 text-balance text-sm font-bold text-gray-700 md:mb-3 md:text-base">
           <Icon
             className={`${mediaTypes[item.type].icon} me-2 align-bottom text-2xl text-gray-700`}
-            ariaLabel={mediaTypes[item.type].name}
+            ariaLabel={mediaTypes[item.type].labelText}
           />
           <span>{item.title}</span>
         </h2>
@@ -70,7 +70,7 @@ export default function SearchListItem({
           )}
           {showLanguage && (
             <span className="rounded-lg border border-gray-300 px-2 py-1 text-gray-500">
-              {languages[item.language].name}
+              {languages[item.language].labelText}
             </span>
           )}
           <ul
