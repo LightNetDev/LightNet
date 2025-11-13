@@ -13,6 +13,7 @@ import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
 import Categories from "./fields/Categories"
 import Collections from "./fields/Collections"
+import Description from "./fields/Description"
 import { updateMediaItem } from "./media-item-store"
 
 type SelectOption = { id: string; labelText: string }
@@ -81,6 +82,7 @@ export default function EditForm({
         />
         <Categories categories={categories} control={control} />
         <Collections collections={collections} control={control} />
+        <Description control={control} />
 
         <SubmitButton className="self-end" control={control} />
       </form>
