@@ -359,7 +359,7 @@ test.describe("Media item edit page", () => {
 
     const duplicateCategoryError = categoriesFieldset
       .getByRole("alert")
-      .filter({ hasText: "Each entry needs a unique value." })
+      .filter({ hasText: "Please choose a different value for each entry." })
     await expect(duplicateCategoryError).toBeVisible()
     await expect(duplicateCategorySelect).toHaveAttribute(
       "aria-invalid",
