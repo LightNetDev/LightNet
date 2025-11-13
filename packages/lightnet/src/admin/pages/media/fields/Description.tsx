@@ -14,12 +14,19 @@ import { type Control, Controller } from "react-hook-form"
 
 import Hint from "../../../components/form/atoms/Hint"
 import type { MediaItem } from "../../../types/media-item"
+import { useEffect, useState } from "react"
 
 export default function Description({
   control,
 }: {
   control: Control<MediaItem>
 }) {
+  // lazy load editor, as it does not support prerendering
+  const [renderEditor, setRenderEditor] = useState(false)
+  useEffect(() => setRenderEditor(true), [])
+  if (!renderEditor) {
+    return null
+  }
   return (
     <>
       <div className="overflow-hidden rounded-lg border border-gray-300 shadow-sm">
