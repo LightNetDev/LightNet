@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.10.5
+
+### Patch Changes
+
+- [#331](https://github.com/LightNetDev/LightNet/pull/331) [`cdacfdf`](https://github.com/LightNetDev/LightNet/commit/cdacfdfca311469248cb7d1ac0b46f92d9fd5521) Thanks [@smn-cds](https://github.com/smn-cds)! - Experimenatl Admin UI: support editing categories and collections
+
 ## 3.10.4
 
 ### Patch Changes
