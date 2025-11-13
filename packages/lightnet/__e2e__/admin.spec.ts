@@ -143,6 +143,14 @@ test.describe("Media item edit page", () => {
     return () => writeFileRequestPromise
   }
 
+  const getPublishButton = (page: Page) =>
+    page.getByRole("button", { name: "Publish Changes" }).first()
+
+  const expectPublishedMessage = (page: Page) =>
+    expect(
+      page.getByRole("button", { name: "Published" }).first(),
+    ).toBeVisible()
+
   test("should edit title", async ({ page, startLightnet }) => {
     const ln = await startLightnet()
 
@@ -155,7 +163,7 @@ test.describe("Media item edit page", () => {
     await expect(titleInput).toHaveValue("Faithful Freestyle")
     await titleInput.fill(updatedTitle)
 
-    const saveButton = page.getByRole("button", { name: "Save" })
+    const saveButton = getPublishButton(page)
     await expect(saveButton).toBeEnabled()
     await saveButton.click()
 
@@ -171,7 +179,7 @@ test.describe("Media item edit page", () => {
       ...expectedMediaItem,
       title: updatedTitle,
     })
-    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+    await expect(page.getByRole("button", { name: "Published" })).toBeVisible()
   })
 
   test("Should update media type", async ({ page, startLightnet }) => {
@@ -184,7 +192,7 @@ test.describe("Media item edit page", () => {
     await expect(typeSelect).toHaveValue("book")
     await typeSelect.selectOption("video")
 
-    const saveButton = page.getByRole("button", { name: "Save" })
+    const saveButton = getPublishButton(page)
     await expect(saveButton).toBeEnabled()
     await saveButton.click()
 
@@ -196,7 +204,7 @@ test.describe("Media item edit page", () => {
       ...expectedMediaItem,
       type: "video",
     })
-    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+    await expectPublishedMessage(page)
   })
 
   test("Should update author name", async ({ page, startLightnet }) => {
@@ -211,7 +219,7 @@ test.describe("Media item edit page", () => {
     await expect(firstAuthorInput).toHaveValue("Sk8 Ministries")
     await firstAuthorInput.fill(updatedAuthor)
 
-    const saveButton = page.getByRole("button", { name: "Save" })
+    const saveButton = getPublishButton(page)
     await expect(saveButton).toBeEnabled()
     await saveButton.click()
 
@@ -223,7 +231,7 @@ test.describe("Media item edit page", () => {
       ...expectedMediaItem,
       authors: [updatedAuthor],
     })
-    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+    await expectPublishedMessage(page)
   })
 
   test("Should add author", async ({ page, startLightnet }) => {
@@ -239,7 +247,7 @@ test.describe("Media item edit page", () => {
     const additionalAuthor = "Tony Hawk"
     await newAuthorInput.fill(additionalAuthor)
 
-    const saveButton = page.getByRole("button", { name: "Save" })
+    const saveButton = getPublishButton(page)
     await expect(saveButton).toBeEnabled()
     await saveButton.click()
 
@@ -251,7 +259,7 @@ test.describe("Media item edit page", () => {
       ...expectedMediaItem,
       authors: ["Sk8 Ministries", additionalAuthor],
     })
-    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+    await expectPublishedMessage(page)
   })
 
   test("Should remove author", async ({ page, startLightnet }) => {
@@ -272,7 +280,7 @@ test.describe("Media item edit page", () => {
     })
     await removeButtons.first().click()
 
-    const saveButton = page.getByRole("button", { name: "Save" })
+    const saveButton = getPublishButton(page)
     await expect(saveButton).toBeEnabled()
     await saveButton.click()
 
@@ -284,7 +292,7 @@ test.describe("Media item edit page", () => {
       ...expectedMediaItem,
       authors: [replacementAuthor],
     })
-    await expect(page.getByRole("button", { name: "Saved" })).toBeVisible()
+    await expectPublishedMessage(page)
   })
 
   test("should show error message if common id is set empty", async ({
@@ -322,7 +330,7 @@ test.describe("Media item edit page", () => {
     // move focus away so the submission handler needs to return focus
     await page.getByLabel("Title").click()
 
-    const saveButton = page.getByRole("button", { name: "Save" })
+    const saveButton = getPublishButton(page)
     await saveButton.click()
 
     await expect(

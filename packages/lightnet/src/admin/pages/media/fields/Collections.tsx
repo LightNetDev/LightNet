@@ -1,10 +1,10 @@
 import { type Control } from "react-hook-form"
 
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
+import Label from "../../../components/form/atoms/Label"
 import DynamicArray from "../../../components/form/DynamicArray"
 import { useFieldError } from "../../../components/form/hooks/use-field-error"
 import type { MediaItem } from "../../../types/media-item"
-import Label from "../../../components/form/atoms/Label"
 
 export default function Collections({
   control,
