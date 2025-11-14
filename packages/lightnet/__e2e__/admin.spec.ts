@@ -188,7 +188,7 @@ test.describe("Media item edit page", () => {
 
     await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
-    const typeSelect = page.getByLabel("Type")
+    const typeSelect = page.getByLabel("Type").first()
     await expect(typeSelect).toHaveValue("book")
     await typeSelect.selectOption("video")
 
