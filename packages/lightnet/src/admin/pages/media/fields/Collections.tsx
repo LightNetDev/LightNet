@@ -26,12 +26,12 @@ export default function Collections({
             collections={collections}
             control={control}
             index={index}
-            defaultValue={defaultValue[index].collection}
+            defaultValue={defaultValue[index]?.collection}
           />
           <CollectionIndex
             control={control}
             index={index}
-            defaultValue={defaultValue[index].index}
+            defaultValue={defaultValue[index]?.index}
           />
         </div>
       )}

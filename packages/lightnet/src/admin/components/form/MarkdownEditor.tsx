@@ -3,6 +3,8 @@ import { type Control, type FieldValues, type Path } from "react-hook-form"
 
 import Hint from "./atoms/Hint"
 import Legend from "./atoms/Legend"
+import { useFieldError } from "./hooks/use-field-error"
+import ErrorMessage from "./atoms/ErrorMessage"
 
 const InternalMarkdownEditor = lazy(() => import("./InternalMarkdownEditor"))
 
@@ -19,10 +21,14 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
   control: Control<TFieldValues>
   defaultValue?: string
 }) {
+  const errorMessage = useFieldError({ control, name })
+
   return (
     <fieldset key={name}>
       <Legend label={label} />
-      <div className="overflow-hidden rounded-lg border border-gray-300 shadow-sm">
+      <div
+        className={`overflow-hidden rounded-lg border border-gray-300 shadow-sm ${errorMessage ? "border-rose-800" : ""}`}
+      >
         <Suspense
           fallback={
             <div className="h-[22.75rem] w-full bg-gray-50">
@@ -37,7 +43,7 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
           />
         </Suspense>
       </div>
-
+      <ErrorMessage message={errorMessage} />
       <Hint label={hint} />
     </fieldset>
   )

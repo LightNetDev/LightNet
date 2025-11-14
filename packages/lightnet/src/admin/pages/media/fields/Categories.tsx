@@ -24,7 +24,7 @@ export default function Categories({
           categories={categories}
           control={control}
           index={index}
-          defaultValue={defaultValue[index].value}
+          defaultValue={defaultValue[index]?.value}
         />
       )}
       addButton={{

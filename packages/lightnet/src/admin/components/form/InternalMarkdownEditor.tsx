@@ -42,12 +42,13 @@ export default function InternalMarkdownEditor<
     <Controller
       control={control}
       name={name}
-      render={({ field: { onBlur, onChange, value } }) => (
+      render={({ field: { onBlur, onChange, value, ref } }) => (
         <MDXEditor
           markdown={value ?? ""}
           onBlur={onBlur}
-          onChange={(markdown) => onChange(markdown)}
+          onChange={onChange}
           contentEditableClassName="prose bg-gray-50 h-80 w-full max-w-full overflow-y-auto"
+          ref={ref}
           plugins={[
             headingsPlugin(),
             listsPlugin(),

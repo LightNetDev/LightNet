@@ -21,7 +21,7 @@ export default function Authors({
         <AuthorInput
           index={index}
           control={control}
-          defaultValue={defaultValue[index].value}
+          defaultValue={defaultValue[index]?.value}
         />
       )}
       addButton={{
