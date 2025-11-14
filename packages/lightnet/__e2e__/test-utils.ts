@@ -25,12 +25,12 @@
  * SOFTWARE.
  */
 
+import { rm } from "node:fs/promises"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { type Page, test as baseTest } from "@playwright/test"
 import { build, preview } from "astro"
-import { rm } from "node:fs/promises"
 
 export { expect, type Locator } from "@playwright/test"
 
