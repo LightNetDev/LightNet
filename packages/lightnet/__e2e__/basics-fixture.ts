@@ -37,9 +37,9 @@ const root = fileURLToPath(new URL("./fixtures/basics/", import.meta.url))
 
 let server: Server | null = null
 const test = baseTest.extend<{
-  startLightnet: (path?: string) => Promise<LightNetPage>
+  lightnet: (path?: string) => Promise<LightNetPage>
 }>({
-  startLightnet: ({ page }, use) =>
+  lightnet: ({ page }, use) =>
     use(async (path) => {
       if (!server) {
         await build({ logLevel: "error", root })
@@ -74,4 +74,4 @@ class LightNetPage {
 
 type Server = Awaited<ReturnType<typeof preview>>
 
-export { test, teardown }
+export { teardown, test }
