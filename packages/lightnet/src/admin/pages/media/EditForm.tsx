@@ -13,8 +13,8 @@ import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
 import Categories from "./fields/Categories"
 import Collections from "./fields/Collections"
-import Description from "./fields/Description"
 import { updateMediaItem } from "./media-item-store"
+import MarkdownEditor from "../../components/form/MarkdownEditor"
 
 type SelectOption = { id: string; labelText: string }
 
@@ -82,7 +82,11 @@ export default function EditForm({
         />
         <Categories categories={categories} control={control} />
         <Collections collections={collections} control={control} />
-        <Description control={control} defaultValue={mediaItem.description} />
+        <MarkdownEditor
+          control={control}
+          name="description"
+          label="ln.admin.description"
+        />
 
         <SubmitButton className="self-end" control={control} />
       </form>
