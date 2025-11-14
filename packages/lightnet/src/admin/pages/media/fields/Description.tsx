@@ -6,6 +6,12 @@ import {
   headingsPlugin,
   linkPlugin,
   listsPlugin,
+  ListsToggle,
+  CreateLink,
+  quotePlugin,
+  diffSourcePlugin,
+  linkDialogPlugin,
+  DiffSourceToggleWrapper,
   MDXEditor,
   toolbarPlugin,
   UndoRedo,
@@ -18,8 +24,10 @@ import { useEffect, useState } from "react"
 
 export default function Description({
   control,
+  defaultValue,
 }: {
   control: Control<MediaItem>
+  defaultValue?: string
 }) {
   // lazy load editor, as it does not support prerendering
   const [renderEditor, setRenderEditor] = useState(false)
@@ -43,13 +51,21 @@ export default function Description({
                 headingsPlugin(),
                 listsPlugin(),
                 linkPlugin(),
+                linkDialogPlugin(),
+                diffSourcePlugin({
+                  viewMode: "rich-text",
+                  diffMarkdown: defaultValue,
+                }),
+                quotePlugin(),
                 toolbarPlugin({
                   toolbarContents: () => (
-                    <>
+                    <DiffSourceToggleWrapper>
                       <UndoRedo />
                       <BoldItalicUnderlineToggles />
                       <BlockTypeSelect />
-                    </>
+                      <ListsToggle options={["bullet", "number"]} />
+                      <CreateLink />
+                    </DiffSourceToggleWrapper>
                   ),
                 }),
               ]}

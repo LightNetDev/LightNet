@@ -82,7 +82,7 @@ export default function EditForm({
         />
         <Categories categories={categories} control={control} />
         <Collections collections={collections} control={control} />
-        <Description control={control} />
+        <Description control={control} defaultValue={mediaItem.description} />
 
         <SubmitButton className="self-end" control={control} />
       </form>
