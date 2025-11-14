@@ -24,9 +24,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import { rm } from "node:fs/promises"
-import { join } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import { type Page, test as baseTest } from "@playwright/test"
@@ -36,32 +33,26 @@ export { expect, type Locator } from "@playwright/test"
 
 process.env.ASTRO_TELEMETRY_DISABLED = "true"
 process.env.ASTRO_DISABLE_UPDATE_CHECK = "true"
-export function lightnetTest(fixturePath: string) {
-  const root = fileURLToPath(new URL(fixturePath, import.meta.url))
+const root = fileURLToPath(new URL("./fixtures/basics/", import.meta.url))
 
-  let server: Server | null = null
-  const test = baseTest.extend<{
-    startLightnet: (path?: string) => Promise<LightNetPage>
-  }>({
-    startLightnet: ({ page }, use) =>
-      use(async (path) => {
-        if (!server) {
-          await rm(join(root, "dist"), { recursive: true, force: true })
-          await rm(join(root, ".astro"), { recursive: true, force: true })
-          await build({ logLevel: "error", root })
-          server = await preview({ logLevel: "error", root })
-        }
-        const ln = new LightNetPage(server, page)
-        await ln.goto(path ?? "/")
-        return ln
-      }),
-  })
+let server: Server | null = null
+const test = baseTest.extend<{
+  startLightnet: (path?: string) => Promise<LightNetPage>
+}>({
+  startLightnet: ({ page }, use) =>
+    use(async (path) => {
+      if (!server) {
+        await build({ logLevel: "error", root })
+        server = await preview({ logLevel: "error", root })
+      }
+      const ln = new LightNetPage(server, page)
+      await ln.goto(path ?? "/")
+      return ln
+    }),
+})
 
-  test.afterAll(async () => {
-    await server?.stop()
-  })
-
-  return test
+const teardown = async () => {
+  await server?.stop()
 }
 
 // A Playwright test fixture accessible from within all tests.
@@ -82,3 +73,5 @@ class LightNetPage {
 }
 
 type Server = Awaited<ReturnType<typeof preview>>
+
+export { test, teardown }

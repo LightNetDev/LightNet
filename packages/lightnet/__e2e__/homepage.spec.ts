@@ -1,8 +1,6 @@
 import { expect } from "@playwright/test"
 
-import { lightnetTest } from "./test-utils"
-
-const test = lightnetTest("./fixtures/basics/")
+import { test } from "./test-utils"
 
 test("Should have title set", async ({ page, startLightnet }) => {
   await startLightnet()

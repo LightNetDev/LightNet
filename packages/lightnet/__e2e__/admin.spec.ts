@@ -2,9 +2,8 @@ import { readFile } from "node:fs/promises"
 
 import { expect, type Page } from "@playwright/test"
 
-import { lightnetTest } from "./test-utils"
+import { test } from "./test-utils"
 
-const test = lightnetTest("./fixtures/basics/")
 const faithfulFreestyleMediaUrl = new URL(
   "./fixtures/basics/src/content/media/faithful-freestyle--en.json",
   import.meta.url,
