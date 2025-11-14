@@ -40,31 +40,18 @@ export function lightnetTest(fixturePath: string) {
   const root = fileURLToPath(new URL(fixturePath, import.meta.url))
 
   let server: Server | null = null
-  let serverReady: Promise<Server> | null = null
-
-  const ensureServer = () => {
-    if (!serverReady) {
-      serverReady = (async () => {
-        await rm(join(root, "dist"), { recursive: true, force: true })
-        await rm(join(root, ".astro"), { recursive: true, force: true })
-        await build({ logLevel: "error", root })
-        server = await preview({ logLevel: "error", root })
-        return server
-      })().catch((error) => {
-        serverReady = null
-        throw error
-      })
-    }
-    return serverReady
-  }
-
   const test = baseTest.extend<{
     startLightnet: (path?: string) => Promise<LightNetPage>
   }>({
     startLightnet: ({ page }, use) =>
       use(async (path) => {
-        const serverInstance = await ensureServer()
-        const ln = new LightNetPage(serverInstance, page)
+        if (!server) {
+          await rm(join(root, "dist"), { recursive: true, force: true })
+          await rm(join(root, ".astro"), { recursive: true, force: true })
+          await build({ logLevel: "error", root })
+          server = await preview({ logLevel: "error", root })
+        }
+        const ln = new LightNetPage(server, page)
         await ln.goto(path ?? "/")
         return ln
       }),
