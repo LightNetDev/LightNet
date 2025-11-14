@@ -92,6 +92,7 @@ function CollectionIndex({
         className={`dy-input dy-input-bordered shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
         aria-invalid={!!errorMessage}
         type="number"
+        id={name}
         step={1}
         {...control.register(name, {
           setValueAs: (value) => (value === "" ? undefined : Number(value)),
