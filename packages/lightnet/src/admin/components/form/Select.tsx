@@ -9,12 +9,14 @@ export default function Select<TFieldValues extends FieldValues>({
   name,
   label,
   control,
+  defaultValue,
   hint,
   options,
 }: {
   name: Path<TFieldValues>
   label: string
   hint?: string
+  defaultValue?: string
   control: Control<TFieldValues>
   options: { id: string; labelText?: string }[]
 }) {
@@ -26,6 +28,7 @@ export default function Select<TFieldValues extends FieldValues>({
         {...control.register(name)}
         id={name}
         aria-invalid={!!errorMessage}
+        defaultValue={defaultValue}
         className={`dy-select dy-select-bordered text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
       >
         {options.map(({ id, labelText }) => (

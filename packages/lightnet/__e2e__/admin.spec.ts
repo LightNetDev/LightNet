@@ -2,9 +2,8 @@ import { readFile } from "node:fs/promises"
 
 import { expect, type Page } from "@playwright/test"
 
-import { lightnetTest } from "./test-utils"
+import { test } from "./basics-fixture"
 
-const test = lightnetTest("./fixtures/basics/")
 const faithfulFreestyleMediaUrl = new URL(
   "./fixtures/basics/src/content/media/faithful-freestyle--en.json",
   import.meta.url,
@@ -13,9 +12,9 @@ const faithfulFreestyleMediaUrl = new URL(
 test.describe("Edit button on details page", () => {
   test("Should not show `Edit` button on details page by default.", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    await startLightnet()
+    await lightnet()
 
     await page.getByRole("link", { name: "Faithful Freestyle" }).click()
     await expect(
@@ -28,9 +27,9 @@ test.describe("Edit button on details page", () => {
 
   test("Should show `Edit` button on book details page after visiting `/en/admin/` path.", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    const ln = await startLightnet()
+    const ln = await lightnet()
 
     await page.goto(ln.resolveURL("/en/admin/"))
     await expect(
@@ -52,11 +51,10 @@ test.describe("Edit button on details page", () => {
 
   test("Should show `Edit` button on video details page after visiting `/en/admin/` path.", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    const ln = await startLightnet()
+    const ln = await lightnet("/en/admin/")
 
-    await page.goto(ln.resolveURL("/en/admin/"))
     await expect(
       page.getByText("Admin features are enabled now.", { exact: true }),
     ).toBeVisible()
@@ -76,11 +74,10 @@ test.describe("Edit button on details page", () => {
 
   test("Should show `Edit` button on audio details page after visiting `/en/admin/` path.", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    const ln = await startLightnet()
+    const ln = await lightnet("/en/admin/")
 
-    await page.goto(ln.resolveURL("/en/admin/"))
     await expect(
       page.getByText("Admin features are enabled now.", { exact: true }),
     ).toBeVisible()
@@ -100,12 +97,10 @@ test.describe("Edit button on details page", () => {
 
   test("Edit button on details page should navigate to media item edit page", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    const ln = await startLightnet()
-
-    await page.goto(ln.resolveURL("/en/admin/"))
-    await page.goto(ln.resolveURL("/en/media/faithful-freestyle--en"))
+    const ln = await lightnet("/en/admin/")
+    await ln.goto("/en/media/faithful-freestyle--en")
 
     const editButton = page.locator("#edit-btn")
     await expect(editButton).toBeVisible()
@@ -151,12 +146,9 @@ test.describe("Media item edit page", () => {
       page.getByRole("button", { name: "Published" }).first(),
     ).toBeVisible()
 
-  test("should edit title", async ({ page, startLightnet }) => {
-    const ln = await startLightnet()
-
+  test("should edit title", async ({ page, lightnet }) => {
+    await lightnet("/en/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
-
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
     const updatedTitle = "Faithful Freestyle (Edited)"
     const titleInput = page.getByLabel("Title")
@@ -182,13 +174,11 @@ test.describe("Media item edit page", () => {
     await expectPublishedMessage(page)
   })
 
-  test("Should update media type", async ({ page, startLightnet }) => {
-    const ln = await startLightnet()
+  test("Should update media type", async ({ page, lightnet }) => {
+    await lightnet("/en/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
 
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
-
-    const typeSelect = page.getByLabel("Type")
+    const typeSelect = page.getByLabel("Type").first()
     await expect(typeSelect).toHaveValue("book")
     await typeSelect.selectOption("video")
 
@@ -207,11 +197,9 @@ test.describe("Media item edit page", () => {
     await expectPublishedMessage(page)
   })
 
-  test("Should update author name", async ({ page, startLightnet }) => {
-    const ln = await startLightnet()
+  test("Should update author name", async ({ page, lightnet }) => {
+    await lightnet("/en/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
-
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
     const authorsFieldset = page.getByRole("group", { name: "Authors" })
     const firstAuthorInput = authorsFieldset.getByRole("textbox").first()
@@ -234,11 +222,9 @@ test.describe("Media item edit page", () => {
     await expectPublishedMessage(page)
   })
 
-  test("Should add author", async ({ page, startLightnet }) => {
-    const ln = await startLightnet()
+  test("Should add author", async ({ page, lightnet }) => {
+    await lightnet("/en/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
-
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
     const authorsFieldset = page.getByRole("group", { name: "Authors" })
     const addAuthorButton = page.getByRole("button", { name: "Add Author" })
@@ -262,11 +248,9 @@ test.describe("Media item edit page", () => {
     await expectPublishedMessage(page)
   })
 
-  test("Should remove author", async ({ page, startLightnet }) => {
-    const ln = await startLightnet()
+  test("Should remove author", async ({ page, lightnet }) => {
+    await lightnet("/en/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
-
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
 
     const authorsFieldset = page.getByRole("group", { name: "Authors" })
     const addAuthorButton = page.getByRole("button", { name: "Add Author" })
@@ -297,10 +281,9 @@ test.describe("Media item edit page", () => {
 
   test("should show error message if common id is set empty", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    const ln = await startLightnet()
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+    await lightnet("/en/admin/media/faithful-freestyle--en")
 
     const commonIdInput = page.getByLabel("Common ID")
     await expect(commonIdInput).toHaveValue("faithful-freestyle")
@@ -317,10 +300,9 @@ test.describe("Media item edit page", () => {
 
   test("should focus invalid field when submitting invalid form data", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    const ln = await startLightnet()
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+    await lightnet("/en/admin/media/faithful-freestyle--en")
 
     const categoriesFieldset = page.getByRole("group", { name: "Categories" })
     await page.getByRole("button", { name: "Add Category" }).click()
@@ -341,10 +323,9 @@ test.describe("Media item edit page", () => {
 
   test("should not allow assigning duplicate categories", async ({
     page,
-    startLightnet,
+    lightnet,
   }) => {
-    const ln = await startLightnet()
-    await page.goto(ln.resolveURL("/en/admin/media/faithful-freestyle--en"))
+    await lightnet("/en/admin/media/faithful-freestyle--en")
 
     const categoriesFieldset = page.getByRole("group", { name: "Categories" })
     await page.getByRole("button", { name: "Add Category" }).click()

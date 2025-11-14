@@ -1,34 +1,32 @@
 import { expect } from "@playwright/test"
 
-import { lightnetTest } from "./test-utils"
+import { test } from "./basics-fixture"
 
-const test = lightnetTest("./fixtures/basics/")
-
-test("Should have title set", async ({ page, startLightnet }) => {
-  await startLightnet()
+test("Should have title set", async ({ page, lightnet }) => {
+  await lightnet()
   await expect(page).toHaveTitle("Basic Test")
 })
 
 test("Should have header title that navigates to home page", async ({
   page,
-  startLightnet,
+  lightnet,
 }) => {
-  const ln = await startLightnet()
+  const ln = await lightnet()
   await page.getByRole("link", { name: "Basic Test" }).click()
 
   await expect(page).toHaveURL(ln.resolveURL("/en/"))
 })
 
-test("Should have item section", async ({ page, startLightnet }) => {
-  await startLightnet()
+test("Should have item section", async ({ page, lightnet }) => {
+  await lightnet()
   await expect(page.getByRole("heading", { name: "All items" })).toBeVisible()
 })
 
 test("Should navigate to search page from main menu", async ({
   page,
-  startLightnet,
+  lightnet,
 }) => {
-  const ln = await startLightnet()
+  const ln = await lightnet()
   await expect(
     page.getByRole("button", { name: "Open Main Menu" }),
   ).toBeVisible()
@@ -42,8 +40,8 @@ test("Should navigate to search page from main menu", async ({
   await expect(page.getByRole("heading", { name: "Search" })).toBeVisible()
 })
 
-test("Should switch languages", async ({ page, startLightnet }) => {
-  const ln = await startLightnet()
+test("Should switch languages", async ({ page, lightnet }) => {
+  const ln = await lightnet()
 
   await page.getByLabel("Select language").click()
   await page.getByRole("link", { name: "Deutsch" }).click()
@@ -57,9 +55,9 @@ test("Should switch languages", async ({ page, startLightnet }) => {
 
 test("Should verify EN Detail media page url and title", async ({
   page,
-  startLightnet,
+  lightnet,
 }) => {
-  const ln = await startLightnet()
+  const ln = await lightnet()
 
   await page.getByRole("link", { name: "Faithful Freestyle" }).click()
   await expect(
@@ -80,9 +78,9 @@ test("Should verify EN Detail media page url and title", async ({
 
 test("Should verify DE Detail media page url and title", async ({
   page,
-  startLightnet,
+  lightnet,
 }) => {
-  const ln = await startLightnet()
+  const ln = await lightnet()
 
   await page.getByLabel("Select language").click()
   await page.getByRole("link", { name: "Deutsch" }).click()
@@ -105,9 +103,9 @@ test("Should verify DE Detail media page url and title", async ({
 
 test("Should show `Powered by LightNet` in footer", async ({
   page,
-  startLightnet,
+  lightnet,
 }) => {
-  await startLightnet()
+  await lightnet()
 
   const footerLink = page
     .getByRole("contentinfo")
