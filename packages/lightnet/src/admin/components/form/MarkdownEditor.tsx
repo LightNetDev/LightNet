@@ -1,10 +1,10 @@
 import { lazy, Suspense } from "react"
 import { type Control, type FieldValues, type Path } from "react-hook-form"
 
+import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Legend from "./atoms/Legend"
 import { useFieldError } from "./hooks/use-field-error"
-import ErrorMessage from "./atoms/ErrorMessage"
 
 const InternalMarkdownEditor = lazy(() => import("./InternalMarkdownEditor"))
 
