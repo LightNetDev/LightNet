@@ -1,6 +1,6 @@
+import { lazy, Suspense } from "react"
 import { type Control, type FieldValues, type Path } from "react-hook-form"
 
-import { lazy, Suspense } from "react"
 import Hint from "./atoms/Hint"
 import Legend from "./atoms/Legend"
 

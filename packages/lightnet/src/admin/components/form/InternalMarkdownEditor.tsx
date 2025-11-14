@@ -3,22 +3,22 @@ import "@mdxeditor/editor/style.css"
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
+  CreateLink,
+  diffSourcePlugin,
+  DiffSourceToggleWrapper,
   headingsPlugin,
+  linkDialogPlugin,
   linkPlugin,
   listsPlugin,
   ListsToggle,
-  CreateLink,
-  quotePlugin,
-  diffSourcePlugin,
-  linkDialogPlugin,
-  DiffSourceToggleWrapper,
   MDXEditor,
+  quotePlugin,
   toolbarPlugin,
   UndoRedo,
 } from "@mdxeditor/editor"
 import {
-  Controller,
   type Control,
+  Controller,
   type FieldValues,
   type Path,
 } from "react-hook-form"

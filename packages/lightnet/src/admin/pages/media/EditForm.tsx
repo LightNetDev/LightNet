@@ -7,6 +7,7 @@ import {
   I18nContext,
 } from "../../../i18n/react/i18n-context"
 import Input from "../../components/form/Input"
+import MarkdownEditor from "../../components/form/MarkdownEditor"
 import Select from "../../components/form/Select"
 import SubmitButton from "../../components/form/SubmitButton"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
@@ -14,7 +15,6 @@ import Authors from "./fields/Authors"
 import Categories from "./fields/Categories"
 import Collections from "./fields/Collections"
 import { updateMediaItem } from "./media-item-store"
-import MarkdownEditor from "../../components/form/MarkdownEditor"
 
 type SelectOption = { id: string; labelText: string }
 
