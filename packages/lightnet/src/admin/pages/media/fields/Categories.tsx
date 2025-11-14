@@ -8,8 +8,10 @@ import type { MediaItem } from "../../../types/media-item"
 export default function Categories({
   control,
   categories,
+  defaultValue,
 }: {
   control: Control<MediaItem>
+  defaultValue: MediaItem["categories"]
   categories: { id: string; labelText: string }[]
 }) {
   return (
@@ -22,6 +24,7 @@ export default function Categories({
           categories={categories}
           control={control}
           index={index}
+          defaultValue={defaultValue[index].value}
         />
       )}
       addButton={{
@@ -36,10 +39,12 @@ export default function Categories({
 function CategorySelect({
   control,
   categories,
+  defaultValue,
   index,
 }: {
   control: Control<MediaItem>
   categories: { id: string; labelText: string }[]
+  defaultValue?: string
   index: number
 }) {
   const name = `categories.${index}.value` as const
@@ -49,6 +54,7 @@ function CategorySelect({
       <select
         {...control.register(name)}
         id={name}
+        defaultValue={defaultValue}
         aria-invalid={!!errorMessage}
         className={`dy-select dy-select-bordered text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
       >

@@ -8,12 +8,14 @@ import { useFieldError } from "./hooks/use-field-error"
 export default function Input<TFieldValues extends FieldValues>({
   name,
   label,
+  defaultValue,
   hint,
   control,
   type = "text",
 }: {
   name: Path<TFieldValues>
   label: string
+  defaultValue?: string
   hint?: string
   control: Control<TFieldValues>
   type?: "text" | "date"
@@ -26,6 +28,7 @@ export default function Input<TFieldValues extends FieldValues>({
         className={`dy-input dy-input-bordered shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
         type={type}
         id={name}
+        defaultValue={defaultValue}
         aria-invalid={!!errorMessage}
         {...control.register(name)}
       />

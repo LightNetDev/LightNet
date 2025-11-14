@@ -53,35 +53,52 @@ export default function EditForm({
           <SubmitButton control={control} />
         </div>
 
-        <Input name="title" label="ln.admin.title" control={control} />
+        <Input
+          name="title"
+          label="ln.admin.title"
+          control={control}
+          defaultValue={mediaItem.title}
+        />
         <Input
           name="commonId"
           label="ln.admin.common-id"
           hint="ln.admin.common-id-hint"
           control={control}
+          defaultValue={mediaItem.commonId}
         />
         <Select
           name="type"
           label="ln.type"
           options={mediaTypes}
           control={control}
+          defaultValue={mediaItem.type}
         />
         <Select
           name="language"
           label="ln.language"
+          defaultValue={mediaItem.language}
           options={languages}
           control={control}
         />
-        <Authors control={control} />
+        <Authors control={control} defaultValue={mediaItem.authors} />
         <Input
           name="dateCreated"
           label="ln.admin.created-on"
           hint="ln.admin.created-on-hint"
           type="date"
+          defaultValue={mediaItem.dateCreated}
           control={control}
         />
-        <Categories categories={categories} control={control} />
-        <Collections collections={collections} control={control} />
+        <Categories
+          categories={categories}
+          control={control}
+          defaultValue={mediaItem.categories}
+        />
+        <Collections
+          collections={collections}
+          control={control}
+          defaultValue={mediaItem.collections}
+        />
         <MarkdownEditor
           control={control}
           name="description"
