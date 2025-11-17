@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.10.6
+
+### Patch Changes
+
+- [#333](https://github.com/LightNetDev/LightNet/pull/333) [`539a377`](https://github.com/LightNetDev/LightNet/commit/539a377702df9213d0869ae63646f569c10b1867) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 3.10.5
 
 ### Patch Changes
