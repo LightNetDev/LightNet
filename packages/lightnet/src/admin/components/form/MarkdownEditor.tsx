@@ -6,7 +6,9 @@ import Hint from "./atoms/Hint"
 import Legend from "./atoms/Legend"
 import { useFieldError } from "./hooks/use-field-error"
 
-const InternalMarkdownEditor = lazy(() => import("./InternalMarkdownEditor"))
+const LazyLoadedMarkdownEditor = lazy(
+  () => import("./LazyLoadedMarkdownEditor"),
+)
 
 export default function MarkdownEditor<TFieldValues extends FieldValues>({
   control,
@@ -36,7 +38,7 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
             </div>
           }
         >
-          <InternalMarkdownEditor
+          <LazyLoadedMarkdownEditor
             control={control as Control<any>}
             name={name}
             defaultValue={defaultValue}

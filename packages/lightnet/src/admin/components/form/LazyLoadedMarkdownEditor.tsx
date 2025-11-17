@@ -24,10 +24,10 @@ import {
 } from "react-hook-form"
 
 /**
- * Do not import this component directly. It is
+ * IMPORTANT: Do not import this component directly. It is
  * very big. Use it with React lazy loading.
  */
-export default function InternalMarkdownEditor<
+export default function LazyLoadedMarkdownEditor<
   TFieldValues extends FieldValues,
 >({
   control,
