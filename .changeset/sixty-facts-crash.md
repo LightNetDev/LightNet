@@ -1,0 +1,5 @@
+---
+"lightnet": patch
+---
+
+Update dependencies

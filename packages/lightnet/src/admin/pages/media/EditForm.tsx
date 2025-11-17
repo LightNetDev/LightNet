@@ -7,6 +7,7 @@ import {
   I18nContext,
 } from "../../../i18n/react/i18n-context"
 import Input from "../../components/form/Input"
+import MarkdownEditor from "../../components/form/MarkdownEditor"
 import Select from "../../components/form/Select"
 import SubmitButton from "../../components/form/SubmitButton"
 import { type MediaItem, mediaItemSchema } from "../../types/media-item"
@@ -35,6 +36,8 @@ export default function EditForm({
   collections: SelectOption[]
 }) {
   const { handleSubmit, control } = useForm({
+    // Provide per-input defaults so SSG prerender matches, but keep a full
+    // defaultValues object here because useFieldArray does not accept default values.
     defaultValues: mediaItem,
     mode: "onTouched",
     shouldFocusError: true,
@@ -52,35 +55,58 @@ export default function EditForm({
           <SubmitButton control={control} />
         </div>
 
-        <Input name="title" label="ln.admin.title" control={control} />
+        <Input
+          name="title"
+          label="ln.admin.title"
+          control={control}
+          defaultValue={mediaItem.title}
+        />
         <Input
           name="commonId"
           label="ln.admin.common-id"
           hint="ln.admin.common-id-hint"
           control={control}
+          defaultValue={mediaItem.commonId}
         />
         <Select
           name="type"
           label="ln.type"
           options={mediaTypes}
           control={control}
+          defaultValue={mediaItem.type}
         />
         <Select
           name="language"
           label="ln.language"
+          defaultValue={mediaItem.language}
           options={languages}
           control={control}
         />
-        <Authors control={control} />
+        <Authors control={control} defaultValue={mediaItem.authors} />
         <Input
           name="dateCreated"
           label="ln.admin.created-on"
           hint="ln.admin.created-on-hint"
           type="date"
+          defaultValue={mediaItem.dateCreated}
           control={control}
         />
-        <Categories categories={categories} control={control} />
-        <Collections collections={collections} control={control} />
+        <Categories
+          categories={categories}
+          control={control}
+          defaultValue={mediaItem.categories}
+        />
+        <Collections
+          collections={collections}
+          control={control}
+          defaultValue={mediaItem.collections}
+        />
+        <MarkdownEditor
+          control={control}
+          name="description"
+          label="ln.admin.description"
+          defaultValue={mediaItem.description}
+        />
 
         <SubmitButton className="self-end" control={control} />
       </form>

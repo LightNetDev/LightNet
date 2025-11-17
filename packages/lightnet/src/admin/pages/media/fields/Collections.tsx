@@ -9,9 +9,11 @@ import type { MediaItem } from "../../../types/media-item"
 export default function Collections({
   control,
   collections,
+  defaultValue,
 }: {
   control: Control<MediaItem>
   collections: { id: string; labelText: string }[]
+  defaultValue: MediaItem["collections"]
 }) {
   return (
     <DynamicArray
@@ -24,8 +26,13 @@ export default function Collections({
             collections={collections}
             control={control}
             index={index}
+            defaultValue={defaultValue[index]?.collection}
           />
-          <CollectionIndex control={control} index={index} />
+          <CollectionIndex
+            control={control}
+            index={index}
+            defaultValue={defaultValue[index]?.index}
+          />
         </div>
       )}
       addButton={{
@@ -44,9 +51,11 @@ function CollectionSelect({
   control,
   collections,
   index,
+  defaultValue,
 }: {
   control: Control<MediaItem>
   collections: { id: string; labelText: string }[]
+  defaultValue?: string
   index: number
 }) {
   const name = `collections.${index}.collection` as const
@@ -57,6 +66,7 @@ function CollectionSelect({
       <select
         {...control.register(name)}
         id={name}
+        defaultValue={defaultValue}
         aria-invalid={!!errorMessage}
         className={`dy-select dy-select-bordered text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
       >
@@ -74,9 +84,11 @@ function CollectionSelect({
 function CollectionIndex({
   control,
   index,
+  defaultValue,
 }: {
   control: Control<MediaItem>
   index: number
+  defaultValue?: number
 }) {
   const name = `collections.${index}.index` as const
   const errorMessage = useFieldError({ name, control })
@@ -92,6 +104,8 @@ function CollectionIndex({
         className={`dy-input dy-input-bordered shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
         aria-invalid={!!errorMessage}
         type="number"
+        id={name}
+        defaultValue={defaultValue}
         step={1}
         {...control.register(name, {
           setValueAs: (value) => (value === "" ? undefined : Number(value)),

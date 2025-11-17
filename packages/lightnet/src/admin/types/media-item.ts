@@ -46,6 +46,7 @@ export const mediaItemSchema = z.object({
     .array()
     .superRefine(unique("collection")),
   dateCreated: z.string().date(INVALID_DATE),
+  description: z.string().optional(),
 })
 
 export type MediaItem = z.input<typeof mediaItemSchema>

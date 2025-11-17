@@ -5,6 +5,7 @@ import { defineConfig, devices } from "@playwright/test"
  */
 export default defineConfig({
   testDir: "./__e2e__",
+  globalTeardown: "./__e2e__/global.teardown.ts",
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
