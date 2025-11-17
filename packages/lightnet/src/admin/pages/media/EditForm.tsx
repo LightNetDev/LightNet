@@ -105,7 +105,6 @@ export default function EditForm({
           control={control}
           name="description"
           label="ln.admin.description"
-          defaultValue={mediaItem.description}
         />
 
         <SubmitButton className="self-end" control={control} />

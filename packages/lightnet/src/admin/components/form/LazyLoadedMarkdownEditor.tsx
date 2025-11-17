@@ -4,8 +4,6 @@ import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
   CreateLink,
-  diffSourcePlugin,
-  DiffSourceToggleWrapper,
   headingsPlugin,
   linkDialogPlugin,
   linkPlugin,
@@ -31,12 +29,10 @@ export default function LazyLoadedMarkdownEditor<
   TFieldValues extends FieldValues,
 >({
   control,
-  defaultValue,
   name,
 }: {
   name: Path<TFieldValues>
   control: Control<TFieldValues>
-  defaultValue?: string
 }) {
   return (
     <Controller
@@ -54,20 +50,16 @@ export default function LazyLoadedMarkdownEditor<
             listsPlugin(),
             linkPlugin(),
             linkDialogPlugin(),
-            diffSourcePlugin({
-              viewMode: "rich-text",
-              diffMarkdown: defaultValue,
-            }),
             quotePlugin(),
             toolbarPlugin({
               toolbarContents: () => (
-                <DiffSourceToggleWrapper>
+                <>
                   <UndoRedo />
                   <BoldItalicUnderlineToggles />
                   <BlockTypeSelect />
                   <ListsToggle options={["bullet", "number"]} />
                   <CreateLink />
-                </DiffSourceToggleWrapper>
+                </>
               ),
             }),
           ]}

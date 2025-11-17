@@ -12,7 +12,6 @@ const LazyLoadedMarkdownEditor = lazy(
 
 export default function MarkdownEditor<TFieldValues extends FieldValues>({
   control,
-  defaultValue,
   name,
   label,
   hint,
@@ -21,7 +20,6 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
   label: string
   hint?: string
   control: Control<TFieldValues>
-  defaultValue?: string
 }) {
   const errorMessage = useFieldError({ control, name })
 
@@ -41,7 +39,6 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
           <LazyLoadedMarkdownEditor
             control={control as Control<any>}
             name={name}
-            defaultValue={defaultValue}
           />
         </Suspense>
       </div>
