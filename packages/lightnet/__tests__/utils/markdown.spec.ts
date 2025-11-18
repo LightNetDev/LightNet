@@ -27,6 +27,18 @@ test("Should remove headers", () => {
   expect(markdownToText("# H1\n## H2 words#")).toBe("H1\nH2 words#")
 })
 
+test("Should remove underline", () => {
+  expect(markdownToText("Some <u>underlined</u> Words /u >")).toBe(
+    "Some underlined Words /u >",
+  )
+})
+
+test("Should remove encoded space", () => {
+  expect(markdownToText("Text&#x20;with&#x20;space&#x20;")).toBe(
+    "Text with space ",
+  )
+})
+
 test("Should remove inline modifiers", async () => {
   expect(markdownToText("this is **some bold** and _italic_ text")).toBe(
     "this is some bold and italic text",

@@ -19,6 +19,10 @@ export function markdownToText(markdown?: string) {
       .replaceAll(/^#+ ?/gm, "")
       // lists
       .replaceAll(/^- /gm, "")
+      // escaped white space
+      .replaceAll(/&#x20;/g, " ")
+      // underlines
+      .replaceAll(/<\/?u>/g, "")
       // block quotes
       .replaceAll(/^>+ ?/gm, "")
       // bold and italics
