@@ -45,6 +45,10 @@ test("Should remove inline modifiers", async () => {
   )
 })
 
+test("Should remove code blocks", async () => {
+  expect(markdownToText("some\n```js \ncode\n```\n")).toBe("some\ncode\n")
+})
+
 test("Should remove list", () => {
   expect(markdownToText("- this is **bold**\n- this is normal")).toBe(
     "this is bold\nthis is normal",

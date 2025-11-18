@@ -23,6 +23,8 @@ export function markdownToText(markdown?: string) {
       .replaceAll(/&#x20;/g, " ")
       // underlines
       .replaceAll(/<\/?u>/g, "")
+      // code block
+      .replaceAll(/^```[a-zA-Z ]*\n/gm, "")
       // block quotes
       .replaceAll(/^>+ ?/gm, "")
       // bold and italics
