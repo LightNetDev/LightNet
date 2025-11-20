@@ -1,5 +1,13 @@
 # lightnet
 
+## 3.10.7
+
+### Patch Changes
+
+- [#337](https://github.com/LightNetDev/LightNet/pull/337) [`ac32a7f`](https://github.com/LightNetDev/LightNet/commit/ac32a7f35b58d5aff39dd45531d77247ae24c61f) Thanks [@smn-cds](https://github.com/smn-cds)! - Do not use ALL CAPS casing for primary buttons.
+
+- [#337](https://github.com/LightNetDev/LightNet/pull/337) [`ac32a7f`](https://github.com/LightNetDev/LightNet/commit/ac32a7f35b58d5aff39dd45531d77247ae24c61f) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 3.10.6
 
 ### Patch Changes
