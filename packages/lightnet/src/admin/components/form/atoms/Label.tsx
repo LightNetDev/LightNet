@@ -15,7 +15,7 @@ export default function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className={`font-bold uppercase text-gray-600 ${size === "sm" ? "pb-2 text-sm" : "pb-1 text-xs"} ${className}`}
+      className={`font-bold text-gray-600 ${size === "sm" ? "pb-2 text-sm" : "pb-1 text-xs"} ${className}`}
     >
       {t(label)}
     </label>

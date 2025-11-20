@@ -85,8 +85,8 @@ export default function EditForm({
         <Authors control={control} defaultValue={mediaItem.authors} />
         <Input
           name="dateCreated"
-          label="ln.admin.created-on"
-          hint="ln.admin.created-on-hint"
+          label="ln.admin.date-created"
+          hint="ln.admin.date-created-hint"
           type="date"
           defaultValue={mediaItem.dateCreated}
           control={control}
