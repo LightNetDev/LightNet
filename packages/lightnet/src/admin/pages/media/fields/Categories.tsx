@@ -1,8 +1,7 @@
 import { type Control } from "react-hook-form"
 
-import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import DynamicArray from "../../../components/form/DynamicArray"
-import { useFieldError } from "../../../components/form/hooks/use-field-error"
+import Select from "../../../components/form/Select"
 import type { MediaItem } from "../../../types/media-item"
 
 export default function Categories({
@@ -20,11 +19,12 @@ export default function Categories({
       name="categories"
       label="ln.categories"
       renderElement={(index) => (
-        <CategorySelect
-          categories={categories}
+        <Select
+          options={categories}
           control={control}
-          index={index}
+          name={`categories.${index}.value`}
           defaultValue={defaultValue[index]?.value}
+          preserveHintSpace={false}
         />
       )}
       addButton={{
@@ -33,38 +33,5 @@ export default function Categories({
           append({ value: "" }, { focusName: `categories.${index}.value` }),
       }}
     />
-  )
-}
-
-function CategorySelect({
-  control,
-  categories,
-  defaultValue,
-  index,
-}: {
-  control: Control<MediaItem>
-  categories: { id: string; labelText: string }[]
-  defaultValue?: string
-  index: number
-}) {
-  const name = `categories.${index}.value` as const
-  const errorMessage = useFieldError({ name, control })
-  return (
-    <>
-      <select
-        {...control.register(name)}
-        id={name}
-        defaultValue={defaultValue}
-        aria-invalid={!!errorMessage}
-        className={`dy-select dy-select-bordered text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
-      >
-        {categories.map(({ id, labelText }) => (
-          <option key={id} value={id}>
-            {labelText}
-          </option>
-        ))}
-      </select>
-      <ErrorMessage message={errorMessage} />
-    </>
   )
 }
