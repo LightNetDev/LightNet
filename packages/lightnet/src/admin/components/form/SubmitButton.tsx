@@ -8,10 +8,10 @@ import type { MediaItem } from "../../types/media-item"
 const SUCCESS_DURATION_MS = 2000
 
 const baseButtonClass =
-  "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-bold shadow-sm transition-colors easy-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:cursor-not-allowed"
+  "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-bold shadow-sm transition-colors easy-in-out focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-blue-700 focus-visible:ring-offset-1 disabled:cursor-not-allowed"
 
 const buttonStateClasses = {
-  idle: "bg-gray-800 text-gray-100 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-500 disabled:text-gray-300",
+  idle: "bg-gray-800 text-gray-50 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-500 disabled:text-gray-300",
   error:
     "bg-rose-700 text-white hover:bg-rose-800 hover:text-white disabled:bg-rose-600",
   success:

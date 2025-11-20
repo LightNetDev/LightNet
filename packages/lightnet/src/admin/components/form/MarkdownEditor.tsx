@@ -1,9 +1,14 @@
 import { lazy, Suspense } from "react"
-import { type Control, type FieldValues, type Path } from "react-hook-form"
+import {
+  type Control,
+  type FieldValues,
+  type Path,
+} from "react-hook-form"
 
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
+import { useFieldDirty } from "./hooks/use-field-dirty"
 import { useFieldError } from "./hooks/use-field-error"
 
 const LazyLoadedMarkdownEditor = lazy(
@@ -21,16 +26,17 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
   hint?: string
   control: Control<TFieldValues>
 }) {
+  const isDirty = useFieldDirty({ control, name })
   const errorMessage = useFieldError({ control, name })
 
   return (
     <fieldset key={name} className="group">
       <legend>
-        <Label label={label} />
+        <Label label={label} isDirty={isDirty} isInvalid={!!errorMessage} />
       </legend>
 
       <div
-        className={`overflow-hidden rounded-lg rounded-ss-none border border-gray-300 shadow-sm ${errorMessage ? "border-rose-800" : ""}`}
+        className={`overflow-hidden rounded-lg rounded-ss-none border border-gray-300 shadow-sm group-focus-within:border-blue-700 group-focus-within:ring-1 group-focus-within:ring-blue-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""}`}
       >
         <Suspense
           fallback={

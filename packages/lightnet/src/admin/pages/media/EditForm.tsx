@@ -36,8 +36,6 @@ export default function EditForm({
   collections: SelectOption[]
 }) {
   const { handleSubmit, control } = useForm({
-    // Provide per-input defaults so SSG prerender matches, but keep a full
-    // defaultValues object here because useFieldArray does not accept default values.
     defaultValues: mediaItem,
     mode: "onTouched",
     shouldFocusError: true,

@@ -47,12 +47,12 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         <Label label={label} />
       </legend>
 
-      <div className="flex w-full flex-col divide-y divide-gray-300 overflow-hidden rounded-lg rounded-ss-none border border-gray-300 bg-gray-100 shadow-sm">
+      <div className="flex w-full flex-col divide-y divide-gray-300 rounded-lg rounded-ss-none border border-gray-300 bg-gray-100 shadow-sm">
         {fields.map((field, index) => (
           <div className="flex w-full items-center gap-2 p-2" key={field.id}>
             <div className="flex grow flex-col">{renderElement(index)}</div>
             <button
-              className="flex items-center p-2 text-gray-600 transition-colors ease-in-out hover:text-rose-800"
+              className="flex items-center rounded-md p-2 text-gray-600 transition-colors ease-in-out hover:text-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
               type="button"
               onClick={() => remove(index)}
             >
@@ -62,7 +62,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         ))}
         <button
           type="button"
-          className="p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-gray-200"
+          className="rounded-b-lg p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
           onClick={() => {
             addButton.onClick(append, fields.length)
           }}
