@@ -62,13 +62,16 @@ function CollectionSelect({
   const errorMessage = useFieldError({ name, control })
   return (
     <>
-      <Label for={name} label="ln.admin.name" size="xs" />
+      <label htmlFor={name}>
+        <Label label="ln.admin.name" size="small" />
+      </label>
+
       <select
         {...control.register(name)}
         id={name}
         defaultValue={defaultValue}
         aria-invalid={!!errorMessage}
-        className={`dy-select dy-select-bordered text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
+        className={`dy-select dy-select-bordered rounded-ss-none text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
       >
         {collections.map(({ id, labelText }) => (
           <option key={id} value={id}>
@@ -94,14 +97,16 @@ function CollectionIndex({
   const errorMessage = useFieldError({ name, control })
   return (
     <>
-      <Label
-        for={name}
-        label="ln.admin.position-in-collection"
-        size="xs"
-        className="mt-3"
-      />
+      <label htmlFor={name}>
+        <Label
+          label="ln.admin.position-in-collection"
+          size="small"
+          className="mt-3"
+        />
+      </label>
+
       <input
-        className={`dy-input dy-input-bordered shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
+        className={`dy-input dy-input-bordered rounded-ss-none shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
         aria-invalid={!!errorMessage}
         type="number"
         id={name}

@@ -11,8 +11,8 @@ import Icon from "../../../components/Icon"
 import { useI18n } from "../../../i18n/react/useI18n"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
-import Legend from "./atoms/Legend"
 import { useFieldError } from "./hooks/use-field-error"
+import Label from "./atoms/Label"
 
 export default function DynamicArray<TFieldValues extends FieldValues>({
   control,
@@ -42,9 +42,12 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   const { t } = useI18n()
   const errorMessage = useFieldError({ control, name })
   return (
-    <fieldset key={name}>
-      <Legend label={label} />
-      <div className="flex w-full flex-col divide-y divide-gray-300 overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-sm">
+    <fieldset key={name} className="group">
+      <legend>
+        <Label label={label} />
+      </legend>
+
+      <div className="flex w-full flex-col divide-y divide-gray-300 overflow-hidden rounded-lg rounded-ss-none border border-gray-300 bg-gray-100 shadow-sm">
         {fields.map((field, index) => (
           <div className="flex w-full items-center gap-2 p-2" key={field.id}>
             <div className="flex grow flex-col">{renderElement(index)}</div>
@@ -68,7 +71,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         </button>
       </div>
       <ErrorMessage message={errorMessage} />
-      <Hint label={hint} />
+      <Hint preserveSpace={true} label={hint} />
     </fieldset>
   )
 }

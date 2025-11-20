@@ -11,25 +11,31 @@ export default function Select<TFieldValues extends FieldValues>({
   control,
   defaultValue,
   hint,
+  preserveHintSpace = true,
   options,
 }: {
   name: Path<TFieldValues>
-  label: string
+  label?: string
   hint?: string
+  preserveHintSpace?: boolean
   defaultValue?: string
   control: Control<TFieldValues>
   options: { id: string; labelText?: string }[]
 }) {
   const errorMessage = useFieldError({ control, name })
   return (
-    <div key={name} className="flex w-full flex-col">
-      <Label for={name} label={label} />
+    <div key={name} className="group flex w-full flex-col">
+      {label && (
+        <label htmlFor={name}>
+          <Label label={label} />
+        </label>
+      )}
       <select
         {...control.register(name)}
         id={name}
         aria-invalid={!!errorMessage}
         defaultValue={defaultValue}
-        className={`dy-select dy-select-bordered text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
+        className={`dy-select dy-select-bordered text-base shadow-sm focus:border-blue-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-700 ${errorMessage ? "dy-select-error" : ""} ${label ? "rounded-ss-none" : ""}`}
       >
         {options.map(({ id, labelText }) => (
           <option key={id} value={id}>
@@ -38,7 +44,7 @@ export default function Select<TFieldValues extends FieldValues>({
         ))}
       </select>
       <ErrorMessage message={errorMessage} />
-      <Hint label={hint} />
+      <Hint preserveSpace={preserveHintSpace} label={hint} />
     </div>
   )
 }

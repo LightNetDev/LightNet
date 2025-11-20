@@ -11,7 +11,7 @@ const baseButtonClass =
   "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-bold shadow-sm transition-colors easy-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:cursor-not-allowed"
 
 const buttonStateClasses = {
-  idle: "bg-gray-800 text-gray-100 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-600 disabled:text-gray-200",
+  idle: "bg-gray-800 text-gray-100 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-500 disabled:text-gray-300",
   error:
     "bg-rose-700 text-white hover:bg-rose-800 hover:text-white disabled:bg-rose-600",
   success:
@@ -40,9 +40,10 @@ export default function SubmitButton({
   className?: string
 }) {
   const { t } = useI18n()
-  const { isSubmitting, isSubmitSuccessful, submitCount } = useFormState({
-    control,
-  })
+  const { isSubmitting, isSubmitSuccessful, submitCount, isDirty } =
+    useFormState({
+      control,
+    })
 
   const buttonState = useButtonState(isSubmitSuccessful, submitCount)
   const buttonClass = `${baseButtonClass} ${buttonStateClasses[buttonState]} ${className}`
@@ -50,7 +51,11 @@ export default function SubmitButton({
   const icon = icons[buttonState]
 
   return (
-    <button className={buttonClass} type="submit" disabled={isSubmitting}>
+    <button
+      className={buttonClass}
+      type="submit"
+      disabled={isSubmitting || !isDirty}
+    >
       {icon && <Icon className={icon} ariaLabel="" />}
       {t(label)}
     </button>

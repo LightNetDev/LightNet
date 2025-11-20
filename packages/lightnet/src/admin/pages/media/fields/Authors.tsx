@@ -1,9 +1,8 @@
 import { type Control } from "react-hook-form"
 
-import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import DynamicArray from "../../../components/form/DynamicArray"
-import { useFieldError } from "../../../components/form/hooks/use-field-error"
 import type { MediaItem } from "../../../types/media-item"
+import Input from "../../../components/form/Input"
 
 export default function Authors({
   control,
@@ -18,8 +17,9 @@ export default function Authors({
       name="authors"
       label="ln.admin.authors"
       renderElement={(index) => (
-        <AuthorInput
-          index={index}
+        <Input
+          name={`authors.${index}.value`}
+          preserveHintSpace={false}
           control={control}
           defaultValue={defaultValue[index]?.value}
         />
@@ -30,29 +30,5 @@ export default function Authors({
           append({ value: "" }, { focusName: `authors.${index}.value` }),
       }}
     />
-  )
-}
-
-function AuthorInput({
-  index,
-  control,
-  defaultValue,
-}: {
-  index: number
-  control: Control<MediaItem>
-  defaultValue?: string
-}) {
-  const name = `authors.${index}.value` as const
-  const errorMessage = useFieldError({ name, control })
-  return (
-    <>
-      <input
-        className={`dy-input dy-input-bordered shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
-        aria-invalid={!!errorMessage}
-        defaultValue={defaultValue}
-        {...control.register(name)}
-      />
-      <ErrorMessage message={errorMessage} />
-    </>
   )
 }
