@@ -3,20 +3,20 @@ import "@mdxeditor/editor/style.css"
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
+  type CodeBlockEditorProps,
+  codeBlockPlugin,
   CreateLink,
   headingsPlugin,
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
   ListsToggle,
-  codeBlockPlugin,
+  markdownShortcutPlugin,
   MDXEditor,
   quotePlugin,
   toolbarPlugin,
   UndoRedo,
   useCodeBlockEditorContext,
-  type CodeBlockEditorProps,
-  markdownShortcutPlugin,
 } from "@mdxeditor/editor"
 import {
   type Control,
