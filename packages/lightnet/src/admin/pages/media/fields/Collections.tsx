@@ -1,10 +1,9 @@
 import { type Control } from "react-hook-form"
 
-import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
-import Label from "../../../components/form/atoms/Label"
 import DynamicArray from "../../../components/form/DynamicArray"
-import { useFieldError } from "../../../components/form/hooks/use-field-error"
 import type { MediaItem } from "../../../types/media-item"
+import Select from "../../../components/form/Select"
+import Input from "../../../components/form/Input"
 
 export default function Collections({
   control,
@@ -21,17 +20,28 @@ export default function Collections({
       name="collections"
       label="ln.admin.collections"
       renderElement={(index) => (
-        <div className="flex w-full flex-col py-2">
-          <CollectionSelect
-            collections={collections}
+        <div className="flex w-full flex-col gap-4 py-2">
+          <Select
+            options={collections}
+            label="ln.admin.name"
+            labelSize="small"
+            preserveHintSpace={false}
+            name={`collections.${index}.collection`}
             control={control}
-            index={index}
             defaultValue={defaultValue[index]?.collection}
           />
-          <CollectionIndex
+          <Input
+            type="number"
             control={control}
-            index={index}
+            label="ln.admin.position-in-collection"
+            labelSize="small"
+            step={1}
+            min={0}
+            preserveHintSpace={false}
             defaultValue={defaultValue[index]?.index}
+            {...control.register(`collections.${index}.index`, {
+              setValueAs: (value) => (value === "" ? undefined : Number(value)),
+            })}
           />
         </div>
       )}
@@ -44,79 +54,5 @@ export default function Collections({
           ),
       }}
     />
-  )
-}
-
-function CollectionSelect({
-  control,
-  collections,
-  index,
-  defaultValue,
-}: {
-  control: Control<MediaItem>
-  collections: { id: string; labelText: string }[]
-  defaultValue?: string
-  index: number
-}) {
-  const name = `collections.${index}.collection` as const
-  const errorMessage = useFieldError({ name, control })
-  return (
-    <>
-      <label htmlFor={name}>
-        <Label label="ln.admin.name" size="small" />
-      </label>
-
-      <select
-        {...control.register(name)}
-        id={name}
-        defaultValue={defaultValue}
-        aria-invalid={!!errorMessage}
-        className={`dy-select dy-select-bordered rounded-ss-none text-base shadow-sm ${errorMessage ? "dy-select-error" : ""}`}
-      >
-        {collections.map(({ id, labelText }) => (
-          <option key={id} value={id}>
-            {labelText}
-          </option>
-        ))}
-      </select>
-      <ErrorMessage message={errorMessage} />
-    </>
-  )
-}
-
-function CollectionIndex({
-  control,
-  index,
-  defaultValue,
-}: {
-  control: Control<MediaItem>
-  index: number
-  defaultValue?: number
-}) {
-  const name = `collections.${index}.index` as const
-  const errorMessage = useFieldError({ name, control })
-  return (
-    <>
-      <label htmlFor={name}>
-        <Label
-          label="ln.admin.position-in-collection"
-          size="small"
-          className="mt-3"
-        />
-      </label>
-
-      <input
-        className={`dy-input dy-input-bordered rounded-ss-none shadow-inner ${errorMessage ? "dy-input-error" : ""}`}
-        aria-invalid={!!errorMessage}
-        type="number"
-        id={name}
-        defaultValue={defaultValue}
-        step={1}
-        {...control.register(name, {
-          setValueAs: (value) => (value === "" ? undefined : Number(value)),
-        })}
-      />
-      <ErrorMessage message={errorMessage} />
-    </>
   )
 }

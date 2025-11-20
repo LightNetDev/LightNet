@@ -42,7 +42,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   const { t } = useI18n()
   const errorMessage = useFieldError({ control, name })
   return (
-    <fieldset key={name} className="group">
+    <fieldset key={name}>
       <legend>
         <Label label={label} />
       </legend>

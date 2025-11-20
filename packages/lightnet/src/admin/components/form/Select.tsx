@@ -8,6 +8,7 @@ import { useFieldError } from "./hooks/use-field-error"
 export default function Select<TFieldValues extends FieldValues>({
   name,
   label,
+  labelSize,
   control,
   defaultValue,
   hint,
@@ -16,6 +17,7 @@ export default function Select<TFieldValues extends FieldValues>({
 }: {
   name: Path<TFieldValues>
   label?: string
+  labelSize?: "small" | "medium"
   hint?: string
   preserveHintSpace?: boolean
   defaultValue?: string
@@ -27,7 +29,7 @@ export default function Select<TFieldValues extends FieldValues>({
     <div key={name} className="group flex w-full flex-col">
       {label && (
         <label htmlFor={name}>
-          <Label label={label} />
+          <Label label={label} size={labelSize} />
         </label>
       )}
       <select
