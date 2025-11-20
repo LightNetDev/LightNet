@@ -11,14 +11,14 @@ ln.admin.add-category: Add category
 ln.admin.collections: Collections
 ln.admin.add-collection: Add collection
 ln.admin.edit-media-item: Edit Media Item
-ln.admin.position-in-collection: Position in collection
+ln.admin.position-in-collection: Position in Collection
 ln.admin.back-to-details-page: Back to details page
 ln.admin.title: Title
 ln.admin.common-id: Common ID
 ln.admin.authors: Authors
 ln.admin.description: Description
-ln.admin.created-on: Created on
-ln.admin.created-on-hint: When has this item been created on this library?
+ln.admin.date-created: Date Created
+ln.admin.date-created-hint: When has this item been created on this library?
 ln.admin.common-id-hint: The English title, all lowercase, words separated with hyphens.
 ln.admin.errors.non-empty-string: Please enter at least one character.
 ln.admin.errors.invalid-date: That date doesn't look right.
