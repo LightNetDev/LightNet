@@ -13,7 +13,9 @@
     "format": "prettier . --write --cache",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "version": "pnpm changeset version && pnpm i --no-frozen-lockfile",
-    "translation-status": "pnpm --silent -F cli translation-status"
+    "translation-status": "pnpm --silent -F cli translation-status",
+    "e2e": "pnpm --filter=lightnet e2e",
+    "test": "pnpm --filter=lightnet test"
   },
   "packageManager": "pnpm@10.18.3+sha512.bbd16e6d7286fd7e01f6b3c0b3c932cda2965c06a908328f74663f10a9aea51f1129eea615134bf992831b009eabe167ecb7008b597f40ff9bc75946aadfb08d",
   "repository": {
