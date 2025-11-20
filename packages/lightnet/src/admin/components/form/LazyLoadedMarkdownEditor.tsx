@@ -16,6 +16,7 @@ import {
   UndoRedo,
   useCodeBlockEditorContext,
   type CodeBlockEditorProps,
+  markdownShortcutPlugin,
 } from "@mdxeditor/editor"
 import {
   type Control,
@@ -66,6 +67,7 @@ export default function LazyLoadedMarkdownEditor<
             }),
             linkDialogPlugin(),
             quotePlugin(),
+            markdownShortcutPlugin(),
             toolbarPlugin({
               toolbarContents: () => (
                 <>
