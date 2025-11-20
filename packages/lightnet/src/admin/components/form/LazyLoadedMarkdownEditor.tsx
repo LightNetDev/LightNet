@@ -9,10 +9,13 @@ import {
   linkPlugin,
   listsPlugin,
   ListsToggle,
+  codeBlockPlugin,
   MDXEditor,
   quotePlugin,
   toolbarPlugin,
   UndoRedo,
+  useCodeBlockEditorContext,
+  type CodeBlockEditorProps,
 } from "@mdxeditor/editor"
 import {
   type Control,
@@ -45,10 +48,22 @@ export default function LazyLoadedMarkdownEditor<
           onChange={onChange}
           contentEditableClassName="prose bg-gray-50 h-80 w-full max-w-full overflow-y-auto"
           ref={ref}
+          onError={(error) =>
+            console.error("Error while editing markdown", error)
+          }
           plugins={[
             headingsPlugin(),
             listsPlugin(),
             linkPlugin(),
+            codeBlockPlugin({
+              codeBlockEditorDescriptors: [
+                {
+                  match: () => true,
+                  priority: 0,
+                  Editor: TextAreaCodeEditor,
+                },
+              ],
+            }),
             linkDialogPlugin(),
             quotePlugin(),
             toolbarPlugin({
@@ -66,5 +81,19 @@ export default function LazyLoadedMarkdownEditor<
         />
       )}
     />
+  )
+}
+
+function TextAreaCodeEditor(props: CodeBlockEditorProps) {
+  const cb = useCodeBlockEditorContext()
+  return (
+    <div onKeyDown={(e) => e.nativeEvent.stopImmediatePropagation()}>
+      <textarea
+        rows={3}
+        cols={20}
+        defaultValue={props.code}
+        onChange={(e) => cb.setCode(e.target.value)}
+      />
+    </div>
   )
 }
