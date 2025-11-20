@@ -11,8 +11,8 @@ import Icon from "../../../components/Icon"
 import { useI18n } from "../../../i18n/react/useI18n"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
-import { useFieldError } from "./hooks/use-field-error"
 import Label from "./atoms/Label"
+import { useFieldError } from "./hooks/use-field-error"
 
 export default function DynamicArray<TFieldValues extends FieldValues>({
   control,

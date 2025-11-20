@@ -1,8 +1,8 @@
 import { type Control } from "react-hook-form"
 
 import DynamicArray from "../../../components/form/DynamicArray"
-import type { MediaItem } from "../../../types/media-item"
 import Input from "../../../components/form/Input"
+import type { MediaItem } from "../../../types/media-item"
 
 export default function Authors({
   control,

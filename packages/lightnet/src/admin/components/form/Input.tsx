@@ -1,10 +1,10 @@
+import type { InputHTMLAttributes } from "react"
 import { type Control, type FieldValues, type Path } from "react-hook-form"
 
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
 import { useFieldError } from "./hooks/use-field-error"
-import type { InputHTMLAttributes } from "react"
 
 type Props<TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>
