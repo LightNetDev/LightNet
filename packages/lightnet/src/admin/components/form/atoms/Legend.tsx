@@ -12,7 +12,7 @@ export default function Legend({
   const { t } = useI18n()
   return (
     <legend
-      className={`pb-2 font-bold uppercase text-gray-600 ${size === "sm" ? "text-sm" : "text-xs"} ${className}`}
+      className={`pb-2 font-bold text-gray-600 ${size === "sm" ? "text-sm" : "text-xs"} ${className}`}
     >
       {t(label)}
     </legend>
