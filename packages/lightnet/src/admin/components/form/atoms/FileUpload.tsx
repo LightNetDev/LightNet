@@ -1,4 +1,4 @@
-import { type ChangeEvent, type DragEvent,useRef, useState } from "react"
+import { type ChangeEvent, type DragEvent, useRef, useState } from "react"
 import {
   type Control,
   type FieldValues,
@@ -38,6 +38,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     const extension = nameParts.pop()
     const name = nameParts.join(".")
     field.onChange({
+      ...field.value,
       path: `${destinationPath}/${fileName ?? name}.${extension}`,
       file,
     })
