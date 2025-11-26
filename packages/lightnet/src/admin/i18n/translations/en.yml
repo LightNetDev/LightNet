@@ -16,8 +16,8 @@ ln.admin.back-to-details-page: Back to details page
 ln.admin.title: Title
 ln.admin.common-id: Common ID
 ln.admin.image: Image
-ln.admin.image-upload-hint: Drag and drop a cover image or click to replace it.
-ln.admin.image-hint: Upload cover image with format PNG, JPG or WebP.
+ln.admin.file-upload-hint: Drag a file here or click to browse files.
+ln.admin.image-hint: Cover image with format PNG, JPG or WebP.
 ln.admin.select-file: Select file
 ln.admin.authors: Authors
 ln.admin.description: Description

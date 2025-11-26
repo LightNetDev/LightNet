@@ -89,7 +89,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
         onDrop={onDrop}
       >
         <span className="text-sm text-gray-500">
-          {t("ln.admin.image-upload-hint")}
+          {t("ln.admin.file-upload-hint")}
         </span>
       </div>
       <input
