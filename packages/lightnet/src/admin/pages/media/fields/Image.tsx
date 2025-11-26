@@ -1,8 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import { useEffect, useRef, useState } from "react"
 import { type Control } from "react-hook-form"
 
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
@@ -74,6 +70,7 @@ export default function Image({
           control={control}
           onFileChange={updateImage}
           destinationPath="./images"
+          acceptedFileTypes={["image/jpeg", "image/png", "image/webp"]}
           fileName={mediaId}
         />
       </div>

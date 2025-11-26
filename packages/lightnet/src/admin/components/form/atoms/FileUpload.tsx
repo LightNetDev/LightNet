@@ -8,18 +8,22 @@ import {
 
 import { useI18n } from "../../../../i18n/react/use-i18n"
 
+type FileType = "image/png" | "image/jpeg" | "image/webp"
+
 export default function FileUpload<TFieldValues extends FieldValues>({
   name,
   control,
   destinationPath,
   onFileChange,
   fileName,
+  acceptedFileTypes,
 }: {
   onFileChange: (file: File) => void
   control: Control<TFieldValues>
   name: Path<TFieldValues>
   destinationPath: string
   fileName?: string
+  acceptedFileTypes: FileType[]
 }) {
   const { field } = useController({
     name,
@@ -34,6 +38,9 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     if (!file) {
       return
     }
+    if (!acceptedFileTypes.find((t) => t === file?.type)) {
+      return
+    }
     const nameParts = file.name.split(".")
     const extension = nameParts.pop()
     const name = nameParts.join(".")
@@ -44,6 +51,11 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     })
     onFileChange(file)
     field.onBlur()
+  }
+
+  const onDragEnter = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    setIsDragging(true)
   }
 
   const onDrop = (event: DragEvent<HTMLDivElement>) => {
@@ -61,7 +73,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 ${isDragging ? "bg-sky-50" : ""} focus-within:border-sky-700 focus-within:ring-1 focus-within:ring-sky-700`}
+        className={`flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
@@ -72,10 +84,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
             fileInputRef.current?.click()
           }
         }}
-        onDragOver={(event) => {
-          event.preventDefault()
-          setIsDragging(true)
-        }}
+        onDragOver={onDragEnter}
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
       >
@@ -91,7 +100,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
           field.ref(ref)
         }}
         type="file"
-        accept="image/png,image/jpeg,image/webp"
+        accept={acceptedFileTypes.join(",")}
         className="sr-only"
         onChange={onInputChange}
       />
