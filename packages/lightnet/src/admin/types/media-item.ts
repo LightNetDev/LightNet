@@ -49,11 +49,9 @@ export const mediaItemSchema = z.object({
   description: z.string().optional(),
   image: z.object({
     path: z.string().nonempty(NON_EMPTY_STRING),
-    previewSrc: z.string().optional(),
+    previewSrc: z.string(),
+    file: z.instanceof(File).optional(),
   }),
 })
 
-type BaseMediaItem = z.input<typeof mediaItemSchema>
-export type MediaItem = Omit<BaseMediaItem, "image"> & {
-  image: BaseMediaItem["image"] & { file?: File }
-}
+export type MediaItem = z.input<typeof mediaItemSchema>
