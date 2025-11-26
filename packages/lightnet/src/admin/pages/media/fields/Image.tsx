@@ -50,29 +50,12 @@ export default function Image({
     }
   }, [])
 
-  const relativePathLabel = useMemo(() => {
-    return currentPath || t("ln.admin.image")
-  }, [currentPath, t])
+  const relativePathLabel = currentPath
 
-  const onDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    setIsDragging(false)
-    const file = event.dataTransfer.files?.[0]
-    if (file) {
-      setFile(file)
+  const updateImage = (file?: File) => {
+    if (!file) {
+      return
     }
-  }
-
-  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setFile(file)
-    }
-    // allow selecting the same file twice in a row
-    event.target.value = ""
-  }
-
-  const setFile = (file: File) => {
     if (objectUrlRef.current) {
       URL.revokeObjectURL(objectUrlRef.current)
     }
@@ -86,6 +69,18 @@ export default function Image({
       file,
     })
     field.onBlur()
+  }
+
+  const onDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    setIsDragging(false)
+    updateImage(event.dataTransfer.files?.[0])
+  }
+
+  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    updateImage(event.target.files?.[0])
+    // allow selecting the same file twice in a row
+    event.target.value = ""
   }
 
   return (
@@ -116,12 +111,12 @@ export default function Image({
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
       >
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gray-200">
+        <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-200 p-1">
           {previewSrc ? (
             <img
               src={previewSrc}
               alt=""
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain"
             />
           ) : (
             <span className="text-center text-xs text-gray-500">
@@ -129,25 +124,23 @@ export default function Image({
             </span>
           )}
         </div>
-        <div className="flex flex-1 flex-col gap-1 py-1">
+        <div className="flex flex-1 flex-col items-start gap-1 py-1">
           <span className="text-sm font-semibold text-gray-800">
             {relativePathLabel}
           </span>
-          <span className="text-sm text-gray-600">
+          <span className="mt-4 text-sm text-gray-600">
             {t("ln.admin.image-upload-hint")}
           </span>
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              className="rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm transition-colors duration-150 hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:ring-offset-1"
-              onClick={(event) => {
-                event.stopPropagation()
-                fileInputRef.current?.click()
-              }}
-            >
-              {t("ln.admin.select-file")}
-            </button>
-          </div>
+          <button
+            type="button"
+            className="mt-2 rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm transition-colors duration-150 hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:ring-offset-1"
+            onClick={(event) => {
+              event.stopPropagation()
+              fileInputRef.current?.click()
+            }}
+          >
+            {t("ln.admin.select-file")}
+          </button>
         </div>
       </div>
       <input
