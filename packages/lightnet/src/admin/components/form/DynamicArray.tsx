@@ -8,7 +8,7 @@ import {
 } from "react-hook-form"
 
 import Icon from "../../../components/Icon"
-import { useI18n } from "../../../i18n/react/useI18n"
+import { useI18n } from "../../../i18n/react/use-i18n"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"

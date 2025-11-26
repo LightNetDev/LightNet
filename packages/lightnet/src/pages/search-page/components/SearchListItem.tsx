@@ -1,6 +1,6 @@
 import CoverImageDecorator from "../../../components/CoverImageDecorator"
 import Icon from "../../../components/Icon"
-import { useI18n } from "../../../i18n/react/useI18n"
+import { useI18n } from "../../../i18n/react/use-i18n"
 import { detailsPagePath } from "../../../utils/paths"
 import type { SearchItem } from "../api/search-response"
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { type Control, useFormState } from "react-hook-form"
 
 import Icon from "../../../components/Icon"
-import { useI18n } from "../../../i18n/react/useI18n"
+import { useI18n } from "../../../i18n/react/use-i18n"
 import type { MediaItem } from "../../types/media-item"
 
 const SUCCESS_DURATION_MS = 2000
