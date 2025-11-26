@@ -1,9 +1,13 @@
-export const writeFile = (path: string, body: string) => {
+export const writeFile = (
+  path: string,
+  body: BodyInit,
+  contentType?: string,
+) => {
   return fetch(
     `/api/internal/fs/write-file?path=${encodeURIComponent(path.replace(/^\//, ""))}`,
     {
       method: "POST",
-      headers: { "Content-Type": resolveContentType(path) },
+      headers: { "Content-Type": contentType ?? resolveContentType(path) },
       body,
     },
   )

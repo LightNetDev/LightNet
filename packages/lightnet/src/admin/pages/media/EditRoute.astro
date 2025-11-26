@@ -1,10 +1,11 @@
 ---
 import type { GetStaticPaths } from "astro"
 import { getCollection } from "astro:content"
+import { getImage } from "astro:assets"
 import config from "virtual:lightnet/config"
 
 import { getCategories } from "../../../content/get-categories"
-import { getRawMediaItem } from "../../../content/get-media-items"
+import { getMediaItem, getRawMediaItem } from "../../../content/get-media-items"
 import { getMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import { resolveLocales } from "../../../i18n/resolve-locales"
@@ -20,9 +21,22 @@ export const getStaticPaths = (async () => {
 
 const { mediaId } = Astro.params
 const { data: mediaItem } = await getRawMediaItem(mediaId)
+const {
+  data: { image },
+} = await getMediaItem(mediaId)
+
+const previewImage = await getImage({
+  src: image,
+  width: 256,
+  format: "webp",
+})
 
 const formData = {
   ...mediaItem,
+  image: {
+    path: mediaItem.image,
+    previewSrc: previewImage.src,
+  },
   authors: mediaItem.authors?.map((value) => ({ value })) ?? [],
   categories:
     mediaItem.categories?.map((value) => ({

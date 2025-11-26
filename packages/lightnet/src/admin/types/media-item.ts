@@ -47,6 +47,13 @@ export const mediaItemSchema = z.object({
     .superRefine(unique("collection")),
   dateCreated: z.string().date(INVALID_DATE),
   description: z.string().optional(),
+  image: z.object({
+    path: z.string().nonempty(NON_EMPTY_STRING),
+    previewSrc: z.string().optional(),
+  }),
 })
 
-export type MediaItem = z.input<typeof mediaItemSchema>
+type BaseMediaItem = z.input<typeof mediaItemSchema>
+export type MediaItem = Omit<BaseMediaItem, "image"> & {
+  image: BaseMediaItem["image"] & { file?: File }
+}
