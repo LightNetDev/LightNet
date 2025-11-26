@@ -44,7 +44,7 @@ export default function Select<TFieldValues extends FieldValues>({
         id={name}
         aria-invalid={!!errorMessage}
         defaultValue={defaultValue}
-        className={`dy-select dy-select-bordered text-base shadow-sm focus:border-blue-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
+        className={`dy-select dy-select-bordered text-base shadow-sm focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
       >
         {options.map(({ id, labelText }) => (
           <option key={id} value={id}>

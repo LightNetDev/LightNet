@@ -32,7 +32,7 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
       </legend>
 
       <div
-        className={`overflow-hidden rounded-lg rounded-ss-none border border-gray-300 shadow-sm group-focus-within:border-blue-700 group-focus-within:ring-1 group-focus-within:ring-blue-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""}`}
+        className={`overflow-hidden rounded-lg rounded-ss-none border border-gray-300 shadow-sm group-focus-within:border-sky-700 group-focus-within:ring-1 group-focus-within:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""}`}
       >
         <Suspense
           fallback={

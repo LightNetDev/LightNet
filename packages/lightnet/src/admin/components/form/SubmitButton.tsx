@@ -8,7 +8,7 @@ import type { MediaItem } from "../../types/media-item"
 const SUCCESS_DURATION_MS = 2000
 
 const baseButtonClass =
-  "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-bold shadow-sm transition-colors easy-in-out focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-blue-700 focus-visible:ring-offset-1 disabled:cursor-not-allowed"
+  "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-bold shadow-sm transition-colors easy-in-out focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-sky-700 focus-visible:ring-offset-1 disabled:cursor-not-allowed"
 
 const buttonStateClasses = {
   idle: "bg-gray-800 text-gray-50 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-500 disabled:text-gray-300",
