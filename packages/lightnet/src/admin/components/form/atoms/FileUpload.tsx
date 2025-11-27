@@ -5,9 +5,9 @@ import {
   type Path,
   useController,
 } from "react-hook-form"
+import config from "virtual:lightnet/config"
 
 import { useI18n } from "../../../../i18n/react/use-i18n"
-import config from "virtual:lightnet/config"
 
 type FileType = "image/png" | "image/jpeg" | "image/webp"
 
