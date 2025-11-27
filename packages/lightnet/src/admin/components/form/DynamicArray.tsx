@@ -62,7 +62,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         ))}
         <button
           type="button"
-          className="rounded-b-lg p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
+          className="rounded-b-lg p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
           onClick={() => {
             addButton.onClick(append, fields.length)
           }}

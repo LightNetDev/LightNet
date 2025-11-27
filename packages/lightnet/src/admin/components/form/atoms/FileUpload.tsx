@@ -23,7 +23,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   name: Path<TFieldValues>
   destinationPath: string
   fileName?: string
-  acceptedFileTypes: FileType[]
+  acceptedFileTypes: Readonly<FileType[]>
 }) {
   const { field } = useController({
     name,
@@ -38,7 +38,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     if (!file) {
       return
     }
-    if (!acceptedFileTypes.find((t) => t === file?.type)) {
+    if (!acceptedFileTypes.includes(file.type as any)) {
       return
     }
     const nameParts = file.name.split(".")
@@ -73,7 +73,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700`}
+        className={`flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 transition-colors ease-in-out ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 hover:bg-sky-50`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
