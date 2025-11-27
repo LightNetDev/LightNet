@@ -114,7 +114,7 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
             locales: resolveLocales(config),
             routing: {
               redirectToDefaultLocale: false,
-              prefixDefaultLocale: true,
+              prefixDefaultLocale: false,
               fallbackType: "rewrite",
             },
           },
