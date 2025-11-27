@@ -9,8 +9,8 @@ import { getMediaItem, getRawMediaItem } from "../../../content/get-media-items"
 import { getMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import Page from "../../../layouts/Page.astro"
-import EditForm from "./EditForm"
 import { adminI18n } from "../../i18n/admin-i18n"
+import EditForm from "./EditForm"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
