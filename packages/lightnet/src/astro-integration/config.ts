@@ -228,6 +228,10 @@ export const configSchema = z.object({
       admin: z
         .object({
           enabled: z.boolean().default(false),
+          /**
+           * Currently we only support english as Admin UI language.
+           */
+          languageCode: z.literal("en").default("en"),
         })
         .optional(),
     })

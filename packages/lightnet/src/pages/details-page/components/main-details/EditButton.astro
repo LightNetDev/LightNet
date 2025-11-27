@@ -14,7 +14,7 @@ const { mediaId } = Astro.props
   class="hidden cursor-pointer items-center gap-2 font-bold text-gray-700 underline"
   id="edit-btn"
   data-admin-enabled={config.experimental?.admin?.enabled}
-  href={`/${Astro.currentLocale}/admin/media/${mediaId}`}
+  href={`/admin/media/${mediaId}`}
   ><Icon className="mdi--square-edit-outline" ariaLabel="" />
   {Astro.locals.i18n.t("ln.admin.edit")}</a
 >
