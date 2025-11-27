@@ -13,8 +13,8 @@
   "dependencies": {
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
-    "astro": "^5.15.9",
-    "lightnet": "^3.10.6",
+    "astro": "^5.16.1",
+    "lightnet": "^3.10.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sharp": "^0.34.5",
