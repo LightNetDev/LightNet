@@ -9,6 +9,8 @@ import { useFieldDirty } from "../../../components/form/hooks/use-field-dirty"
 import { useFieldError } from "../../../components/form/hooks/use-field-error"
 import type { MediaItem } from "../../../types/media-item"
 
+const acceptedFileTypes = ["image/jpeg", "image/png", "image/webp"] as const
+
 export default function Image({
   control,
   defaultValue,
@@ -36,6 +38,9 @@ export default function Image({
 
   const updateImage = (file?: File) => {
     if (!file) {
+      return
+    }
+    if (!acceptedFileTypes.includes(file.type as any)) {
       return
     }
     if (objectUrlRef.current) {
@@ -70,7 +75,7 @@ export default function Image({
           control={control}
           onFileChange={updateImage}
           destinationPath="./images"
-          acceptedFileTypes={["image/jpeg", "image/png", "image/webp"]}
+          acceptedFileTypes={acceptedFileTypes}
           fileName={mediaId}
         />
       </div>
