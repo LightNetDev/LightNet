@@ -10,7 +10,12 @@ export function useFieldError({
   exact?: boolean
 }) {
   const { errors } = useFormState({ control, name, exact })
-  return findErrorMessage(get(errors, name))
+  const error = get(errors, name) as {message:string} | undefined
+  if(exact) {
+    return error?.message
+  } else {
+    return findErrorMessage(get(errors, name))
+  }
 }
 
 function findErrorMessage(errors?: unknown) {
