@@ -19,7 +19,7 @@ const languages = [
   },
   {
     code: "ar",
-    label: "Arabic",
+    label: "العربية",
     isSiteLanguage: true,
   },
 ]
