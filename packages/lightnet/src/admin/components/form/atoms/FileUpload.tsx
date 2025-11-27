@@ -7,6 +7,7 @@ import {
 } from "react-hook-form"
 
 import { useI18n } from "../../../../i18n/react/use-i18n"
+import config from "virtual:lightnet/config"
 
 type FileType = "image/png" | "image/jpeg" | "image/webp"
 
@@ -73,7 +74,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 transition-colors ease-in-out ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 hover:bg-sky-50`}
+        className={`flex w-full flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 transition-colors ease-in-out ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 hover:bg-sky-50`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
@@ -88,8 +89,13 @@ export default function FileUpload<TFieldValues extends FieldValues>({
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
       >
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-800">
           {t("ln.admin.file-upload-hint")}
+        </span>
+        <span className="text-xs text-gray-600">
+          {t("ln.admin.file-upload-size-limit", {
+            limit: config.experimental?.admin?.maxFileSize,
+          })}
         </span>
       </div>
       <input

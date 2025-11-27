@@ -1,4 +1,5 @@
 import { type RefinementCtx, z } from "astro/zod"
+import config from "virtual:lightnet/config"
 
 const NON_EMPTY_STRING = "ln.admin.errors.non-empty-string"
 const INVALID_DATE = "ln.admin.errors.invalid-date"
@@ -6,6 +7,7 @@ const REQUIRED = "ln.admin.errors.required"
 const GTE_0 = "ln.admin.errors.gte-0"
 const INTEGER = "ln.admin.errors.integer"
 const UNIQUE_ELEMENTS = "ln.admin.errors.unique-elements"
+const FILE_SIZE_EXCEEDED = "ln.admin.error.file-size-exceeded"
 
 const unique = <TArrayItem>(path: Extract<keyof TArrayItem, string>) => {
   return (values: TArrayItem[], ctx: RefinementCtx) => {
@@ -22,6 +24,19 @@ const unique = <TArrayItem>(path: Extract<keyof TArrayItem, string>) => {
     })
   }
 }
+
+const fileShape = z
+  .instanceof(File)
+  .optional()
+  .refine(
+    (file) =>
+      !file ||
+      !!(
+        file.size <
+        (config.experimental?.admin?.maxFileSize ?? 0) * 1024 * 1024
+      ),
+    { message: FILE_SIZE_EXCEEDED },
+  )
 
 export const mediaItemSchema = z.object({
   commonId: z.string().nonempty(NON_EMPTY_STRING),
@@ -50,7 +65,7 @@ export const mediaItemSchema = z.object({
   image: z.object({
     path: z.string().nonempty(NON_EMPTY_STRING),
     previewSrc: z.string(),
-    file: z.instanceof(File).optional(),
+    file: fileShape,
   }),
 })
 

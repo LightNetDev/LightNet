@@ -25,7 +25,7 @@ export default function Image({
     defaultValue.previewSrc,
   )
   const isDirty = useFieldDirty({ control, name: "image" })
-  const errorMessage = useFieldError({ control, name: "image" })
+  const errorMessage = useFieldError({ control, name: "image", exact: false })
 
   useEffect(() => {
     // cleanup on component unmount
