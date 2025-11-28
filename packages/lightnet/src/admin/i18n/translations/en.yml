@@ -23,8 +23,8 @@ ln.admin.select-file: Select file
 ln.admin.authors: Authors
 ln.admin.description: Description
 ln.admin.date-created: Date Created
-ln.admin.date-created-hint: When has this item been created on this library?
-ln.admin.common-id-hint: The English title, all lowercase, words separated with hyphens.
+ln.admin.date-created-hint: The date this item was added to this media library.
+ln.admin.common-id-hint: Use a shared Common ID to link translated versions of a media item.
 ln.admin.errors.non-empty-string: Please enter at least one character.
 ln.admin.errors.invalid-date: That date doesn't look right.
 ln.admin.error.file-size-exceeded: This file is too big.

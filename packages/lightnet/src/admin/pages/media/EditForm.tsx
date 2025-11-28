@@ -60,13 +60,6 @@ export default function EditForm({
           control={control}
           defaultValue={mediaItem.title}
         />
-        <Input
-          name="commonId"
-          label="ln.admin.common-id"
-          hint="ln.admin.common-id-hint"
-          control={control}
-          defaultValue={mediaItem.commonId}
-        />
         <Select
           name="type"
           label="ln.type"
@@ -110,8 +103,15 @@ export default function EditForm({
           name="description"
           label="ln.admin.description"
         />
+        <Input
+          name="commonId"
+          label="ln.admin.common-id"
+          hint="ln.admin.common-id-hint"
+          control={control}
+          defaultValue={mediaItem.commonId}
+        />
 
-        <SubmitButton className="self-end" control={control} />
+        <SubmitButton className="mt-8 self-end" control={control} />
       </form>
     </I18nContext.Provider>
   )
