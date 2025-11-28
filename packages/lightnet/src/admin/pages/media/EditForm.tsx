@@ -80,7 +80,6 @@ export default function EditForm({
           control={control}
         />
         <Authors control={control} defaultValue={mediaItem.authors} />
-
         <Input
           name="dateCreated"
           label="ln.admin.date-created"
