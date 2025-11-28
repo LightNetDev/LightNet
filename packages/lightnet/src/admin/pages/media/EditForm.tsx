@@ -60,13 +60,6 @@ export default function EditForm({
           control={control}
           defaultValue={mediaItem.title}
         />
-        <Input
-          name="commonId"
-          label="ln.admin.common-id"
-          hint="ln.admin.common-id-hint"
-          control={control}
-          defaultValue={mediaItem.commonId}
-        />
         <Select
           name="type"
           label="ln.type"
@@ -87,6 +80,11 @@ export default function EditForm({
           control={control}
         />
         <Authors control={control} defaultValue={mediaItem.authors} />
+        <MarkdownEditor
+          control={control}
+          name="description"
+          label="ln.admin.description"
+        />
         <Input
           name="dateCreated"
           label="ln.admin.date-created"
@@ -105,13 +103,15 @@ export default function EditForm({
           control={control}
           defaultValue={mediaItem.collections}
         />
-        <MarkdownEditor
+        <Input
+          name="commonId"
+          label="ln.admin.common-id"
+          hint="ln.admin.common-id-hint"
           control={control}
-          name="description"
-          label="ln.admin.description"
+          defaultValue={mediaItem.commonId}
         />
 
-        <SubmitButton className="self-end" control={control} />
+        <SubmitButton className="self-end mt-8" control={control} />
       </form>
     </I18nContext.Provider>
   )
