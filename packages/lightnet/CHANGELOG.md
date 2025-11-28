@@ -1,5 +1,15 @@
 # lightnet
 
+## 3.10.8
+
+### Patch Changes
+
+- [#340](https://github.com/LightNetDev/LightNet/pull/340) [`6162179`](https://github.com/LightNetDev/LightNet/commit/6162179b90e987359934bd08ac9d4500eb560e25) Thanks [@smn-cds](https://github.com/smn-cds)! - Tighten locale detection to avoid partial matches
+
+  When the URL path starts with a locale-like prefix, only full segment matches should be treated as a locale. Previously `/enx` was parsed as locale `en`; now only `/en/...` (or just `/en`) will match.
+
+- [#340](https://github.com/LightNetDev/LightNet/pull/340) [`6162179`](https://github.com/LightNetDev/LightNet/commit/6162179b90e987359934bd08ac9d4500eb560e25) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 3.10.7
 
 ### Patch Changes
