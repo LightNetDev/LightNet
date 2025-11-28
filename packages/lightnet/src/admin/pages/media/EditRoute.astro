@@ -1,28 +1,40 @@
 ---
 import type { GetStaticPaths } from "astro"
+import { getImage } from "astro:assets"
 import { getCollection } from "astro:content"
 import config from "virtual:lightnet/config"
 
 import { getCategories } from "../../../content/get-categories"
-import { getRawMediaItem } from "../../../content/get-media-items"
+import { getMediaItem, getRawMediaItem } from "../../../content/get-media-items"
 import { getMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
-import { resolveLocales } from "../../../i18n/resolve-locales"
 import Page from "../../../layouts/Page.astro"
+import { adminI18n } from "../../i18n/admin-i18n"
 import EditForm from "./EditForm"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
-  return resolveLocales(config).flatMap((locale) =>
-    mediaItems.map(({ id: mediaId }) => ({ params: { mediaId, locale } })),
-  )
+  return mediaItems.map(({ id: mediaId }) => ({ params: { mediaId } }))
 }) satisfies GetStaticPaths
 
 const { mediaId } = Astro.params
 const { data: mediaItem } = await getRawMediaItem(mediaId)
+const {
+  data: { image },
+} = await getMediaItem(mediaId)
+
+const previewImage = await getImage({
+  src: image,
+  width: 256,
+  format: "webp",
+})
 
 const formData = {
   ...mediaItem,
+  image: {
+    path: mediaItem.image,
+    previewSrc: previewImage.src,
+  },
   authors: mediaItem.authors?.map((value) => ({ value })) ?? [],
   categories:
     mediaItem.categories?.map((value) => ({
@@ -31,34 +43,38 @@ const formData = {
   collections: mediaItem.collections ?? [],
 }
 
-const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
+const i18nConfig = prepareI18nConfig(adminI18n, [
   "ln.admin.*",
   "ln.type",
   "ln.language",
   "ln.categories",
 ])
-const { t, currentLocale } = Astro.locals.i18n
+const { t, currentLocale } = adminI18n
 
-const mediaTypes = (await getMediaTypes()).map(({ id, data: { label } }) => ({
+const mediaTypes = (await getMediaTypes()).map(({ id }) => ({
   id,
-  labelText: t(label),
+  labelText: id,
 }))
 
-const categories = (await getCategories(currentLocale, t)).map(
-  ({ id, labelText }) => ({ id, labelText }),
-)
+const categories = (await getCategories(currentLocale, t)).map(({ id }) => ({
+  id,
+  labelText: id,
+}))
 
 const collections = (await getCollection("media-collections")).map(
-  ({ id, data: { label } }) => ({ id, labelText: t(label) }),
+  ({ id }) => ({ id, labelText: id }),
 )
 
 const languages = config.languages.map(({ code, label }) => ({
   id: code,
-  labelText: t(label),
+  labelText: `${code} - ${t(label)}`,
 }))
 ---
 
-<Page mainClass="bg-gray-700">
+<Page
+  mainClass="bg-gradient-to-t from-sky-950 to-slate-800"
+  locale={currentLocale}
+>
   <div class="mx-auto block max-w-screen-md px-4 md:px-8">
     <a
       class="block pb-4 pt-8 text-gray-200 underline"

@@ -14,6 +14,7 @@ import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
 import Categories from "./fields/Categories"
 import Collections from "./fields/Collections"
+import Image from "./fields/Image"
 import { updateMediaItem } from "./media-item-store"
 
 type SelectOption = { id: string; labelText: string }
@@ -72,6 +73,11 @@ export default function EditForm({
           options={mediaTypes}
           control={control}
           defaultValue={mediaItem.type}
+        />
+        <Image
+          control={control}
+          defaultValue={mediaItem.image}
+          mediaId={mediaId}
         />
         <Select
           name="language"

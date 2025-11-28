@@ -25,13 +25,13 @@ test.describe("Edit button on details page", () => {
     await expect(editButton).toBeHidden()
   })
 
-  test("Should show `Edit` button on book details page after visiting `/en/admin/` path.", async ({
+  test("Should show `Edit` button on book details page after visiting `/admin/` path.", async ({
     page,
     lightnet,
   }) => {
     const ln = await lightnet()
 
-    await page.goto(ln.resolveURL("/en/admin/"))
+    await page.goto(ln.resolveURL("/admin/"))
     await expect(
       page.getByText("Admin features are enabled now.", { exact: true }),
     ).toBeVisible()
@@ -45,15 +45,15 @@ test.describe("Edit button on details page", () => {
     await expect(editButton).toBeVisible()
     await expect(editButton).toHaveAttribute(
       "href",
-      "/en/admin/media/faithful-freestyle--en",
+      "/admin/media/faithful-freestyle--en",
     )
   })
 
-  test("Should show `Edit` button on video details page after visiting `/en/admin/` path.", async ({
+  test("Should show `Edit` button on video details page after visiting `/admin/` path.", async ({
     page,
     lightnet,
   }) => {
-    const ln = await lightnet("/en/admin/")
+    const ln = await lightnet("/admin/")
 
     await expect(
       page.getByText("Admin features are enabled now.", { exact: true }),
@@ -68,15 +68,15 @@ test.describe("Edit button on details page", () => {
     await expect(editButton).toBeVisible()
     await expect(editButton).toHaveAttribute(
       "href",
-      "/en/admin/media/how-to-kickflip--de",
+      "/admin/media/how-to-kickflip--de",
     )
   })
 
-  test("Should show `Edit` button on audio details page after visiting `/en/admin/` path.", async ({
+  test("Should show `Edit` button on audio details page after visiting `/admin/` path.", async ({
     page,
     lightnet,
   }) => {
-    const ln = await lightnet("/en/admin/")
+    const ln = await lightnet("/admin/")
 
     await expect(
       page.getByText("Admin features are enabled now.", { exact: true }),
@@ -91,7 +91,7 @@ test.describe("Edit button on details page", () => {
     await expect(editButton).toBeVisible()
     await expect(editButton).toHaveAttribute(
       "href",
-      "/en/admin/media/skate-sounds--en",
+      "/admin/media/skate-sounds--en",
     )
   })
 
@@ -99,7 +99,7 @@ test.describe("Edit button on details page", () => {
     page,
     lightnet,
   }) => {
-    const ln = await lightnet("/en/admin/")
+    const ln = await lightnet("/admin/")
     await ln.goto("/en/media/faithful-freestyle--en")
 
     const editButton = page.locator("#edit-btn")
@@ -107,7 +107,7 @@ test.describe("Edit button on details page", () => {
 
     await editButton.click()
     await expect(page).toHaveURL(
-      ln.resolveURL("/en/admin/media/faithful-freestyle--en"),
+      ln.resolveURL("/admin/media/faithful-freestyle--en"),
     )
     await expect(
       page.getByText("Edit media item", { exact: false }),
@@ -147,7 +147,7 @@ test.describe("Media item edit page", () => {
     ).toBeVisible()
 
   test("should edit title", async ({ page, lightnet }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
 
     const updatedTitle = "Faithful Freestyle (Edited)"
@@ -175,7 +175,7 @@ test.describe("Media item edit page", () => {
   })
 
   test("Should update media type", async ({ page, lightnet }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
 
     const typeSelect = page.getByLabel("Type").first()
@@ -198,7 +198,7 @@ test.describe("Media item edit page", () => {
   })
 
   test("Should update author name", async ({ page, lightnet }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
 
     const authorsFieldset = page.getByRole("group", { name: "Authors" })
@@ -223,7 +223,7 @@ test.describe("Media item edit page", () => {
   })
 
   test("Should add author", async ({ page, lightnet }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
 
     const authorsFieldset = page.getByRole("group", { name: "Authors" })
@@ -249,7 +249,7 @@ test.describe("Media item edit page", () => {
   })
 
   test("Should remove author", async ({ page, lightnet }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
     const writeFileRequest = await recordWriteFile(page)
 
     const authorsFieldset = page.getByRole("group", { name: "Authors" })
@@ -283,7 +283,7 @@ test.describe("Media item edit page", () => {
     page,
     lightnet,
   }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
 
     const commonIdInput = page.getByLabel("Common ID")
     await expect(commonIdInput).toHaveValue("faithful-freestyle")
@@ -302,7 +302,7 @@ test.describe("Media item edit page", () => {
     page,
     lightnet,
   }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
 
     const categoriesFieldset = page.getByRole("group", { name: "Categories" })
     await page.getByRole("button", { name: "Add Category" }).click()
@@ -325,7 +325,7 @@ test.describe("Media item edit page", () => {
     page,
     lightnet,
   }) => {
-    await lightnet("/en/admin/media/faithful-freestyle--en")
+    await lightnet("/admin/media/faithful-freestyle--en")
 
     const categoriesFieldset = page.getByRole("group", { name: "Categories" })
     await page.getByRole("button", { name: "Add Category" }).click()

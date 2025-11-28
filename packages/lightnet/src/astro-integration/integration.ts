@@ -72,12 +72,12 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           })
 
           injectRoute({
-            pattern: "/[locale]/admin",
+            pattern: "/admin",
             entrypoint: "lightnet/admin/pages/AdminRoute.astro",
             prerender: true,
           })
           injectRoute({
-            pattern: "/[locale]/admin/media/[mediaId]",
+            pattern: "/admin/media/[mediaId]",
             entrypoint: "lightnet/admin/pages/media/EditRoute.astro",
             prerender: true,
           })
@@ -114,7 +114,11 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
             locales: resolveLocales(config),
             routing: {
               redirectToDefaultLocale: false,
-              prefixDefaultLocale: true,
+              // We need to set this to false to allow for
+              // admin paths without locale. But actually
+              // the default locale will be prefixed for regular
+              // LightNet pages.
+              prefixDefaultLocale: false,
               fallbackType: "rewrite",
             },
           },

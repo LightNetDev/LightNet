@@ -6,6 +6,11 @@ import MenuItem from "./MenuItem.astro"
 
 const { t, locales } = Astro.locals.i18n
 
+const hasLocale =
+  Astro.currentLocale &&
+  (Astro.url.pathname.startsWith(`/${Astro.currentLocale}/`) ||
+    Astro.url.pathname === `/${Astro.currentLocale}`)
+
 const translations = locales
   .map((locale) => ({
     locale,
@@ -17,17 +22,18 @@ const translations = locales
 
 function currentPathWithLocale(locale: string) {
   const currentPath = Astro.url.pathname
-  const currentPathWithoutLocale =
-    Astro.currentLocale && currentPath.startsWith(`/${Astro.currentLocale}`)
-      ? currentPath.slice(Astro.currentLocale.length + 1)
-      : currentPath
+  const currentPathWithoutLocale = hasLocale
+    ? currentPath.slice(Astro.currentLocale.length + 1)
+    : currentPath
   return localizePath(locale, currentPathWithoutLocale)
 }
+
+const disabled = !hasLocale && Astro.url.pathname !== "/"
 ---
 
 {
   translations.length > 1 && (
-    <Menu icon="mdi--web" label="ln.header.select-language">
+    <Menu disabled={disabled} icon="mdi--web" label="ln.header.select-language">
       {translations.map(({ label, locale, active, href }) => (
         <MenuItem href={href} hreflang={locale} active={active}>
           {label}

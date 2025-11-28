@@ -59,7 +59,8 @@ async function revertMediaItemEntry({ id, data: mediaItem }: MediaItemEntry) {
     ...collection,
     collection: collection.collection.id,
   }))
-  const image = (await getEntry("internal-media-image-path", id))?.data.image
+  const image =
+    (await getEntry("internal-media-image-path", id))?.data.image ?? ""
   return {
     id,
     data: {

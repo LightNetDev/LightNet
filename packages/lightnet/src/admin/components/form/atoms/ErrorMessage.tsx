@@ -1,4 +1,4 @@
-import { useI18n } from "../../../../i18n/react/useI18n"
+import { useI18n } from "../../../../i18n/react/use-i18n"
 
 export default function ErrorMessage({ message }: { message?: string }) {
   const { t } = useI18n()
