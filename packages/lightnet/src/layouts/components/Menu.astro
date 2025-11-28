@@ -4,20 +4,21 @@ import Icon from "../../components/Icon"
 interface Props {
   icon: string
   label: string
+  disabled?: boolean
 }
 
-const { icon, label } = Astro.props
+const { icon, label, disabled } = Astro.props
 ---
 
 <div class="dy-dropdown dy-dropdown-end">
-  <div
-    role="button"
-    tabindex="0"
+  <button
+    disabled={disabled}
+    aria-disabled={disabled}
     aria-label={Astro.locals.i18n.t(label)}
-    class="flex cursor-pointer rounded-md p-3 text-gray-600 hover:text-primary"
+    class="flex rounded-md p-3 text-gray-600 hover:text-primary disabled:text-gray-300"
   >
     <Icon className={icon} ariaLabel="" />
-  </div>
+  </button>
 
   <ul
     tabindex="0"

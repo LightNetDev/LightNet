@@ -14,17 +14,18 @@ interface Props {
   title?: string
   description?: string
   mainClass?: string
+  locale?: string
 }
 
-const { title, description, mainClass } = Astro.props
+const { title, description, mainClass, locale } = Astro.props
 const configTitle = Astro.locals.i18n.t(config.title)
 
-const { currentLocale } = Astro.locals.i18n
-const language = resolveLanguage(currentLocale)
+const currentLocale = locale ?? Astro.locals.i18n.currentLocale
+const { direction } = resolveLanguage(currentLocale)
 ---
 
 <!doctype html>
-<html lang={currentLocale} dir={language.direction}>
+<html lang={currentLocale} dir={direction}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

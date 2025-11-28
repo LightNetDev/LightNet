@@ -8,7 +8,7 @@ import {
 } from "react-hook-form"
 
 import Icon from "../../../components/Icon"
-import { useI18n } from "../../../i18n/react/useI18n"
+import { useI18n } from "../../../i18n/react/use-i18n"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
@@ -52,7 +52,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
           <div className="flex w-full items-center gap-2 p-2" key={field.id}>
             <div className="flex grow flex-col">{renderElement(index)}</div>
             <button
-              className="flex items-center rounded-md p-2 text-gray-600 transition-colors ease-in-out hover:text-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
+              className="flex items-center rounded-md p-2 text-gray-600 transition-colors ease-in-out hover:text-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
               type="button"
               onClick={() => remove(index)}
             >
@@ -62,7 +62,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         ))}
         <button
           type="button"
-          className="rounded-b-lg p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
+          className="rounded-b-lg p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
           onClick={() => {
             addButton.onClick(append, fields.length)
           }}

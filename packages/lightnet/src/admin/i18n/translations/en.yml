@@ -15,6 +15,11 @@ ln.admin.position-in-collection: Position in Collection
 ln.admin.back-to-details-page: Back to details page
 ln.admin.title: Title
 ln.admin.common-id: Common ID
+ln.admin.image: Image
+ln.admin.file-upload-hint: Drag a file here or click to browse files.
+ln.admin.file-upload-size-limit: "Files up to {{limit}} MB accepted."
+ln.admin.image-hint: Cover image with format PNG, JPG or WebP.
+ln.admin.select-file: Select file
 ln.admin.authors: Authors
 ln.admin.description: Description
 ln.admin.date-created: Date Created
@@ -22,6 +27,7 @@ ln.admin.date-created-hint: When has this item been created on this library?
 ln.admin.common-id-hint: The English title, all lowercase, words separated with hyphens.
 ln.admin.errors.non-empty-string: Please enter at least one character.
 ln.admin.errors.invalid-date: That date doesn't look right.
+ln.admin.error.file-size-exceeded: This file is too big.
 ln.admin.errors.required: This field is required.
 ln.admin.errors.gte-0: Use a number zero or greater.
 ln.admin.errors.unique-elements: Please choose a different value for each entry.
