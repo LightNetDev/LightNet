@@ -114,6 +114,10 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
             locales: resolveLocales(config),
             routing: {
               redirectToDefaultLocale: false,
+              // We need to set this to false to allow for
+              // admin paths without locale. But actually
+              // the default locale will be prefixed for regular
+              // LightNet pages.
               prefixDefaultLocale: false,
               fallbackType: "rewrite",
             },
