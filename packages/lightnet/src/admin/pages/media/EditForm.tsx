@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import type { KeyboardEvent } from "react"
 import { useForm } from "react-hook-form"
 
 import {
@@ -42,13 +43,24 @@ export default function EditForm({
     shouldFocusError: true,
     resolver: zodResolver(mediaItemSchema),
   })
+
+  const preventSubmitOnEnter = (event: KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault()
+    }
+  }
+
   const onSubmit = handleSubmit(
     async (data) => await updateMediaItem(mediaId, { ...mediaItem, ...data }),
   )
   const i18n = createI18n(i18nConfig)
   return (
     <I18nContext.Provider value={i18n}>
-      <form className="flex flex-col" onSubmit={onSubmit}>
+      <form
+        className="flex flex-col"
+        onSubmit={onSubmit}
+        onKeyDown={preventSubmitOnEnter}
+      >
         <div className="mb-8 flex items-end justify-between">
           <h1 className="text-3xl">{i18n.t("ln.admin.edit-media-item")}</h1>
           <SubmitButton control={control} />
