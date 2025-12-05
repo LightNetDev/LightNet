@@ -20,6 +20,7 @@ ln.admin.file-upload-hint: Drag a file here or click to browse files.
 ln.admin.file-upload-size-limit: "Files up to {{limit}} MB accepted."
 ln.admin.image-hint: Cover image with format PNG, JPG or WebP.
 ln.admin.select-file: Select file
+ln.admin.file-not-accepted: File not accepted
 ln.admin.authors: Authors
 ln.admin.description: Description
 ln.admin.date-created: Date Created

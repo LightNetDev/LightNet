@@ -1,4 +1,10 @@
-import { type ChangeEvent, type DragEvent, useRef, useState } from "react"
+import {
+  type ChangeEvent,
+  type DragEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 import {
   type Control,
   type FieldValues,
@@ -7,7 +13,9 @@ import {
 } from "react-hook-form"
 import config from "virtual:lightnet/config"
 
+import Icon from "../../../../components/Icon"
 import { useI18n } from "../../../../i18n/react/use-i18n"
+import "./file-upload.css"
 
 type FileType = "image/png" | "image/jpeg" | "image/webp"
 
@@ -31,15 +39,44 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     control,
   })
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const invalidFeedbackTimeout = useRef<number | null>(null)
   const { t } = useI18n()
 
   const [isDragging, setIsDragging] = useState(false)
+  const [showInvalidFeedback, setShowInvalidFeedback] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      if (invalidFeedbackTimeout.current !== null) {
+        window.clearTimeout(invalidFeedbackTimeout.current)
+      }
+    }
+  }, [])
+
+  const triggerInvalidFeedback = () => {
+    setShowInvalidFeedback(true)
+    if (invalidFeedbackTimeout.current !== null) {
+      window.clearTimeout(invalidFeedbackTimeout.current)
+    }
+    invalidFeedbackTimeout.current = window.setTimeout(() => {
+      setShowInvalidFeedback(false)
+      invalidFeedbackTimeout.current = null
+    }, 2000)
+  }
+
+  const maxFileSizeBytes =
+    (config.experimental?.admin?.maxFileSize ?? 0) * 1024 * 1024
 
   const onFileSelected = (file?: File) => {
     if (!file) {
       return
     }
     if (!acceptedFileTypes.includes(file.type as any)) {
+      triggerInvalidFeedback()
+      return
+    }
+    if (maxFileSizeBytes && !(file.size < maxFileSizeBytes)) {
+      triggerInvalidFeedback()
       return
     }
     const nameParts = file.name.split(".")
@@ -52,6 +89,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     })
     onFileChange(file)
     field.onBlur()
+    setShowInvalidFeedback(false)
   }
 
   const onDragEnter = (event: DragEvent<HTMLDivElement>) => {
@@ -74,7 +112,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`flex w-full flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 transition-colors ease-in-out ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
+        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed bg-gray-200 p-4 transition-colors ease-in-out ${showInvalidFeedback ? "border-rose-800 file-upload--shake" : "border-gray-300"} ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
@@ -97,6 +135,15 @@ export default function FileUpload<TFieldValues extends FieldValues>({
             limit: config.experimental?.admin?.maxFileSize,
           })}
         </span>
+        {showInvalidFeedback && (
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-gray-50/85 text-rose-800"
+            role="alert"
+          >
+            <Icon className="mdi--alert-circle-outline" ariaLabel="" />
+            <span className="font-semibold">{t("ln.admin.file-not-accepted")}</span>
+          </div>
+        )}
       </div>
       <input
         id={field.name}
