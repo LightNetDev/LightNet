@@ -55,6 +55,19 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     }
   }, [])
 
+  useEffect(() => {
+    const blockBrowserFileOpen = (event: globalThis.DragEvent) => {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    window.addEventListener("drop", blockBrowserFileOpen)
+    window.addEventListener("dragover", blockBrowserFileOpen)
+    return () => {
+      window.removeEventListener("drop", blockBrowserFileOpen)
+      window.removeEventListener("dragover", blockBrowserFileOpen)
+    }
+  }, [])
+
   const triggerInvalidFeedback = (message: string) => {
     setInvalidFeedbackMessage(message)
     if (invalidFeedbackTimeout.current !== null) {
@@ -119,12 +132,14 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed bg-gray-200 p-4 transition-colors ease-in-out ${invalidFeedbackMessage ? "border-rose-800 file-upload--shake" : "border-gray-300"} ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
+        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed bg-gray-200 p-4 transition-colors ease-in-out ${invalidFeedbackMessage ? "file-upload--shake border-rose-800" : "border-gray-300"} ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
         onBlur={field.onBlur}
-        aria-describedby={invalidFeedbackMessage ? invalidFeedbackId : undefined}
+        aria-describedby={
+          invalidFeedbackMessage ? invalidFeedbackId : undefined
+        }
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault()
@@ -150,9 +165,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
             aria-hidden="true"
           >
             <Icon className="mdi--alert-circle-outline" ariaLabel="" />
-            <span className="font-semibold">
-              {invalidFeedbackMessage}
-            </span>
+            <span className="font-semibold">{invalidFeedbackMessage}</span>
           </div>
         )}
       </div>
