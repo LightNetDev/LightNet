@@ -61,7 +61,7 @@ export default function Image({
         />
       </label>
       <div
-        className={`flex w-full items-stretch gap-4 rounded-lg rounded-ss-none border bg-gray-50 px-4 py-3 shadow-inner outline-none transition-colors ${isDirty && !errorMessage ? "border-gray-700" : "border-gray-300"} ${errorMessage ? "border-rose-800" : ""} `}
+        className={`flex w-full items-stretch gap-4 rounded-lg rounded-ss-none border bg-gray-50 px-4 py-3 shadow-inner outline-none focus-within:border-sky-700 focus-within:ring-1 focus-within:ring-sky-700 transition-colors ${isDirty && !errorMessage ? "border-gray-700" : "border-gray-300"} ${errorMessage ? "border-rose-800" : ""} `}
       >
         <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-200 p-1">
           <img

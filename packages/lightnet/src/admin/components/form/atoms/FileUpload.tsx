@@ -74,7 +74,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`flex w-full flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 transition-colors ease-in-out ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 hover:bg-sky-50`}
+        className={`flex w-full flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 transition-colors ease-in-out ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
@@ -101,6 +101,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
       <input
         id={field.name}
         name={field.name}
+        tabIndex={-1}
         ref={(ref) => {
           fileInputRef.current = ref
           field.ref(ref)
