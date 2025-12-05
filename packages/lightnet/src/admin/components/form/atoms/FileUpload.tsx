@@ -1,3 +1,5 @@
+import "./file-upload.css"
+
 import {
   type ChangeEvent,
   type DragEvent,
@@ -15,7 +17,6 @@ import config from "virtual:lightnet/config"
 
 import Icon from "../../../../components/Icon"
 import { useI18n } from "../../../../i18n/react/use-i18n"
-import "./file-upload.css"
 
 type FileType = "image/png" | "image/jpeg" | "image/webp"
 
