@@ -1,4 +1,12 @@
-import { type ChangeEvent, type DragEvent, useRef, useState } from "react"
+import "./file-upload.css"
+
+import {
+  type ChangeEvent,
+  type DragEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 import {
   type Control,
   type FieldValues,
@@ -7,6 +15,7 @@ import {
 } from "react-hook-form"
 import config from "virtual:lightnet/config"
 
+import Icon from "../../../../components/Icon"
 import { useI18n } from "../../../../i18n/react/use-i18n"
 
 type FileType = "image/png" | "image/jpeg" | "image/webp"
@@ -31,15 +40,64 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     control,
   })
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const invalidFeedbackTimeout = useRef<number | null>(null)
   const { t } = useI18n()
 
   const [isDragging, setIsDragging] = useState(false)
+  const [invalidFeedbackMessage, setInvalidFeedbackMessage] = useState<
+    string | null
+  >(null)
+
+  useEffect(() => {
+    return () => {
+      if (invalidFeedbackTimeout.current !== null) {
+        window.clearTimeout(invalidFeedbackTimeout.current)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    const blockBrowserFileOpen = (event: globalThis.DragEvent) => {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    window.addEventListener("drop", blockBrowserFileOpen)
+    window.addEventListener("dragover", blockBrowserFileOpen)
+    return () => {
+      window.removeEventListener("drop", blockBrowserFileOpen)
+      window.removeEventListener("dragover", blockBrowserFileOpen)
+    }
+  }, [])
+
+  const triggerInvalidFeedback = (message: string) => {
+    setInvalidFeedbackMessage(message)
+    if (invalidFeedbackTimeout.current !== null) {
+      window.clearTimeout(invalidFeedbackTimeout.current)
+    }
+    invalidFeedbackTimeout.current = window.setTimeout(() => {
+      setInvalidFeedbackMessage(null)
+      invalidFeedbackTimeout.current = null
+    }, 2000)
+  }
+
+  const maxFileSizeBytes =
+    (config.experimental?.admin?.maxFileSize ?? 0) * 1024 * 1024
+  const invalidFeedbackId = `${field.name}-invalid-feedback`
 
   const onFileSelected = (file?: File) => {
     if (!file) {
       return
     }
     if (!acceptedFileTypes.includes(file.type as any)) {
+      triggerInvalidFeedback(t("ln.admin.file-invalid-type"))
+      return
+    }
+    if (maxFileSizeBytes && !(file.size < maxFileSizeBytes)) {
+      triggerInvalidFeedback(
+        t("ln.admin.file-too-big", {
+          limit: config.experimental?.admin?.maxFileSize,
+        }),
+      )
       return
     }
     const nameParts = file.name.split(".")
@@ -52,6 +110,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     })
     onFileChange(file)
     field.onBlur()
+    setInvalidFeedbackMessage(null)
   }
 
   const onDragEnter = (event: DragEvent<HTMLDivElement>) => {
@@ -74,11 +133,14 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`flex w-full flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-gray-300 bg-gray-200 p-4 transition-colors ease-in-out ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 hover:bg-sky-50`}
+        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed bg-gray-200 p-4 transition-colors ease-in-out ${invalidFeedbackMessage ? "file-upload--shake border-rose-800" : "border-gray-300"} ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
         onBlur={field.onBlur}
+        aria-describedby={
+          invalidFeedbackMessage ? invalidFeedbackId : undefined
+        }
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault()
@@ -97,10 +159,31 @@ export default function FileUpload<TFieldValues extends FieldValues>({
             limit: config.experimental?.admin?.maxFileSize,
           })}
         </span>
+        {invalidFeedbackMessage && (
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-gray-50/85 text-rose-800"
+            role="alert"
+            aria-hidden="true"
+          >
+            <Icon className="mdi--alert-circle-outline" ariaLabel="" />
+            <span className="font-semibold">{invalidFeedbackMessage}</span>
+          </div>
+        )}
       </div>
+      {invalidFeedbackMessage && (
+        <div
+          id={invalidFeedbackId}
+          aria-live="polite"
+          role="status"
+          className="sr-only"
+        >
+          {invalidFeedbackMessage}
+        </div>
+      )}
       <input
         id={field.name}
         name={field.name}
+        tabIndex={-1}
         ref={(ref) => {
           fileInputRef.current = ref
           field.ref(ref)

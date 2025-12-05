@@ -4,7 +4,7 @@ import { I18nContext } from "./i18n-context"
 
 /**
  * Retrieves the current i18n helpers from context.
- * Must be called inside a React tree wrapped with `I18nContext.Provider`, otherwise throws.
+ * Must be called inside a react tree wrapped with `I18nContext.Provider`, otherwise throws.
  */
 export const useI18n = () => {
   const i18n = useContext(I18nContext)
