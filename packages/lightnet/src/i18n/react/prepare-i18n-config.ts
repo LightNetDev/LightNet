@@ -1,5 +1,5 @@
 /**
- * Prepares the configuration object passed from an Astro page to the React i18n context.
+ * Prepares the configuration object passed from an Astro page to the react i18n context.
  * Resolves every requested translation key (supporting wildcard suffixes like `ln.dashboard.*`)
  * so the React island receives only the strings it needs.
  *
