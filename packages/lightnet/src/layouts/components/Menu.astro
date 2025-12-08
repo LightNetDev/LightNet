@@ -16,7 +16,7 @@ const { icon, label, disabled } = Astro.props
     role={disabled ? undefined : "button"}
     aria-disabled={disabled}
     aria-label={Astro.locals.i18n.t(label)}
-    class=`flex rounded-md p-3 ${disabled? "text-gray-300":"text-gray-600 hover:text-primary"}`
+    class={`flex rounded-md p-3 ${disabled ? "text-gray-300" : "text-gray-600 hover:text-primary"}`}
   >
     <Icon className={icon} ariaLabel="" />
   </div>
