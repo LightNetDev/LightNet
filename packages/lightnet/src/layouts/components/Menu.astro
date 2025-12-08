@@ -11,14 +11,15 @@ const { icon, label, disabled } = Astro.props
 ---
 
 <div class="dy-dropdown dy-dropdown-end">
-  <button
-    disabled={disabled}
+  <div
+    tabindex={disabled ? undefined : "0"}
+    role={disabled ? undefined : "button"}
     aria-disabled={disabled}
     aria-label={Astro.locals.i18n.t(label)}
-    class="flex rounded-md p-3 text-gray-600 hover:text-primary disabled:text-gray-300"
+    class={`flex rounded-md p-3 ${disabled ? "text-gray-300" : "text-gray-600 hover:text-primary"}`}
   >
     <Icon className={icon} ariaLabel="" />
-  </button>
+  </div>
 
   <ul
     tabindex="0"
