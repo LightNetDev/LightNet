@@ -31,7 +31,7 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
 const t = Astro.locals.i18n.t
 ---
 
-<nav class="-me-3 flex items-center">
+<nav class="relative -me-3 flex h-full items-center">
   {
     !config.searchPage?.hideHeaderSearchIcon && (
       <a

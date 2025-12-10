@@ -10,21 +10,73 @@ interface Props {
 const { icon, label, disabled } = Astro.props
 ---
 
-<div class="dy-dropdown dy-dropdown-end">
-  <div
-    tabindex={disabled ? undefined : "0"}
-    role={disabled ? undefined : "button"}
+<ln-menu>
+  <button
+    disabled={disabled}
     aria-disabled={disabled}
     aria-label={Astro.locals.i18n.t(label)}
     class={`flex rounded-md p-3 ${disabled ? "text-gray-300" : "text-gray-600 hover:text-primary"}`}
   >
     <Icon className={icon} ariaLabel="" />
-  </div>
+  </button>
 
   <ul
-    tabindex="0"
-    class="dy-dropdown-content top-px me-3 mt-[3.25rem] w-48 overflow-hidden rounded-b-md bg-white py-3 shadow-lg sm:mt-16"
+    data-menu-panel=""
+    class="absolute right-0 top-full mt-px hidden w-48 flex-col overflow-hidden rounded-b-md bg-white py-3 shadow-lg"
   >
     <slot />
   </ul>
-</div>
+</ln-menu>
+<script>
+  class Menu extends HTMLElement {
+    menuPanel = this.querySelector<HTMLElement>("[data-menu-panel]")!
+    isMenuOpened = false
+    handleOutsideClick = (event: MouseEvent) => {
+      if (!this.isMenuOpened) {
+        return
+      }
+      const target = event.target as Node | null
+      if (target && this.contains(target)) {
+        return
+      }
+      this.closeMenu()
+    }
+
+    toggleMenu() {
+      if (this.isMenuOpened) {
+        this.closeMenu()
+      } else {
+        this.openMenu()
+      }
+    }
+
+    openMenu() {
+      if (this.isMenuOpened) {
+        return
+      }
+      this.menuPanel.style.display = "flex"
+      document.addEventListener("click", this.handleOutsideClick)
+      this.isMenuOpened = true
+    }
+
+    closeMenu() {
+      if (!this.isMenuOpened) {
+        return
+      }
+      this.menuPanel.style.display = "none"
+      document.removeEventListener("click", this.handleOutsideClick)
+      this.isMenuOpened = false
+    }
+
+    connectedCallback() {
+      this.querySelector("button")?.addEventListener("click", () =>
+        this.toggleMenu(),
+      )
+    }
+
+    disconnectedCallback() {
+      document.removeEventListener("click", this.handleOutsideClick)
+    }
+  }
+  customElements.define("ln-menu", Menu)
+</script>

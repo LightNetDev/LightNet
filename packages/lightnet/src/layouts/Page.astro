@@ -37,20 +37,14 @@ const { direction } = resolveLanguage(currentLocale)
     <Favicon />
     <ViewTransition />
   </head>
-  {
-    (
-      /** set tabindex=-1 to wake up iOS Safari, to enable closing menu items; see: https://github.com/saadeghi/daisyui/issues/3454 */
-      <body
-        class="flex min-h-screen flex-col overflow-y-scroll bg-gray-50 text-gray-900"
-        tabindex="-1"
-      >
-        <Header />
-        <main class={`grow pb-8 pt-14 sm:py-20 ${mainClass ?? ""}`}>
-          <slot />
-        </main>
-        {CustomFooter ? <CustomFooter /> : <Footer />}
-        <PreloadReact client:idle />
-      </body>
-    )
-  }
+  <body
+    class="flex min-h-screen flex-col overflow-y-scroll bg-gray-50 text-gray-900"
+  >
+    <Header />
+    <main class={`grow pb-8 pt-14 sm:py-20 ${mainClass ?? ""}`}>
+      <slot />
+    </main>
+    {CustomFooter ? <CustomFooter /> : <Footer />}
+    <PreloadReact client:idle />
+  </body>
 </html>
