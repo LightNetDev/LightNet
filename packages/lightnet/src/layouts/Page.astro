@@ -40,6 +40,7 @@ const { direction } = resolveLanguage(currentLocale)
   <body
     class="flex min-h-screen flex-col overflow-y-scroll bg-gray-50 text-gray-900"
     ontouchstart=""
+    tabindex="-1"
   >
     <Header />
     <main class={`grow pb-8 pt-14 sm:py-20 ${mainClass ?? ""}`}>
