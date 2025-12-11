@@ -84,10 +84,10 @@ const { icon, label, disabled } = Astro.props
       this.querySelector("button")?.addEventListener("click", () =>
         this.toggleMenu(),
       )
-    }
 
-    disconnectedCallback() {
-      document.removeEventListener("click", this.handleOutsideClick)
+      window.addEventListener("beforeunload", () => {
+        this.closeMenu()
+      })
     }
   }
   customElements.define("ln-menu", Menu)
