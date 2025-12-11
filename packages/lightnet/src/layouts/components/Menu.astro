@@ -10,7 +10,7 @@ interface Props {
 const { icon, label, disabled } = Astro.props
 ---
 
-<ln-menu>
+<ln-menu class="relative flex h-full items-center">
   <button
     disabled={disabled}
     aria-disabled={disabled}
@@ -22,7 +22,9 @@ const { icon, label, disabled } = Astro.props
 
   <ul
     data-menu-panel=""
-    class="absolute right-0 top-full mt-px hidden w-48 flex-col overflow-hidden rounded-b-md bg-white py-3 shadow-lg"
+    aria-hidden="true"
+    inert
+    class="pointer-events-none absolute right-3 top-full mt-px flex w-48 origin-top scale-y-90 flex-col overflow-hidden rounded-b-md bg-white py-3 opacity-0 shadow-lg transition-all duration-100 ease-out"
   >
     <slot />
   </ul>
@@ -54,7 +56,12 @@ const { icon, label, disabled } = Astro.props
       if (this.isMenuOpened) {
         return
       }
-      this.menuPanel.style.display = "flex"
+      this.menuPanel.style.opacity = "1"
+      this.menuPanel.style.pointerEvents = "auto"
+      this.menuPanel.style.transform = "scaleY(1)"
+
+      this.menuPanel.setAttribute("aria-hidden", "false")
+      this.menuPanel.removeAttribute("inert")
       document.addEventListener("click", this.handleOutsideClick)
       this.isMenuOpened = true
     }
@@ -63,7 +70,12 @@ const { icon, label, disabled } = Astro.props
       if (!this.isMenuOpened) {
         return
       }
-      this.menuPanel.style.display = "none"
+      this.menuPanel.style.opacity = "0"
+      this.menuPanel.style.pointerEvents = "none"
+      this.menuPanel.style.transform = "scaleY(0.9)"
+
+      this.menuPanel.setAttribute("aria-hidden", "true")
+      this.menuPanel.setAttribute("inert", "")
       document.removeEventListener("click", this.handleOutsideClick)
       this.isMenuOpened = false
     }
