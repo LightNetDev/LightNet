@@ -1,5 +1,20 @@
 # lightnet
 
+## 3.10.8
+
+### Patch Changes
+
+- [#340](https://github.com/LightNetDev/LightNet/pull/340) [`6162179`](https://github.com/LightNetDev/LightNet/commit/6162179b90e987359934bd08ac9d4500eb560e25) Thanks [@smn-cds](https://github.com/smn-cds)! - Tighten locale detection to avoid partial matches
+
+  When the URL path starts with a locale-like prefix, only full segment matches should be treated as a locale. Previously `/enx` was parsed as locale `en`; now only `/en/...` (or just `/en`) will match.
+
+- [#346](https://github.com/LightNetDev/LightNet/pull/346) [`2bc1560`](https://github.com/LightNetDev/LightNet/commit/2bc15600b0a9bcfc3410f155191b7ea1c9c5306a) Thanks [@smn-cds](https://github.com/smn-cds)! - Fixes an issue where top menus would not close when tapping outside the menu on iOS Safari.
+  This update also improves overall menu accessibility.
+
+- [#345](https://github.com/LightNetDev/LightNet/pull/345) [`1e6cddb`](https://github.com/LightNetDev/LightNet/commit/1e6cddba0e783f9d59da7d36dd154dbcd784ed6b) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix menu not working on ios safari
+
+- [#340](https://github.com/LightNetDev/LightNet/pull/340) [`6162179`](https://github.com/LightNetDev/LightNet/commit/6162179b90e987359934bd08ac9d4500eb560e25) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 3.10.7
 
 ### Patch Changes
