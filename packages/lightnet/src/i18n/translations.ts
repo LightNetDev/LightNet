@@ -18,6 +18,7 @@ const builtInTranslations = {
   pt: () => import("./translations/pt.yml?raw"),
   ru: () => import("./translations/ru.yml?raw"),
   uk: () => import("./translations/uk.yml?raw"),
+  ur: () => import("./translations/ur.yml?raw"),
   zh: () => import("./translations/zh.yml?raw"),
 } as const
 
