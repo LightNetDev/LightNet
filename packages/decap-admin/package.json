@@ -27,7 +27,7 @@
     "sharp": "^0.34.0"
   },
   "dependencies": {
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.2"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

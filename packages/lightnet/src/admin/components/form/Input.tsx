@@ -41,7 +41,7 @@ export default function Input<TFieldValues extends FieldValues>({
       )}
 
       <input
-        className={`dy-input dy-input-bordered border-gray-300 shadow-inner focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
+        className={`rounded-lg border border-gray-300 px-4 py-3 shadow-inner focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
         id={name}
         aria-invalid={!!errorMessage}
         {...control.register(name)}

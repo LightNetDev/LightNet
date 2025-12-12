@@ -12,11 +12,11 @@ const { t } = Astro.locals.i18n
   action={`/${Astro.currentLocale}/media`}
   method="get"
   role="search"
-  class="group dy-join w-full rounded-2xl shadow-sm outline-2 outline-offset-2 outline-gray-400 group-focus-within:outline"
+  class="group flex w-full rounded-2xl shadow-sm outline outline-2 outline-offset-2 outline-transparent transition-all ease-in-out group-focus-within:outline-gray-400"
   class:list={[Astro.props.className]}
 >
   <input
-    class="dy-input dy-join-item grow rounded-2xl bg-gray-100/95 text-gray-900 placeholder-gray-500 shadow-inner focus:outline-none"
+    class="grow rounded-s-2xl bg-gray-100/95 px-4 py-3 text-gray-900 placeholder-gray-500 shadow-inner focus:outline-none"
     enterkeyhint="search"
     type="search"
     name="search"
@@ -24,7 +24,7 @@ const { t } = Astro.locals.i18n
   />
   <button
     type="submit"
-    class="dy-btn dy-join-item rounded-2xl border-gray-100/95 bg-gray-800 text-gray-50 hover:bg-gray-950 hover:text-gray-300"
+    class="flex items-center rounded-e-2xl border border-gray-100/95 bg-gray-800 px-4 py-3 text-gray-50 hover:bg-gray-950 hover:text-gray-300"
   >
     <Icon className="mdi--magnify" ariaLabel={t("ln.search.title")} />
   </button>
