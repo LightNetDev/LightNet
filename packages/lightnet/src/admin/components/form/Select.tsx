@@ -1,5 +1,6 @@
 import { type Control, type FieldValues, type Path } from "react-hook-form"
 
+import Icon from "../../../components/Icon"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
@@ -39,19 +40,25 @@ export default function Select<TFieldValues extends FieldValues>({
           />
         </label>
       )}
-      <select
-        {...control.register(name)}
-        id={name}
-        aria-invalid={!!errorMessage}
-        defaultValue={defaultValue}
-        className={`rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
-      >
-        {options.map(({ id, labelText }) => (
-          <option key={id} value={id}>
-            {labelText ?? id}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          {...control.register(name)}
+          id={name}
+          aria-invalid={!!errorMessage}
+          defaultValue={defaultValue}
+          className={`w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 pr-12 shadow-sm focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
+        >
+          {options.map(({ id, labelText }) => (
+            <option key={id} value={id}>
+              {labelText ?? id}
+            </option>
+          ))}
+        </select>
+        <Icon
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-gray-600 mdi--chevron-down"
+          ariaLabel=""
+        />
+      </div>
       <ErrorMessage message={errorMessage} />
       <Hint preserveSpace={preserveHintSpace} label={hint} />
     </div>
