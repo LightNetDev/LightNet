@@ -10,7 +10,7 @@ interface Props {
 const { icon, label, disabled } = Astro.props
 ---
 
-<div class="dy-dropdown dy-dropdown-end">
+<ln-menu class="relative flex h-full items-center">
   <button
     disabled={disabled}
     aria-disabled={disabled}
@@ -21,9 +21,74 @@ const { icon, label, disabled } = Astro.props
   </button>
 
   <ul
-    tabindex="0"
-    class="dy-dropdown-content top-px me-3 mt-[3.25rem] w-48 overflow-hidden rounded-b-md bg-white py-3 shadow-lg sm:mt-16"
+    data-menu-panel
+    aria-hidden="true"
+    inert
+    class="pointer-events-none absolute right-3 top-full mt-px flex w-48 origin-top scale-y-90 flex-col overflow-hidden rounded-b-md bg-white py-3 opacity-0 shadow-lg transition-all duration-100 ease-out"
   >
     <slot />
   </ul>
-</div>
+</ln-menu>
+<script>
+  class Menu extends HTMLElement {
+    menuPanel = this.querySelector<HTMLElement>("[data-menu-panel]")!
+    isMenuOpened = false
+    handleOutsideClick = (event: MouseEvent) => {
+      if (!this.isMenuOpened) {
+        return
+      }
+      const target = event.target as Node | null
+      if (target && this.contains(target)) {
+        return
+      }
+      this.closeMenu()
+    }
+
+    toggleMenu() {
+      if (this.isMenuOpened) {
+        this.closeMenu()
+      } else {
+        this.openMenu()
+      }
+    }
+
+    openMenu() {
+      if (this.isMenuOpened) {
+        return
+      }
+      this.menuPanel.style.opacity = "1"
+      this.menuPanel.style.pointerEvents = "auto"
+      this.menuPanel.style.transform = "scaleY(1)"
+
+      this.menuPanel.setAttribute("aria-hidden", "false")
+      this.menuPanel.removeAttribute("inert")
+      document.addEventListener("click", this.handleOutsideClick)
+      this.isMenuOpened = true
+    }
+
+    closeMenu() {
+      if (!this.isMenuOpened) {
+        return
+      }
+      this.menuPanel.style.opacity = "0"
+      this.menuPanel.style.pointerEvents = "none"
+      this.menuPanel.style.transform = "scaleY(0.9)"
+
+      this.menuPanel.setAttribute("aria-hidden", "true")
+      this.menuPanel.setAttribute("inert", "")
+      document.removeEventListener("click", this.handleOutsideClick)
+      this.isMenuOpened = false
+    }
+
+    connectedCallback() {
+      this.querySelector("button")?.addEventListener("click", () =>
+        this.toggleMenu(),
+      )
+
+      window.addEventListener("beforeunload", () => {
+        this.closeMenu()
+      })
+    }
+  }
+  customElements.define("ln-menu", Menu)
+</script>
