@@ -1,5 +1,5 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import {
   createI18n,
@@ -38,11 +38,15 @@ export default function SearchList({
     mediaTypes,
   })
   const count = isLoading ? mediaItemsTotal : results.length
+  const getItemKey = useCallback(
+    (index: number) => (isLoading ? index : results[index].id),
+    [isLoading, results],
+  )
 
   const virtualizer = useWindowVirtualizer({
     count,
     estimateSize: () => rowHeight,
-    getItemKey: (index) => (isLoading ? index : results[index].id),
+    getItemKey,
     overscan: 2,
     scrollMargin: listRef.current?.offsetTop ?? 0,
   })
