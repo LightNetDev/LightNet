@@ -133,7 +133,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   return (
     <>
       <div
-        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed bg-gray-200 p-4 transition-colors ease-in-out ${invalidFeedbackMessage ? "file-upload--shake border-rose-800" : "border-gray-300"} ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
+        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed bg-slate-200 p-4 transition-colors ease-in-out ${invalidFeedbackMessage ? "file-upload--shake border-rose-800" : "border-slate-300"} ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
         role="button"
         tabIndex={0}
         onClick={() => fileInputRef.current?.click()}
@@ -151,17 +151,17 @@ export default function FileUpload<TFieldValues extends FieldValues>({
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
       >
-        <span className="text-sm text-gray-800">
+        <span className="text-sm text-slate-800">
           {t("ln.admin.file-upload-hint")}
         </span>
-        <span className="text-xs text-gray-600">
+        <span className="text-xs text-slate-600">
           {t("ln.admin.file-upload-size-limit", {
             limit: config.experimental?.admin?.maxFileSize,
           })}
         </span>
         {invalidFeedbackMessage && (
           <div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-gray-50/85 text-rose-800"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-slate-50/85 text-rose-800"
             role="alert"
             aria-hidden="true"
           >

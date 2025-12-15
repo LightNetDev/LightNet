@@ -11,7 +11,7 @@ const baseButtonClass =
   "flex min-w-52 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-bold shadow-sm transition-colors easy-in-out focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-sky-700 focus-visible:ring-offset-1 disabled:cursor-not-allowed"
 
 const buttonStateClasses = {
-  idle: "bg-gray-800 text-gray-50 hover:bg-gray-950 hover:text-gray-300 disabled:bg-gray-500 disabled:text-gray-300",
+  idle: "bg-slate-800 text-slate-50 hover:bg-slate-950 hover:text-slate-300 disabled:bg-slate-500 disabled:text-slate-300",
   error:
     "bg-rose-700 text-white hover:bg-rose-800 hover:text-white disabled:bg-rose-600",
   success:

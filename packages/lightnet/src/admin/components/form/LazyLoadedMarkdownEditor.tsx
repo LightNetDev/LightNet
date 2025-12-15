@@ -47,7 +47,7 @@ export default function LazyLoadedMarkdownEditor<
           markdown={value ?? ""}
           onBlur={onBlur}
           onChange={onChange}
-          contentEditableClassName="prose bg-gray-50 h-80 w-full max-w-full overflow-y-auto"
+          contentEditableClassName="prose bg-slate-50 h-80 w-full max-w-full overflow-y-auto"
           ref={ref}
           onError={(error) =>
             console.error("Error while editing markdown", error)
