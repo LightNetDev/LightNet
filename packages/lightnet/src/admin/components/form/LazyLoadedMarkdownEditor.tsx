@@ -78,7 +78,7 @@ export default function LazyLoadedMarkdownEditor<
                   <CreateLink />
                 </>
               ),
-              toolbarClassName: "!rounded-none",
+              toolbarClassName: "!rounded-none !bg-slate-200",
             }),
           ]}
         />
