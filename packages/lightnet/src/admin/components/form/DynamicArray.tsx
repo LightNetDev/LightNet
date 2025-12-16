@@ -35,7 +35,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
     ) => void
   }
 }) {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, swap } = useFieldArray({
     name,
     control,
   })
@@ -50,20 +50,28 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
       <div className="flex w-full flex-col gap-1 rounded-lg rounded-ss-none border-slate-300 bg-slate-300 p-1 shadow-inner">
         {fields.map((field, index) => (
           <div
-            className="w-full gap-2 rounded-lg bg-slate-50 px-2 pb-2 shadow-sm"
+            className="w-full gap-2 rounded-lg bg-slate-50 px-2 pb-4 shadow-sm"
             key={field.id}
           >
             <div className="-me-2 flex justify-end">
-              <button
-                className="flex items-center rounded-md p-2 text-slate-600 transition-colors ease-in-out hover:text-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
-                type="button"
+              <ItemActionButton
+                icon="mdi--arrow-up"
+                label="ln.admin.move-up"
+                disabled={index === 0}
+                onClick={() => swap(index, index - 1)}
+              />
+              <ItemActionButton
+                icon="mdi--arrow-down"
+                label="ln.admin.move-down"
+                disabled={index === fields.length - 1}
+                onClick={() => swap(index, index + 1)}
+              />
+              <ItemActionButton
+                icon="mdi--remove"
+                label="ln.admin.remove"
                 onClick={() => remove(index)}
-              >
-                <Icon
-                  className="mdi--remove"
-                  ariaLabel={t("ln.admin.remove")}
-                />
-              </button>
+                className="hover:!text-rose-800"
+              />
             </div>
 
             {renderElement(index)}
@@ -82,5 +90,31 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
       <ErrorMessage message={errorMessage} />
       <Hint preserveSpace={true} label={hint} />
     </fieldset>
+  )
+}
+
+function ItemActionButton({
+  label,
+  icon,
+  onClick,
+  disabled = false,
+  className,
+}: {
+  label: string
+  icon: string
+  disabled?: boolean
+  onClick: () => void
+  className?: string
+}) {
+  const { t } = useI18n()
+  return (
+    <button
+      className={`flex items-center rounded-md p-2 text-slate-600 transition-colors ease-in-out hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 disabled:text-slate-300 ${className}`}
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <Icon className={icon} ariaLabel={t(label)} />
+    </button>
   )
 }
