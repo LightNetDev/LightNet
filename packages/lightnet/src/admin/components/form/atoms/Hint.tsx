@@ -12,7 +12,7 @@ export default function Hint({
     return null
   }
   return (
-    <div className="flex h-8 w-full items-start justify-end p-2">
+    <div className="flex h-10 w-full items-start justify-end p-2">
       {label && <span className="text-xs">{t(label)}</span>}
     </div>
   )
