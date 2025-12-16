@@ -24,6 +24,7 @@ ln.admin.file-not-accepted: File not accepted
 ln.admin.file-invalid-type: File type not allowed.
 ln.admin.file-too-big: File is too big. Max {{limit}} MB.
 ln.admin.authors: Authors
+ln.admin.author-name: Author name
 ln.admin.description: Description
 ln.admin.date-created: Date Created
 ln.admin.date-created-hint: The date this item was added to this media library.

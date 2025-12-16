@@ -3,6 +3,7 @@ import { type Control } from "react-hook-form"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Input from "../../../components/form/Input"
 import type { MediaItem } from "../../../types/media-item"
+import { useI18n } from "../../../../i18n/react/use-i18n"
 
 export default function Authors({
   control,
@@ -11,6 +12,7 @@ export default function Authors({
   control: Control<MediaItem>
   defaultValue: MediaItem["authors"]
 }) {
+  const { t } = useI18n()
   return (
     <DynamicArray
       control={control}
@@ -20,6 +22,7 @@ export default function Authors({
         <Input
           name={`authors.${index}.value`}
           preserveHintSpace={false}
+          placeholder={t("ln.admin.author-name")}
           control={control}
           defaultValue={defaultValue[index]?.value}
         />
