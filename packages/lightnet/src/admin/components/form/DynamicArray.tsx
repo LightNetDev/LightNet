@@ -47,22 +47,31 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         <Label label={label} />
       </legend>
 
-      <div className="flex w-full flex-col divide-y divide-slate-300 rounded-lg rounded-ss-none border border-slate-300 bg-slate-100 shadow-sm">
+      <div className="flex w-full flex-col gap-1 rounded-lg rounded-ss-none border-slate-300 bg-slate-300 p-1 shadow-inner">
         {fields.map((field, index) => (
-          <div className="flex w-full items-center gap-2 p-2" key={field.id}>
-            <div className="flex grow flex-col">{renderElement(index)}</div>
-            <button
-              className="flex items-center rounded-md p-2 text-slate-600 transition-colors ease-in-out hover:text-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
-              type="button"
-              onClick={() => remove(index)}
-            >
-              <Icon className="mdi--remove" ariaLabel={t("ln.admin.remove")} />
-            </button>
+          <div
+            className="w-full gap-2 rounded-lg bg-slate-50 px-2 pb-2 shadow-sm"
+            key={field.id}
+          >
+            <div className="-me-2 flex justify-end">
+              <button
+                className="flex items-center rounded-md p-2 text-slate-600 transition-colors ease-in-out hover:text-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
+                type="button"
+                onClick={() => remove(index)}
+              >
+                <Icon
+                  className="mdi--remove"
+                  ariaLabel={t("ln.admin.remove")}
+                />
+              </button>
+            </div>
+
+            {renderElement(index)}
           </div>
         ))}
         <button
           type="button"
-          className="rounded-b-lg p-4 text-sm font-bold text-slate-500 transition-colors ease-in-out hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
+          className="my-2 self-center rounded-2xl bg-slate-100 px-8 py-4 text-sm font-bold text-slate-800 shadow-sm transition-colors ease-in-out hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
           onClick={() => {
             addButton.onClick(append, fields.length)
           }}
