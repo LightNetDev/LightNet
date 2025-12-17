@@ -22,10 +22,14 @@ export default function FileUpload<TFieldValues extends FieldValues>({
   onChange,
   onBlur,
   acceptedFileTypes,
+  title,
+  description,
 }: {
   onChange: (file: File) => void
   onBlur?: () => void
   acceptedFileTypes: Readonly<FileType[]>
+  title: string
+  description: string
 }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const invalidFeedbackTimeout = useRef<number | null>(null)
@@ -115,7 +119,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     if (isDragging) {
       return "border-sky-700 bg-sky-50"
     }
-    return "bg-slate-200 border-slate-300 hover:bg-sky-50"
+    return "bg-slate-100 border-slate-300 hover:bg-sky-50"
   }
 
   return (
@@ -136,14 +140,15 @@ export default function FileUpload<TFieldValues extends FieldValues>({
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
       >
-        <span className="text-sm text-slate-800">
-          {t("ln.admin.file-upload-hint")}
+        <span className="mb-1 text-sm font-bold text-slate-700">
+          {t(title)}
         </span>
-        <span className="text-xs text-slate-600">
-          {t("ln.admin.file-upload-size-limit", {
-            limit: config.experimental?.admin?.maxFileSize,
+        <span className="max-w-md text-balance text-center text-sm text-slate-600">
+          {t(description, {
+            maxFileSize: config.experimental?.admin?.maxFileSize,
           })}
         </span>
+
         {invalidFeedbackMessage && (
           <div
             className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-slate-50/85 text-rose-800"

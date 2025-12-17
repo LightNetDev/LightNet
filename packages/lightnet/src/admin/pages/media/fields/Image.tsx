@@ -81,13 +81,15 @@ export default function Image({
           />
         </div>
         <FileUpload
+          title="ln.admin.image-upload-title"
+          description="ln.admin.image-upload-description"
           onChange={updateImage}
           onBlur={field.onBlur}
           acceptedFileTypes={acceptedFileTypes}
         />
       </div>
       <ErrorMessage message={errorMessage} />
-      <Hint preserveSpace={true} label="ln.admin.image-hint" />
+      <Hint preserveSpace={true} />
     </div>
   )
 }
