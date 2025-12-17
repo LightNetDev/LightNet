@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { type Control } from "react-hook-form"
+import { useController, type Control } from "react-hook-form"
 
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import FileUpload from "../../../components/form/atoms/FileUpload"
@@ -20,6 +20,7 @@ export default function Image({
   defaultValue: MediaItem["image"]
   mediaId: string
 }) {
+  const { field } = useController({ control, name: "image" })
   const objectUrlRef = useRef<string | null>(null)
   const [previewSrc, setPreviewSrc] = useState<string | undefined>(
     defaultValue.previewSrc,
@@ -48,7 +49,15 @@ export default function Image({
     }
     const objectUrl = URL.createObjectURL(file)
     objectUrlRef.current = objectUrl
+
+    const nameParts = file.name.split(".")
+    const extension = nameParts.pop()
     setPreviewSrc(objectUrl)
+    field.onChange({
+      ...field.value,
+      path: `.images/${mediaId}.${extension}`,
+      file,
+    })
   }
 
   return (
@@ -72,12 +81,9 @@ export default function Image({
           />
         </div>
         <FileUpload
-          name="image"
-          control={control}
-          onFileChange={updateImage}
-          destinationPath="./images"
+          onChange={updateImage}
+          onBlur={field.onBlur}
           acceptedFileTypes={acceptedFileTypes}
-          fileName={mediaId}
         />
       </div>
       <ErrorMessage message={errorMessage} />

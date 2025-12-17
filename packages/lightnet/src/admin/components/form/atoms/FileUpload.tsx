@@ -21,24 +21,14 @@ import { useI18n } from "../../../../i18n/react/use-i18n"
 type FileType = "image/png" | "image/jpeg" | "image/webp"
 
 export default function FileUpload<TFieldValues extends FieldValues>({
-  name,
-  control,
-  destinationPath,
-  onFileChange,
-  fileName,
+  onChange,
+  onBlur,
   acceptedFileTypes,
 }: {
-  onFileChange: (file: File) => void
-  control: Control<TFieldValues>
-  name: Path<TFieldValues>
-  destinationPath: string
-  fileName?: string
+  onChange: (file: File) => void
+  onBlur?: () => void
   acceptedFileTypes: Readonly<FileType[]>
 }) {
-  const { field } = useController({
-    name,
-    control,
-  })
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const invalidFeedbackTimeout = useRef<number | null>(null)
   const { t } = useI18n()
@@ -82,7 +72,6 @@ export default function FileUpload<TFieldValues extends FieldValues>({
 
   const maxFileSizeBytes =
     (config.experimental?.admin?.maxFileSize ?? 0) * 1024 * 1024
-  const invalidFeedbackId = `${field.name}-invalid-feedback`
 
   const onFileSelected = (file?: File) => {
     if (!file) {
@@ -100,16 +89,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
       )
       return
     }
-    const nameParts = file.name.split(".")
-    const extension = nameParts.pop()
-    const name = nameParts.join(".")
-    field.onChange({
-      ...field.value,
-      path: `${destinationPath}/${fileName ?? name}.${extension}`,
-      file,
-    })
-    onFileChange(file)
-    field.onBlur()
+    onChange(file)
     setInvalidFeedbackMessage(null)
   }
 
@@ -130,17 +110,26 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     event.target.value = ""
   }
 
+  const colorClass = () => {
+    if (invalidFeedbackMessage) {
+      return "bg-slate-200 border-rose-800 "
+    }
+
+    if (isDragging) {
+      return "border-sky-700 bg-sky-50"
+    }
+
+    return "bg-slate-200 border-slate-300 hover:bg-sky-50"
+  }
+
   return (
     <>
       <div
-        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed bg-slate-200 p-4 transition-colors ease-in-out ${invalidFeedbackMessage ? "file-upload--shake border-rose-800" : "border-slate-300"} ${isDragging ? "border-sky-700 bg-sky-50" : ""} focus-within:border-sky-700 focus-within:outline-none hover:bg-sky-50`}
+        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed ${colorClass()} p-4 transition-colors ease-in-out focus-within:border-sky-700 focus-within:outline-none`}
         role="button"
         tabIndex={0}
+        onBlur={onBlur}
         onClick={() => fileInputRef.current?.click()}
-        onBlur={field.onBlur}
-        aria-describedby={
-          invalidFeedbackMessage ? invalidFeedbackId : undefined
-        }
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault()
@@ -170,27 +159,14 @@ export default function FileUpload<TFieldValues extends FieldValues>({
           </div>
         )}
       </div>
-      {invalidFeedbackMessage && (
-        <div
-          id={invalidFeedbackId}
-          aria-live="polite"
-          role="status"
-          className="sr-only"
-        >
-          {invalidFeedbackMessage}
-        </div>
-      )}
       <input
-        id={field.name}
-        name={field.name}
         tabIndex={-1}
         ref={(ref) => {
           fileInputRef.current = ref
-          field.ref(ref)
         }}
         type="file"
         accept={acceptedFileTypes.join(",")}
-        className="sr-only"
+        className="hidden"
         onChange={onInputChange}
       />
     </>
