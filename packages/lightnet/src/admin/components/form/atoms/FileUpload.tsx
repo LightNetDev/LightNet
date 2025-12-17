@@ -143,7 +143,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
         <span className="mb-1 text-sm font-bold text-slate-700">
           {t(title)}
         </span>
-        <span className="max-w-md text-balance text-center text-sm text-slate-600">
+        <span className="max-w-md text-balance text-center text-xs text-slate-600">
           {t(description, {
             maxFileSize: config.experimental?.admin?.maxFileSize,
           })}
