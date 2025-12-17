@@ -11,6 +11,7 @@ export default function Select<TFieldValues extends FieldValues>({
   name,
   label,
   labelSize,
+  required = false,
   control,
   defaultValue,
   hint,
@@ -21,6 +22,7 @@ export default function Select<TFieldValues extends FieldValues>({
   label?: string
   labelSize?: "small" | "medium"
   hint?: string
+  required?: boolean
   preserveHintSpace?: boolean
   defaultValue?: string
   control: Control<TFieldValues>
@@ -36,6 +38,7 @@ export default function Select<TFieldValues extends FieldValues>({
             label={label}
             size={labelSize}
             isDirty={isDirty}
+            required={required}
             isInvalid={!!errorMessage}
           />
         </label>
@@ -45,6 +48,8 @@ export default function Select<TFieldValues extends FieldValues>({
           {...control.register(name)}
           id={name}
           aria-invalid={!!errorMessage}
+          aria-required={required}
+          required
           defaultValue={defaultValue}
           className={`w-full appearance-none rounded-lg border border-slate-300 bg-white px-4 py-3 pe-12 shadow-sm focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-slate-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
         >

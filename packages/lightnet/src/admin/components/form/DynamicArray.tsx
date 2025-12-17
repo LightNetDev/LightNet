@@ -18,11 +18,13 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   control,
   name,
   label,
+  required = false,
   hint,
   renderElement,
   addButton,
 }: {
   name: ArrayPath<TFieldValues>
+  required?: boolean
   label: string
   hint?: string
   control: Control<TFieldValues>
@@ -44,7 +46,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   return (
     <fieldset key={name}>
       <legend>
-        <Label label={label} />
+        <Label required={required} label={label} />
       </legend>
 
       <div className="flex w-full flex-col gap-1 rounded-lg rounded-ss-none border border-slate-300 bg-slate-200 p-1 shadow-inner">

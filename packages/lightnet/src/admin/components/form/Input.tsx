@@ -9,6 +9,7 @@ import { useFieldError } from "./hooks/use-field-error"
 
 type Props<TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>
+  required?: boolean
   label?: string
   labelSize?: "small" | "medium"
   hint?: string
@@ -23,6 +24,7 @@ export default function Input<TFieldValues extends FieldValues>({
   hint,
   preserveHintSpace = true,
   control,
+  required = false,
   ...inputProps
 }: Props<TFieldValues>) {
   const isDirty = useFieldDirty({ control, name })
@@ -36,6 +38,7 @@ export default function Input<TFieldValues extends FieldValues>({
             size={labelSize}
             isDirty={isDirty}
             isInvalid={!!errorMessage}
+            required={required}
           />
         </label>
       )}
@@ -44,6 +47,8 @@ export default function Input<TFieldValues extends FieldValues>({
         className={`rounded-lg border border-slate-300 px-4 py-3 shadow-inner focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-slate-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
         id={name}
         aria-invalid={!!errorMessage}
+        aria-required={required}
+        required
         {...control.register(name)}
         {...inputProps}
       />

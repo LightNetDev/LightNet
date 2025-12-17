@@ -22,6 +22,7 @@ export default function Categories({
         <Select
           options={categories}
           control={control}
+          required
           name={`categories.${index}.value`}
           defaultValue={defaultValue[index]?.value}
           preserveHintSpace={false}

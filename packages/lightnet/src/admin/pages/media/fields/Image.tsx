@@ -57,6 +57,7 @@ export default function Image({
         <Label
           label="ln.admin.image"
           isDirty={isDirty}
+          required
           isInvalid={!!errorMessage}
         />
       </label>

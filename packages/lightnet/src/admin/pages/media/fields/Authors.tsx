@@ -23,6 +23,7 @@ export default function Authors({
           name={`authors.${index}.value`}
           preserveHintSpace={false}
           placeholder={t("ln.admin.author-name")}
+          required
           control={control}
           defaultValue={defaultValue[index]?.value}
         />

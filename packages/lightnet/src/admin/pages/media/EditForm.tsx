@@ -69,12 +69,14 @@ export default function EditForm({
         <Input
           name="title"
           label="ln.admin.title"
+          required
           control={control}
           defaultValue={mediaItem.title}
         />
         <Select
           name="type"
           label="ln.type"
+          required
           options={mediaTypes}
           control={control}
           defaultValue={mediaItem.type}
@@ -87,6 +89,7 @@ export default function EditForm({
         <Select
           name="language"
           label="ln.language"
+          required
           defaultValue={mediaItem.language}
           options={languages}
           control={control}
@@ -97,6 +100,7 @@ export default function EditForm({
           label="ln.admin.date-created"
           hint="ln.admin.date-created-hint"
           type="date"
+          required
           defaultValue={mediaItem.dateCreated}
           control={control}
         />
@@ -118,6 +122,7 @@ export default function EditForm({
         <Input
           name="commonId"
           label="ln.admin.common-id"
+          required
           hint="ln.admin.common-id-hint"
           control={control}
           defaultValue={mediaItem.commonId}

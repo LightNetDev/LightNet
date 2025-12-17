@@ -25,6 +25,7 @@ export default function Collections({
             options={collections}
             label="ln.admin.name"
             labelSize="small"
+            required
             preserveHintSpace={false}
             name={`collections.${index}.collection`}
             control={control}

@@ -14,11 +14,13 @@ const LazyLoadedMarkdownEditor = lazy(
 export default function MarkdownEditor<TFieldValues extends FieldValues>({
   control,
   name,
+  required = false,
   label,
   hint,
 }: {
   name: Path<TFieldValues>
   label: string
+  required?: boolean
   hint?: string
   control: Control<TFieldValues>
 }) {
@@ -28,7 +30,12 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
   return (
     <fieldset key={name} className="group">
       <legend>
-        <Label label={label} isDirty={isDirty} isInvalid={!!errorMessage} />
+        <Label
+          required={required}
+          label={label}
+          isDirty={isDirty}
+          isInvalid={!!errorMessage}
+        />
       </legend>
 
       <div
