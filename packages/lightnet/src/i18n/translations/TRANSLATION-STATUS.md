@@ -53,6 +53,10 @@ All keys have been translated. ✅
 
 All keys have been translated. ✅
 
+## **UR** ([ur.yml](./ur.yml))
+
+All keys have been translated. ✅
+
 ## **ZH** ([zh.yml](./zh.yml))
 
 All keys have been translated. ✅
