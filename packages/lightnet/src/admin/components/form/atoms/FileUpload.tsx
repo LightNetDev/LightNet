@@ -1,5 +1,3 @@
-import "./file-upload.css"
-
 import {
   type ChangeEvent,
   type DragEvent,
@@ -114,11 +112,9 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     if (invalidFeedbackMessage) {
       return "bg-slate-200 border-rose-800 "
     }
-
     if (isDragging) {
       return "border-sky-700 bg-sky-50"
     }
-
     return "bg-slate-200 border-slate-300 hover:bg-sky-50"
   }
 
