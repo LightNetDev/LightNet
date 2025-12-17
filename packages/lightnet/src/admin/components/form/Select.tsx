@@ -6,6 +6,7 @@ import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
 import { useFieldDirty } from "./hooks/use-field-dirty"
 import { useFieldError } from "./hooks/use-field-error"
+import { getBorderClass } from "./utils/get-border-class"
 
 export default function Select<TFieldValues extends FieldValues>({
   name,
@@ -51,7 +52,7 @@ export default function Select<TFieldValues extends FieldValues>({
           aria-required={required}
           required
           defaultValue={defaultValue}
-          className={`w-full appearance-none rounded-lg border border-slate-300 bg-white px-4 py-3 pe-12 shadow-sm focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-slate-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
+          className={`w-full appearance-none rounded-lg ${getBorderClass({ isDirty, errorMessage })} bg-white px-4 py-3 pe-12 shadow-sm ${label ? "rounded-ss-none" : ""}`}
         >
           {options.map(({ id, labelText }) => (
             <option key={id} value={id}>

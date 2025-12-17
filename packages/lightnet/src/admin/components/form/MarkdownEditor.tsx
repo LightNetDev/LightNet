@@ -6,6 +6,7 @@ import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
 import { useFieldDirty } from "./hooks/use-field-dirty"
 import { useFieldError } from "./hooks/use-field-error"
+import { getBorderClass } from "./utils/get-border-class"
 
 const LazyLoadedMarkdownEditor = lazy(
   () => import("./LazyLoadedMarkdownEditor"),
@@ -39,7 +40,7 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
       </legend>
 
       <div
-        className={`overflow-hidden rounded-lg rounded-ss-none border border-slate-300 shadow-sm group-focus-within:border-sky-700 group-focus-within:ring-1 group-focus-within:ring-sky-700 ${isDirty && !errorMessage ? "border-slate-700" : ""} ${errorMessage ? "border-rose-800" : ""}`}
+        className={`overflow-hidden rounded-lg rounded-ss-none ${getBorderClass({ isDirty, errorMessage, focusWithin: true })} shadow-sm`}
       >
         <Suspense
           fallback={
