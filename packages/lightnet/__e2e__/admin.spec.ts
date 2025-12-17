@@ -139,7 +139,7 @@ test.describe("Media item edit page", () => {
   }
 
   const getPublishButton = (page: Page) =>
-    page.getByRole("button", { name: "Publish Changes" }).first()
+    page.getByRole("button", { name: "Publish changes" }).first()
 
   const expectPublishedMessage = (page: Page) =>
     expect(
