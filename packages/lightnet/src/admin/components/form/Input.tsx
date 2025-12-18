@@ -46,7 +46,7 @@ export default function Input<TFieldValues extends FieldValues>({
       )}
 
       <input
-        className={`rounded-lg ${getBorderClass({ isDirty, errorMessage })} px-4 py-3 shadow-inner ${label ? "rounded-ss-none" : ""}`}
+        className={`rounded-xl ${getBorderClass({ isDirty, errorMessage })} px-4 py-3 shadow-inner ${label ? "rounded-ss-none" : ""}`}
         id={name}
         aria-invalid={!!errorMessage}
         aria-required={required}

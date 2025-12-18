@@ -52,7 +52,7 @@ export default function Select<TFieldValues extends FieldValues>({
           aria-required={required}
           required={required}
           defaultValue={defaultValue}
-          className={`w-full appearance-none rounded-lg ${getBorderClass({ isDirty, errorMessage })} bg-white px-4 py-3 pe-12 shadow-sm ${label ? "rounded-ss-none" : ""}`}
+          className={`w-full appearance-none rounded-xl ${getBorderClass({ isDirty, errorMessage })} bg-white px-4 py-3 pe-12 shadow-sm ${label ? "rounded-ss-none" : ""}`}
         >
           {options.map(({ id, labelText }) => (
             <option key={id} value={id}>

@@ -71,9 +71,9 @@ export default function Image({
         />
       </label>
       <div
-        className={`flex w-full items-stretch gap-4 rounded-lg rounded-ss-none border bg-slate-50 px-4 py-3 shadow-inner outline-none transition-colors focus-within:border-sky-700 focus-within:ring-1 focus-within:ring-sky-700 ${isDirty && !errorMessage ? "border-slate-700" : "border-slate-300"} ${errorMessage ? "border-rose-800" : ""} `}
+        className={`flex w-full items-stretch gap-4 rounded-xl rounded-ss-none border bg-slate-50 px-4 py-3 shadow-inner outline-none transition-colors focus-within:border-sky-700 focus-within:ring-1 focus-within:ring-sky-700 ${isDirty && !errorMessage ? "border-slate-700" : "border-slate-300"} ${errorMessage ? "border-rose-800" : ""} `}
       >
-        <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-200 p-1">
+        <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-200 p-1">
           <img
             src={previewSrc}
             alt=""

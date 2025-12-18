@@ -6,6 +6,7 @@ import type { MediaItem } from "../../../types/media-item"
 import { useI18n } from "../../../../i18n/react/use-i18n"
 import Button from "../../../components/form/atoms/Button"
 import FileUpload from "../../../components/form/atoms/FileUpload"
+import Icon from "../../../../components/Icon"
 
 export default function Content({
   control,
@@ -20,7 +21,7 @@ export default function Content({
       control={control}
       name="content"
       required
-      label="Content (TODO translation)"
+      label="ln.admin.content"
       renderElement={(index) => (
         <div className="flex w-full flex-col gap-6">
           <Input
@@ -34,7 +35,7 @@ export default function Content({
           />
           <Input
             control={control}
-            label="Label (TODO translation)"
+            label="ln.admin.label"
             labelSize="small"
             preserveHintSpace={false}
             defaultValue={defaultValue[index]?.label}
@@ -50,11 +51,16 @@ export default function Content({
               addElement({ url: "" }, { focusName: `content.${index}.url` })
             }
           >
-            Add link todo
+            <Icon className="mdi--link-variant" ariaLabel="" />
+            {t("ln.admin.add-link")}
           </Button>
+          <span className="text-sm font-bold uppercase text-slate-500">
+            {t("ln.admin.or")}
+          </span>
           <FileUpload
-            title="Upload Files Todo"
-            description="Upload..."
+            title="ln.admin.files-upload-title"
+            description="ln.admin.files-upload-description"
+            icon="mdi--file-upload-outline"
             multiple
             onUpload={(...files: File[]) =>
               files.forEach((file, i) => {

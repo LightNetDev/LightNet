@@ -40,7 +40,7 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
       </legend>
 
       <div
-        className={`overflow-hidden rounded-lg rounded-ss-none ${getBorderClass({ isDirty, errorMessage, focusWithin: true })} shadow-sm`}
+        className={`overflow-hidden rounded-xl rounded-ss-none ${getBorderClass({ isDirty, errorMessage, focusWithin: true })} shadow-sm`}
       >
         <Suspense
           fallback={

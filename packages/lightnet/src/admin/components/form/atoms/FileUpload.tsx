@@ -16,7 +16,9 @@ export default function FileUpload({
   onUpload,
   onBlur,
   acceptedFileTypes,
+  className,
   title,
+  icon,
   multiple,
   description,
 }: {
@@ -24,6 +26,8 @@ export default function FileUpload({
   onBlur?: () => void
   acceptedFileTypes?: Readonly<FileType[]>
   title: string
+  className?: string
+  icon?: string
   multiple?: boolean
   description: string
 }) {
@@ -136,7 +140,7 @@ export default function FileUpload({
   return (
     <>
       <div
-        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-dashed ${colorClass()} p-4 transition-colors ease-in-out focus-within:border-sky-700 focus-within:outline-none`}
+        className={`relative flex w-full flex-col items-center justify-center gap-1 overflow-hidden rounded-xl border-2 border-dashed ${colorClass()} p-4 transition-colors ease-in-out focus-within:border-sky-700 focus-within:outline-none`}
         role="button"
         tabIndex={0}
         onBlur={onBlur}
@@ -151,10 +155,11 @@ export default function FileUpload({
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
       >
-        <span className="mb-1 text-sm font-bold text-slate-700">
+        <span className="mb-2 flex items-center gap-1 text-sm font-bold text-slate-700">
+          {icon && <Icon className={`${icon}`} ariaLabel="" />}
           {t(title)}
         </span>
-        <span className="max-w-md text-balance text-center text-xs text-slate-600">
+        <span className="max-w-xs text-balance text-center text-xs text-slate-600">
           {t(description, {
             maxFileSize: config.experimental?.admin?.maxFileSize,
           })}

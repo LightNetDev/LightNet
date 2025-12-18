@@ -46,10 +46,10 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
         <Label required={required} label={label} />
       </legend>
 
-      <div className="flex w-full flex-col gap-1 rounded-lg rounded-ss-none border border-slate-300 bg-slate-200 p-1 shadow-inner">
+      <div className="flex w-full flex-col gap-1 rounded-xl rounded-ss-none border border-slate-300 bg-slate-200 p-1 shadow-inner">
         {fields.map((field, index) => (
           <div
-            className="w-full gap-2 rounded-lg bg-slate-50 px-2 pb-4 shadow-sm"
+            className="w-full gap-2 rounded-xl bg-slate-50 px-2 pb-4 shadow-sm"
             key={field.id}
           >
             <div className="-me-2 flex justify-end">
@@ -102,7 +102,7 @@ function ItemActionButton({
   const { t } = useI18n()
   return (
     <button
-      className={`flex items-center rounded-md p-2 text-slate-600 transition-colors ease-in-out hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 disabled:text-slate-300 ${className}`}
+      className={`flex items-center rounded-xl p-2 text-slate-600 transition-colors ease-in-out hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 disabled:text-slate-300 ${className}`}
       type="button"
       disabled={disabled}
       onClick={onClick}

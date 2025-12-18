@@ -28,7 +28,7 @@ export default function Label({
   }
   return (
     <div
-      className={`inline-flex rounded-t-md px-4 font-bold ${getColor()} transition-colors duration-150 group-focus-within:!bg-sky-700 group-focus-within:text-slate-50 group-focus-within:ring-1 group-focus-within:ring-sky-700 ${size === "medium" ? "py-2 text-sm" : "py-1 text-xs"} ${className}`}
+      className={`inline-flex rounded-t-xl px-4 font-bold ${getColor()} py-2 transition-colors duration-150 group-focus-within:!bg-sky-700 group-focus-within:text-slate-50 group-focus-within:ring-1 group-focus-within:ring-sky-700 ${size === "medium" ? "text-sm" : "text-xs"} ${className}`}
     >
       {t(label)}
       {!required && <span className="ms-1">({t("ln.admin.optional")})</span>}
