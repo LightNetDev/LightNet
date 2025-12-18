@@ -23,6 +23,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   required = false,
   hint,
   renderElement,
+  renderElementMeta,
   renderAddButton,
 }: {
   name: ArrayPath<TFieldValues>
@@ -31,6 +32,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   hint?: string
   control: Control<TFieldValues>
   renderElement: (index: number) => ReactNode
+  renderElementMeta?: (index: number) => ReactNode
   renderAddButton: (args: {
     addElement: UseFieldArrayAppend<TFieldValues, ArrayPath<TFieldValues>>
     index: number
@@ -61,25 +63,30 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
             className="w-full gap-2 rounded-xl bg-slate-50 px-2 pb-4 shadow-sm"
             key={field.id}
           >
-            <div className="-me-2 flex justify-end">
-              <ItemActionButton
-                icon="mdi--arrow-up"
-                label="ln.admin.move-up"
-                disabled={index === 0}
-                onClick={() => swap(index, index - 1)}
-              />
-              <ItemActionButton
-                icon="mdi--arrow-down"
-                label="ln.admin.move-down"
-                disabled={index === fields.length - 1}
-                onClick={() => swap(index, index + 1)}
-              />
-              <ItemActionButton
-                icon="mdi--remove"
-                label="ln.admin.remove"
-                onClick={() => remove(index)}
-                className="hover:!text-rose-800"
-              />
+            <div
+              className={`flex items-center ${renderElementMeta ? "justify-between" : "justify-end"}`}
+            >
+              {renderElementMeta && renderElementMeta(index)}
+              <div className="-me-2 flex">
+                <ItemActionButton
+                  icon="mdi--arrow-up"
+                  label="ln.admin.move-up"
+                  disabled={index === 0}
+                  onClick={() => swap(index, index - 1)}
+                />
+                <ItemActionButton
+                  icon="mdi--arrow-down"
+                  label="ln.admin.move-down"
+                  disabled={index === fields.length - 1}
+                  onClick={() => swap(index, index + 1)}
+                />
+                <ItemActionButton
+                  icon="mdi--remove"
+                  label="ln.admin.remove"
+                  onClick={() => remove(index)}
+                  className="hover:!text-rose-800"
+                />
+              </div>
             </div>
 
             {renderElement(index)}

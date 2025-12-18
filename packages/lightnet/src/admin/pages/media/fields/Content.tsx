@@ -39,6 +39,17 @@ export default function Content({
           />
         </div>
       )}
+      renderElementMeta={(index) => {
+        if (index !== 0) {
+          return <span></span>
+        }
+        return (
+          <span className="ms-1 flex items-center gap-1 rounded-lg bg-sky-700 px-2 py-1 text-xs uppercase text-slate-100">
+            <Icon className="text-sm mdi--star" ariaLabel="" />
+            {t("ln.admin.primary-content")}
+          </span>
+        )
+      }}
       renderAddButton={({ addElement, index }) => (
         <div className="flex w-2/3 flex-col items-center gap-2 pb-2 pt-4">
           <Button
