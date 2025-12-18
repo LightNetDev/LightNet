@@ -5,12 +5,6 @@ import {
   useRef,
   useState,
 } from "react"
-import {
-  type Control,
-  type FieldValues,
-  type Path,
-  useController,
-} from "react-hook-form"
 import config from "virtual:lightnet/config"
 
 import Icon from "../../../../components/Icon"
@@ -18,7 +12,7 @@ import { useI18n } from "../../../../i18n/react/use-i18n"
 
 type FileType = "image/png" | "image/jpeg" | "image/webp"
 
-export default function FileUpload<TFieldValues extends FieldValues>({
+export default function FileUpload({
   onChange,
   onBlur,
   acceptedFileTypes,
@@ -86,7 +80,7 @@ export default function FileUpload<TFieldValues extends FieldValues>({
     if (maxFileSizeBytes && !(file.size < maxFileSizeBytes)) {
       triggerInvalidFeedback(
         t("ln.admin.file-too-big", {
-          limit: config.experimental?.admin?.maxFileSize,
+          maxFileSize: config.experimental?.admin?.maxFileSize,
         }),
       )
       return

@@ -19,11 +19,10 @@ ln.admin.title: Title
 ln.admin.common-id: Common ID
 ln.admin.image: Image
 ln.admin.image-upload-title: Upload image
-ln.admin.image-upload-description: Drop an image here or click to browse. PNG, JPG, or WebP images up to {{maxFileSize}} MB.
+ln.admin.image-upload-description: Drop an image here or click to browse. PNG, JPG, or WebP image up to {{maxFileSize}} MB.
 ln.admin.select-file: Select file
-ln.admin.file-not-accepted: File not accepted
 ln.admin.file-invalid-type: File type not allowed.
-ln.admin.file-too-big: File is too big. Max {{limit}} MB.
+ln.admin.file-too-big: File is too big. Max {{maxFileSize}} MB.
 ln.admin.authors: Authors
 ln.admin.optional: optional
 ln.admin.author-name: Author name
