@@ -1,4 +1,4 @@
-import { type Control } from "react-hook-form"
+import { useWatch, type Control } from "react-hook-form"
 
 import Icon from "../../../../components/Icon"
 import { useI18n } from "../../../../i18n/react/use-i18n"
@@ -24,14 +24,10 @@ export default function Content({
       label="ln.admin.content"
       renderElement={(index) => (
         <div className="flex w-full flex-col gap-6">
-          <Input
+          <URLInput
             control={control}
-            label="URL (TODO translation)"
-            labelSize="small"
-            required
-            preserveHintSpace={false}
             defaultValue={defaultValue[index]?.url}
-            {...control.register(`content.${index}.url`)}
+            index={index}
           />
           <Input
             control={control}
@@ -44,7 +40,7 @@ export default function Content({
         </div>
       )}
       renderAddButton={({ addElement, index }) => (
-        <div className="flex w-2/3 flex-col items-center gap-4 py-2">
+        <div className="flex w-2/3 flex-col items-center gap-2 pb-2 pt-4">
           <Button
             variant="secondary"
             onClick={() =>
@@ -73,6 +69,45 @@ export default function Content({
           />
         </div>
       )}
+    />
+  )
+}
+
+function URLInput({
+  control,
+  defaultValue,
+  index,
+}: {
+  defaultValue?: string
+  index: number
+  control: Control<MediaItem>
+}) {
+  const { url, file } = useWatch({ control, name: `content.${index}` })
+  const { t } = useI18n()
+  const isFile = url.startsWith("/files/")
+
+  const label = () => {
+    if (!isFile) {
+      return "ln.admin.link"
+    }
+    if (!file) {
+      return "ln.admin.file"
+    }
+    return t("ln.admin.file-upload", {
+      fileSize: (file.size / 1024 / 1024).toFixed(1),
+    })
+  }
+
+  return (
+    <Input
+      control={control}
+      label={label()}
+      disabled={isFile}
+      labelSize="small"
+      required
+      preserveHintSpace={false}
+      defaultValue={defaultValue}
+      {...control.register(`content.${index}.url`)}
     />
   )
 }

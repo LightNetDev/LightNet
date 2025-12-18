@@ -25,6 +25,7 @@ export default function Input<TFieldValues extends FieldValues>({
   hint,
   preserveHintSpace = true,
   control,
+  className,
   required = false,
   ...inputProps
 }: Props<TFieldValues>) {
@@ -46,7 +47,7 @@ export default function Input<TFieldValues extends FieldValues>({
       )}
 
       <input
-        className={`rounded-xl ${getBorderClass({ isDirty, errorMessage })} px-4 py-3 shadow-inner ${label ? "rounded-ss-none" : ""}`}
+        className={`rounded-xl ${getBorderClass({ isDirty, errorMessage })} px-4 py-3 shadow-inner disabled:text-slate-500 ${label ? "rounded-ss-none" : ""} ${className}`}
         id={name}
         aria-invalid={!!errorMessage}
         aria-required={required}

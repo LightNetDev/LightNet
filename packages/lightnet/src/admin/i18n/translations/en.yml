@@ -11,6 +11,9 @@ ln.admin.move-down: Move down
 ln.admin.content: Content
 ln.admin.or: or
 ln.admin.label: Label
+ln.admin.link: Link
+ln.admin.file: File
+ln.admin.file-upload: File - Upload {{fileSize}} MB
 ln.admin.add-link: Add link
 ln.admin.files-upload-title: Upload files
 ln.admin.files-upload-description: Drag files here or click to browse files. Files up to {{maxFileSize}} MB accepted.
