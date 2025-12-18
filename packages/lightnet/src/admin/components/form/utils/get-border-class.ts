@@ -16,7 +16,7 @@ export const getBorderClass = ({
     return "border border-rose-800 " + focusColors(focusWithin)
   }
   if (isDirty) {
-    return "border border-slate-700 " + focusColors(focusWithin)
+    return "border border-slate-400 " + focusColors(focusWithin)
   }
   return "border border-slate-300 " + focusColors(focusWithin)
 }

@@ -22,7 +22,7 @@ export default function Label({
       return "bg-rose-800 text-white"
     }
     if (isDirty) {
-      return "bg-slate-800 text-white"
+      return "bg-slate-400 text-slate-950"
     }
     return "bg-slate-300 text-slate-800"
   }

@@ -13,6 +13,8 @@ import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
 import { useFieldError } from "./hooks/use-field-error"
+import { useFieldDirty } from "./hooks/use-field-dirty"
+import { getBorderClass } from "./utils/get-border-class"
 
 export default function DynamicArray<TFieldValues extends FieldValues>({
   control,
@@ -38,15 +40,22 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
     name,
     control,
   })
-  const { t } = useI18n()
   const errorMessage = useFieldError({ control, name })
+  const isDirty = useFieldDirty({ control, name })
   return (
     <fieldset key={name}>
       <legend>
-        <Label required={required} label={label} />
+        <Label
+          required={required}
+          label={label}
+          isDirty={isDirty}
+          isInvalid={!!errorMessage}
+        />
       </legend>
 
-      <div className="flex w-full flex-col gap-1 rounded-xl rounded-ss-none border border-slate-300 bg-slate-200 p-1 shadow-inner">
+      <div
+        className={`flex w-full flex-col gap-1 rounded-xl rounded-ss-none ${getBorderClass({ isDirty, errorMessage })} bg-slate-200 p-1 shadow-inner`}
+      >
         {fields.map((field, index) => (
           <div
             className="w-full gap-2 rounded-xl bg-slate-50 px-2 pb-4 shadow-sm"

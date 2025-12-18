@@ -50,7 +50,6 @@ export default function Input<TFieldValues extends FieldValues>({
         id={name}
         aria-invalid={!!errorMessage}
         aria-required={required}
-        required={required}
         {...control.register(name)}
         {...inputProps}
       />
