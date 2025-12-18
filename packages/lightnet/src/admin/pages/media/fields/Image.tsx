@@ -83,7 +83,7 @@ export default function Image({
         <FileUpload
           title="ln.admin.image-upload-title"
           description="ln.admin.image-upload-description"
-          onChange={updateImage}
+          onUpload={updateImage}
           onBlur={field.onBlur}
           acceptedFileTypes={acceptedFileTypes}
         />

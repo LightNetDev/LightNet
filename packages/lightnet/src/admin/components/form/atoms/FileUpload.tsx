@@ -13,16 +13,18 @@ import { useI18n } from "../../../../i18n/react/use-i18n"
 type FileType = "image/png" | "image/jpeg" | "image/webp"
 
 export default function FileUpload({
-  onChange,
+  onUpload,
   onBlur,
   acceptedFileTypes,
   title,
+  multiple,
   description,
 }: {
-  onChange: (file: File) => void
+  onUpload: (...file: File[]) => void
   onBlur?: () => void
-  acceptedFileTypes: Readonly<FileType[]>
+  acceptedFileTypes?: Readonly<FileType[]>
   title: string
+  multiple?: boolean
   description: string
 }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -69,15 +71,22 @@ export default function FileUpload({
   const maxFileSizeBytes =
     (config.experimental?.admin?.maxFileSize ?? 0) * 1024 * 1024
 
-  const onFileSelected = (file?: File) => {
-    if (!file) {
+  const onFilesSelected = (files?: File[]) => {
+    if (!files || files.length === 0) {
       return
     }
-    if (!acceptedFileTypes.includes(file.type as any)) {
+
+    if (
+      acceptedFileTypes &&
+      files.find((file) => !acceptedFileTypes.includes(file.type as any))
+    ) {
       triggerInvalidFeedback(t("ln.admin.file-invalid-type"))
       return
     }
-    if (maxFileSizeBytes && !(file.size < maxFileSizeBytes)) {
+    if (
+      maxFileSizeBytes &&
+      files.find((file) => file.size > maxFileSizeBytes)
+    ) {
       triggerInvalidFeedback(
         t("ln.admin.file-too-big", {
           maxFileSize: config.experimental?.admin?.maxFileSize,
@@ -85,7 +94,7 @@ export default function FileUpload({
       )
       return
     }
-    onChange(file)
+    onUpload(...files)
     setInvalidFeedbackMessage(null)
   }
 
@@ -97,11 +106,19 @@ export default function FileUpload({
   const onDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     setIsDragging(false)
-    onFileSelected(event.dataTransfer.files?.[0])
+    onFilesSelected([...event.dataTransfer.files])
   }
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onFileSelected(event.target.files?.[0])
+    const { files } = event.target
+    if (!files) {
+      return
+    }
+    const filesArray = []
+    for (let i = 0; i < files.length; i++) {
+      filesArray.push(files[i])
+    }
+    onFilesSelected(filesArray)
     // allow selecting the same file twice in a row
     event.target.value = ""
   }
@@ -160,7 +177,8 @@ export default function FileUpload({
           fileInputRef.current = ref
         }}
         type="file"
-        accept={acceptedFileTypes.join(",")}
+        multiple={multiple}
+        accept={acceptedFileTypes?.join(",")}
         className="hidden"
         onChange={onInputChange}
       />

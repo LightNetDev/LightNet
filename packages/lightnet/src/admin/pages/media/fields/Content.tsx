@@ -3,6 +3,9 @@ import { type Control } from "react-hook-form"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Input from "../../../components/form/Input"
 import type { MediaItem } from "../../../types/media-item"
+import { useI18n } from "../../../../i18n/react/use-i18n"
+import Button from "../../../components/form/atoms/Button"
+import FileUpload from "../../../components/form/atoms/FileUpload"
 
 export default function Content({
   control,
@@ -11,6 +14,7 @@ export default function Content({
   control: Control<MediaItem>
   defaultValue: MediaItem["content"]
 }) {
+  const { t } = useI18n()
   return (
     <DynamicArray
       control={control}
@@ -38,11 +42,31 @@ export default function Content({
           />
         </div>
       )}
-      addButton={{
-        label: "Add Link (TODO translation)",
-        onClick: (append, index) =>
-          append({ url: "" }, { focusName: `content.${index}.url` }),
-      }}
+      renderAddButton={({ addElement, index }) => (
+        <div className="flex w-2/3 flex-col items-center gap-4 py-2">
+          <Button
+            variant="secondary"
+            onClick={() =>
+              addElement({ url: "" }, { focusName: `content.${index}.url` })
+            }
+          >
+            Add link todo
+          </Button>
+          <FileUpload
+            title="Upload Files Todo"
+            description="Upload..."
+            multiple
+            onUpload={(...files: File[]) =>
+              files.forEach((file, i) => {
+                addElement(
+                  { url: `/files/${file.name}`, file },
+                  { focusName: `content.${index + i}.url` },
+                )
+              })
+            }
+          />
+        </div>
+      )}
     />
   )
 }

@@ -21,7 +21,7 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   required = false,
   hint,
   renderElement,
-  addButton,
+  renderAddButton,
 }: {
   name: ArrayPath<TFieldValues>
   required?: boolean
@@ -29,13 +29,10 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
   hint?: string
   control: Control<TFieldValues>
   renderElement: (index: number) => ReactNode
-  addButton: {
-    label: string
-    onClick: (
-      append: UseFieldArrayAppend<TFieldValues, ArrayPath<TFieldValues>>,
-      elementIndex: number,
-    ) => void
-  }
+  renderAddButton: (args: {
+    addElement: UseFieldArrayAppend<TFieldValues, ArrayPath<TFieldValues>>
+    index: number
+  }) => ReactNode
 }) {
   const { fields, append, remove, swap } = useFieldArray({
     name,
@@ -79,15 +76,9 @@ export default function DynamicArray<TFieldValues extends FieldValues>({
             {renderElement(index)}
           </div>
         ))}
-        <button
-          type="button"
-          className="my-2 self-center rounded-2xl bg-slate-50 px-8 py-4 text-sm font-bold text-slate-800 shadow-sm transition-colors ease-in-out hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
-          onClick={() => {
-            addButton.onClick(append, fields.length)
-          }}
-        >
-          {t(addButton.label)}
-        </button>
+        <div className="flex flex-col items-center py-2">
+          {renderAddButton({ addElement: append, index: fields.length })}
+        </div>
       </div>
       <ErrorMessage message={errorMessage} />
       <Hint preserveSpace={true} label={hint} />

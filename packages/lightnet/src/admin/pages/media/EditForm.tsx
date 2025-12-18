@@ -46,7 +46,7 @@ export default function EditForm({
   })
 
   const preventSubmitOnEnter = (event: KeyboardEvent<HTMLFormElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !(event.target instanceof HTMLButtonElement)) {
       event.preventDefault()
     }
   }

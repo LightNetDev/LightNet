@@ -4,6 +4,7 @@ import { useI18n } from "../../../../i18n/react/use-i18n"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Input from "../../../components/form/Input"
 import type { MediaItem } from "../../../types/media-item"
+import Button from "../../../components/form/atoms/Button"
 
 export default function Authors({
   control,
@@ -28,11 +29,16 @@ export default function Authors({
           defaultValue={defaultValue[index]?.value}
         />
       )}
-      addButton={{
-        label: "ln.admin.add-author",
-        onClick: (append, index) =>
-          append({ value: "" }, { focusName: `authors.${index}.value` }),
-      }}
+      renderAddButton={({ addElement, index }) => (
+        <Button
+          variant="secondary"
+          onClick={() =>
+            addElement({ value: "" }, { focusName: `authors.${index}.value` })
+          }
+        >
+          {t("ln.admin.add-author")}
+        </Button>
+      )}
     />
   )
 }

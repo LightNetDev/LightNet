@@ -4,6 +4,8 @@ import DynamicArray from "../../../components/form/DynamicArray"
 import Input from "../../../components/form/Input"
 import Select from "../../../components/form/Select"
 import type { MediaItem } from "../../../types/media-item"
+import { useI18n } from "../../../../i18n/react/use-i18n"
+import Button from "../../../components/form/atoms/Button"
 
 export default function Collections({
   control,
@@ -14,6 +16,7 @@ export default function Collections({
   collections: { id: string; labelText: string }[]
   defaultValue: MediaItem["collections"]
 }) {
+  const { t } = useI18n()
   return (
     <DynamicArray
       control={control}
@@ -46,14 +49,19 @@ export default function Collections({
           />
         </div>
       )}
-      addButton={{
-        label: "ln.admin.add-collection",
-        onClick: (append, index) =>
-          append(
-            { collection: "" },
-            { focusName: `collections.${index}.collection` },
-          ),
-      }}
+      renderAddButton={({ addElement, index }) => (
+        <Button
+          variant="secondary"
+          onClick={() =>
+            addElement(
+              { collection: "" },
+              { focusName: `collections.${index}.collection` },
+            )
+          }
+        >
+          {t("ln.admin.add-collection")}
+        </Button>
+      )}
     />
   )
 }
