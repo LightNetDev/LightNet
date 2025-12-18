@@ -16,7 +16,6 @@ export default function FileUpload({
   onUpload,
   onBlur,
   acceptedFileTypes,
-  className,
   title,
   icon,
   multiple,
@@ -26,7 +25,6 @@ export default function FileUpload({
   onBlur?: () => void
   acceptedFileTypes?: Readonly<FileType[]>
   title: string
-  className?: string
   icon?: string
   multiple?: boolean
   description: string

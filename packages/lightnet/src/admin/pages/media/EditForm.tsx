@@ -15,9 +15,9 @@ import { type MediaItem, mediaItemSchema } from "../../types/media-item"
 import Authors from "./fields/Authors"
 import Categories from "./fields/Categories"
 import Collections from "./fields/Collections"
+import Content from "./fields/Content"
 import Image from "./fields/Image"
 import { updateMediaItem } from "./media-item-store"
-import Content from "./fields/Content"
 
 type SelectOption = { id: string; labelText: string }
 

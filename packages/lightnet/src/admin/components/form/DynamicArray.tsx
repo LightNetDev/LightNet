@@ -12,8 +12,8 @@ import { useI18n } from "../../../i18n/react/use-i18n"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
-import { useFieldError } from "./hooks/use-field-error"
 import { useFieldDirty } from "./hooks/use-field-dirty"
+import { useFieldError } from "./hooks/use-field-error"
 import { getBorderClass } from "./utils/get-border-class"
 
 export default function DynamicArray<TFieldValues extends FieldValues>({

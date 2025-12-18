@@ -1,10 +1,10 @@
 import { type Control } from "react-hook-form"
 
+import { useI18n } from "../../../../i18n/react/use-i18n"
+import Button from "../../../components/form/atoms/Button"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Select from "../../../components/form/Select"
 import type { MediaItem } from "../../../types/media-item"
-import { useI18n } from "../../../../i18n/react/use-i18n"
-import Button from "../../../components/form/atoms/Button"
 
 export default function Categories({
   control,
