@@ -17,6 +17,7 @@ import Categories from "./fields/Categories"
 import Collections from "./fields/Collections"
 import Image from "./fields/Image"
 import { updateMediaItem } from "./media-item-store"
+import Content from "./fields/Content"
 
 type SelectOption = { id: string; labelText: string }
 
@@ -81,11 +82,6 @@ export default function EditForm({
           control={control}
           defaultValue={mediaItem.type}
         />
-        <Image
-          control={control}
-          defaultValue={mediaItem.image}
-          mediaId={mediaId}
-        />
         <Select
           name="language"
           label="ln.language"
@@ -94,7 +90,12 @@ export default function EditForm({
           options={languages}
           control={control}
         />
-        <Authors control={control} defaultValue={mediaItem.authors} />
+        <Image
+          control={control}
+          defaultValue={mediaItem.image}
+          mediaId={mediaId}
+        />
+        <Content control={control} defaultValue={mediaItem.content} />
         <Input
           name="dateCreated"
           label="ln.admin.date-created"
@@ -104,6 +105,15 @@ export default function EditForm({
           defaultValue={mediaItem.dateCreated}
           control={control}
         />
+        <Input
+          name="commonId"
+          label="ln.admin.common-id"
+          required
+          hint="ln.admin.common-id-hint"
+          control={control}
+          defaultValue={mediaItem.commonId}
+        />
+        <Authors control={control} defaultValue={mediaItem.authors} />
         <Categories
           categories={categories}
           control={control}
@@ -119,15 +129,6 @@ export default function EditForm({
           name="description"
           label="ln.admin.description"
         />
-        <Input
-          name="commonId"
-          label="ln.admin.common-id"
-          required
-          hint="ln.admin.common-id-hint"
-          control={control}
-          defaultValue={mediaItem.commonId}
-        />
-
         <SubmitButton className="mt-8 self-end" control={control} />
       </form>
     </I18nContext.Provider>

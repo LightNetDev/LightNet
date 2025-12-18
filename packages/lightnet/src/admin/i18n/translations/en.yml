@@ -37,3 +37,4 @@ ln.admin.errors.required: This field is required.
 ln.admin.errors.gte-0: Use a number zero or greater.
 ln.admin.errors.unique-elements: Please choose a different value for each entry.
 ln.admin.errors.integer: Please enter a whole number.
+ln.admin.errors.non-empty-list: List must contain at least 1 element.

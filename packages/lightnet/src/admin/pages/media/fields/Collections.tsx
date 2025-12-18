@@ -20,7 +20,7 @@ export default function Collections({
       name="collections"
       label="ln.admin.collections"
       renderElement={(index) => (
-        <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-6">
           <Select
             options={collections}
             label="ln.admin.name"
