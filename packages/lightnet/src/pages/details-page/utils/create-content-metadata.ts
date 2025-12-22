@@ -18,6 +18,7 @@ const KNOWN_EXTENSIONS: Record<
   php: { type: "link", canBeOpened: true },
   json: { type: "source", canBeOpened: true },
   xml: { type: "source", canBeOpened: true },
+  md: { type: "source", canBeOpened: true },
   svg: { type: "image", canBeOpened: true },
   jpg: { type: "image", canBeOpened: true },
   jpeg: { type: "image", canBeOpened: true },
