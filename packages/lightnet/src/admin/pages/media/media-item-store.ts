@@ -51,6 +51,7 @@ const mapToContentSchema = (item: MediaItem, imagePath: string) => {
     ...item,
     image: imagePath,
     authors: flatten(item.authors),
+    content: item.content.map(({ file, ...content }) => content),
     categories: flatten(item.categories),
   }
 }
