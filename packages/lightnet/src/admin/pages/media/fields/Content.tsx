@@ -7,6 +7,8 @@ import FileUpload from "../../../components/form/atoms/FileUpload"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Input from "../../../components/form/Input"
 import type { MediaItem } from "../../../types/media-item"
+import { isExternalUrl } from "../../../../utils/urls"
+import { createContentMetadata } from "../../../../pages/details-page/utils/create-content-metadata"
 
 export default function Content({
   control,
@@ -29,13 +31,10 @@ export default function Content({
             defaultValue={defaultValue[index]?.url}
             index={index}
           />
-          <Input
+          <LabelInput
             control={control}
-            label="ln.admin.label"
-            labelSize="small"
-            preserveHintSpace={false}
             defaultValue={defaultValue[index]?.label}
-            {...control.register(`content.${index}.label`)}
+            index={index}
           />
         </div>
       )}
@@ -119,6 +118,31 @@ function URLInput({
       preserveHintSpace={false}
       defaultValue={defaultValue}
       {...control.register(`content.${index}.url`)}
+    />
+  )
+}
+
+function LabelInput({
+  control,
+  defaultValue,
+  index,
+}: {
+  control: Control<MediaItem>
+  defaultValue?: string
+  index: number
+}) {
+  const url = useWatch({ control, name: `content.${index}.url` })
+  const { label: defaultLabel } = createContentMetadata({ url })
+
+  return (
+    <Input
+      control={control}
+      label="ln.admin.label"
+      labelSize="small"
+      placeholder={defaultLabel}
+      preserveHintSpace={false}
+      defaultValue={defaultValue}
+      {...control.register(`content.${index}.label`)}
     />
   )
 }
