@@ -51,6 +51,8 @@ const mapToContentSchema = (item: MediaItem, imagePath: string) => {
     ...item,
     image: imagePath,
     authors: flatten(item.authors),
+    // Remove uploaded file from content.
+    // eslint-disable-next-line unused-imports/no-unused-vars
     content: item.content.map(({ file, ...content }) => content),
     categories: flatten(item.categories),
   }
