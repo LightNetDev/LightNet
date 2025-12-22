@@ -11,6 +11,30 @@ import type { MediaItem } from "../../../types/media-item"
 
 const acceptedFileTypes = ["image/jpeg", "image/png", "image/webp"] as const
 
+const sanitizeImageUrl = (url?: string) => {
+  if (!url) {
+    return undefined
+  }
+  const trimmed = url.trim()
+  if (!trimmed) {
+    return undefined
+  }
+  if (
+    trimmed.startsWith("/") ||
+    trimmed.startsWith("./") ||
+    trimmed.startsWith("blob:")
+  ) {
+    return trimmed
+  }
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed
+  }
+  if (/^data:image\/(png|jpe?g|webp);/i.test(trimmed)) {
+    return trimmed
+  }
+  return undefined
+}
+
 export default function Image({
   control,
   defaultValue,
@@ -22,8 +46,8 @@ export default function Image({
 }) {
   const { field } = useController({ control, name: "image" })
   const objectUrlRef = useRef<string | null>(null)
-  const [previewSrc, setPreviewSrc] = useState<string | undefined>(
-    defaultValue.previewSrc,
+  const [previewSrc, setPreviewSrc] = useState<string | undefined>(() =>
+    sanitizeImageUrl(defaultValue.previewSrc),
   )
   const isDirty = useFieldDirty({ control, name: "image" })
   const errorMessage = useFieldError({ control, name: "image", exact: false })
@@ -52,7 +76,7 @@ export default function Image({
 
     const nameParts = file.name.split(".")
     const extension = nameParts.pop()
-    setPreviewSrc(objectUrl)
+    setPreviewSrc(sanitizeImageUrl(objectUrl))
     field.onChange({
       ...field.value,
       path: `./images/${mediaId}.${extension}`,
