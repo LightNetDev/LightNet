@@ -55,7 +55,7 @@ export default function Image({
     setPreviewSrc(objectUrl)
     field.onChange({
       ...field.value,
-      path: `.images/${mediaId}.${extension}`,
+      path: `./images/${mediaId}.${extension}`,
       file,
     })
   }
