@@ -46,8 +46,8 @@ export default function Image({
 }) {
   const { field } = useController({ control, name: "image" })
   const objectUrlRef = useRef<string | null>(null)
-  const [previewSrc, setPreviewSrc] = useState<string | undefined>(() =>
-    sanitizeImageUrl(defaultValue.previewSrc),
+  const [previewSrc, setPreviewSrc] = useState<string | undefined>(
+    defaultValue.previewSrc,
   )
   const isDirty = useFieldDirty({ control, name: "image" })
   const errorMessage = useFieldError({ control, name: "image", exact: false })
@@ -76,7 +76,7 @@ export default function Image({
 
     const nameParts = file.name.split(".")
     const extension = nameParts.pop()
-    setPreviewSrc(sanitizeImageUrl(objectUrl))
+    setPreviewSrc(objectUrl)
     field.onChange({
       ...field.value,
       path: `./images/${mediaId}.${extension}`,
@@ -99,7 +99,7 @@ export default function Image({
       >
         <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-200 p-1">
           <img
-            src={previewSrc}
+            src={sanitizeImageUrl(previewSrc)}
             alt=""
             className="h-full w-full object-contain"
           />
