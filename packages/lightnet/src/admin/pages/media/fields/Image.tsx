@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { type Control } from "react-hook-form"
+import { type Control, useController } from "react-hook-form"
 
 import ErrorMessage from "../../../components/form/atoms/ErrorMessage"
 import FileUpload from "../../../components/form/atoms/FileUpload"
@@ -11,6 +11,30 @@ import type { MediaItem } from "../../../types/media-item"
 
 const acceptedFileTypes = ["image/jpeg", "image/png", "image/webp"] as const
 
+const sanitizeImageUrl = (url?: string) => {
+  if (!url) {
+    return undefined
+  }
+  const trimmed = url.trim()
+  if (!trimmed) {
+    return undefined
+  }
+  if (
+    trimmed.startsWith("/") ||
+    trimmed.startsWith("./") ||
+    trimmed.startsWith("blob:")
+  ) {
+    return trimmed
+  }
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed
+  }
+  if (/^data:image\/(png|jpe?g|webp);/i.test(trimmed)) {
+    return trimmed
+  }
+  return undefined
+}
+
 export default function Image({
   control,
   defaultValue,
@@ -20,6 +44,7 @@ export default function Image({
   defaultValue: MediaItem["image"]
   mediaId: string
 }) {
+  const { field } = useController({ control, name: "image" })
   const objectUrlRef = useRef<string | null>(null)
   const [previewSrc, setPreviewSrc] = useState<string | undefined>(
     defaultValue.previewSrc,
@@ -48,7 +73,15 @@ export default function Image({
     }
     const objectUrl = URL.createObjectURL(file)
     objectUrlRef.current = objectUrl
+
+    const nameParts = file.name.split(".")
+    const extension = nameParts.pop()
     setPreviewSrc(objectUrl)
+    field.onChange({
+      ...field.value,
+      path: `./images/${mediaId}.${extension}`,
+      file,
+    })
   }
 
   return (
@@ -57,30 +90,30 @@ export default function Image({
         <Label
           label="ln.admin.image"
           isDirty={isDirty}
+          required
           isInvalid={!!errorMessage}
         />
       </label>
       <div
-        className={`flex w-full items-stretch gap-4 rounded-lg rounded-ss-none border bg-gray-50 px-4 py-3 shadow-inner outline-none transition-colors ${isDirty && !errorMessage ? "border-gray-700" : "border-gray-300"} ${errorMessage ? "border-rose-800" : ""} `}
+        className={`flex w-full items-stretch gap-4 rounded-xl rounded-ss-none border bg-slate-50 px-4 py-3 shadow-inner outline-none transition-colors focus-within:border-sky-700 focus-within:ring-1 focus-within:ring-sky-700 ${isDirty && !errorMessage ? "border-slate-700" : "border-slate-300"} ${errorMessage ? "border-rose-800" : ""} `}
       >
-        <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-200 p-1">
+        <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-200 p-1">
           <img
-            src={previewSrc}
+            src={sanitizeImageUrl(previewSrc)}
             alt=""
             className="h-full w-full object-contain"
           />
         </div>
         <FileUpload
-          name="image"
-          control={control}
-          onFileChange={updateImage}
-          destinationPath="./images"
+          title="ln.admin.image-upload-title"
+          description="ln.admin.image-upload-description"
+          onUpload={updateImage}
+          onBlur={field.onBlur}
           acceptedFileTypes={acceptedFileTypes}
-          fileName={mediaId}
         />
       </div>
       <ErrorMessage message={errorMessage} />
-      <Hint preserveSpace={true} label="ln.admin.image-hint" />
+      <Hint preserveSpace={true} />
     </div>
   )
 }

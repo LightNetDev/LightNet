@@ -54,24 +54,24 @@
     "@hookform/resolvers": "^5.2.2",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
-    "@mdxeditor/editor": "^3.50.0",
+    "@mdxeditor/editor": "^3.52.1",
     "@tailwindcss/typography": "^0.5.19",
-    "@tanstack/react-virtual": "^3.13.12",
+    "@tanstack/react-virtual": "^3.13.13",
     "daisyui": "^4.12.24",
     "embla-carousel": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "fuse.js": "^7.1.0",
-    "i18next": "^25.6.3",
+    "i18next": "^25.7.3",
     "marked": "^16.4.2",
-    "react-hook-form": "^7.66.1",
-    "yaml": "^2.8.1"
+    "react-hook-form": "^7.69.0",
+    "yaml": "^2.8.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
-    "@types/node": "^22.19.1",
+    "@types/node": "^22.19.3",
     "@types/react": "^19.2.7",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.14"
+    "vitest": "^4.0.16"
   },
   "engines": {
     "node": ">=22"

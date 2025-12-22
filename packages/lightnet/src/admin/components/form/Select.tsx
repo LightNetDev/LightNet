@@ -1,15 +1,18 @@
 import { type Control, type FieldValues, type Path } from "react-hook-form"
 
+import Icon from "../../../components/Icon"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
 import { useFieldDirty } from "./hooks/use-field-dirty"
 import { useFieldError } from "./hooks/use-field-error"
+import { getBorderClass } from "./utils/get-border-class"
 
 export default function Select<TFieldValues extends FieldValues>({
   name,
   label,
   labelSize,
+  required = false,
   control,
   defaultValue,
   hint,
@@ -20,6 +23,7 @@ export default function Select<TFieldValues extends FieldValues>({
   label?: string
   labelSize?: "small" | "medium"
   hint?: string
+  required?: boolean
   preserveHintSpace?: boolean
   defaultValue?: string
   control: Control<TFieldValues>
@@ -35,23 +39,31 @@ export default function Select<TFieldValues extends FieldValues>({
             label={label}
             size={labelSize}
             isDirty={isDirty}
+            required={required}
             isInvalid={!!errorMessage}
           />
         </label>
       )}
-      <select
-        {...control.register(name)}
-        id={name}
-        aria-invalid={!!errorMessage}
-        defaultValue={defaultValue}
-        className={`dy-select dy-select-bordered text-base shadow-sm focus:border-sky-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""} ${label ? "rounded-ss-none" : ""}`}
-      >
-        {options.map(({ id, labelText }) => (
-          <option key={id} value={id}>
-            {labelText ?? id}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          {...control.register(name)}
+          id={name}
+          aria-invalid={!!errorMessage}
+          aria-required={required}
+          defaultValue={defaultValue}
+          className={`w-full appearance-none rounded-xl ${getBorderClass({ isDirty, errorMessage })} bg-white px-4 py-3 pe-12 shadow-sm ${label ? "rounded-ss-none" : ""}`}
+        >
+          {options.map(({ id, labelText }) => (
+            <option key={id} value={id}>
+              {labelText ?? id}
+            </option>
+          ))}
+        </select>
+        <Icon
+          className="absolute end-3 top-1/2 -translate-y-1/2 text-lg text-slate-600 mdi--chevron-down"
+          ariaLabel=""
+        />
+      </div>
       <ErrorMessage message={errorMessage} />
       <Hint preserveSpace={preserveHintSpace} label={hint} />
     </div>

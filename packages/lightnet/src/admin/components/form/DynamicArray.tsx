@@ -12,66 +12,118 @@ import { useI18n } from "../../../i18n/react/use-i18n"
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
+import { useFieldDirty } from "./hooks/use-field-dirty"
 import { useFieldError } from "./hooks/use-field-error"
+import { getBorderClass } from "./utils/get-border-class"
 
 export default function DynamicArray<TFieldValues extends FieldValues>({
   control,
   name,
   label,
+  required = false,
   hint,
   renderElement,
-  addButton,
+  renderElementMeta,
+  renderAddButton,
 }: {
   name: ArrayPath<TFieldValues>
+  required?: boolean
   label: string
   hint?: string
   control: Control<TFieldValues>
   renderElement: (index: number) => ReactNode
-  addButton: {
-    label: string
-    onClick: (
-      append: UseFieldArrayAppend<TFieldValues, ArrayPath<TFieldValues>>,
-      elementIndex: number,
-    ) => void
-  }
+  renderElementMeta?: (index: number) => ReactNode
+  renderAddButton: (args: {
+    addElement: UseFieldArrayAppend<TFieldValues, ArrayPath<TFieldValues>>
+    index: number
+  }) => ReactNode
 }) {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, swap } = useFieldArray({
     name,
     control,
   })
-  const { t } = useI18n()
   const errorMessage = useFieldError({ control, name })
+  const isDirty = useFieldDirty({ control, name })
   return (
     <fieldset key={name}>
       <legend>
-        <Label label={label} />
+        <Label
+          required={required}
+          label={label}
+          isDirty={isDirty}
+          isInvalid={!!errorMessage}
+        />
       </legend>
 
-      <div className="flex w-full flex-col divide-y divide-gray-300 rounded-lg rounded-ss-none border border-gray-300 bg-gray-100 shadow-sm">
+      <div
+        className={`flex w-full flex-col gap-1 rounded-xl rounded-ss-none ${getBorderClass({ isDirty, errorMessage })} bg-slate-200 p-1 shadow-inner`}
+      >
         {fields.map((field, index) => (
-          <div className="flex w-full items-center gap-2 p-2" key={field.id}>
-            <div className="flex grow flex-col">{renderElement(index)}</div>
-            <button
-              className="flex items-center rounded-md p-2 text-gray-600 transition-colors ease-in-out hover:text-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
-              type="button"
-              onClick={() => remove(index)}
+          <div
+            className="w-full gap-2 rounded-xl bg-slate-50 px-2 pb-4 shadow-sm"
+            key={field.id}
+          >
+            <div
+              className={`flex items-center ${renderElementMeta ? "justify-between" : "justify-end"}`}
             >
-              <Icon className="mdi--remove" ariaLabel={t("ln.admin.remove")} />
-            </button>
+              {renderElementMeta && renderElementMeta(index)}
+              <div className="-me-2 flex">
+                <ItemActionButton
+                  icon="mdi--arrow-up"
+                  label="ln.admin.move-up"
+                  disabled={index === 0}
+                  onClick={() => swap(index, index - 1)}
+                />
+                <ItemActionButton
+                  icon="mdi--arrow-down"
+                  label="ln.admin.move-down"
+                  disabled={index === fields.length - 1}
+                  onClick={() => swap(index, index + 1)}
+                />
+                <ItemActionButton
+                  icon="mdi--remove"
+                  label="ln.admin.remove"
+                  onClick={() => remove(index)}
+                  className="hover:!text-rose-800"
+                />
+              </div>
+            </div>
+
+            {renderElement(index)}
           </div>
         ))}
-        <button
-          type="button"
-          className="rounded-b-lg p-4 text-sm font-bold text-gray-500 transition-colors ease-in-out hover:bg-sky-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700"
-          onClick={() => {
-            addButton.onClick(append, fields.length)
-          }}
-        >
-          {t(addButton.label)}
-        </button>
+        <div className="flex flex-col items-center py-2">
+          {renderAddButton({ addElement: append, index: fields.length })}
+        </div>
       </div>
       <ErrorMessage message={errorMessage} />
       <Hint preserveSpace={true} label={hint} />
     </fieldset>
+  )
+}
+
+function ItemActionButton({
+  label,
+  icon,
+  onClick,
+  disabled = false,
+  className,
+}: {
+  label: string
+  icon: string
+  disabled?: boolean
+  onClick: () => void
+  className?: string
+}) {
+  const { t } = useI18n()
+  return (
+    <button
+      className={`flex items-center rounded-xl p-2 text-slate-600 transition-colors ease-in-out hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 disabled:text-slate-300 ${className}`}
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <Icon className={icon} ariaLabel={t(label)} />
+    </button>
   )
 }

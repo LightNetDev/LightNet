@@ -18,6 +18,7 @@ const KNOWN_EXTENSIONS: Record<
   php: { type: "link", canBeOpened: true },
   json: { type: "source", canBeOpened: true },
   xml: { type: "source", canBeOpened: true },
+  md: { type: "source", canBeOpened: true },
   svg: { type: "image", canBeOpened: true },
   jpg: { type: "image", canBeOpened: true },
   jpeg: { type: "image", canBeOpened: true },
@@ -62,7 +63,7 @@ export function createContentMetadata({
   const fileName = hasExtension
     ? lastPathSegment.slice(0, -(extension.length + 1))
     : undefined
-  const label = customLabel ?? fileName ?? linkName
+  const label = customLabel || fileName || linkName
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
   const canBeOpened =
     !hasExtension || !!KNOWN_EXTENSIONS[extension]?.canBeOpened

@@ -1,5 +1,5 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import {
   createI18n,
@@ -38,11 +38,15 @@ export default function SearchList({
     mediaTypes,
   })
   const count = isLoading ? mediaItemsTotal : results.length
+  const getItemKey = useCallback(
+    (index: number) => (isLoading ? index : results[index].id),
+    [isLoading, results],
+  )
 
   const virtualizer = useWindowVirtualizer({
     count,
     estimateSize: () => rowHeight,
-    getItemKey: (index) => (isLoading ? index : results[index].id),
+    getItemKey,
     overscan: 2,
     scrollMargin: listRef.current?.offsetTop ?? 0,
   })
@@ -68,28 +72,28 @@ export default function SearchList({
   return (
     <I18nContext.Provider value={i18n}>
       <div ref={listRef} className="px-4 md:px-8">
-        <ol
-          className="relative w-full divide-y divide-gray-200"
-          style={{
-            height: `${virtualizer.getTotalSize()}px`,
-          }}
-        >
-          {virtualizer.getVirtualItems().map((virtualRow) => {
-            const item = results[virtualRow.index]
-            return (
-              <li
-                key={virtualRow.key}
-                className="absolute left-0 top-0 block w-full"
-                style={{
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${
-                    virtualRow.start - virtualizer.options.scrollMargin
-                  }px)`,
-                }}
-              >
-                {isLoading ? (
-                  <LoadingSkeleton />
-                ) : (
+        {isLoading ? (
+          <LoadingSkeleton />
+        ) : (
+          <ol
+            className="relative w-full divide-y divide-gray-200"
+            style={{
+              height: `${virtualizer.getTotalSize()}px`,
+            }}
+          >
+            {virtualizer.getVirtualItems().map((virtualRow) => {
+              const item = results[virtualRow.index]
+              return (
+                <li
+                  key={virtualRow.key}
+                  className="absolute left-0 top-0 block w-full"
+                  style={{
+                    height: `${virtualRow.size}px`,
+                    transform: `translateY(${
+                      virtualRow.start - virtualizer.options.scrollMargin
+                    }px)`,
+                  }}
+                >
                   <SearchListItem
                     item={item}
                     showLanguage={showLanguage}
@@ -97,11 +101,11 @@ export default function SearchList({
                     languages={languages}
                     mediaTypes={mediaTypes}
                   />
-                )}
-              </li>
-            )
-          })}
-        </ol>
+                </li>
+              )
+            })}
+          </ol>
+        )}
       </div>
       {!results.length && !isLoading && (
         <div className="mt-24 text-center font-bold text-gray-500">

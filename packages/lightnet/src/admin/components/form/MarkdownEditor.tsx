@@ -6,6 +6,7 @@ import Hint from "./atoms/Hint"
 import Label from "./atoms/Label"
 import { useFieldDirty } from "./hooks/use-field-dirty"
 import { useFieldError } from "./hooks/use-field-error"
+import { getBorderClass } from "./utils/get-border-class"
 
 const LazyLoadedMarkdownEditor = lazy(
   () => import("./LazyLoadedMarkdownEditor"),
@@ -14,11 +15,13 @@ const LazyLoadedMarkdownEditor = lazy(
 export default function MarkdownEditor<TFieldValues extends FieldValues>({
   control,
   name,
+  required = false,
   label,
   hint,
 }: {
   name: Path<TFieldValues>
   label: string
+  required?: boolean
   hint?: string
   control: Control<TFieldValues>
 }) {
@@ -28,16 +31,21 @@ export default function MarkdownEditor<TFieldValues extends FieldValues>({
   return (
     <fieldset key={name} className="group">
       <legend>
-        <Label label={label} isDirty={isDirty} isInvalid={!!errorMessage} />
+        <Label
+          required={required}
+          label={label}
+          isDirty={isDirty}
+          isInvalid={!!errorMessage}
+        />
       </legend>
 
       <div
-        className={`overflow-hidden rounded-lg rounded-ss-none border border-gray-300 shadow-sm group-focus-within:border-sky-700 group-focus-within:ring-1 group-focus-within:ring-sky-700 ${isDirty && !errorMessage ? "border-gray-700" : ""} ${errorMessage ? "border-rose-800" : ""}`}
+        className={`overflow-hidden rounded-xl rounded-ss-none ${getBorderClass({ isDirty, errorMessage, focusWithin: true })} shadow-sm`}
       >
         <Suspense
           fallback={
-            <div className="h-[22.75rem] w-full bg-gray-50">
-              <div className="h-10 bg-gray-100"></div>
+            <div className="h-[22.75rem] w-full bg-slate-50">
+              <div className="h-10 bg-slate-100"></div>
             </div>
           }
         >

@@ -102,9 +102,29 @@ test("Should create complete content metadata", () => {
       type: "package",
     },
   },
-].forEach(({ url, expected }) => {
-  test(`Should create content metadata for url ${url}`, () => {
-    expect(createContentMetadata({ url })).toMatchObject(expected)
+  {
+    url: "/some.zip",
+    label: "foo",
+    expected: {
+      label: "foo",
+      isExternal: false,
+      extension: "zip",
+      type: "package",
+    },
+  },
+  {
+    url: "/some.zip",
+    label: "",
+    expected: {
+      label: "some",
+      isExternal: false,
+      extension: "zip",
+      type: "package",
+    },
+  },
+].forEach(({ url, expected, label }) => {
+  test(`Should create content metadata for url '${url}' ${label !== undefined ? `and label '${label}'` : ""}`, () => {
+    expect(createContentMetadata({ url, label })).toMatchObject(expected)
   })
 })
 

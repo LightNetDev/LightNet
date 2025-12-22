@@ -1,5 +1,7 @@
 import { type Control } from "react-hook-form"
 
+import { useI18n } from "../../../../i18n/react/use-i18n"
+import Button from "../../../components/form/atoms/Button"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Select from "../../../components/form/Select"
 import type { MediaItem } from "../../../types/media-item"
@@ -13,6 +15,7 @@ export default function Categories({
   defaultValue: MediaItem["categories"]
   categories: { id: string; labelText: string }[]
 }) {
+  const { t } = useI18n()
   return (
     <DynamicArray
       control={control}
@@ -22,16 +25,25 @@ export default function Categories({
         <Select
           options={categories}
           control={control}
+          required
           name={`categories.${index}.value`}
           defaultValue={defaultValue[index]?.value}
           preserveHintSpace={false}
         />
       )}
-      addButton={{
-        label: "ln.admin.add-category",
-        onClick: (append, index) =>
-          append({ value: "" }, { focusName: `categories.${index}.value` }),
-      }}
+      renderAddButton={({ addElement, index }) => (
+        <Button
+          variant="secondary"
+          onClick={() =>
+            addElement(
+              { value: "" },
+              { focusName: `categories.${index}.value` },
+            )
+          }
+        >
+          {t("ln.admin.add-category")}
+        </Button>
+      )}
     />
   )
 }

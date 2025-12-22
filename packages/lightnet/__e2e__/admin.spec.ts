@@ -139,7 +139,7 @@ test.describe("Media item edit page", () => {
   }
 
   const getPublishButton = (page: Page) =>
-    page.getByRole("button", { name: "Publish Changes" }).first()
+    page.getByRole("button", { name: "Publish changes" }).first()
 
   const expectPublishedMessage = (page: Page) =>
     expect(
@@ -346,5 +346,39 @@ test.describe("Media item edit page", () => {
       "aria-invalid",
       "true",
     )
+  })
+
+  test("should not submit the form on enter", async ({ page, lightnet }) => {
+    await lightnet("/admin/media/faithful-freestyle--en")
+    const writeFileRequest = await recordWriteFile(page)
+    const writePromise = writeFileRequest()
+
+    const updatedTitle = "Faithful Freestyle (Enter key)"
+    const titleInput = page.getByLabel("Title")
+    await titleInput.fill(updatedTitle)
+
+    const publishButton = getPublishButton(page)
+    await expect(publishButton).toBeEnabled()
+
+    await titleInput.press("Enter")
+
+    const enterResult = await Promise.race([
+      writePromise.then(() => "submitted"),
+      page.waitForTimeout(500).then(() => "timeout"),
+    ])
+    expect(enterResult).toBe("timeout")
+    await expect(publishButton).toBeEnabled()
+
+    await publishButton.click()
+
+    const expectedMediaItem = JSON.parse(
+      await readFile(faithfulFreestyleMediaUrl, "utf-8"),
+    )
+    const { body } = await writePromise
+    expect(body).toEqual({
+      ...expectedMediaItem,
+      title: updatedTitle,
+    })
+    await expectPublishedMessage(page)
   })
 })

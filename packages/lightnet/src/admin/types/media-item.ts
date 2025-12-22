@@ -8,6 +8,7 @@ const GTE_0 = "ln.admin.errors.gte-0"
 const INTEGER = "ln.admin.errors.integer"
 const UNIQUE_ELEMENTS = "ln.admin.errors.unique-elements"
 const FILE_SIZE_EXCEEDED = "ln.admin.error.file-size-exceeded"
+const NON_EMPTY_LIST = "ln.admin.errors.non-empty-list"
 
 const unique = <TArrayItem>(path: Extract<keyof TArrayItem, string>) => {
   return (values: TArrayItem[], ctx: RefinementCtx) => {
@@ -67,6 +68,14 @@ export const mediaItemSchema = z.object({
     previewSrc: z.string(),
     file: fileShape,
   }),
+  content: z
+    .object({
+      url: z.string().nonempty(NON_EMPTY_STRING),
+      file: fileShape,
+      label: z.string().optional(),
+    })
+    .array()
+    .min(1, NON_EMPTY_LIST),
 })
 
 export type MediaItem = z.input<typeof mediaItemSchema>

@@ -7,7 +7,6 @@ import { resolveLanguage } from "../i18n/resolve-language"
 import Favicon from "./components/Favicon.astro"
 import Footer from "./components/Footer.astro"
 import Header from "./components/Header.astro"
-import PreloadReact from "./components/PreloadReact"
 import ViewTransition from "./components/ViewTransition.astro"
 
 interface Props {
@@ -45,6 +44,5 @@ const { direction } = resolveLanguage(currentLocale)
       <slot />
     </main>
     {CustomFooter ? <CustomFooter /> : <Footer />}
-    <PreloadReact client:idle />
   </body>
 </html>

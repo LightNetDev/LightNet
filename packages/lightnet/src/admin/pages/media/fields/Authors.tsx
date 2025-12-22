@@ -1,5 +1,7 @@
 import { type Control } from "react-hook-form"
 
+import { useI18n } from "../../../../i18n/react/use-i18n"
+import Button from "../../../components/form/atoms/Button"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Input from "../../../components/form/Input"
 import type { MediaItem } from "../../../types/media-item"
@@ -11,6 +13,7 @@ export default function Authors({
   control: Control<MediaItem>
   defaultValue: MediaItem["authors"]
 }) {
+  const { t } = useI18n()
   return (
     <DynamicArray
       control={control}
@@ -20,15 +23,22 @@ export default function Authors({
         <Input
           name={`authors.${index}.value`}
           preserveHintSpace={false}
+          placeholder={t("ln.admin.author-name")}
+          required
           control={control}
           defaultValue={defaultValue[index]?.value}
         />
       )}
-      addButton={{
-        label: "ln.admin.add-author",
-        onClick: (append, index) =>
-          append({ value: "" }, { focusName: `authors.${index}.value` }),
-      }}
+      renderAddButton={({ addElement, index }) => (
+        <Button
+          variant="secondary"
+          onClick={() =>
+            addElement({ value: "" }, { focusName: `authors.${index}.value` })
+          }
+        >
+          {t("ln.admin.add-author")}
+        </Button>
+      )}
     />
   )
 }
