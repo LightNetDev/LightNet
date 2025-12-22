@@ -1,14 +1,13 @@
-import { useWatch, type Control } from "react-hook-form"
+import { type Control, useWatch } from "react-hook-form"
 
 import Icon from "../../../../components/Icon"
 import { useI18n } from "../../../../i18n/react/use-i18n"
+import { createContentMetadata } from "../../../../pages/details-page/utils/create-content-metadata"
 import Button from "../../../components/form/atoms/Button"
 import FileUpload from "../../../components/form/atoms/FileUpload"
 import DynamicArray from "../../../components/form/DynamicArray"
 import Input from "../../../components/form/Input"
 import type { MediaItem } from "../../../types/media-item"
-import { isExternalUrl } from "../../../../utils/urls"
-import { createContentMetadata } from "../../../../pages/details-page/utils/create-content-metadata"
 
 export default function Content({
   control,
