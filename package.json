@@ -31,9 +31,9 @@
     "@astrojs/check": "^0.9.6",
     "@changesets/changelog-github": "^0.5.2",
     "@changesets/cli": "^2.29.8",
-    "@eslint/js": "^9.39.1",
-    "astro": "^5.16.5",
-    "eslint": "^9.39.1",
+    "@eslint/js": "^9.39.2",
+    "astro": "^5.16.6",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.5.0",
     "eslint-plugin-react": "^7.37.5",
@@ -44,7 +44,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.50.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
