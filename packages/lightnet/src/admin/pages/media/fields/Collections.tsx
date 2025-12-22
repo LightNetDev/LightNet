@@ -43,9 +43,10 @@ export default function Collections({
             min={0}
             preserveHintSpace={false}
             defaultValue={defaultValue[index]?.index}
-            {...control.register(`collections.${index}.index`, {
+            name={`collections.${index}.index`}
+            registerOptions={{
               setValueAs: (value) => (value === "" ? undefined : Number(value)),
-            })}
+            }}
           />
         </div>
       )}

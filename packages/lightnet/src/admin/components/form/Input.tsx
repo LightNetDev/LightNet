@@ -1,5 +1,10 @@
 import type { InputHTMLAttributes } from "react"
-import { type Control, type FieldValues, type Path } from "react-hook-form"
+import {
+  type Control,
+  type FieldValues,
+  type Path,
+  type RegisterOptions,
+} from "react-hook-form"
 
 import ErrorMessage from "./atoms/ErrorMessage"
 import Hint from "./atoms/Hint"
@@ -16,6 +21,7 @@ type Props<TFieldValues extends FieldValues> = {
   hint?: string
   preserveHintSpace?: boolean
   control: Control<TFieldValues>
+  registerOptions?: RegisterOptions<TFieldValues>
 } & InputHTMLAttributes<HTMLInputElement>
 
 export default function Input<TFieldValues extends FieldValues>({
@@ -27,6 +33,7 @@ export default function Input<TFieldValues extends FieldValues>({
   control,
   className,
   required = false,
+  registerOptions,
   ...inputProps
 }: Props<TFieldValues>) {
   const isDirty = useFieldDirty({ control, name })
@@ -51,7 +58,7 @@ export default function Input<TFieldValues extends FieldValues>({
         id={name}
         aria-invalid={!!errorMessage}
         aria-required={required}
-        {...control.register(name)}
+        {...control.register(name, registerOptions)}
         {...inputProps}
       />
       <ErrorMessage message={errorMessage} />

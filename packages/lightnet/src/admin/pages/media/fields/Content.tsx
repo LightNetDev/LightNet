@@ -116,7 +116,7 @@ function URLInput({
       required
       preserveHintSpace={false}
       defaultValue={defaultValue}
-      {...control.register(`content.${index}.url`)}
+      name={`content.${index}.url`}
     />
   )
 }
@@ -135,13 +135,16 @@ function LabelInput({
 
   return (
     <Input
+      name={`content.${index}.label`}
       control={control}
       label="ln.admin.label"
       labelSize="small"
       placeholder={defaultLabel}
       preserveHintSpace={false}
       defaultValue={defaultValue}
-      {...control.register(`content.${index}.label`)}
+      registerOptions={{
+        setValueAs: (value) => value?.trim() || undefined,
+      }}
     />
   )
 }
