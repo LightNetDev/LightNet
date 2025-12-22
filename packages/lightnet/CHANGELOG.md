@@ -1,5 +1,15 @@
 # lightnet
 
+## 3.11.0
+
+### Minor Changes
+
+- [#347](https://github.com/LightNetDev/LightNet/pull/347) [`17ea3d9`](https://github.com/LightNetDev/LightNet/commit/17ea3d9b599d9456b36e1974d3a8f5dc7d39fb65) Thanks [@ajjn](https://github.com/ajjn)! - Add translation for Urdu
+
+### Patch Changes
+
+- [#344](https://github.com/LightNetDev/LightNet/pull/344) [`a48d2a7`](https://github.com/LightNetDev/LightNet/commit/a48d2a7ec9b782c763950b02cdbe420b1ed000ec) Thanks [@smn-cds](https://github.com/smn-cds)! - Remove preload React logic
+
 ## 3.10.8
 
 ### Patch Changes
