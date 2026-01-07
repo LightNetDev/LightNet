@@ -1,5 +1,13 @@
 # lightnet
 
+## 3.12.0
+
+### Minor Changes
+
+- [#351](https://github.com/LightNetDev/LightNet/pull/351) [`a1f63bf`](https://github.com/LightNetDev/LightNet/commit/a1f63bfa30448fdf58bfb1ff24007caa750349e0) Thanks [@smn-cds](https://github.com/smn-cds)! - Add an external fallback UI for audio content so non-mp3 URLs show a player-style link that opens in a new tab.
+
+- [#351](https://github.com/LightNetDev/LightNet/pull/351) [`a1f63bf`](https://github.com/LightNetDev/LightNet/commit/a1f63bfa30448fdf58bfb1ff24007caa750349e0) Thanks [@smn-cds](https://github.com/smn-cds)! - Add a fallback in the video player so any video URL can be used on the "video" details page. Unsupported providers now render a poster-style link that opens the video on the external site.
+
 ## 3.11.0
 
 ### Minor Changes
