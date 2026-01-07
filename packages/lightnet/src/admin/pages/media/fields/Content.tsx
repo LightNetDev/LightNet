@@ -42,8 +42,8 @@ export default function Content({
           return <span></span>
         }
         return (
-          <span className="ms-1 flex items-center gap-1 rounded-lg bg-sky-700 px-2 py-1 text-xs uppercase text-slate-100">
-            <Icon className="text-sm mdi--star" ariaLabel="" />
+          <span className="ms-1 flex items-center gap-1 rounded-lg bg-slate-200 px-2 py-1 text-xs font-bold uppercase text-slate-600">
+            <Icon className="text-sm text-sky-700 mdi--star" ariaLabel="" />
             {t("ln.admin.primary-content")}
           </span>
         )
