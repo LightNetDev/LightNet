@@ -16,7 +16,7 @@ Primary use: feature development and bug fixes.
 - UI work: start in `packages/lightnet/` (components, layouts, pages).
 - Content models and i18n: start in `packages/lightnet/src/content/` and `packages/lightnet/src/i18n/`.
 - CLI features or fixes: start in `packages/cli/`.
-- Admin work: start in `packages/lightnet/admin`.
+- Admin work: start in `packages/lightnet/admin/`.
 
 ## Stack
 
@@ -46,6 +46,12 @@ Primary use: feature development and bug fixes.
 - Translation files live in `packages/lightnet/src/i18n/translations/`.
 - Avoid hard-coded English in UI; add keys and update translations.
 - During development, add missing translations to `packages/lightnet/src/i18n/translations/en.yml`.
+
+## Localization workflow
+
+- Add new keys in `packages/lightnet/src/i18n/translations/en.yml` and `packages/lightnet/src/i18n/translations.ts`.
+- Use `Astro.locals.i18n.t` in UI and avoid hard-coded strings.
+- In Astro components direction and other information relevant for localization from `Astro.locals.i18n`.
 
 ## Changesets
 
