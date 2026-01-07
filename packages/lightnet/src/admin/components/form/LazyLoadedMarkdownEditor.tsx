@@ -6,6 +6,8 @@ import {
   type CodeBlockEditorProps,
   codeBlockPlugin,
   CreateLink,
+  diffSourcePlugin,
+  DiffSourceToggleWrapper,
   headingsPlugin,
   linkDialogPlugin,
   linkPlugin,
@@ -16,9 +18,7 @@ import {
   quotePlugin,
   toolbarPlugin,
   UndoRedo,
-  DiffSourceToggleWrapper,
   useCodeBlockEditorContext,
-  diffSourcePlugin,
 } from "@mdxeditor/editor"
 import {
   type Control,
