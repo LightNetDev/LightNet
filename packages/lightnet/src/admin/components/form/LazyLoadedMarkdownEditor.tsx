@@ -16,12 +16,15 @@ import {
   quotePlugin,
   toolbarPlugin,
   UndoRedo,
+  DiffSourceToggleWrapper,
   useCodeBlockEditorContext,
+  diffSourcePlugin,
 } from "@mdxeditor/editor"
 import {
   type Control,
   Controller,
   type FieldValues,
+  get,
   type Path,
 } from "react-hook-form"
 
@@ -42,7 +45,10 @@ export default function LazyLoadedMarkdownEditor<
     <Controller
       control={control}
       name={name}
-      render={({ field: { onBlur, onChange, value, ref } }) => (
+      render={({
+        field: { onBlur, onChange, value, ref },
+        formState: { defaultValues },
+      }) => (
         <MDXEditor
           markdown={value ?? ""}
           onBlur={onBlur}
@@ -68,15 +74,16 @@ export default function LazyLoadedMarkdownEditor<
             linkDialogPlugin(),
             quotePlugin(),
             markdownShortcutPlugin(),
+            diffSourcePlugin({ diffMarkdown: get(defaultValues, name) }),
             toolbarPlugin({
               toolbarContents: () => (
-                <>
+                <DiffSourceToggleWrapper>
                   <UndoRedo />
                   <BoldItalicUnderlineToggles />
                   <BlockTypeSelect />
                   <ListsToggle options={["bullet", "number"]} />
                   <CreateLink />
-                </>
+                </DiffSourceToggleWrapper>
               ),
               toolbarClassName: "!rounded-none !bg-slate-200",
             }),
