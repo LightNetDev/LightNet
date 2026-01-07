@@ -1,20 +1,52 @@
 ---
-import { AstroError } from "astro/errors"
+import Icon from "../../../components/Icon"
 
 type Props = {
   src: string
   className?: string
 }
 const { src, className } = Astro.props
-if (!src.toLowerCase().endsWith(".mp3")) {
-  throw new AstroError(
-    `Unsupported audio file ${src}`,
-    "To fix the issue, reference a mp3 file.",
-  )
-}
+const { t } = Astro.locals.i18n
+
+const normalizedSrc = src.trim()
+const audioExtension = normalizedSrc.split("?")[0].split("#")[0].toLowerCase()
+const isMp3 = audioExtension.endsWith(".mp3")
 ---
 
-<audio class="rounded-2xl" class:list={[className]} src={src} controls></audio>
+{
+  isMp3 ? (
+    <audio class="rounded-2xl" class:list={[className]} src={src} controls />
+  ) : (
+    <a
+      class="group flex w-full items-center gap-4 rounded-2xl border border-gray-200 bg-white px-4 py-4 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/70"
+      class:list={[className]}
+      href={src}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={t("ln.external-link")}
+    >
+      <span class="flex h-12 w-12 items-center justify-center rounded-full border border-gray-700 text-gray-700 shadow-sm transition group-hover:scale-105">
+        <svg
+          class="h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </span>
+      <div class="flex h-full grow flex-col gap-3">
+        <span class="flex items-center gap-2 font-semibold text-gray-900">
+          <Icon className="mdi--external-link" ariaLabel="" />
+          {t("ln.external-link")}
+        </span>
+        <div class="h-2 w-full rounded-full bg-gray-200">
+          <div class="h-full w-2 rounded-full bg-gray-400" />
+        </div>
+      </div>
+    </a>
+  )
+}
 
 <style>
   audio::-webkit-media-controls-enclosure {

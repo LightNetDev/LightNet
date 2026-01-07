@@ -1,6 +1,9 @@
 ---
 import type { ImageMetadata } from "astro"
 import { getImage } from "astro:assets"
+import { Image } from "astro:assets"
+
+import Icon from "./Icon"
 
 interface Props {
   /**
@@ -12,21 +15,43 @@ interface Props {
    */
   title?: string
   /**
-   * Poster image to use for the mp4 video player.
+   * Poster image to use for the mp4 video player or external fallback.
    */
   image?: ImageMetadata
 }
 
 const { url, title, image: imageMetadata } = Astro.props
 
-const { host, id, image } = await parseUrl(url)
+const { host, id, image, href } = await parseUrl(url, imageMetadata)
+const { t } = Astro.locals.i18n
 
-async function parseUrl(urlToParse: string): Promise<{
-  host: "youtube" | "vimeo" | "mp4"
+async function parseUrl(
+  urlToParse: string,
+  imageMetadata?: ImageMetadata,
+): Promise<{
+  host: "youtube" | "vimeo" | "mp4" | "external"
   id: string | null
   image?: string
+  href?: string
 }> {
-  const url = new URL(urlToParse)
+  const resolvedImage = async () => {
+    if (!imageMetadata) {
+      return undefined
+    }
+    return (await getImage({ src: imageMetadata, format: "webp" })).src
+  }
+
+  let url: URL
+  try {
+    url = new URL(urlToParse)
+  } catch {
+    return {
+      host: "external",
+      id: null,
+      href: urlToParse,
+      image: await resolvedImage(),
+    }
+  }
   // https://www.youtube.com/embed/ABC123abc
   // https://www.youtube.com/watch?v=ABC123abc
   if (url.hostname === "www.youtube.com") {
@@ -54,12 +79,15 @@ async function parseUrl(urlToParse: string): Promise<{
 
   // https://domain.com/video.mp4
   if (url.pathname.endsWith(".mp4")) {
-    const image =
-      imageMetadata &&
-      (await getImage({ src: imageMetadata, format: "webp" })).src
+    const image = await resolvedImage()
     return { host: "mp4", id: url.toString(), image }
   }
-  throw Error(`Unsupported video url: ${urlToParse}`)
+  return {
+    host: "external",
+    id: null,
+    href: url.toString(),
+    image: await resolvedImage(),
+  }
 }
 ---
 
@@ -86,6 +114,42 @@ async function parseUrl(urlToParse: string): Promise<{
       <video class="h-full w-full" controls preload="auto" poster={image}>
         <source src={id} type="video/mp4" />
       </video>
-    ) : null
+    ) : (
+      <a
+        class="group relative flex h-full w-full items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        href={href ?? url}
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        {imageMetadata ? (
+          <Image
+            src={imageMetadata}
+            alt={title ?? ""}
+            class="h-full w-full object-cover"
+          />
+        ) : (
+          <div class="flex h-full w-full items-center justify-center bg-gray-900 text-gray-200">
+            <span class="text-sm font-medium">{t("ln.external-link")}</span>
+          </div>
+        )}
+        <div class="absolute inset-0 z-10 bg-black/35 transition group-hover:bg-black/50" />
+        <div class="absolute inset-0 z-20 flex items-center justify-center">
+          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-black shadow-lg transition group-hover:scale-105">
+            <svg
+              class="h-7 w-7"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        </div>
+        <div class="absolute bottom-0 end-0 start-0 z-20 flex items-center gap-2 rounded bg-black/70 px-4 py-4 text-sm font-medium text-white backdrop-blur md:text-sm">
+          <Icon className="mdi--external-link" ariaLabel="" />
+          {t("ln.external-link")}
+        </div>
+      </a>
+    )
   }
 </div>

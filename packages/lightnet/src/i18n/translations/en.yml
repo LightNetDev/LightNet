@@ -60,12 +60,11 @@ ln.previous: Previous
 # English: Next
 ln.next: Next
 
-# Accessibility label for an external link.
-# This is only "visible" to a screen-reader.
+# Hint for an external link.
 #
-# English: External link
+# English: External link - opens in a new tab
 # Used on: https://sk8-ministries.pages.dev/en/media/ollie-with-integrity--en/
-ln.external-link: External link
+ln.external-link: External link - opens in a new tab
 
 # Title for the search page.
 #

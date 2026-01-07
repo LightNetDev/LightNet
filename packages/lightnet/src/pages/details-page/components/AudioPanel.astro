@@ -1,6 +1,4 @@
 ---
-import { AstroError } from "astro/errors"
-
 import { getMediaItem } from "../../../content/get-media-items"
 import { createContentMetadata } from "../utils/create-content-metadata"
 import AudioPlayer from "./AudioPlayer.astro"
@@ -15,16 +13,7 @@ const { t } = Astro.locals.i18n
 
 const item = await getMediaItem(mediaId)
 
-const content = item.data.content
-  .map((c) => createContentMetadata(c))
-  .filter((c) => c.extension === "mp3")
-
-if (!content.length) {
-  throw new AstroError(
-    `Missing mp3 content for ${mediaId}`,
-    `Add at least one mp3 file to the content array of /src/media/${mediaId}.json`,
-  )
-}
+const content = item.data.content.map((c) => createContentMetadata(c))
 ---
 
 <ol
