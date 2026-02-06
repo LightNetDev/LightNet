@@ -1,24 +1,25 @@
 // @ts-check
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
+import { fixedLabel, translatedLabel } from "lightnet/i18n"
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://test.com",
   integrations: [
     lightnet({
-      title: "Basic Test",
+      title: fixedLabel("Basic Test"),
       logo: { src: "./src/assets/logo.png" },
       credits: true,
       languages: [
         {
           code: "en",
-          label: { type: "fixed", value: "English" },
+          label: fixedLabel("English"),
           isDefaultSiteLanguage: true,
         },
         {
           code: "de",
-          label: { type: "fixed", value: "Deutsch" },
+          label: fixedLabel("Deutsch"),
           isSiteLanguage: true,
         },
       ],
@@ -26,11 +27,11 @@ export default defineConfig({
       mainMenu: [
         {
           href: "/",
-          label: { type: "translated", value: "ln.home.title" },
+          label: translatedLabel("ln.home.title"),
         },
         {
           href: "/media",
-          label: { type: "translated", value: "ln.search.title" },
+          label: translatedLabel("ln.search.title"),
         },
       ],
     }),

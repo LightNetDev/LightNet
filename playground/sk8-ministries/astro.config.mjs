@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
+import { fixedLabel, translatedLabel } from "lightnet/utils"
 
 /**
  * @type {import('lightnet').Language[]}
@@ -8,17 +9,17 @@ import lightnet from "lightnet"
 const languages = [
   {
     code: "en",
-    label: { type: "fixed", value: "English" },
+    label: fixedLabel("English"),
     isDefaultSiteLanguage: true,
   },
   {
     code: "de",
-    label: { type: "fixed", value: "Deutsch" },
+    label: fixedLabel("Deutsch"),
     isSiteLanguage: true,
   },
   {
     code: "ar",
-    label: { type: "fixed", value: "العربية" },
+    label: fixedLabel("العربية"),
     isSiteLanguage: true,
   },
 ]
@@ -30,7 +31,7 @@ export default defineConfig({
   },
   integrations: [
     lightnet({
-      title: "site.title",
+      title: translatedLabel("site.title"),
       credits: true,
       logo: { src: "./src/assets/logo.png" },
       languages,
@@ -41,19 +42,19 @@ export default defineConfig({
       mainMenu: [
         {
           href: "/",
-          label: { type: "translated", value: "ln.home.title" },
+          label: translatedLabel("ln.home.title"),
         },
         {
           href: "/media",
-          label: { type: "translated", value: "ln.search.title" },
+          label: translatedLabel("ln.search.title"),
         },
         {
           href: "/about",
-          label: { type: "translated", value: "navigation.about" },
+          label: translatedLabel("navigation.about"),
         },
         {
           href: "https://www.om.org/eng/mediaworks/lightnet",
-          label: { type: "fixed", value: "LightNet" },
+          label: fixedLabel("LightNet"),
         },
       ],
       searchPage: {

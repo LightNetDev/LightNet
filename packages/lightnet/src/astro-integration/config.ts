@@ -126,8 +126,11 @@ const faviconSchema = z.object({
 export const configSchema = z.object({
   /**
    * Title of the web site.
+   *
+   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", value: "<text>" }` to display as is.
    */
-  title: z.string(),
+  title: labelSchema,
   /**
    * All languages: content languages and site languages.
    */
@@ -161,7 +164,7 @@ export const configSchema = z.object({
        * Alt attribute to add for screen reader etc.
        * This can be a fixed string or a translation key.
        */
-      alt: z.string().optional(),
+      alt: labelSchema.optional(),
       /**
        * Size in px to use for the logo on the header bar.
        * The size will be applied to the shorter side of your logo image.

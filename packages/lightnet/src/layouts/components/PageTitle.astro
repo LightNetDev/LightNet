@@ -14,10 +14,17 @@ function getWidth(logo: ImageMetadata) {
   return Math.floor(size * Math.max(1, logo.width / logo.height))
 }
 
-const logoAlt =
-  config.logo?.alt ?? (config.logo?.replacesTitle ? config.title : "")
-
 const { t } = Astro.locals.i18n
+
+const getLogoAlt = () => {
+  if (config.logo?.alt) {
+    return t(config.logo.alt)
+  }
+  if (config.logo?.replacesTitle) {
+    return t(config.title)
+  }
+  return ""
+}
 ---
 
 <a
@@ -29,13 +36,13 @@ const { t } = Astro.locals.i18n
       (logo.format === "svg" ? (
         <img
           src={logo.src}
-          alt={t(logoAlt)}
+          alt={getLogoAlt()}
           style={`width:${getWidth(logo)}px;`}
         />
       ) : (
         <Image
           src={logo}
-          alt={t(logoAlt)}
+          alt={getLogoAlt()}
           style={`width:${getWidth(logo)}px;`}
           width={getWidth(logo)}
           densities={[1.5, 2, 3]}

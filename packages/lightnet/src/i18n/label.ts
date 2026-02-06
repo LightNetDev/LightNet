@@ -8,6 +8,16 @@ export const labelSchema = z.object({
 export type LabelInput = z.input<typeof labelSchema>
 export type LabelValue = z.output<typeof labelSchema>
 
+export const fixedLabel = (value: string): LabelValue => ({
+  type: "fixed",
+  value,
+})
+
+export const translatedLabel = (value: string): LabelValue => ({
+  type: "translated",
+  value,
+})
+
 export const isLabelValue = (value: unknown): value is LabelValue => {
   if (!value || typeof value !== "object") {
     return false
