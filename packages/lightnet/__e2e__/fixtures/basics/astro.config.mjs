@@ -30,11 +30,6 @@ export default defineConfig({
         },
         { href: "/media", label: "ln.search.title" },
       ],
-      experimental: {
-        admin: {
-          enabled: true,
-        },
-      },
     }),
   ],
 })
