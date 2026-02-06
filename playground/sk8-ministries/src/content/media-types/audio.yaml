@@ -1,4 +1,6 @@
-label: x.type.audio
+label:
+  type: translated
+  value: type.audio
 detailsPage:
   layout: audio
 icon: mdi--music-box-outline

@@ -1,2 +1,4 @@
-label: x.category.bible-studies
+label:
+  type: translated
+  value: category.bible-studies
 image: "../../assets/sample-images/1.webp"

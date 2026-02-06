@@ -1,2 +1,4 @@
-label: x.category.children
+label:
+  type: translated
+  value: category.children
 image: "../../assets/sample-images/4.webp"

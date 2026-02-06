@@ -1,9 +1,11 @@
 ---
 import Icon from "../../components/Icon"
+import type { LabelValue } from "../../i18n/label"
+import type { TranslationKey } from "../../i18n/translate"
 
 interface Props {
   icon: string
-  label: string
+  label: LabelValue | TranslationKey
   disabled?: boolean
 }
 

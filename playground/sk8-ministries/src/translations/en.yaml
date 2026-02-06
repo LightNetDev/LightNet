@@ -1,35 +1,35 @@
-x.site.title: Sk8 Ministries
-x.navigation.about-lightnet: About LightNet
-x.navigation.about: About
-x.ministry.slogan: Living faith, building community
-x.home.our-latest-books: Our latest Books
-x.home.bbq.title: Skate, BBQ & Faith
-x.home.bbq.text: >
+site.title: Sk8 Ministries
+navigation.about-lightnet: About LightNet
+navigation.about: About
+ministry.slogan: Living faith, building community
+home.our-latest-books: Our latest Books
+home.bbq.title: Skate, BBQ & Faith
+home.bbq.text: >
   Join us for our next community meeting! 
   Enjoy a BBQ, skate with friends, and engage in meaningful conversations about Jesus. 
   Don’t miss this opportunity to connect, skate, and grow in faith together. 
   All skill levels welcome!
-x.home.bbq.sign-up-now: Sign Up Now
-x.category.bible-studies: Bible Studies
-x.category.bibles-and-bible-stories: Bibles & Bible Stories
-x.category.biographies-and-memoirs: Biographies & Memoirs
-x.category.children: Children
-x.category.christian-living: Christian Living
-x.category.comics-and-graphic-novels: Comics & Graphic Novels
-x.category.devotionals: Devotionals
-x.category.educational: Educational
-x.category.ethics-and-social-issues: Ethics & Social Issues
-x.category.family-and-relationships: Family & Relationships
-x.category.ministry-and-evangelism: Ministry & Evangelism
-x.category.novels: Novels
-x.category.sermons: Sermons
-x.category.spiritual-and-personal-growth: Spiritual & Personal Growth
-x.category.study-materials: Study Materials
-x.category.support-and-counseling: Support & Counseling
-x.category.teens-and-young-adults: Teens & Young Adults
-x.category.theology: Theology
-x.type.book: Book
-x.type.video: Video
-x.type.audio: Audio
-x.details.action.read: Read
-x.details.action.watch: Watch
+home.bbq.sign-up-now: Sign Up Now
+category.bible-studies: Bible Studies
+category.bibles-and-bible-stories: Bibles & Bible Stories
+category.biographies-and-memoirs: Biographies & Memoirs
+category.children: Children
+category.christian-living: Christian Living
+category.comics-and-graphic-novels: Comics & Graphic Novels
+category.devotionals: Devotionals
+category.educational: Educational
+category.ethics-and-social-issues: Ethics & Social Issues
+category.family-and-relationships: Family & Relationships
+category.ministry-and-evangelism: Ministry & Evangelism
+category.novels: Novels
+category.sermons: Sermons
+category.spiritual-and-personal-growth: Spiritual & Personal Growth
+category.study-materials: Study Materials
+category.support-and-counseling: Support & Counseling
+category.teens-and-young-adults: Teens & Young Adults
+category.theology: Theology
+type.book: Book
+type.video: Video
+type.audio: Audio
+details.action.read: Read
+details.action.watch: Watch

@@ -1,1 +1,3 @@
-label: category.theology
+label:
+  type: translated
+  value: category.theology

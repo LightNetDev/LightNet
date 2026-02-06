@@ -1,4 +1,6 @@
-label: x.type.video
+label:
+  type: translated
+  value: type.video
 coverImageStyle: video
 detailsPage:
   layout: video

@@ -13,12 +13,12 @@ export default defineConfig({
       languages: [
         {
           code: "en",
-          label: "English",
+          label: { type: "fixed", value: "English" },
           isDefaultSiteLanguage: true,
         },
         {
           code: "de",
-          label: "Deutsch",
+          label: { type: "fixed", value: "Deutsch" },
           isSiteLanguage: true,
         },
       ],
@@ -26,9 +26,12 @@ export default defineConfig({
       mainMenu: [
         {
           href: "/",
-          label: "ln.home.title",
+          label: { type: "translated", value: "ln.home.title" },
         },
-        { href: "/media", label: "ln.search.title" },
+        {
+          href: "/media",
+          label: { type: "translated", value: "ln.search.title" },
+        },
       ],
     }),
   ],

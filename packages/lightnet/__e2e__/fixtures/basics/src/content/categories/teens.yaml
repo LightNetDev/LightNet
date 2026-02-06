@@ -1,1 +1,3 @@
-label: category.teens
+label:
+  type: translated
+  value: category.teens

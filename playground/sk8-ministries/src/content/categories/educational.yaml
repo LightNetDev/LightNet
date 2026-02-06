@@ -1,2 +1,4 @@
-label: x.category.educational
+label:
+  type: translated
+  value: category.educational
 image: "../../assets/sample-images/3.webp"

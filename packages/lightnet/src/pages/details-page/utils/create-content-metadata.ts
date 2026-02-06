@@ -1,3 +1,4 @@
+import type { LabelValue } from "../../../i18n/label"
 import { isExternalUrl } from "../../../utils/urls"
 
 export type UrlType =
@@ -48,7 +49,7 @@ export function createContentMetadata({
   label: customLabel,
 }: {
   url: string
-  label?: string
+  label?: LabelValue
 }) {
   const isExternal = isExternalUrl(url)
   const path = isExternal ? new URL(url).pathname : url
@@ -63,7 +64,7 @@ export function createContentMetadata({
   const fileName = hasExtension
     ? lastPathSegment.slice(0, -(extension.length + 1))
     : undefined
-  const label = customLabel || fileName || linkName
+  const label = customLabel ?? { type: "fixed", value: fileName || linkName }
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
   const canBeOpened =
     !hasExtension || !!KNOWN_EXTENSIONS[extension]?.canBeOpened

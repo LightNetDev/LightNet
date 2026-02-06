@@ -1,6 +1,8 @@
-label: x.type.book
+label:
+  type: translated
+  value: type.book
 detailsPage:
   layout: default
   coverStyle: book
-  openActionLabel: x.details.action.read
+  openActionLabel: details.action.read
 icon: mdi--book-open-blank-variant

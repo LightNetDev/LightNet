@@ -1,2 +1,4 @@
-label: x.category.biographies-and-memoirs
+label:
+  type: translated
+  value: category.biographies-and-memoirs
 image: "../../assets/sample-images/3.webp"

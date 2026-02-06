@@ -1,2 +1,4 @@
-label: x.category.teens-and-young-adults
+label:
+  type: translated
+  value: category.teens-and-young-adults
 image: "../../assets/sample-images/5.webp"

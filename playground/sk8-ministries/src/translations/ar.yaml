@@ -1,35 +1,35 @@
-x.site.title: خدمات التزلج على الألواح
-x.navigation.about-lightnet: عن هذا المشروع
-x.navigation.about: من نحن
-x.ministry.slogan: إيمان حي، وبناء مجتمع
-x.home.our-latest-books: أحدث كتبنا
-x.home.bbq.title: تزلج، شواء وإيمان
-x.home.bbq.text: >
+site.title: خدمات التزلج على الألواح
+navigation.about-lightnet: عن هذا المشروع
+navigation.about: من نحن
+ministry.slogan: إيمان حي، وبناء مجتمع
+home.our-latest-books: أحدث كتبنا
+home.bbq.title: تزلج، شواء وإيمان
+home.bbq.text: >
   انضم إلينا في اجتماعنا المجتمعي القادم!
   استمتع بحفلة شواء، وتزلج مع الأصدقاء، وشارك في محادثات هادفة عن يسوع.
   لا تفوت هذه الفرصة للتواصل، والتزلج، والنمو في الإيمان معًا.
   جميع المستويات مرحب بها!
-x.home.bbq.sign-up-now: سجّل الآن
-x.category.bible-studies: دراسات كتابية
-x.category.bibles-and-bible-stories: كتب وقصص الكتاب المقدس
-x.category.biographies-and-memoirs: السير الذاتية والمذكرات
-x.category.children: الأطفال
-x.category.christian-living: الحياة المسيحية
-x.category.comics-and-graphic-novels: القصص المصورة والروايات المصورة
-x.category.devotionals: كتب التأملات الروحية
-x.category.educational: تعليمية
-x.category.ethics-and-social-issues: الأخلاقيات والقضايا الاجتماعية
-x.category.family-and-relationships: الأسرة والعلاقات
-x.category.ministry-and-evangelism: الخدمة والتبشير
-x.category.novels: روايات
-x.category.sermons: عظات
-x.category.spiritual-and-personal-growth: النمو الروحي والشخصي
-x.category.study-materials: مواد دراسية
-x.category.support-and-counseling: الدعم والإرشاد
-x.category.teens-and-young-adults: المراهقون والشباب
-x.category.theology: علم اللاهوت
-x.type.book: كتاب
-x.type.video: فيديو
-x.type.audio: صوتي
-x.details.action.read: اقرأ
-x.details.action.watch: شاهد
+home.bbq.sign-up-now: سجّل الآن
+category.bible-studies: دراسات كتابية
+category.bibles-and-bible-stories: كتب وقصص الكتاب المقدس
+category.biographies-and-memoirs: السير الذاتية والمذكرات
+category.children: الأطفال
+category.christian-living: الحياة المسيحية
+category.comics-and-graphic-novels: القصص المصورة والروايات المصورة
+category.devotionals: كتب التأملات الروحية
+category.educational: تعليمية
+category.ethics-and-social-issues: الأخلاقيات والقضايا الاجتماعية
+category.family-and-relationships: الأسرة والعلاقات
+category.ministry-and-evangelism: الخدمة والتبشير
+category.novels: روايات
+category.sermons: عظات
+category.spiritual-and-personal-growth: النمو الروحي والشخصي
+category.study-materials: مواد دراسية
+category.support-and-counseling: الدعم والإرشاد
+category.teens-and-young-adults: المراهقون والشباب
+category.theology: علم اللاهوت
+type.book: كتاب
+type.video: فيديو
+type.audio: صوتي
+details.action.read: اقرأ
+details.action.watch: شاهد

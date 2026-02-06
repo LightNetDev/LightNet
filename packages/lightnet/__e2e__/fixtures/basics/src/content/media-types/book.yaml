@@ -1,4 +1,6 @@
-label: type.book
+label:
+  type: translated
+  value: type.book
 detailsPage:
   layout: default
   coverStyle: book

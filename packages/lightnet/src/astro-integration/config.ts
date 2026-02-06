@@ -1,5 +1,7 @@
 import { z } from "astro/zod"
 
+import { labelSchema } from "../i18n/label"
+
 /**
  * Link Schema.
  */
@@ -12,9 +14,10 @@ const linkSchema = z.object({
   href: z.string(),
   /**
    * Label to be used for the link.
-   * Can either be a translation key or a fixed string.
+   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", value: "<text>" }` to display as is.
    */
-  label: z.string(),
+  label: labelSchema,
   /**
    * If this is set to true the currentLocale will be appended to
    * the href path. Eg. for href="/about"
@@ -42,9 +45,10 @@ const languageSchema = z
     /**
      * The name of the language that will be shown on the Website.
      *
-     * Can either be a fixed string or a translation key.
+     * Use `{ type: "translated", value: "<translation-key>" }` to translate.
+     * Use `{ type: "fixed", value: "<text>" }` to display as is.
      */
-    label: z.string(),
+    label: labelSchema,
     /**
      * Should this language be used as a site language?
      *

@@ -1,34 +1,34 @@
-x.navigation.about-lightnet: Über LightNet
-x.navigation.about: Über uns
-x.ministry.slogan: Glaube leben, Gemeinschaft bauen
-x.home.our-latest-books: Unsere neuesten Bücher
-x.home.bbq.title: Skate, BBQ & Glaube
-x.home.bbq.text: >
+navigation.about-lightnet: Über LightNet
+navigation.about: Über uns
+ministry.slogan: Glaube leben, Gemeinschaft bauen
+home.our-latest-books: Unsere neuesten Bücher
+home.bbq.title: Skate, BBQ & Glaube
+home.bbq.text: >
   Komm zu unserem nächsten Community-Treffen! 
   Genieße ein BBQ, Skaten mit Freunden und führe tiefgehende Gespräche über Jesus. 
   Verpasse nicht diese Gelegenheit, gemeinsam zu connecten, zu skaten und im Glauben zu wachsen. 
   Alle Erfahrungsstufen sind willkommen!
-x.home.bbq.sign-up-now: Jetzt anmelden
-x.category.bible-studies: Bibelstudien
-x.category.bibles-and-bible-stories: Bibeln & Bibelgeschichten
-x.category.biographies-and-memoirs: Biografien & Lebensgeschiten
-x.category.children: Kinder
-x.category.christian-living: Glaubensleben
-x.category.comics-and-graphic-novels: Comics & Illustrierte Geschichten
-x.category.devotionals: Andachtsbücher
-x.category.educational: Schulung
-x.category.ethics-and-social-issues: Ethik & Soziale Fragen
-x.category.family-and-relationships: Familie & Beziehungen
-x.category.ministry-and-evangelism: Dienst & Evangelisation
-x.category.novels: Romane
-x.category.sermons: Predigten
-x.category.spiritual-and-personal-growth: Spirituelles & Persönliche Entwicklung
-x.category.study-materials: Studienmaterialien
-x.category.support-and-counseling: Hilfe & Beratung
-x.category.teens-and-young-adults: Teenager & Junge Erwachsene
-x.category.theology: Theologie
-x.type.book: Buch
-x.type.video: Video
-x.type.audio: Audio
-x.details.action.read: Lesen
-x.details.action.watch: Anschauen
+home.bbq.sign-up-now: Jetzt anmelden
+category.bible-studies: Bibelstudien
+category.bibles-and-bible-stories: Bibeln & Bibelgeschichten
+category.biographies-and-memoirs: Biografien & Lebensgeschiten
+category.children: Kinder
+category.christian-living: Glaubensleben
+category.comics-and-graphic-novels: Comics & Illustrierte Geschichten
+category.devotionals: Andachtsbücher
+category.educational: Schulung
+category.ethics-and-social-issues: Ethik & Soziale Fragen
+category.family-and-relationships: Familie & Beziehungen
+category.ministry-and-evangelism: Dienst & Evangelisation
+category.novels: Romane
+category.sermons: Predigten
+category.spiritual-and-personal-growth: Spirituelles & Persönliche Entwicklung
+category.study-materials: Studienmaterialien
+category.support-and-counseling: Hilfe & Beratung
+category.teens-and-young-adults: Teenager & Junge Erwachsene
+category.theology: Theologie
+type.book: Buch
+type.video: Video
+type.audio: Audio
+details.action.read: Lesen
+details.action.watch: Anschauen

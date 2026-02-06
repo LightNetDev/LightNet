@@ -1,2 +1,4 @@
-label: x.category.study-materials
+label:
+  type: translated
+  value: category.study-materials
 image: "../../assets/sample-images/1.webp"

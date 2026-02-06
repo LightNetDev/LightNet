@@ -1,2 +1,4 @@
-label: x.category.ministry-and-evangelism
+label:
+  type: translated
+  value: category.ministry-and-evangelism
 image: "../../assets/sample-images/1.webp"

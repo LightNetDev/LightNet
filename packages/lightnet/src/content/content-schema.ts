@@ -3,6 +3,7 @@ import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
 
+import { labelSchema } from "../i18n/label"
 import { imageSchema } from "./astro-image"
 
 /**
@@ -12,12 +13,13 @@ export const categorySchema = z.object({
   /**
    * Name of the category.
    *
-   * This can either be a translation key or a string that will be displayed as is.
-   * LightNet will try to use it as translation key first if no translation is found it will use the string as is.
+   * This can either be a translated label or a fixed string.
+   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", value: "<text>" }` to display as is.
    *
-   * @example "category.biography"
+   * @example { type: "translated", value: "category.biography" }
    */
-  label: z.string(),
+  label: labelSchema,
 
   /* Relative path to the thumbnail image of this category.
    *
@@ -37,10 +39,11 @@ export const mediaCollectionSchema = z.object({
   /**
    * Name of the collection.
    *
-   * This can either be a translation key or a string that will be displayed as is.
-   * LightNet will try to use it as translation key first if no translation is found it will use the string as is.
+   * This can either be a translated label or a fixed string.
+   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", value: "<text>" }` to display as is.
    */
-  label: z.string(),
+  label: labelSchema,
 })
 
 /**
@@ -154,9 +157,11 @@ export const mediaItemSchema = z.object({
         url: z.string(),
         /**
          * The name of the content. If this is not set. The file name
-         * from URL will be used. This can either be a fixed string or a translation key.
+         * from URL will be used. This can either be a translated label or a fixed string.
+         * Use `{ type: "translated", value: "<translation-key>" }` to translate.
+         * Use `{ type: "fixed", value: "<text>" }` to display as is.
          */
-        label: z.string().optional(),
+        label: labelSchema.optional(),
       }),
     )
     .min(1),
@@ -188,11 +193,13 @@ export const mediaTypeSchema = z
     /**
      * Name of this media type that will be shown on the pages.
      *
-     * This can either be a fixed string or a translation key.
+     * This can either be a translated label or a fixed string.
+     * Use `{ type: "translated", value: "<translation-key>" }` to translate.
+     * Use `{ type: "fixed", value: "<text>" }` to display as is.
      *
-     * @example "media-type.book"
+     * @example { type: "translated", value: "media-type.book" }
      */
-    label: z.string(),
+    label: labelSchema,
     /**
      * Defines how the cover image for a media item of this type is rendered.
      *

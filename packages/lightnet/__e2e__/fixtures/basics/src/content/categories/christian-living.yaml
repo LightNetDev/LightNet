@@ -1,1 +1,3 @@
-label: category.christian-living
+label:
+  type: translated
+  value: category.christian-living

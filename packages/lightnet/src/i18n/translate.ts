@@ -2,6 +2,7 @@ import { AstroError } from "astro/errors"
 import i18next, { type TOptions } from "i18next"
 import config from "virtual:lightnet/config"
 
+import { isLabelValue, type LabelValue } from "./label"
 import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLanguage } from "./resolve-language"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
@@ -11,7 +12,10 @@ export type TranslationKey =
   | LightNetTranslationKey
   | (string & NonNullable<unknown>)
 
-export type TranslateFn = (key: TranslationKey, options?: TOptions) => string
+export type TranslateFn = (
+  key: TranslationKey | LabelValue,
+  options?: TOptions,
+) => string
 
 const languageCodes = [
   ...new Set(
@@ -52,18 +56,32 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
     "en",
   ]
   return (key, options) => {
-    const value = t(key, { fallbackLng, ...options })
-    // i18next will return the key if no translation is found.
-    // If a value starts with ln. or x. we consider it to be
-    // a untranslated translation key.
-    if (value.match(/^(?:ln|x)\../i)) {
-      throw new AstroError(
-        `Missing translation: '${key}' is undefined for language '${resolvedLocale}'.`,
-        `To fix the issue, add a translation for '${key}' to src/translations/${resolvedLocale}.yaml`,
-      )
+    if (isLabelValue(key)) {
+      if (key.type === "fixed") {
+        return key.value
+      }
+      return translateKey(key.value, t, fallbackLng, resolvedLocale, options)
     }
-    return value
+
+    return translateKey(key, t, fallbackLng, resolvedLocale, options)
   }
+}
+
+function translateKey(
+  key: TranslationKey,
+  t: ReturnType<typeof i18n.getFixedT<TranslationKey>>,
+  fallbackLng: string[],
+  resolvedLocale: string,
+  options?: TOptions,
+) {
+  const value = t(key, { fallbackLng, ...options })
+  if (value === key) {
+    throw new AstroError(
+      `Missing translation: '${key}' is undefined for language '${resolvedLocale}'.`,
+      `To fix the issue, add a translation for '${key}' to src/translations/${resolvedLocale}.yaml`,
+    )
+  }
+  return value
 }
 
 async function prepareI18nextTranslations() {

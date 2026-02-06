@@ -1,2 +1,4 @@
-label: x.category.comics-and-graphic-novels
+label:
+  type: translated
+  value: category.comics-and-graphic-novels
 image: "../../assets/sample-images/1.webp"

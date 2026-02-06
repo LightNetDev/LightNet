@@ -8,17 +8,17 @@ import lightnet from "lightnet"
 const languages = [
   {
     code: "en",
-    label: "English",
+    label: { type: "fixed", value: "English" },
     isDefaultSiteLanguage: true,
   },
   {
     code: "de",
-    label: "Deutsch",
+    label: { type: "fixed", value: "Deutsch" },
     isSiteLanguage: true,
   },
   {
     code: "ar",
-    label: "العربية",
+    label: { type: "fixed", value: "العربية" },
     isSiteLanguage: true,
   },
 ]
@@ -30,7 +30,7 @@ export default defineConfig({
   },
   integrations: [
     lightnet({
-      title: "x.site.title",
+      title: "site.title",
       credits: true,
       logo: { src: "./src/assets/logo.png" },
       languages,
@@ -41,19 +41,19 @@ export default defineConfig({
       mainMenu: [
         {
           href: "/",
-          label: "ln.home.title",
+          label: { type: "translated", value: "ln.home.title" },
         },
         {
           href: "/media",
-          label: "ln.search.title",
+          label: { type: "translated", value: "ln.search.title" },
         },
         {
           href: "/about",
-          label: "x.navigation.about",
+          label: { type: "translated", value: "navigation.about" },
         },
         {
           href: "https://www.om.org/eng/mediaworks/lightnet",
-          label: "LightNet",
+          label: { type: "fixed", value: "LightNet" },
         },
       ],
       searchPage: {

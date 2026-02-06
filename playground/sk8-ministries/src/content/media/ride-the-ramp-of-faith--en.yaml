@@ -6,9 +6,13 @@ collections:
     index: 1
 commonId: ride-the-ramp-of-faith
 content:
-  - label: eBook
+  - label:
+      type: fixed
+      value: eBook
     url: "/files/example.epub"
-  - label: Table of Contents
+  - label:
+      type: fixed
+      value: Table of Contents
     url: "/files/example.pdf"
 dateCreated: "2024-04-21"
 description: |-

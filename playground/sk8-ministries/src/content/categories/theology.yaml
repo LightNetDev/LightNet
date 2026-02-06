@@ -1,2 +1,4 @@
-label: x.category.theology
+label:
+  type: translated
+  value: category.theology
 image: "../../assets/sample-images/1.webp"

@@ -1,1 +1,3 @@
-label: Learn Skateboarding
+label:
+  type: fixed
+  value: Learn Skateboarding

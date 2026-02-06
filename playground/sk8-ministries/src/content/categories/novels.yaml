@@ -1,2 +1,4 @@
-label: x.category.novels
+label:
+  type: translated
+  value: category.novels
 image: "../../assets/sample-images/1.webp"
