@@ -1,9 +1,9 @@
-home.all-items: Alle Artikel
-category.christian-living: Glaube leben
-category.teens: Teens
-category.theology: Theologie
-type.book: Buch
-type.video: Video
-type.audio: Audio
-details.action.read: Lesen
-details.action.watch: Anschauen
+homeAllItems: Alle Artikel
+categoryChristianLiving: Glaube leben
+categoryTeens: Teens
+categoryTheology: Theologie
+typeBook: Buch
+typeVideo: Video
+typeAudio: Audio
+detailsActionRead: Lesen
+detailsActionWatch: Anschauen

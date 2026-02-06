@@ -61,7 +61,7 @@ const { t, direction } = Astro.locals.i18n
             <Icon
               className={`${canBeOpened ? "mdi--chevron-right" : "mdi--download"} shrink-0 bg-gray-600 group-hover:bg-gray-800`}
               ariaLabel={
-                canBeOpened ? t("ln.details.open") : t("ln.details.download")
+                canBeOpened ? t("ln_detailsOpen") : t("ln_detailsDownload")
               }
               flipIcon={direction === "rtl"}
             />

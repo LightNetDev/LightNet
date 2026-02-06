@@ -1,25 +1,25 @@
-ln.header.open-main-menu: Открыть главное меню
-ln.header.select-language: Выберите язык
-ln.home.title: Главная
-ln.category: Категория
-ln.categories: Категории
-ln.language: Язык
-ln.languages: Языки
-ln.type: Тип
-ln.previous: Предыдущий
-ln.next: Следующий
-ln.external-link: Внешняя ссылка
-ln.search.title: Поиск
-ln.search.placeholder: Поиск медиа
-ln.search.all-languages: Все языки
-ln.search.all-types: Все типы
-ln.search.all-categories: Все категории
-ln.search.no-results: Нет результатов
-ln.details.open: Открыть
-ln.details.share: Поделиться
-ln.details.part-of-collection: Часть коллекции
-ln.details.download: Скачать
-ln.share.url-copied-to-clipboard: Ссылка скопированa в буфер
-ln.404.page-not-found: Страница не найдена
-ln.404.go-to-the-home-page: Перейти на главную страницу
-ln.footer.powered-by-lightnet: Работает на платформе LightNet
+ln_headerOpenMainMenu: Открыть главное меню
+ln_headerSelectLanguage: Выберите язык
+ln_homeTitle: Главная
+ln_category: Категория
+ln_categories: Категории
+ln_language: Язык
+ln_languages: Языки
+ln_type: Тип
+ln_previous: Предыдущий
+ln_next: Следующий
+ln_externalLink: Внешняя ссылка
+ln_searchTitle: Поиск
+ln_searchPlaceholder: Поиск медиа
+ln_searchAllLanguages: Все языки
+ln_searchAllTypes: Все типы
+ln_searchAllCategories: Все категории
+ln_searchNoResults: Нет результатов
+ln_detailsOpen: Открыть
+ln_detailsShare: Поделиться
+ln_detailsPartOfCollection: Часть коллекции
+ln_detailsDownload: Скачать
+ln_shareUrlCopiedToClipboard: Ссылка скопированa в буфер
+ln_404PageNotFound: Страница не найдена
+ln_404GoToTheHomePage: Перейти на главную страницу
+ln_footerPoweredByLightnet: Работает на платформе LightNet

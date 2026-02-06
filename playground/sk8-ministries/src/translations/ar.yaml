@@ -1,35 +1,35 @@
-site.title: خدمات التزلج على الألواح
-navigation.about-lightnet: عن هذا المشروع
-navigation.about: من نحن
-ministry.slogan: إيمان حي، وبناء مجتمع
-home.our-latest-books: أحدث كتبنا
-home.bbq.title: تزلج، شواء وإيمان
-home.bbq.text: >
+siteTitle: خدمات التزلج على الألواح
+navigationAboutLightnet: عن هذا المشروع
+navigationAbout: من نحن
+ministrySlogan: إيمان حي، وبناء مجتمع
+homeOurLatestBooks: أحدث كتبنا
+homeBbqTitle: تزلج، شواء وإيمان
+homeBbqText: >
   انضم إلينا في اجتماعنا المجتمعي القادم!
   استمتع بحفلة شواء، وتزلج مع الأصدقاء، وشارك في محادثات هادفة عن يسوع.
   لا تفوت هذه الفرصة للتواصل، والتزلج، والنمو في الإيمان معًا.
   جميع المستويات مرحب بها!
-home.bbq.sign-up-now: سجّل الآن
-category.bible-studies: دراسات كتابية
-category.bibles-and-bible-stories: كتب وقصص الكتاب المقدس
-category.biographies-and-memoirs: السير الذاتية والمذكرات
-category.children: الأطفال
-category.christian-living: الحياة المسيحية
-category.comics-and-graphic-novels: القصص المصورة والروايات المصورة
-category.devotionals: كتب التأملات الروحية
-category.educational: تعليمية
-category.ethics-and-social-issues: الأخلاقيات والقضايا الاجتماعية
-category.family-and-relationships: الأسرة والعلاقات
-category.ministry-and-evangelism: الخدمة والتبشير
-category.novels: روايات
-category.sermons: عظات
-category.spiritual-and-personal-growth: النمو الروحي والشخصي
-category.study-materials: مواد دراسية
-category.support-and-counseling: الدعم والإرشاد
-category.teens-and-young-adults: المراهقون والشباب
-category.theology: علم اللاهوت
-type.book: كتاب
-type.video: فيديو
-type.audio: صوتي
-details.action.read: اقرأ
-details.action.watch: شاهد
+homeBbqSignUpNow: سجّل الآن
+categoryBibleStudies: دراسات كتابية
+categoryBiblesAndBibleStories: كتب وقصص الكتاب المقدس
+categoryBiographiesAndMemoirs: السير الذاتية والمذكرات
+categoryChildren: الأطفال
+categoryChristianLiving: الحياة المسيحية
+categoryComicsAndGraphicNovels: القصص المصورة والروايات المصورة
+categoryDevotionals: كتب التأملات الروحية
+categoryEducational: تعليمية
+categoryEthicsAndSocialIssues: الأخلاقيات والقضايا الاجتماعية
+categoryFamilyAndRelationships: الأسرة والعلاقات
+categoryMinistryAndEvangelism: الخدمة والتبشير
+categoryNovels: روايات
+categorySermons: عظات
+categorySpiritualAndPersonalGrowth: النمو الروحي والشخصي
+categoryStudyMaterials: مواد دراسية
+categorySupportAndCounseling: الدعم والإرشاد
+categoryTeensAndYoungAdults: المراهقون والشباب
+categoryTheology: علم اللاهوت
+typeBook: كتاب
+typeVideo: فيديو
+typeAudio: صوتي
+detailsActionRead: اقرأ
+detailsActionWatch: شاهد

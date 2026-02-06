@@ -1,25 +1,25 @@
-ln.header.open-main-menu: Відкрити головне меню
-ln.header.select-language: Оберіть мову
-ln.home.title: Головна
-ln.category: Категорія
-ln.categories: Категорії
-ln.language: Мова
-ln.languages: Мови
-ln.type: Тип
-ln.previous: Попередній
-ln.next: Наступний
-ln.external-link: Зовнішнє посилання
-ln.search.title: Пошук
-ln.search.placeholder: Пошук медіа
-ln.search.all-languages: Усі мови
-ln.search.all-types: Усі типи
-ln.search.all-categories: Усі категорії
-ln.search.no-results: Немає результатів
-ln.details.open: Відкрити
-ln.details.share: Поділитися
-ln.details.part-of-collection: Частина колекції
-ln.details.download: Завантажити
-ln.share.url-copied-to-clipboard: Посилання скопійовано до буферу обміну
-ln.404.page-not-found: Сторінку не знайдено
-ln.404.go-to-the-home-page: Перейти на Головну сторінку
-ln.footer.powered-by-lightnet: Працює на платформі LightNet
+ln_headerOpenMainMenu: Відкрити головне меню
+ln_headerSelectLanguage: Оберіть мову
+ln_homeTitle: Головна
+ln_category: Категорія
+ln_categories: Категорії
+ln_language: Мова
+ln_languages: Мови
+ln_type: Тип
+ln_previous: Попередній
+ln_next: Наступний
+ln_externalLink: Зовнішнє посилання
+ln_searchTitle: Пошук
+ln_searchPlaceholder: Пошук медіа
+ln_searchAllLanguages: Усі мови
+ln_searchAllTypes: Усі типи
+ln_searchAllCategories: Усі категорії
+ln_searchNoResults: Немає результатів
+ln_detailsOpen: Відкрити
+ln_detailsShare: Поділитися
+ln_detailsPartOfCollection: Частина колекції
+ln_detailsDownload: Завантажити
+ln_shareUrlCopiedToClipboard: Посилання скопійовано до буферу обміну
+ln_404PageNotFound: Сторінку не знайдено
+ln_404GoToTheHomePage: Перейти на Головну сторінку
+ln_footerPoweredByLightnet: Працює на платформі LightNet

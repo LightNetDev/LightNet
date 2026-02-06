@@ -1,25 +1,25 @@
-ln.header.open-main-menu: Abrir menú principal
-ln.header.select-language: Seleccionar idioma
-ln.home.title: Inicio
-ln.category: Categoría
-ln.categories: Categorías
-ln.language: Idioma
-ln.languages: Idiomas
-ln.type: Tipo
-ln.previous: Anterior
-ln.next: Siguiente
-ln.external-link: Enlace externo
-ln.search.title: Buscar
-ln.search.placeholder: Buscar medios
-ln.search.all-languages: Todos los idiomas
-ln.search.all-types: Todos los tipos
-ln.search.all-categories: Todas las categorías
-ln.search.no-results: Sin resultados
-ln.details.open: Abrir
-ln.details.share: Compartir
-ln.details.part-of-collection: Parte de la colección
-ln.details.download: Descargar
-ln.share.url-copied-to-clipboard: Enlace copiado al portapapeles
-ln.404.page-not-found: Página no encontrada
-ln.404.go-to-the-home-page: Ir a la página de inicio
-ln.footer.powered-by-lightnet: Impulsado por LightNet
+ln_headerOpenMainMenu: Abrir menú principal
+ln_headerSelectLanguage: Seleccionar idioma
+ln_homeTitle: Inicio
+ln_category: Categoría
+ln_categories: Categorías
+ln_language: Idioma
+ln_languages: Idiomas
+ln_type: Tipo
+ln_previous: Anterior
+ln_next: Siguiente
+ln_externalLink: Enlace externo
+ln_searchTitle: Buscar
+ln_searchPlaceholder: Buscar medios
+ln_searchAllLanguages: Todos los idiomas
+ln_searchAllTypes: Todos los tipos
+ln_searchAllCategories: Todas las categorías
+ln_searchNoResults: Sin resultados
+ln_detailsOpen: Abrir
+ln_detailsShare: Compartir
+ln_detailsPartOfCollection: Parte de la colección
+ln_detailsDownload: Descargar
+ln_shareUrlCopiedToClipboard: Enlace copiado al portapapeles
+ln_404PageNotFound: Página no encontrada
+ln_404GoToTheHomePage: Ir a la página de inicio
+ln_footerPoweredByLightnet: Impulsado por LightNet

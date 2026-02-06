@@ -51,7 +51,7 @@ export default function SearchFilter({
           className="grow placeholder-gray-500 focus:outline-none"
           name="search"
           ref={searchInput}
-          placeholder={t("ln.search.placeholder")}
+          placeholder={t("ln_searchPlaceholder")}
           enterKeyHint="search"
           defaultValue={search}
           onInput={(e) => debouncedSetSearch(e.currentTarget.value)}
@@ -62,11 +62,11 @@ export default function SearchFilter({
       <div className="mb-8 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-6 md:mb-10">
         {languageFilterEnabled && (
           <Select
-            label={t("ln.language")}
+            label={t("ln_language")}
             initialValue={language}
             valueChange={(val) => setLanguage(val)}
             options={[
-              { id: "", labelText: t("ln.search.all-languages") },
+              { id: "", labelText: t("ln_searchAllLanguages") },
               ...languages,
             ]}
           />
@@ -74,11 +74,11 @@ export default function SearchFilter({
 
         {typesFilterEnabled && (
           <Select
-            label={t("ln.type")}
+            label={t("ln_type")}
             initialValue={type}
             valueChange={(val) => setType(val)}
             options={[
-              { id: "", labelText: t("ln.search.all-types") },
+              { id: "", labelText: t("ln_searchAllTypes") },
               ...mediaTypes,
             ]}
           />
@@ -86,11 +86,11 @@ export default function SearchFilter({
 
         {categoriesFilterEnabled && (
           <Select
-            label={t("ln.category")}
+            label={t("ln_category")}
             initialValue={category}
             valueChange={(val) => setCategory(val)}
             options={[
-              { id: "", labelText: t("ln.search.all-categories") },
+              { id: "", labelText: t("ln_searchAllCategories") },
               ...categories,
             ]}
           />

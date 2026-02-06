@@ -1,35 +1,35 @@
-site.title: Sk8 Ministries
-navigation.about-lightnet: About LightNet
-navigation.about: About
-ministry.slogan: Living faith, building community
-home.our-latest-books: Our latest Books
-home.bbq.title: Skate, BBQ & Faith
-home.bbq.text: >
+siteTitle: Sk8 Ministries
+navigationAboutLightnet: About LightNet
+navigationAbout: About
+ministrySlogan: Living faith, building community
+homeOurLatestBooks: Our latest Books
+homeBbqTitle: Skate, BBQ & Faith
+homeBbqText: >
   Join us for our next community meeting! 
   Enjoy a BBQ, skate with friends, and engage in meaningful conversations about Jesus. 
   Don’t miss this opportunity to connect, skate, and grow in faith together. 
   All skill levels welcome!
-home.bbq.sign-up-now: Sign Up Now
-category.bible-studies: Bible Studies
-category.bibles-and-bible-stories: Bibles & Bible Stories
-category.biographies-and-memoirs: Biographies & Memoirs
-category.children: Children
-category.christian-living: Christian Living
-category.comics-and-graphic-novels: Comics & Graphic Novels
-category.devotionals: Devotionals
-category.educational: Educational
-category.ethics-and-social-issues: Ethics & Social Issues
-category.family-and-relationships: Family & Relationships
-category.ministry-and-evangelism: Ministry & Evangelism
-category.novels: Novels
-category.sermons: Sermons
-category.spiritual-and-personal-growth: Spiritual & Personal Growth
-category.study-materials: Study Materials
-category.support-and-counseling: Support & Counseling
-category.teens-and-young-adults: Teens & Young Adults
-category.theology: Theology
-type.book: Book
-type.video: Video
-type.audio: Audio
-details.action.read: Read
-details.action.watch: Watch
+homeBbqSignUpNow: Sign Up Now
+categoryBibleStudies: Bible Studies
+categoryBiblesAndBibleStories: Bibles & Bible Stories
+categoryBiographiesAndMemoirs: Biographies & Memoirs
+categoryChildren: Children
+categoryChristianLiving: Christian Living
+categoryComicsAndGraphicNovels: Comics & Graphic Novels
+categoryDevotionals: Devotionals
+categoryEducational: Educational
+categoryEthicsAndSocialIssues: Ethics & Social Issues
+categoryFamilyAndRelationships: Family & Relationships
+categoryMinistryAndEvangelism: Ministry & Evangelism
+categoryNovels: Novels
+categorySermons: Sermons
+categorySpiritualAndPersonalGrowth: Spiritual & Personal Growth
+categoryStudyMaterials: Study Materials
+categorySupportAndCounseling: Support & Counseling
+categoryTeensAndYoungAdults: Teens & Young Adults
+categoryTheology: Theology
+typeBook: Book
+typeVideo: Video
+typeAudio: Audio
+detailsActionRead: Read
+detailsActionWatch: Watch

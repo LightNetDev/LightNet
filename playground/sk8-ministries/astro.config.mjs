@@ -31,7 +31,7 @@ export default defineConfig({
   },
   integrations: [
     lightnet({
-      title: translatedLabel("site.title"),
+      title: translatedLabel("siteTitle"),
       credits: true,
       logo: { src: "./src/assets/logo.png" },
       languages,
@@ -42,15 +42,15 @@ export default defineConfig({
       mainMenu: [
         {
           href: "/",
-          label: translatedLabel("ln.home.title"),
+          label: translatedLabel("ln_homeTitle"),
         },
         {
           href: "/media",
-          label: translatedLabel("ln.search.title"),
+          label: translatedLabel("ln_searchTitle"),
         },
         {
           href: "/about",
-          label: translatedLabel("navigation.about"),
+          label: translatedLabel("navigationAbout"),
         },
         {
           href: "https://www.om.org/eng/mediaworks/lightnet",

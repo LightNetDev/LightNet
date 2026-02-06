@@ -197,7 +197,7 @@ export const mediaTypeSchema = z
      * Use `{ type: "translated", value: "<translation-key>" }` to translate.
      * Use `{ type: "fixed", value: "<text>" }` to display as is.
      *
-     * @example { type: "translated", value: "media-type.book" }
+     * @example { type: "translated", value: "media-typeBook" }
      */
     label: labelSchema,
     /**
@@ -229,7 +229,7 @@ export const mediaTypeSchema = z
            *
            * The label is a translation key.
            *
-           * @example "ln.details.open"
+           * @example "ln_detailsOpen"
            */
           openActionLabel: z.string().optional(),
           /**

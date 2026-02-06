@@ -23,7 +23,7 @@ const content = createContentMetadata(item.data.content[0])
   {
     content.isExternal && (
       <Icon
-        ariaLabel={Astro.locals.i18n.t("ln.external-link")}
+        ariaLabel={Astro.locals.i18n.t("ln_externalLink")}
         className={`shrink-0 mdi--external-link`}
       />
     )
@@ -31,6 +31,6 @@ const content = createContentMetadata(item.data.content[0])
   {
     content.canBeOpened
       ? Astro.locals.i18n.t(openActionLabel)
-      : Astro.locals.i18n.t("ln.details.download")
+      : Astro.locals.i18n.t("ln_detailsDownload")
   }
 </a>

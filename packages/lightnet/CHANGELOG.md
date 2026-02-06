@@ -92,7 +92,7 @@
 - [#315](https://github.com/LightNetDev/LightNet/pull/315) [`f01fd72`](https://github.com/LightNetDev/LightNet/commit/f01fd728efe1577248db40111b9dfe5bd1a33423) Thanks [@smn-cds](https://github.com/smn-cds)! - Add optional LightNet credits footer
   - Adds `credits: boolean` to LightNet config to show a “Built with LightNet” footer; default is `false`
   - Footer includes LightNet logo/text and appears when no `CustomFooter` is provided
-  - Adds i18n key `ln.footer.powered-by-lightnet` (English + AI generated translations provided)
+  - Adds i18n key `ln_footerPoweredByLightnet` (English + AI generated translations provided)
   - Enable via `astro.config.mjs`, lightnet config: `credits: true` (PR #315)
 
 ## 3.9.1
@@ -129,7 +129,7 @@
 
   ```astro
   <MediaGallerySection
-    title={t("x.home.our-latest-books")}
+    title={t("x.homeOurLatestBooks")}
     items={latestBooks}
     layout="book"
     viewLayout="carousel"
@@ -167,8 +167,8 @@
   With this release we remove the use of ClientRouter and switch to the browser built-in [ViewTransitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API).
 
 - [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - ⚠️ Added new translations
-  - ln.previous: "Previous"
-  - ln.next: "Next"
+  - ln_previous: "Previous"
+  - ln_next: "Next"
 
 - [#299](https://github.com/LightNetDev/LightNet/pull/299) [`ecaf1f6`](https://github.com/LightNetDev/LightNet/commit/ecaf1f698231c3e4eec700ca07cb78d1dbf4378c) Thanks [@smn-cds](https://github.com/smn-cds)! - Improved CategorySection
   - added `carousel` layout
@@ -277,8 +277,8 @@
   Pro tip: Search for "theology | book" to find theology books. The [extended search syntax](https://www.fusejs.io/examples.html#extended-search) can do even more...
 
 - [#273](https://github.com/LightNetDev/LightNet/pull/273) [`5b0b24f`](https://github.com/LightNetDev/LightNet/commit/5b0b24f58a6b8df8a3bc7dc66b751981f4e0498e) Thanks [@smn-cds](https://github.com/smn-cds)! - Update Translations
-  - remove `ln.search.more-results`. Because search now uses infinite scroll there is no need for this button label anymore 🎉.
-  - change value of `ln.search.placeholder` from "Search by title, author or description..." to "Search media...". Search now also searches on categories, type, language and id of a media item.
+  - remove `ln_searchMoreResults`. Because search now uses infinite scroll there is no need for this button label anymore 🎉.
+  - change value of `ln_searchPlaceholder` from "Search by title, author or description..." to "Search media...". Search now also searches on categories, type, language and id of a media item.
 
 ## 3.4.6
 
@@ -507,18 +507,18 @@
     - added `isUILanguage` option to set other interface languages. Before this would have been implied by a defined `translations` property.
     - removed `translations` property. Translations are automatically loaded from `src/translations/*.yml` files. Imports can be removed.
     - added `fallbackLanguages` property. Each language can now define a fallback chain.
-  - **Astro.locals.i18n.t** Removed `allowFixedStrings` option. We now allow fixed strings by default. `t()` will only fail if a translation key starts with `ln.` or `x.` and cannot be resolved.
+  - **Astro.locals.i18n.t** Removed `allowFixedStrings` option. We now allow fixed strings by default. `t()` will only fail if a translation key starts with `ln_` or `x.` and cannot be resolved.
   - Added `en` as a fallback language for all translations. This means after all user configured fallbacks LightNet will try resolve the label using the english translations.
   - Changed prefix for user defined translation keys from `custom.` to `x.`.
   - Changed translation keys:
-    - `ln.header.a11y.open-main-menu` renamed to `ln.header.open-main-menu`
-    - `ln.header.a11y.select-language` renamed to `ln.header.select-language`
-    - `ln.common.a11y.external-link` renamed to `ln.external-link`
-    - `ln.common.category` renamed to `ln.category_one` (using i18next pluralization)
-    - `ln.common.categories` renamed to `ln.category_other` (using i18next pluralization)
-    - `ln.common.language` renamed to `ln.language_one` (using i18next pluralization)
-    - `ln.common.languages` renamed to `ln.language_other` (using i18next pluralization)
-    - `ln.common.type` renamed to `ln.type_one` (using i18next pluralization)
+    - `ln_headerA11yOpenMainMenu` renamed to `ln_headerOpenMainMenu`
+    - `ln_headerA11ySelectLanguage` renamed to `ln_headerSelectLanguage`
+    - `ln_commonA11yExternalLink` renamed to `ln_externalLink`
+    - `ln_commonCategory` renamed to `ln_category_one` (using i18next pluralization)
+    - `ln_commonCategories` renamed to `ln_category_other` (using i18next pluralization)
+    - `ln_commonLanguage` renamed to `ln_language_one` (using i18next pluralization)
+    - `ln_commonLanguages` renamed to `ln_language_other` (using i18next pluralization)
+    - `ln_commonType` renamed to `ln_type_one` (using i18next pluralization)
 
 ## 2.15.6
 
@@ -573,13 +573,13 @@
 
 - [#183](https://github.com/LightNetDev/lightnet/pull/183) [`9c0bb8d`](https://github.com/LightNetDev/lightnet/commit/9c0bb8d2508f8bfbb18dd224a36e7f5d75f89268) Thanks [@smn-cds](https://github.com/si-fab)! - Improve validation of label properties.
 
-  This adds more validation to `label` properties. They all support fixed strings. Currently we are not able to identify if a label value is a translation key or a fixed string. With this release, labels that start with `custom.` or `ln.` prefix will be treated as translation keys. They will fail the build if no translation is found.
+  This adds more validation to `label` properties. They all support fixed strings. Currently we are not able to identify if a label value is a translation key or a fixed string. With this release, labels that start with `custom.` or `ln_` prefix will be treated as translation keys. They will fail the build if no translation is found.
 
   Prefixing custom translation strings with `custom.` is non mandatory but recommended as it improves validation.
 
   This is changed:
   - rename translate parameter `fallbackToKey` to `allowFixedStrings`.
-  - change behavior of the translate function. If `allowFixedStrings` is set to `true`, return the translation key if no translation is found. But fail if the key starts with `custom.` or `ln.` prefix.
+  - change behavior of the translate function. If `allowFixedStrings` is set to `true`, return the translation key if no translation is found. But fail if the key starts with `custom.` or `ln_` prefix.
   - change example to reflect the new convention of prefixing custom translation keys with `custom.`.
 
 - [#183](https://github.com/LightNetDev/lightnet/pull/183) [`9c0bb8d`](https://github.com/LightNetDev/lightnet/commit/9c0bb8d2508f8bfbb18dd224a36e7f5d75f89268) Thanks [@smn-cds](https://github.com/si-fab)! - Implement `landscape` layout for Gallery component.

@@ -1,25 +1,25 @@
-ln.header.open-main-menu: Ouvrir le menu principal
-ln.header.select-language: Sélectionner la langue
-ln.home.title: Accueil
-ln.category: Catégorie
-ln.categories: Catégories
-ln.language: Langue
-ln.languages: Langues
-ln.type: Type
-ln.previous: Précédent
-ln.next: Suivant
-ln.external-link: Lien externe
-ln.search.title: Recherche
-ln.search.placeholder: Rechercher des médias
-ln.search.all-languages: Toutes les langues
-ln.search.all-types: Tous les types
-ln.search.all-categories: Toutes les catégories
-ln.search.no-results: Aucun résultat
-ln.details.open: Ouvrir
-ln.details.share: Partager
-ln.details.part-of-collection: Fait partie de la collection
-ln.details.download: Télécharger
-ln.share.url-copied-to-clipboard: Lien copié dans le presse-papiers
-ln.404.page-not-found: Page non trouvée
-ln.404.go-to-the-home-page: Aller à la page d’accueil
-ln.footer.powered-by-lightnet: Propulsé par LightNet
+ln_headerOpenMainMenu: Ouvrir le menu principal
+ln_headerSelectLanguage: Sélectionner la langue
+ln_homeTitle: Accueil
+ln_category: Catégorie
+ln_categories: Catégories
+ln_language: Langue
+ln_languages: Langues
+ln_type: Type
+ln_previous: Précédent
+ln_next: Suivant
+ln_externalLink: Lien externe
+ln_searchTitle: Recherche
+ln_searchPlaceholder: Rechercher des médias
+ln_searchAllLanguages: Toutes les langues
+ln_searchAllTypes: Tous les types
+ln_searchAllCategories: Toutes les catégories
+ln_searchNoResults: Aucun résultat
+ln_detailsOpen: Ouvrir
+ln_detailsShare: Partager
+ln_detailsPartOfCollection: Fait partie de la collection
+ln_detailsDownload: Télécharger
+ln_shareUrlCopiedToClipboard: Lien copié dans le presse-papiers
+ln_404PageNotFound: Page non trouvée
+ln_404GoToTheHomePage: Aller à la page d’accueil
+ln_footerPoweredByLightnet: Propulsé par LightNet

@@ -36,7 +36,7 @@ const t = Astro.locals.i18n.t
     !config.searchPage?.hideHeaderSearchIcon && (
       <a
         class="flex p-3 text-gray-600 hover:text-primary"
-        aria-label={t("ln.search.title")}
+        aria-label={t("ln_searchTitle")}
         data-astro-prefetch="viewport"
         href={searchPagePath(Astro.currentLocale)}
       >
@@ -49,7 +49,7 @@ const t = Astro.locals.i18n.t
 
   {
     !!items.length && (
-      <Menu icon="mdi--menu" label="ln.header.open-main-menu">
+      <Menu icon="mdi--menu" label="ln_headerOpenMainMenu">
         {items.map(({ label, path, isActive, isExternal }) => (
           <MenuItem
             href={path}

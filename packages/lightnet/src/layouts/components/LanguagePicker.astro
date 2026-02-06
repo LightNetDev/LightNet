@@ -33,7 +33,7 @@ const disabled = !hasLocale && Astro.url.pathname !== "/"
 
 {
   translations.length > 1 && (
-    <Menu disabled={disabled} icon="mdi--web" label="ln.header.select-language">
+    <Menu disabled={disabled} icon="mdi--web" label="ln_headerSelectLanguage">
       {translations.map(({ label, locale, active, href }) => (
         <MenuItem href={href} hreflang={locale} active={active}>
           {label}

@@ -109,7 +109,7 @@ export default function SearchList({
       </div>
       {!results.length && !isLoading && (
         <div className="mt-24 text-center font-bold text-gray-500">
-          {i18n.t("ln.search.no-results")}
+          {i18n.t("ln_searchNoResults")}
         </div>
       )}
     </I18nContext.Provider>

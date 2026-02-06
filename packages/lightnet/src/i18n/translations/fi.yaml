@@ -1,25 +1,25 @@
-ln.header.open-main-menu: Avaa päävalikko
-ln.header.select-language: Valitse kieli
-ln.home.title: Etusivu
-ln.category: Kategoria
-ln.categories: Kategoriat
-ln.language: Kieli
-ln.languages: Kielet
-ln.type: Mediatyyppi
-ln.previous: Edellinen
-ln.next: Seuraava
-ln.external-link: Ulkoinen linkki
-ln.search.title: Haku
-ln.search.placeholder: Hae mediaa
-ln.search.all-languages: Kaikki kielet
-ln.search.all-types: Kaikki mediatyypit
-ln.search.all-categories: Kaikki kategoriat
-ln.search.no-results: Ei tuloksia
-ln.details.open: Avaa
-ln.details.share: Jaa
-ln.details.part-of-collection: Osa kokoelmaa
-ln.details.download: Lataa
-ln.share.url-copied-to-clipboard: Linkki kopioitu leikepöydälle
-ln.404.page-not-found: Sivua ei löytynyt
-ln.404.go-to-the-home-page: Palaa etusivulle
-ln.footer.powered-by-lightnet: Toimii LightNet-teknologialla
+ln_headerOpenMainMenu: Avaa päävalikko
+ln_headerSelectLanguage: Valitse kieli
+ln_homeTitle: Etusivu
+ln_category: Kategoria
+ln_categories: Kategoriat
+ln_language: Kieli
+ln_languages: Kielet
+ln_type: Mediatyyppi
+ln_previous: Edellinen
+ln_next: Seuraava
+ln_externalLink: Ulkoinen linkki
+ln_searchTitle: Haku
+ln_searchPlaceholder: Hae mediaa
+ln_searchAllLanguages: Kaikki kielet
+ln_searchAllTypes: Kaikki mediatyypit
+ln_searchAllCategories: Kaikki kategoriat
+ln_searchNoResults: Ei tuloksia
+ln_detailsOpen: Avaa
+ln_detailsShare: Jaa
+ln_detailsPartOfCollection: Osa kokoelmaa
+ln_detailsDownload: Lataa
+ln_shareUrlCopiedToClipboard: Linkki kopioitu leikepöydälle
+ln_404PageNotFound: Sivua ei löytynyt
+ln_404GoToTheHomePage: Palaa etusivulle
+ln_footerPoweredByLightnet: Toimii LightNet-teknologialla

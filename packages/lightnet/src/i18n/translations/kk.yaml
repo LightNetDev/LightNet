@@ -1,23 +1,23 @@
-ln.header.open-main-menu: Бастапқы мәзірді ашу
-ln.header.select-language: Тіл таңдау
-ln.home.title: Басты бет
-ln.category: Санат
-ln.categories: Барлық санаттар
-ln.language: Тіл
-ln.languages: Тілдер
-ln.type: Түрі
-ln.external-link: Сыртқы сілтеме
-ln.search.title: Іздеу
-ln.search.placeholder: Медиа іздеу
-ln.search.all-languages: Барлық тілдер
-ln.search.all-types: Барлық түрлер
-ln.search.all-categories: Барлық санаттар
-ln.search.no-results: Нәтижие жоқ
-ln.details.open: Ашу
-ln.details.share: Бөлісу
-ln.details.part-of-collection: Жинақ бөлімі
-ln.details.download: Жүктеу
-ln.share.url-copied-to-clipboard: Жүктеме көшірілді
-ln.404.page-not-found: Ештеңе табылмады
-ln.404.go-to-the-home-page: Бастапқы бетке өту
-ln.footer.powered-by-lightnet: LightNet платформасында жұмыс істейді
+ln_headerOpenMainMenu: Бастапқы мәзірді ашу
+ln_headerSelectLanguage: Тіл таңдау
+ln_homeTitle: Басты бет
+ln_category: Санат
+ln_categories: Барлық санаттар
+ln_language: Тіл
+ln_languages: Тілдер
+ln_type: Түрі
+ln_externalLink: Сыртқы сілтеме
+ln_searchTitle: Іздеу
+ln_searchPlaceholder: Медиа іздеу
+ln_searchAllLanguages: Барлық тілдер
+ln_searchAllTypes: Барлық түрлер
+ln_searchAllCategories: Барлық санаттар
+ln_searchNoResults: Нәтижие жоқ
+ln_detailsOpen: Ашу
+ln_detailsShare: Бөлісу
+ln_detailsPartOfCollection: Жинақ бөлімі
+ln_detailsDownload: Жүктеу
+ln_shareUrlCopiedToClipboard: Жүктеме көшірілді
+ln_404PageNotFound: Ештеңе табылмады
+ln_404GoToTheHomePage: Бастапқы бетке өту
+ln_footerPoweredByLightnet: LightNet платформасында жұмыс істейді

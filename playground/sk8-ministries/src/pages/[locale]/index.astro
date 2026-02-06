@@ -38,8 +38,8 @@ const { t, currentLocale } = Astro.locals.i18n
 <Page>
   <HeroSection
     image={heroImage}
-    title={t("site.title")}
-    subtitle={t("ministry.slogan")}
+    title={t("siteTitle")}
+    subtitle={t("ministrySlogan")}
     titleSize="lg"
     subtitleSize="lg"
     showSearch={true}
@@ -48,7 +48,7 @@ const { t, currentLocale } = Astro.locals.i18n
   <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
 
   <MediaGallerySection
-    title={t("home.our-latest-books")}
+    title={t("homeOurLatestBooks")}
     titleHref={searchPagePath(currentLocale, { type: "book" })}
     items={latestBooks}
     layout="book"
@@ -57,11 +57,11 @@ const { t, currentLocale } = Astro.locals.i18n
 
   <HighlightSection
     image={eventImage}
-    title={t("home.bbq.title")}
-    text={t("home.bbq.text")}
+    title={t("homeBbqTitle")}
+    text={t("homeBbqText")}
     link={{
       href: "mailto:some-email-address-from-the-ministry",
-      text: t("home.bbq.sign-up-now"),
+      text: t("homeBbqSignUpNow"),
     }}
   />
 

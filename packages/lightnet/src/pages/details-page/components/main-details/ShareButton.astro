@@ -12,10 +12,10 @@ interface Props {
   class:list={[Astro.props.className]}
   id="share-btn"
   ><Icon className="mdi--share" ariaLabel="" />
-  {Astro.locals.i18n.t("ln.details.share")}</button
+  {Astro.locals.i18n.t("ln_detailsShare")}</button
 >
 <Toast id="share-success" variant="success">
-  {Astro.locals.i18n.t("ln.share.url-copied-to-clipboard")}
+  {Astro.locals.i18n.t("ln_shareUrlCopiedToClipboard")}
 </Toast>
 <script>
   import { showToastById } from "../../../../components/showToast"

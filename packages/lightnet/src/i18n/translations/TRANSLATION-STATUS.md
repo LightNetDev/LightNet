@@ -38,8 +38,8 @@ All keys have been translated. ✅
 
 Missing keys:
 
-- ln.previous
-- ln.next
+- ln_previous
+- ln_next
 
 ## **PT** ([pt.yml](./pt.yml))
 

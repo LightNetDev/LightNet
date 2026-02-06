@@ -18,7 +18,7 @@ const { t } = Astro.locals.i18n
 ---
 
 <div>
-  <Label>{translations.length ? t("ln.languages") : t("ln.language")}</Label>
+  <Label>{translations.length ? t("ln_languages") : t("ln_language")}</Label>
   <ul class="flex flex-wrap gap-2">
     <li class="py-1 pe-2 text-gray-800">
       {resolveTranslatedLanguage(item.data.language, t).labelText}

@@ -36,9 +36,7 @@ const mediaItemsTotal = (await getCollection("media")).length
 
 const showLanguage = contentLanguages.length > 1
 
-const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
-  "ln.search.no-results",
-])
+const i18nConfig = prepareI18nConfig(Astro.locals.i18n, ["ln_searchNoResults"])
 ---
 
 <SearchListReact

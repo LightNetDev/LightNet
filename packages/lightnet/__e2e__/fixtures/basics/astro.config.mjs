@@ -27,11 +27,11 @@ export default defineConfig({
       mainMenu: [
         {
           href: "/",
-          label: translatedLabel("ln.home.title"),
+          label: translatedLabel("ln_homeTitle"),
         },
         {
           href: "/media",
-          label: translatedLabel("ln.search.title"),
+          label: translatedLabel("ln_searchTitle"),
         },
       ],
     }),

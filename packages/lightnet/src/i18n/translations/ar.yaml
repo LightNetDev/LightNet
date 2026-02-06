@@ -1,25 +1,25 @@
-ln.header.open-main-menu: افتح القائمة الرئيسية
-ln.header.select-language: اختر اللغة
-ln.home.title: الصفحة الرئيسية
-ln.category: الفئة
-ln.categories: الفئات
-ln.language: اللغة
-ln.languages: اللغات
-ln.type: النوع
-ln.previous: السابق
-ln.next: التالي
-ln.external-link: رابط خارجي
-ln.search.title: بحث
-ln.search.placeholder: ابحث في الوسائط
-ln.search.all-languages: جميع اللغات
-ln.search.all-types: جميع الأنواع
-ln.search.all-categories: جميع الفئات
-ln.search.no-results: لا توجد نتائج
-ln.details.open: فتح
-ln.details.share: مشاركة
-ln.details.part-of-collection: جزء من مجموعة
-ln.details.download: تنزيل
-ln.share.url-copied-to-clipboard: تم نسخ الرابط إلى الحافظة
-ln.404.page-not-found: الصفحة غير موجودة
-ln.404.go-to-the-home-page: العودة إلى الصفحة الرئيسية
-ln.footer.powered-by-lightnet: مدعوم من LightNet
+ln_headerOpenMainMenu: افتح القائمة الرئيسية
+ln_headerSelectLanguage: اختر اللغة
+ln_homeTitle: الصفحة الرئيسية
+ln_category: الفئة
+ln_categories: الفئات
+ln_language: اللغة
+ln_languages: اللغات
+ln_type: النوع
+ln_previous: السابق
+ln_next: التالي
+ln_externalLink: رابط خارجي
+ln_searchTitle: بحث
+ln_searchPlaceholder: ابحث في الوسائط
+ln_searchAllLanguages: جميع اللغات
+ln_searchAllTypes: جميع الأنواع
+ln_searchAllCategories: جميع الفئات
+ln_searchNoResults: لا توجد نتائج
+ln_detailsOpen: فتح
+ln_detailsShare: مشاركة
+ln_detailsPartOfCollection: جزء من مجموعة
+ln_detailsDownload: تنزيل
+ln_shareUrlCopiedToClipboard: تم نسخ الرابط إلى الحافظة
+ln_404PageNotFound: الصفحة غير موجودة
+ln_404GoToTheHomePage: العودة إلى الصفحة الرئيسية
+ln_footerPoweredByLightnet: مدعوم من LightNet

@@ -13,7 +13,7 @@ type Props = Omit<SectionProps, "maxWidth"> & {
 
 const { title, layout = "carousel", ...props } = Astro.props
 const { t, currentLocale } = Astro.locals.i18n
-const resolvedTitle = title ?? t("ln.categories")
+const resolvedTitle = title ?? t("ln_categories")
 
 const categories = await getUsedCategories(currentLocale, t)
 type Category = (typeof categories)[number]

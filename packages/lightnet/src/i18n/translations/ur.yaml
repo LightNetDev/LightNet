@@ -1,25 +1,25 @@
-ln.header.open-main-menu: مرکزی مینو کھولیں
-ln.header.select-language: زبان منتخب کریں
-ln.home.title: ہوم
-ln.category: زمرہ
-ln.categories: زمروں
-ln.language: زبان
-ln.languages: زبانیں
-ln.type: قسم
-ln.previous: پچھلا
-ln.next: اگلا
-ln.external-link: بیرونی لنک
-ln.search.title: تلاش
-ln.search.placeholder: میڈیا تلاش کریں
-ln.search.all-languages: تمام زبانیں
-ln.search.all-types: تمام اقسام
-ln.search.all-categories: تمام زمرے
-ln.search.no-results: کوئی نتیجہ نہیں ملا
-ln.details.open: کھولیں
-ln.details.share: شیئر کریں
-ln.details.part-of-collection: مجموعے کا حصہ
-ln.details.download: ڈاؤن لوڈ کریں
-ln.share.url-copied-to-clipboard: لنک کاپی ہو گیا
-ln.404.page-not-found: صفحہ نہیں ملا
-ln.404.go-to-the-home-page: ہوم پیج پر جائیں
-ln.footer.powered-by-lightnet: لائٹ نیٹ کے ذریعے چلایا گیا
+ln_headerOpenMainMenu: مرکزی مینو کھولیں
+ln_headerSelectLanguage: زبان منتخب کریں
+ln_homeTitle: ہوم
+ln_category: زمرہ
+ln_categories: زمروں
+ln_language: زبان
+ln_languages: زبانیں
+ln_type: قسم
+ln_previous: پچھلا
+ln_next: اگلا
+ln_externalLink: بیرونی لنک
+ln_searchTitle: تلاش
+ln_searchPlaceholder: میڈیا تلاش کریں
+ln_searchAllLanguages: تمام زبانیں
+ln_searchAllTypes: تمام اقسام
+ln_searchAllCategories: تمام زمرے
+ln_searchNoResults: کوئی نتیجہ نہیں ملا
+ln_detailsOpen: کھولیں
+ln_detailsShare: شیئر کریں
+ln_detailsPartOfCollection: مجموعے کا حصہ
+ln_detailsDownload: ڈاؤن لوڈ کریں
+ln_shareUrlCopiedToClipboard: لنک کاپی ہو گیا
+ln_404PageNotFound: صفحہ نہیں ملا
+ln_404GoToTheHomePage: ہوم پیج پر جائیں
+ln_footerPoweredByLightnet: لائٹ نیٹ کے ذریعے چلایا گیا

@@ -1,6 +1,6 @@
 label:
   type: translated
-  value: type.video
+  value: typeVideo
 coverImageStyle: video
 detailsPage:
   layout: video
