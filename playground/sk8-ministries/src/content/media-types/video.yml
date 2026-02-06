@@ -1,0 +1,5 @@
+label: x.type.video
+coverImageStyle: video
+detailsPage:
+  layout: video
+icon: mdi--video-outline

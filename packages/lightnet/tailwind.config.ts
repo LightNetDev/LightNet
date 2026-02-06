@@ -15,7 +15,7 @@ export function lightnetStyles({
     content: [
       "./node_modules/lightnet/src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}",
       "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}",
-      "./src/content/media-types/*.json",
+      "./src/content/media-types/*.{yml,yaml}",
     ],
     theme: {
       extend: {

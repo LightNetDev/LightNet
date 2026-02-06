@@ -1,0 +1,4 @@
+label: type.video
+detailsPage:
+  layout: video
+icon: mdi--video-outline

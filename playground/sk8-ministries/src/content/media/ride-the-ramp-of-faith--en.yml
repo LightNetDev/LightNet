@@ -1,0 +1,26 @@
+authors:
+  - Sk8 Ministries
+categories: []
+collections:
+  - collection: how-to-articles
+    index: 1
+commonId: ride-the-ramp-of-faith
+content:
+  - label: eBook
+    url: "/files/example.epub"
+  - label: Table of Contents
+    url: "/files/example.pdf"
+dateCreated: "2024-04-21"
+description: |-
+  *How to: Ride the Ramp of Faith* is your essential companion for navigating the exciting world of skateboarding as a committed Christian. This book provides:
+
+  * **Step-by-step guidance** on merging faith with skate culture
+  * **Personal testimonies** from skaters who live out their faith
+  * **Scriptural insights** relevant to the skateboarding lifestyle
+  * **Strategies for overcoming challenges** and staying true to your values
+
+  Whether you’re a novice or a seasoned skater, this guide will help you ride the ramp of faith with confidence and grace.
+image: "./images/ride-the-ramp-of-faith--en.webp"
+language: en
+title: Ride the Ramp of Faith
+type: book

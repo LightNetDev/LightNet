@@ -113,6 +113,9 @@ ln.details.open: Open
 # Used on: https://sk8-ministries.pages.dev/en/media/ollie-with-integrity--en/
 ln.details.share: Share
 
+# Edit media item
+ln.details.edit: Edit
+
 # Label for indicating that the media item belongs to a collection.
 #
 # English: Part of collection

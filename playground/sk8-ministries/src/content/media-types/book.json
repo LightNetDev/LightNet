@@ -1,9 +1,0 @@
-{
-  "label": "x.type.book",
-  "detailsPage": {
-    "layout": "default",
-    "coverStyle": "book",
-    "openActionLabel": "x.details.action.read"
-  },
-  "icon": "mdi--book-open-blank-variant"
-}

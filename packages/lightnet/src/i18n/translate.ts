@@ -33,7 +33,7 @@ export const translationKeys = [
   ),
 ]
 
-const i18n = i18next.createInstance({showSupportNotice: false})
+const i18n = i18next.createInstance({ showSupportNotice: false })
 await i18n.init({
   lng: defaultLocale,
   // don't use name spacing

@@ -21,7 +21,7 @@ export const categorySchema = z.object({
 
   /* Relative path to the thumbnail image of this category.
    *
-   * The image is expected to be inside the `images` folder next to category definition json.
+   * The image is expected to be inside the `images` folder next to category definition yml.
    * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
    * We suggest to give it a size of at least 1000px for it's longer side.
    *
@@ -65,7 +65,7 @@ export const mediaItemSchema = z.object({
    */
   title: z.string(),
   /**
-   * References one media-type by its filename without .json suffix.
+   * References one media-type by its filename without .yml suffix.
    *
    * @example "book"
    */
@@ -125,7 +125,7 @@ export const mediaItemSchema = z.object({
   /**
    * Relative path to the image of this media item. Eg. a book cover or video thumbnail.
    *
-   * The image is expected to be inside the `images` folder next to the media item definition json.
+   * The image is expected to be inside the `images` folder next to the media item definition yml.
    * This image will be used for previews and on the media item detail page.
    * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
    * We suggest to give it a size of at least 1000px for it's longer side.
@@ -291,33 +291,33 @@ export const mediaTypeSchema = z
 
 export const LIGHTNET_COLLECTIONS = {
   categories: defineCollection({
-    loader: glob({ pattern: "*.json", base: "./src/content/categories" }),
+    loader: glob({ pattern: "*.{yml,yaml}", base: "./src/content/categories" }),
     schema: createCategorySchema,
   }),
   "media-collections": defineCollection({
     loader: glob({
-      pattern: "*.json",
+      pattern: "*.{yml,yaml}",
       base: "./src/content/media-collections",
     }),
     schema: mediaCollectionSchema,
   }),
   media: defineCollection({
     loader: glob({
-      pattern: "*.json",
+      pattern: "*.{yml,yaml}",
       base: "./src/content/media",
     }),
     schema: createMediaItemSchema,
   }),
   "media-types": defineCollection({
     loader: glob({
-      pattern: "*.json",
+      pattern: "*.{yml,yaml}",
       base: "./src/content/media-types",
     }),
     schema: mediaTypeSchema,
   }),
   "internal-media-image-path": defineCollection({
     loader: glob({
-      pattern: "*.json",
+      pattern: "*.{yml,yaml}",
       base: "./src/content/media",
     }),
     schema: z.object({ image: z.string() }),

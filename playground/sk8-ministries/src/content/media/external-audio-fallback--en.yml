@@ -1,0 +1,16 @@
+authors:
+  - Sk8 Ministries
+categories:
+  - support-and-counseling
+collections: []
+commonId: external-audio-fallback
+content:
+  - url: https://www.desiringgod.org/messages/contrite-courage
+dateCreated: "2025-03-05"
+description:
+  Test item to confirm unsupported audio URLs render the external fallback
+  player.
+image: "./images/skate-sounds--en.webp"
+language: en
+title: External Audio Fallback
+type: audio

@@ -20,7 +20,7 @@ const contentCategories = Object.fromEntries(
           "Missing Category",
           `A media item references a non-existent category: "${c.id}".\n` +
             `To fix this, create a category file at:\n` +
-            `src/content/categories/${c.id}.json`,
+            `src/content/categories/${c.id}.yml`,
         )
       }
       return [c.id, category]
@@ -61,7 +61,7 @@ export async function getCategory(id: string) {
   if (!category) {
     throw new AstroError(
       `Missing category "${id}"`,
-      `To fix the issue, add a category at "src/content/categories/${id}.json".`,
+      `To fix the issue, add a category at "src/content/categories/${id}.yml".`,
     )
   }
   return {
@@ -83,6 +83,6 @@ function parseCategory(item: unknown) {
     categoryEntrySchema,
     item,
     (id) => `Invalid category: ${id}`,
-    (id) => `Fix these issues inside "src/content/categories/${id}.json":`,
+    (id) => `Fix these issues inside "src/content/categories/${id}.yml":`,
   )
 }

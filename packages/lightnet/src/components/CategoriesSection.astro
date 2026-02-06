@@ -22,7 +22,7 @@ function getImage({ image, id }: Category) {
   if (!image) {
     throw new AstroError(
       `Expected an image for category "${id}".`,
-      `To resolve this issue, provide a valid image path in /src/content/categories/${id}.json.`,
+      `To resolve this issue, provide a valid image path in /src/content/categories/${id}.yml.`,
     )
   }
   return image

@@ -1,0 +1,18 @@
+authors:
+  - Skiddy Skates
+categories:
+  - bible-studies
+  - theology
+collections:
+  - collection: learn-skateboarding
+commonId: how-to-kickflip
+content:
+  - url: https://www.youtube.com/watch?v=tnpLkUQZODc
+dateCreated: "2024-04-21"
+description:
+  هذا الدرس يعلّمك إتقان حركة الكيك فليب، ويغطي الوقفة، الضربة، الفليك،
+  التوقيت، والهبوط. مثالي لجميع المستويات!
+image: "./images/how-to-kickflip--en.webp"
+language: ar
+title: كيفية أداء الكيك فليب
+type: video

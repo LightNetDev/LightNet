@@ -23,7 +23,7 @@ const prepareItem = async (item: unknown) => {
     mediaItemEntrySchema,
     item,
     (id) => `Invalid media item: ${id}`,
-    (id) => `Fix these issues inside "src/content/media/${id}.json":`,
+    (id) => `Fix these issues inside "src/content/media/${id}.yml":`,
   )
 }
 
@@ -46,7 +46,7 @@ export const getRawMediaItems = async () => {
 }
 
 /**
- * Returns the media item like it is stored in the content collection json.
+ * Returns the media item like it is stored in the content collection yml.
  * We need to revert Astro's modifications to references and images.
  *
  * @param mediaItem media item parsed by Astro

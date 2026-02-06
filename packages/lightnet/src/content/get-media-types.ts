@@ -8,7 +8,7 @@ export const getMediaType = async (id: string) => {
     mediaTypeEntrySchema,
     await getEntry("media-types", id),
     (id) => `Invalid media type: "${id}"`,
-    (id) => `Fix these issues inside "src/content/media-types/${id}.json":`,
+    (id) => `Fix these issues inside "src/content/media-types/${id}.yml":`,
   )
 }
 
@@ -19,7 +19,7 @@ export const getMediaTypes = async () => {
       mediaTypeEntrySchema,
       type,
       (id) => `Invalid media type: "${id}"`,
-      (id) => `Fix these issues inside "src/content/media-types/${id}.json":`,
+      (id) => `Fix these issues inside "src/content/media-types/${id}.yml":`,
     ),
   )
 }
