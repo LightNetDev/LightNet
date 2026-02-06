@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
-import { fixedLabel, translatedLabel } from "lightnet/i18n"
+import { fixedLabel, translatedLabel } from "lightnet/utils"
 
 // https://astro.build/config
 export default defineConfig({
