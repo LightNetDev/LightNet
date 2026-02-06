@@ -64,7 +64,7 @@ importers:
     dependencies:
       lightnet:
         specifier: ^3.0.0
-        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(postcss@8.5.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
+        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
       yaml:
         specifier: ^2.8.2
         version: 2.8.2
@@ -76,7 +76,7 @@ importers:
         version: 5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
       lightnet:
         specifier: ^3.0.0
-        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(postcss@8.5.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
+        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
       sharp:
         specifier: ^0.34.0
         version: 0.34.5
@@ -96,18 +96,12 @@ importers:
       '@astrojs/tailwind':
         specifier: ^6.0.2
         version: 6.0.2(astro@5.16.6(@types/node@22.19.3)(jiti@1.21.7)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@3.4.19(yaml@2.8.2))
-      '@hookform/resolvers':
-        specifier: ^5.2.2
-        version: 5.2.2(react-hook-form@7.70.0(react@19.2.3))
       '@iconify-json/mdi':
         specifier: ^1.2.3
         version: 1.2.3
       '@iconify/tailwind':
         specifier: ^1.2.0
         version: 1.2.0
-      '@mdxeditor/editor':
-        specifier: ^3.52.3
-        version: 3.52.3(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(yjs@13.6.27)
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@3.4.19(yaml@2.8.2))
@@ -141,9 +135,6 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.3(react@19.2.3)
-      react-hook-form:
-        specifier: ^7.70.0
-        version: 7.70.0(react@19.2.3)
       tailwindcss:
         specifier: '>=3.4.0 <4.0.0'
         version: 3.4.19(yaml@2.8.2)
@@ -183,7 +174,7 @@ importers:
         version: 5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
       lightnet:
         specifier: ^3.12.0
-        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(postcss@8.5.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
+        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
       react:
         specifier: ^19.2.3
         version: 19.2.3
@@ -213,7 +204,7 @@ importers:
         version: 5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
       lightnet:
         specifier: ^3.12.0
-        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(postcss@8.5.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
+        version: 3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27)
       react:
         specifier: ^19.2.3
         version: 19.2.3
@@ -9108,7 +9099,7 @@ snapshots:
     dependencies:
       isomorphic.js: 0.2.5
 
-  lightnet@3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(postcss@8.5.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27):
+  lightnet@3.12.0(@codemirror/language@6.12.1)(@lezer/highlight@1.2.3)(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(jiti@2.4.2)(lightningcss@1.29.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.19(yaml@2.8.2))(terser@5.39.0)(typescript@5.9.3)(yjs@13.6.27):
     dependencies:
       '@astrojs/react': 4.4.2(@types/node@25.0.3)(@types/react-dom@18.3.0)(@types/react@19.2.7)(jiti@2.4.2)(lightningcss@1.29.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(terser@5.39.0)(yaml@2.8.2)
       '@astrojs/tailwind': 6.0.2(astro@5.16.6(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.55.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@3.4.19(yaml@2.8.2))
