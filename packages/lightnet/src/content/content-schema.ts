@@ -14,10 +14,10 @@ export const categorySchema = z.object({
    * Name of the category.
    *
    * This can either be a translated label or a fixed string.
-   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
-   * Use `{ type: "fixed", value: "<text>" }` to display as is.
+   * Use `{ type: "translated", key: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", text: "<text>" }` to display as is.
    *
-   * @example { type: "translated", value: "category.biography" }
+   * @example { type: "translated", key: "categoryBiography" }
    */
   label: labelSchema,
 
@@ -40,8 +40,8 @@ export const mediaCollectionSchema = z.object({
    * Name of the collection.
    *
    * This can either be a translated label or a fixed string.
-   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
-   * Use `{ type: "fixed", value: "<text>" }` to display as is.
+   * Use `{ type: "translated", key: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", text: "<text>" }` to display as is.
    */
   label: labelSchema,
 })
@@ -158,8 +158,8 @@ export const mediaItemSchema = z.object({
         /**
          * The name of the content. If this is not set. The file name
          * from URL will be used. This can either be a translated label or a fixed string.
-         * Use `{ type: "translated", value: "<translation-key>" }` to translate.
-         * Use `{ type: "fixed", value: "<text>" }` to display as is.
+         * Use `{ type: "translated", key: "<translation-key>" }` to translate.
+         * Use `{ type: "fixed", text: "<text>" }` to display as is.
          */
         label: labelSchema.optional(),
       }),
@@ -194,10 +194,10 @@ export const mediaTypeSchema = z
      * Name of this media type that will be shown on the pages.
      *
      * This can either be a translated label or a fixed string.
-     * Use `{ type: "translated", value: "<translation-key>" }` to translate.
-     * Use `{ type: "fixed", value: "<text>" }` to display as is.
+     * Use `{ type: "translated", key: "<translation-key>" }` to translate.
+     * Use `{ type: "fixed", text: "<text>" }` to display as is.
      *
-     * @example { type: "translated", value: "media-typeBook" }
+     * @example { type: "translated", key: "mediaTypeBook" }
      */
     label: labelSchema,
     /**

@@ -2,7 +2,7 @@
 "lightnet": major
 ---
 
-Make label fields explicit with `{ type, value }` objects and remove the `x.` translation key prefix.
+Make label fields explicit with `{ type, key/text }` objects and remove the `x.` translation key prefix.
 
 Affected fields:
 

@@ -1,4 +1,4 @@
 label:
   type: translated
-  value: categoryMinistryAndEvangelism
+  key: categoryMinistryAndEvangelism
 image: "../../assets/sample-images/1.webp"

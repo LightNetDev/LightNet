@@ -1,4 +1,4 @@
 label:
   type: translated
-  value: categoryBiblesAndBibleStories
+  key: categoryBiblesAndBibleStories
 image: "../../assets/sample-images/2.webp"

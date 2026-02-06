@@ -48,13 +48,13 @@ AI coding agents operating on a **consumer repo** (e.g., a site like `sk8-minist
      ```yaml
      label:
        type: translated
-       value: someKey
+       key: someKey
      ```
    - For fixed strings:
      ```yaml
      label:
        type: fixed
-       value: "Some Text"
+       text: "Some Text"
      ```
 
 5. **Migrate content file formats**
@@ -95,7 +95,7 @@ ln.search.title  ->  ln_searchTitle
 ```yaml
 label:
   type: translated
-  value: categoryBibleStudies
+  key: categoryBibleStudies
 ```
 
 ## Verification

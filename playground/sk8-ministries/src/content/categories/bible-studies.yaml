@@ -1,4 +1,4 @@
 label:
   type: translated
-  value: categoryBibleStudies
+  key: categoryBibleStudies
 image: "../../assets/sample-images/1.webp"

@@ -58,9 +58,9 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
   return (key, options) => {
     if (isLabelValue(key)) {
       if (key.type === "fixed") {
-        return key.value
+        return key.text
       }
-      return translateKey(key.value, t, fallbackLng, resolvedLocale, options)
+      return translateKey(key.key, t, fallbackLng, resolvedLocale, options)
     }
 
     return translateKey(key, t, fallbackLng, resolvedLocale, options)

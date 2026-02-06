@@ -8,7 +8,7 @@ test("Should create complete content metadata", () => {
     canBeOpened: true,
     type: "text",
     target: "_blank",
-    label: { type: "fixed", value: "some" },
+    label: { type: "fixed", text: "some" },
     isExternal: true,
     extension: "pdf",
   })
@@ -19,7 +19,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: true,
       target: "_blank",
-      label: { type: "fixed", value: "youtube.com" },
+      label: { type: "fixed", text: "youtube.com" },
       isExternal: true,
       extension: "",
       type: "link",
@@ -30,7 +30,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: true,
       target: "_blank",
-      label: { type: "fixed", value: "wikipedia.org" },
+      label: { type: "fixed", text: "wikipedia.org" },
       isExternal: true,
       extension: "",
       type: "link",
@@ -42,7 +42,7 @@ test("Should create complete content metadata", () => {
       canBeOpened: true,
       type: "text",
       target: "_blank",
-      label: { type: "fixed", value: "some" },
+      label: { type: "fixed", text: "some" },
       isExternal: true,
       extension: "pdf",
     },
@@ -53,7 +53,7 @@ test("Should create complete content metadata", () => {
       type: "link",
       canBeOpened: false,
       target: "_blank",
-      label: { type: "fixed", value: "some" },
+      label: { type: "fixed", text: "some" },
       isExternal: true,
       extension: "unknown",
     },
@@ -64,7 +64,7 @@ test("Should create complete content metadata", () => {
       canBeOpened: true,
       type: "text",
       target: "_self",
-      label: { type: "fixed", value: "my" },
+      label: { type: "fixed", text: "my" },
       isExternal: false,
       extension: "pdf",
     },
@@ -74,7 +74,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: true,
       target: "_self",
-      label: { type: "fixed", value: "my-id" },
+      label: { type: "fixed", text: "my-id" },
       isExternal: false,
       extension: "",
       type: "link",
@@ -85,7 +85,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: false,
       target: "_self",
-      label: { type: "fixed", value: "my" },
+      label: { type: "fixed", text: "my" },
       isExternal: false,
       type: "link",
       extension: "unknown",
@@ -96,7 +96,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: false,
       target: "_self",
-      label: { type: "fixed", value: "some" },
+      label: { type: "fixed", text: "some" },
       isExternal: false,
       extension: "zip",
       type: "package",
@@ -104,9 +104,9 @@ test("Should create complete content metadata", () => {
   },
   {
     url: "/some.zip",
-    label: { type: "fixed", value: "foo" },
+    label: { type: "fixed", text: "foo" },
     expected: {
-      label: { type: "fixed", value: "foo" },
+      label: { type: "fixed", text: "foo" },
       isExternal: false,
       extension: "zip",
       type: "package",
@@ -114,9 +114,9 @@ test("Should create complete content metadata", () => {
   },
   {
     url: "/some.zip",
-    label: { type: "fixed", value: "" },
+    label: { type: "fixed", text: "" },
     expected: {
-      label: { type: "fixed", value: "" },
+      label: { type: "fixed", text: "" },
       isExternal: false,
       extension: "zip",
       type: "package",
@@ -132,7 +132,7 @@ test("Should override name with input", () => {
   expect(
     createContentMetadata({
       url: "/path/to/a.file",
-      label: { type: "fixed", value: "My file" },
+      label: { type: "fixed", text: "My file" },
     }),
-  ).toMatchObject({ label: { type: "fixed", value: "My file" } })
+  ).toMatchObject({ label: { type: "fixed", text: "My file" } })
 })

@@ -14,8 +14,8 @@ const linkSchema = z.object({
   href: z.string(),
   /**
    * Label to be used for the link.
-   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
-   * Use `{ type: "fixed", value: "<text>" }` to display as is.
+   * Use `{ type: "translated", key: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", text: "<text>" }` to display as is.
    */
   label: labelSchema,
   /**
@@ -45,8 +45,8 @@ const languageSchema = z
     /**
      * The name of the language that will be shown on the Website.
      *
-     * Use `{ type: "translated", value: "<translation-key>" }` to translate.
-     * Use `{ type: "fixed", value: "<text>" }` to display as is.
+     * Use `{ type: "translated", key: "<translation-key>" }` to translate.
+     * Use `{ type: "fixed", text: "<text>" }` to display as is.
      */
     label: labelSchema,
     /**
@@ -127,8 +127,8 @@ export const configSchema = z.object({
   /**
    * Title of the web site.
    *
-   * Use `{ type: "translated", value: "<translation-key>" }` to translate.
-   * Use `{ type: "fixed", value: "<text>" }` to display as is.
+   * Use `{ type: "translated", key: "<translation-key>" }` to translate.
+   * Use `{ type: "fixed", text: "<text>" }` to display as is.
    */
   title: labelSchema,
   /**

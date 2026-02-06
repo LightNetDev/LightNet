@@ -1,6 +1,6 @@
 label:
   type: translated
-  value: typeBook
+  key: typeBook
 detailsPage:
   layout: default
   coverStyle: book

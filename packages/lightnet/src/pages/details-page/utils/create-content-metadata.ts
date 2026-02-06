@@ -64,7 +64,7 @@ export function createContentMetadata({
   const fileName = hasExtension
     ? lastPathSegment.slice(0, -(extension.length + 1))
     : undefined
-  const label = customLabel ?? { type: "fixed", value: fileName || linkName }
+  const label = customLabel ?? { type: "fixed", text: fileName || linkName }
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
   const canBeOpened =
     !hasExtension || !!KNOWN_EXTENSIONS[extension]?.canBeOpened

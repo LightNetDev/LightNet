@@ -4,5 +4,5 @@
 
 Export `fixedLabel` and `translatedLabel` from `lightnet/utils`.
 
-`fixedLabel(value)` creates a `{ type: "fixed", value }` label that bypasses translation.
-`translatedLabel(key)` creates a `{ type: "translated", value: key }` label that is resolved via i18n.
+`fixedLabel(text)` creates a `{ type: "fixed", text }` label that bypasses translation.
+`translatedLabel(key)` creates a `{ type: "translated", key }` label that is resolved via i18n.

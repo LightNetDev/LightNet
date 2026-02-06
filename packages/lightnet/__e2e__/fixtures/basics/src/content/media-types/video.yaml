@@ -1,6 +1,6 @@
 label:
   type: translated
-  value: typeVideo
+  key: typeVideo
 detailsPage:
   layout: video
 icon: mdi--video-outline

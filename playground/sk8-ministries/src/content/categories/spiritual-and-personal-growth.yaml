@@ -1,4 +1,4 @@
 label:
   type: translated
-  value: categorySpiritualAndPersonalGrowth
+  key: categorySpiritualAndPersonalGrowth
 image: "../../assets/sample-images/3.webp"

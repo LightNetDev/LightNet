@@ -9,9 +9,9 @@ This guide is for **consumer projects** that depend on the `lightnet` npm packag
 **What Changed (Summary)**
 
 1. **Labels are now explicit objects**
-   - All label fields must use `{ type, value }`.
-   - Fixed strings: `{ type: "fixed", value: "My Label" }`
-   - Translated labels: `{ type: "translated", value: "someKey" }`
+   - All label fields must use `{ type, key/text } (translated uses `key`, fixed uses `text`)`.
+   - Fixed strings: `{ type: "fixed", text: "My Label" }`
+   - Translated labels: `{ type: "translated", key: "someKey" }`
 
 2. **Config `title` is now a label**
    - Your LightNet config `title` must be a label object.
@@ -43,7 +43,7 @@ label: category.bible-studies
 # v4
 label:
   type: translated
-  value: categoryBibleStudies
+  key: categoryBibleStudies
 ```
 
 **Config title (`astro.config.mjs`)**

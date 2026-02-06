@@ -1,4 +1,4 @@
 label:
   type: translated
-  value: categoryChristianLiving
+  key: categoryChristianLiving
 image: "../../assets/sample-images/5.webp"

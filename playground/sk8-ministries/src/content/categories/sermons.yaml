@@ -1,4 +1,4 @@
 label:
   type: translated
-  value: categorySermons
+  key: categorySermons
 image: "../../assets/sample-images/2.webp"

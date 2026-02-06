@@ -1,21 +1,27 @@
 import { z } from "astro/zod"
 
-export const labelSchema = z.object({
-  type: z.enum(["fixed", "translated"]),
-  value: z.string(),
-})
+export const labelSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("fixed"),
+    text: z.string(),
+  }),
+  z.object({
+    type: z.literal("translated"),
+    key: z.string(),
+  }),
+])
 
 export type LabelInput = z.input<typeof labelSchema>
 export type LabelValue = z.output<typeof labelSchema>
 
-export const fixedLabel = (value: string): LabelValue => ({
+export const fixedLabel = (text: string): LabelValue => ({
   type: "fixed",
-  value,
+  text,
 })
 
-export const translatedLabel = (value: string): LabelValue => ({
+export const translatedLabel = (key: string): LabelValue => ({
   type: "translated",
-  value,
+  key,
 })
 
 export const isLabelValue = (value: unknown): value is LabelValue => {
@@ -23,10 +29,12 @@ export const isLabelValue = (value: unknown): value is LabelValue => {
     return false
   }
 
-  if (!("type" in value) || !("value" in value)) {
-    return false
-  }
-
   const labelType = (value as { type?: unknown }).type
-  return labelType === "fixed" || labelType === "translated"
+  if (labelType === "fixed") {
+    return "text" in value
+  }
+  if (labelType === "translated") {
+    return "key" in value
+  }
+  return false
 }
