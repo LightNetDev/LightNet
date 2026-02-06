@@ -15,7 +15,7 @@ const collection = await getEntry("media-collections", collectionId)
 if (!collection) {
   throw new AstroError(
     `Missing media-collection "${collectionId}".`,
-    `To fix the issue, add a media-collection at "src/content/media-collections/${collectionId}.yml".`,
+    `To fix the issue, add a media-collection at "src/content/media-collections/${collectionId}.yaml".`,
   )
 }
 const items = (await getCollectionItems(collection.id)).map((item) => ({

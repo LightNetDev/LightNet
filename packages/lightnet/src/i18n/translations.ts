@@ -1,20 +1,20 @@
 import YAML from "yaml"
 
 const builtInTranslations = {
-  ar: () => import("./translations/ar.yml?raw"),
-  bn: () => import("./translations/bn.yml?raw"),
-  de: () => import("./translations/de.yml?raw"),
-  en: () => import("./translations/en.yml?raw"),
-  es: () => import("./translations/es.yml?raw"),
-  fi: () => import("./translations/fi.yml?raw"),
-  fr: () => import("./translations/fr.yml?raw"),
-  hi: () => import("./translations/hi.yml?raw"),
-  kk: () => import("./translations/kk.yml?raw"),
-  pt: () => import("./translations/pt.yml?raw"),
-  ru: () => import("./translations/ru.yml?raw"),
-  uk: () => import("./translations/uk.yml?raw"),
-  ur: () => import("./translations/ur.yml?raw"),
-  zh: () => import("./translations/zh.yml?raw"),
+  ar: () => import("./translations/ar.yaml?raw"),
+  bn: () => import("./translations/bn.yaml?raw"),
+  de: () => import("./translations/de.yaml?raw"),
+  en: () => import("./translations/en.yaml?raw"),
+  es: () => import("./translations/es.yaml?raw"),
+  fi: () => import("./translations/fi.yaml?raw"),
+  fr: () => import("./translations/fr.yaml?raw"),
+  hi: () => import("./translations/hi.yaml?raw"),
+  kk: () => import("./translations/kk.yaml?raw"),
+  pt: () => import("./translations/pt.yaml?raw"),
+  ru: () => import("./translations/ru.yaml?raw"),
+  uk: () => import("./translations/uk.yaml?raw"),
+  ur: () => import("./translations/ur.yaml?raw"),
+  zh: () => import("./translations/zh.yaml?raw"),
 } as const
 
 type BuiltInLanguage = keyof typeof builtInTranslations

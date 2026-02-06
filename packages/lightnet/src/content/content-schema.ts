@@ -21,7 +21,7 @@ export const categorySchema = z.object({
 
   /* Relative path to the thumbnail image of this category.
    *
-   * The image is expected to be inside the `images` folder next to category definition yml.
+   * The image is expected to be inside the `images` folder next to category definition yaml.
    * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
    * We suggest to give it a size of at least 1000px for it's longer side.
    *
@@ -65,7 +65,7 @@ export const mediaItemSchema = z.object({
    */
   title: z.string(),
   /**
-   * References one media-type by its filename without .yml suffix.
+   * References one media-type by its filename without .yaml suffix.
    *
    * @example "book"
    */
@@ -125,7 +125,7 @@ export const mediaItemSchema = z.object({
   /**
    * Relative path to the image of this media item. Eg. a book cover or video thumbnail.
    *
-   * The image is expected to be inside the `images` folder next to the media item definition yml.
+   * The image is expected to be inside the `images` folder next to the media item definition yaml.
    * This image will be used for previews and on the media item detail page.
    * It can have one of these file types: png, jpg, tiff, webp, gif, svg, avif.
    * We suggest to give it a size of at least 1000px for it's longer side.
