@@ -92,7 +92,7 @@ src/content/categories/foo.yml  ->  src/content/categories/foo.yaml
    - Use `fixedLabel()` / `translatedLabel()` from `lightnet/utils`.
    - Ensure `title`, `languages[].label`, and `mainMenu[].label` are label objects.
 
-2. Update translation keys in `src/translations/*.yaml`
+2. Update translation keys in `src/config/translations/*.yaml`
    - Camelize all user keys (remove dots and hyphens).
    - Update references in pages, content, and config.
 

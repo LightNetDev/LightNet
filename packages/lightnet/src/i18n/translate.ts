@@ -78,7 +78,7 @@ function translateKey(
   if (value === key) {
     throw new AstroError(
       `Missing translation: '${key}' is undefined for language '${resolvedLocale}'.`,
-      `To fix the issue, add a translation for '${key}' to src/translations/${resolvedLocale}.yaml`,
+      `To fix the issue, add a translation for '${key}' to src/config/translations/${resolvedLocale}.yaml`,
     )
   }
   return value

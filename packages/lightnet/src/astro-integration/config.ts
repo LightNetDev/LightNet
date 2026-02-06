@@ -52,7 +52,7 @@ const languageSchema = z
     /**
      * Should this language be used as a site language?
      *
-     * Make sure to provide translations inside the `src/translations/` folder.
+     * Make sure to provide translations inside the `src/config/translations/` folder.
      *
      * Default is `false`
      */

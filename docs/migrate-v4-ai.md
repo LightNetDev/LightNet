@@ -11,7 +11,7 @@ AI coding agents operating on a **consumer repo** (e.g., a site like `sk8-minist
 ## Inputs
 
 - Project root with `astro.config.mjs` (or `.ts`)
-- `src/translations/*.yaml`
+- `src/config/translations/*.yaml`
 - `src/content/**`
 - `src/pages/**` and `src/components/**`
 
@@ -35,7 +35,7 @@ AI coding agents operating on a **consumer repo** (e.g., a site like `sk8-minist
    - Ensure `title`, `languages[].label`, `mainMenu[].label` are label objects.
 
 2. **Camelize user translation keys**
-   - In `src/translations/*.yaml`, rename keys from dotted/hyphenated to camelCase.
+   - In `src/config/translations/*.yaml`, rename keys from dotted/hyphenated to camelCase.
    - Example: `home.bbq.sign-up-now` → `homeBbqSignUpNow`.
 
 3. **Update key usages**

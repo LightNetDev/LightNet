@@ -21,7 +21,7 @@ type BuiltInLanguage = keyof typeof builtInTranslations
 
 const userTranslations = Object.fromEntries(
   Object.entries(
-    import.meta.glob(["/src/translations/*.(yml|yaml)"], {
+    import.meta.glob(["/src/config/translations/*.(yml|yaml)"], {
       query: "?raw",
       import: "default",
     }),

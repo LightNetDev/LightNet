@@ -34,7 +34,7 @@ export function vitePluginLightnetConfig(
       if (module) return `\0${module}`
     },
     handleHotUpdate({ file, server }) {
-      const srcPath = resolve(fileURLToPath(root), "src/translations/")
+      const srcPath = resolve(fileURLToPath(root), "src/config/translations/")
       if (
         (file.endsWith(".yml") || file.endsWith(".yaml")) &&
         file.startsWith(srcPath)
