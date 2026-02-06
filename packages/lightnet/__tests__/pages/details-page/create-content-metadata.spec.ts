@@ -1,5 +1,6 @@
 import { expect, test } from "vitest"
 
+import type { LabelValue } from "../../../src/i18n/label"
 import { createContentMetadata } from "../../../src/pages/details-page/utils/create-content-metadata"
 
 test("Should create complete content metadata", () => {
@@ -13,7 +14,11 @@ test("Should create complete content metadata", () => {
     extension: "pdf",
   })
 })
-;[
+const cases: {
+  url: string
+  expected: Record<string, unknown>
+  label?: LabelValue
+}[] = [
   {
     url: "https://youtube.com/watch?v=k2exixc",
     expected: {
@@ -122,7 +127,9 @@ test("Should create complete content metadata", () => {
       type: "package",
     },
   },
-].forEach(({ url, expected, label }) => {
+]
+
+cases.forEach(({ url, expected, label }) => {
   test(`Should create content metadata for url '${url}' ${label !== undefined ? `and label '${label}'` : ""}`, () => {
     expect(createContentMetadata({ url, label })).toMatchObject(expected)
   })
