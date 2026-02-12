@@ -103,7 +103,10 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
 
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
-        astroConfig.integrations.push(tailwind(), react())
+        astroConfig.integrations.push(
+          tailwind({ applyBaseStyles: false }),
+          react(),
+        )
 
         updateConfig({
           vite: {
