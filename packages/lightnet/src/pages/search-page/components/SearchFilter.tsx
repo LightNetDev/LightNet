@@ -48,7 +48,7 @@ export default function SearchFilter({
       <label className="mb-2 flex items-center gap-2 rounded-2xl border border-gray-300 bg-white px-4 py-3 shadow-inner outline outline-2 outline-offset-2 outline-transparent transition-all ease-in-out focus-within:outline-gray-300">
         <input
           type="search"
-          className="grow placeholder-gray-500 focus:outline-none"
+          className="grow bg-white placeholder-gray-500 focus:outline-none"
           name="search"
           ref={searchInput}
           placeholder={t("ln.search.placeholder")}
