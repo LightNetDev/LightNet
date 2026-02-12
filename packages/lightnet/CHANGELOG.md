@@ -1,5 +1,21 @@
 # lightnet
 
+## 3.12.1
+
+### Patch Changes
+
+- [#356](https://github.com/LightNetDev/LightNet/pull/356) [`81e5749`](https://github.com/LightNetDev/LightNet/commit/81e57498caa24c480bab43b1f368c9028637dad6) Thanks [@smn-cds](https://github.com/smn-cds)! - **Remove code for experimental Admin UI.**
+
+  We are exploring a different way to implement it. Yet we consider reusing this code later.
+
+- [#358](https://github.com/LightNetDev/LightNet/pull/358) [`ca9f983`](https://github.com/LightNetDev/LightNet/commit/ca9f98337e35878761d353916b189ce7364ddbf2) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies, disable i18next support notice
+
+- [#356](https://github.com/LightNetDev/LightNet/pull/356) [`81e5749`](https://github.com/LightNetDev/LightNet/commit/81e57498caa24c480bab43b1f368c9028637dad6) Thanks [@smn-cds](https://github.com/smn-cds)! - Remove unused internal `getRawMediaItems` function.
+
+- [#354](https://github.com/LightNetDev/LightNet/pull/354) [`1c3c7ea`](https://github.com/LightNetDev/LightNet/commit/1c3c7eac0384f9c57da89c2abddabd91c20dcfa2) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix search input background on IOS safari
+
+- [#354](https://github.com/LightNetDev/LightNet/pull/354) [`1c3c7ea`](https://github.com/LightNetDev/LightNet/commit/1c3c7eac0384f9c57da89c2abddabd91c20dcfa2) Thanks [@smn-cds](https://github.com/smn-cds)! - Do not apply TailwindCSS base styles to every page by default.
+
 ## 3.12.0
 
 ### Minor Changes
