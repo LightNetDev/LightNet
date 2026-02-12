@@ -32,19 +32,19 @@
     "@changesets/changelog-github": "^0.5.2",
     "@changesets/cli": "^2.29.8",
     "@eslint/js": "^9.39.2",
-    "astro": "^5.16.6",
+    "astro": "^5.17.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.5.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unused-imports": "^4.3.0",
-    "globals": "^17.0.0",
-    "prettier": "^3.7.4",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "globals": "^17.3.0",
+    "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.52.0"
+    "typescript-eslint": "^8.55.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
