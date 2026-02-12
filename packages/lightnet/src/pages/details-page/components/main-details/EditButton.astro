@@ -1,6 +1,4 @@
 ---
-import config from "virtual:lightnet/config"
-
 import Icon from "../../../../components/Icon"
 
 interface Props {
@@ -13,10 +11,10 @@ const { mediaId } = Astro.props
 <a
   class="hidden cursor-pointer items-center gap-2 font-bold text-gray-700 underline"
   id="edit-btn"
-  data-admin-enabled={config.experimental?.admin?.enabled}
+  data-admin-enabled={false}
   href={`/admin/media/${mediaId}`}
   ><Icon className="mdi--square-edit-outline" ariaLabel="" />
-  {Astro.locals.i18n.t("ln.admin.edit")}</a
+  {Astro.locals.i18n.t("ln.details.edit")}</a
 >
 <script>
   const btn: HTMLAnchorElement | null = document.querySelector("#edit-btn")

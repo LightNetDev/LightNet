@@ -36,11 +36,7 @@
     "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
     "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
     "./api/internal/search.ts": "./src/pages/search-page/api/search.ts",
-    "./api/versions.ts": "./src/api/versions.ts",
-    "./api/media/[mediaId].ts": "./src/api/media/[mediaId].ts",
-    "./api/internal/fs/write-file.ts": "./src/admin/api/fs/write-file.ts",
-    "./admin/pages/AdminRoute.astro": "./src/admin/pages/AdminRoute.astro",
-    "./admin/pages/media/EditRoute.astro": "./src/admin/pages/media/EditRoute.astro"
+    "./api/versions.ts": "./src/api/versions.ts"
   },
   "peerDependencies": {
     "astro": "^5.1.0",
@@ -51,10 +47,8 @@
   "dependencies": {
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
-    "@hookform/resolvers": "^5.2.2",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
-    "@mdxeditor/editor": "^3.52.3",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-virtual": "^3.13.17",
     "daisyui": "^4.12.24",
@@ -63,7 +57,6 @@
     "fuse.js": "^7.1.0",
     "i18next": "^25.7.3",
     "marked": "^16.4.2",
-    "react-hook-form": "^7.70.0",
     "yaml": "^2.8.2"
   },
   "devDependencies": {

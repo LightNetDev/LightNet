@@ -1,10 +1,5 @@
 import YAML from "yaml"
 
-import {
-  type AdminTranslationKey,
-  builtInAdminTranslations,
-} from "../admin/i18n/translations"
-
 const builtInTranslations = {
   ar: () => import("./translations/ar.yml?raw"),
   bn: () => import("./translations/bn.yml?raw"),
@@ -39,7 +34,6 @@ const userTranslations = Object.fromEntries(
 
 export const loadTranslations = async (bcp47: string) => ({
   ...(await loadBuiltInTranslations(builtInTranslations, bcp47)),
-  ...(await loadBuiltInTranslations(builtInAdminTranslations, bcp47)),
   ...(await loadUserTranslations(bcp47)),
 })
 
@@ -95,4 +89,3 @@ export type LightNetTranslationKey =
   | "ln.search.title"
   | "ln.share.url-copied-to-clipboard"
   | "ln.footer.powered-by-lightnet"
-  | AdminTranslationKey

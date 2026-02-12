@@ -220,28 +220,7 @@ export const configSchema = z.object({
   /**
    * Experimental features. Subject to change with any release.
    */
-  experimental: z
-    .object({
-      /**
-       * Configure administration interface.
-       */
-      admin: z
-        .object({
-          enabled: z.boolean().default(false),
-          /**
-           * Currently we only support english as Admin UI language.
-           */
-          languageCode: z.literal("en").default("en"),
-          /**
-           * Max file size to upload in mega bytes.
-           *
-           * Default is 25 (this aligns with Cloudflare's max file size).
-           */
-          maxFileSize: z.number().default(25),
-        })
-        .optional(),
-    })
-    .optional(),
+  experimental: z.object({}).optional(),
 })
 
 export type Language = z.input<typeof languageSchema>
