@@ -315,13 +315,6 @@ export const LIGHTNET_COLLECTIONS = {
     }),
     schema: mediaTypeSchema,
   }),
-  "internal-media-image-path": defineCollection({
-    loader: glob({
-      pattern: "*.json",
-      base: "./src/content/media",
-    }),
-    schema: z.object({ image: z.string() }),
-  }),
 }
 
 export const mediaItemEntrySchema = z.object({
