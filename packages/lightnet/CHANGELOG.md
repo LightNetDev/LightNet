@@ -1,5 +1,11 @@
 # lightnet
 
+## 3.12.2
+
+### Patch Changes
+
+- [#359](https://github.com/LightNetDev/LightNet/pull/359) [`1e71adf`](https://github.com/LightNetDev/LightNet/commit/1e71adfd03c218efeb06a20b73132a688a7d0ce3) Thanks [@smn-cds](https://github.com/smn-cds)! - Remove internal image path collection
+
 ## 3.12.1
 
 ### Patch Changes
