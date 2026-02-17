@@ -56,6 +56,7 @@ Primary use: feature development and bug fixes.
 ## Changesets
 
 - Add a `.changeset/*.md` for changes that affect published packages.
+- For major updates include instructions on how to update sites that depend on the published package.
 - No changeset needed for playground-only changes.
 
 ## Commands
