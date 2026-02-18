@@ -1,6 +1,5 @@
 import type { APIRoute } from "astro"
 import { getCollection } from "astro:content"
-import { resolveDefaultLocale } from "lightnet/i18n"
 import userConfig from "virtual:lightnet/decapAdminUserConfig"
 import YAML from "yaml"
 
@@ -20,7 +19,7 @@ const toSnakeCase = (object?: Record<string, unknown>) => {
   return result
 }
 
-const defaultLocale = resolveDefaultLocale(userConfig)
+const defaultLocale = "en"
 
 const categories = (await getCollection("categories")).map(({ id }) => id)
 

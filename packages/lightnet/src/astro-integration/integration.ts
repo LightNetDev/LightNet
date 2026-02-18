@@ -3,13 +3,13 @@ import react from "@astrojs/react"
 import tailwind from "@astrojs/tailwind"
 import type { AstroIntegration } from "astro"
 
-import { resolveDefaultLocale } from "../i18n/resolve-default-locale"
-import { resolveLocales } from "../i18n/resolve-locales"
 import { verifySchema } from "../utils/verify-schema"
-import { configSchema, type LightnetConfig } from "./config"
+import { extendedConfigSchema, type LightnetConfig } from "./config"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
 
-export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
+export function lightnet(
+  lightnetConfig: Partial<LightnetConfig>,
+): AstroIntegration {
   return {
     name: "lightnet",
     hooks: {
@@ -21,10 +21,10 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         addMiddleware,
       }) => {
         const config = verifySchema(
-          configSchema,
+          extendedConfigSchema,
           lightnetConfig,
           "Invalid LightNet configuration",
-          "Fix these errors on the LightNet configuration inside astro.config.mjs:",
+          "Fix these errors on the LightNet configuration:",
         )
 
         injectRoute({
@@ -75,8 +75,8 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },
           i18n: {
-            defaultLocale: resolveDefaultLocale(config),
-            locales: resolveLocales(config),
+            defaultLocale: config.defaultLocale,
+            locales: config.locales,
             routing: {
               redirectToDefaultLocale: false,
               // We need to set this to false to allow for

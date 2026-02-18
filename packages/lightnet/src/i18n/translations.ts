@@ -1,3 +1,4 @@
+import config from "virtual:lightnet/config"
 import YAML from "yaml"
 
 const builtInTranslations = {
@@ -19,22 +20,9 @@ const builtInTranslations = {
 
 type BuiltInLanguage = keyof typeof builtInTranslations
 
-const userTranslations = Object.fromEntries(
-  Object.entries(
-    import.meta.glob(["/src/translations/*.(yml|yaml)"], {
-      query: "?raw",
-      import: "default",
-    }),
-  ).map(([path, translationImport]) => {
-    const [fileName] = path.split("/").slice(-1)
-    const lang = fileName.replace(/\.ya?ml/, "")
-    return [lang, translationImport]
-  }),
-)
-
 export const loadTranslations = async (bcp47: string) => ({
   ...(await loadBuiltInTranslations(builtInTranslations, bcp47)),
-  ...(await loadUserTranslations(bcp47)),
+  ...loadUserTranslations(bcp47),
 })
 
 function hasTranslations(
@@ -55,12 +43,8 @@ const loadBuiltInTranslations = async (
   return YAML.parse(yml)
 }
 
-const loadUserTranslations = async (bcp47: string) => {
-  if (!userTranslations[bcp47]) {
-    return {}
-  }
-  const yml = (await userTranslations[bcp47]()) as string
-  return YAML.parse(yml)
+const loadUserTranslations = (bcp47: string) => {
+  return config.translations[bcp47] ?? {}
 }
 
 export type LightNetTranslationKey =

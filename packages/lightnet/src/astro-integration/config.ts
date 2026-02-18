@@ -1,7 +1,8 @@
 import { z } from "astro/zod"
 
-import { isBcp47 } from "../i18n/bcp-47"
 import { inlineTranslationSchema } from "../i18n/inline-translation"
+import { resolveDefaultLocale } from "./resolve-default-locale"
+import { resolveLocales } from "./resolve-locales"
 
 /**
  * Link Schema.
@@ -31,56 +32,45 @@ const linkSchema = z.object({
 })
 
 /**
- * Language Schema.
+ * Language configuration for one BCP-47 locale key.
  */
 const languageSchema = z
   .object({
     /**
-     * IETF BCP-47 language tag for this language.
+     * Display name for this language (for example in language switchers).
      *
-     * This will be the identifier of this language and will
-     * also appear on the URL paths of the website.
-     */
-    code: z
-      .string()
-      .refine(isBcp47, "Language code must be a valid BCP-47 language tag."),
-    /**
-     * The name of the language that will be shown on the Website.
+     * This is an inline translation map keyed by locale code.
      */
     label: inlineTranslationSchema,
     /**
-     * Should this language be used as a site language?
+     * Whether this language should be exposed as a site UI language.
      *
-     * Make sure to provide translations inside the `src/translations/` folder.
+     * If enabled, provide translations in `src/translations/`.
      *
      * Default is `false`
      */
     isSiteLanguage: z.boolean().default(false),
     /**
-     * Should this language be used as the default site language?
+     * Whether this language is the default site language.
      *
-     * The default language will be used as a fallback when translations are missing
-     * also this will be the language selected when a user visits the site on the `/` path.
+     * The default language is used:
+     * - as a fallback for missing translations
+     * - for users visiting `/`
      *
-     * Setting this to `true` will also set `isSiteLanguage` to `true`.
+     * Setting this to `true` also forces `isSiteLanguage` to `true`.
      *
      * Default is `false`
      */
     isDefaultSiteLanguage: z.boolean().default(false),
     /**
-     * An array of fallback language codes.
+     * Ordered fallback language codes for this language.
      *
-     * This is used when no translation key is defined for this language.
-     * The system will iterate over this array in order and use the first language for which a
-     * matching translation key is found.
+     * If a translation key is missing, LightNet checks these locales in order and uses the first
+     * one that provides a matching key.
      *
-     * If no match is found from the fallback languages, the system will
-     * attempt the translation using the default site language.
+     * If no match is found, LightNet falls back to the default site language, then to English.
      *
-     * If the translation still cannot be resolved, it will then fall back to the English
-     * translation as a final resort.
-     *
-     * @example ["fr", "it"]
+     * @example ["pt", "en"]
      */
     fallbackLanguages: z.string().array().default([]),
   })
@@ -128,9 +118,30 @@ export const configSchema = z.object({
    */
   title: inlineTranslationSchema,
   /**
-   * All languages: content languages and site languages.
+   * All supported languages, keyed by BCP-47 code.
+   *
+   * Include both:
+   * - site UI languages (`isSiteLanguage: true`)
+   * - content-only languages (`isSiteLanguage: false`)
+   *
+   * Mark exactly one entry as `isDefaultSiteLanguage: true`.
+   *
+   * @example
+   * {
+   *   "en": {
+   *     label: { en: "English", de: "Englisch" },
+   *     isDefaultSiteLanguage: true
+   *   },
+   *   "de": {
+   *     label: { en: "German", de: "Deutsch" },
+   *     isSiteLanguage: true
+   *   },
+   *   "pt-BR": {
+   *     label: { en: "Portuguese (Brazil)", de: "Portugiesisch (Brasilien)" }
+   *   }
+   * }
    */
-  languages: languageSchema.array(),
+  languages: z.record(languageSchema),
   /**
    * Favicons for your site.
    */
@@ -220,14 +231,40 @@ export const configSchema = z.object({
       hideHeaderSearchIcon: z.boolean().default(false),
     })
     .optional(),
+
+  /**
+   * UI translations keyed by BCP-47 locale code.
+   *
+   * Each locale contains a flat translation map: `translationKey -> translated string`.
+   * Use dot-separated keys for grouping (for example `menu.home`).
+   *
+   * @example
+   * {
+   *   "en": {
+   *     "menu.home": "Home",
+   *     "search.placeholder": "Search"
+   *   },
+   *   "de": {
+   *     "menu.home": "Startseite",
+   *     "search.placeholder": "Suchen"
+   *   }
+   * }
+   */
+  translations: z.record(z.record(z.string())).default({}),
   /**
    * Experimental features. Subject to change with any release.
    */
   experimental: z.object({}).optional(),
 })
 
+export const extendedConfigSchema = configSchema.transform((config) => ({
+  ...config,
+  locales: resolveLocales(config),
+  defaultLocale: resolveDefaultLocale(config),
+}))
+
 export type Language = z.input<typeof languageSchema>
 export type Link = z.input<typeof linkSchema>
 
 export type LightnetConfig = z.input<typeof configSchema>
-export type PreparedLightnetConfig = z.output<typeof configSchema>
+export type PreparedLightnetConfig = z.output<typeof extendedConfigSchema>

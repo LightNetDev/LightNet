@@ -6,7 +6,6 @@ import {
   type InlineTranslation,
   resolveInlineTranslation,
 } from "./inline-translation"
-import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLanguage } from "./resolve-language"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
 
@@ -22,12 +21,11 @@ export type TranslateFn = (
 
 const languageCodes = [
   ...new Set(
-    config.languages
-      .filter((lng) => lng.isSiteLanguage)
-      .flatMap((lng) => [lng.code, ...lng.fallbackLanguages, "en"]),
+    Object.entries(config.languages)
+      .filter(([_, lng]) => lng.isSiteLanguage)
+      .flatMap(([bcp47, lng]) => [bcp47, ...lng.fallbackLanguages, "en"]),
   ),
 ]
-const defaultLocale = resolveDefaultLocale(config)
 
 const translations = await prepareI18nextTranslations()
 export const translationKeys = [
@@ -42,7 +40,7 @@ export const translationKeys = [
 
 const i18n = i18next.createInstance({ showSupportNotice: false })
 await i18n.init({
-  lng: defaultLocale,
+  lng: config.defaultLocale,
   // don't use name spacing
   nsSeparator: false,
   // only use flat keys
@@ -51,11 +49,11 @@ await i18n.init({
 })
 
 export function useTranslate(bcp47: string | undefined): TranslateFn {
-  const resolvedLocale = bcp47 ?? defaultLocale
+  const resolvedLocale = bcp47 ?? config.defaultLocale
   const t = i18n.getFixedT<TranslationKey>(resolvedLocale)
   const fallbackLng = [
     ...resolveLanguage(resolvedLocale).fallbackLanguages,
-    defaultLocale,
+    config.defaultLocale,
     "en",
   ]
   return (input, options) => {

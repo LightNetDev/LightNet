@@ -1,0 +1,25 @@
+{
+  "mainMenu": [
+    {
+      "href": "/",
+      "label": { "en": "Home", "de": "Startseite", "ar": "الصفحة الرئيسية" }
+    },
+    {
+      "href": "/media",
+      "label": { "en": "Search", "de": "Suche", "ar": "بحث" }
+    },
+    {
+      "href": "/about",
+      "label": { "en": "About", "de": "Über uns", "ar": "من نحن" }
+    },
+    {
+      "href": "/admin",
+      "label": { "en": "Admin", "de": "Admin", "ar": "Admin" },
+      "requiresLocale": false
+    },
+    {
+      "href": "https://www.om.org/eng/mediaworks/lightnet",
+      "label": { "en": "LightNet", "de": "LightNet", "ar": "LightNet" }
+    }
+  ]
+}

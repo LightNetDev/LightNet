@@ -1,9 +1,7 @@
 import type { MiddlewareHandler } from "astro"
 import config from "virtual:lightnet/config"
 
-import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLanguage } from "./resolve-language"
-import { resolveLocales } from "./resolve-locales"
 import { translationKeys, useTranslate } from "./translate"
 
 export const onRequest: MiddlewareHandler = (
@@ -12,8 +10,8 @@ export const onRequest: MiddlewareHandler = (
 ) => {
   if (!locals.i18n) {
     const t = useTranslate(astroCurrentLocale)
-    const defaultLocale = resolveDefaultLocale(config)
-    const locales = resolveLocales(config)
+    const defaultLocale = config.defaultLocale
+    const locales = config.locales
     const currentLocale = astroCurrentLocale ?? defaultLocale
     const { direction } = resolveLanguage(currentLocale)
     locals.i18n = {
