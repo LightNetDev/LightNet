@@ -3,10 +3,7 @@ import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
 
-import {
-  type InlineTranslation,
-  inlineTranslationSchema,
-} from "../i18n/inline-translation"
+import { inlineTranslationSchema } from "../i18n/inline-translation"
 import { imageSchema } from "./astro-image"
 
 /**
@@ -139,6 +136,15 @@ export const mediaItemSchema = z.object({
   content: z
     .array(
       z.object({
+        /**
+         * Storage kind for this content item.
+         *
+         * - `"upload"`: a file managed by this LightNet site (typically a relative path like `/files/...`)
+         * - `"link"`: an external URL (typically `https://...`)
+         *
+         * @example "upload"
+         */
+        type: z.enum(["upload", "link"]).optional(),
         /**
          * Urls might be:
          * - links to youtube videos
@@ -319,7 +325,6 @@ export const mediaItemEntrySchema = z.object({
 })
 
 export type MediaItemEntry = z.infer<typeof mediaItemEntrySchema>
-export type ContentLabel = InlineTranslation
 
 export const mediaTypeEntrySchema = z.object({
   id: z.string(),

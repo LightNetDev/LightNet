@@ -1,4 +1,4 @@
-import type { ContentLabel } from "../../../content/content-schema"
+import type { InlineTranslation } from "../../../i18n/inline-translation"
 import type { TranslateFn } from "../../../i18n/translate"
 import { isExternalUrl } from "../../../utils/urls"
 
@@ -51,7 +51,7 @@ export function createContentMetadata(
     label: customLabel,
   }: {
     url: string
-    label?: ContentLabel
+    label?: InlineTranslation
   },
   t: TranslateFn,
 ) {

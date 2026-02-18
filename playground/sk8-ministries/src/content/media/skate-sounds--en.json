@@ -7,9 +7,11 @@
   "commonId": "skate-sounds",
   "content": [
     {
+      "type": "upload",
       "url": "/files/bell-ring.mp3"
     },
     {
+      "type": "link",
       "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
     }
   ],

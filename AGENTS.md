@@ -8,7 +8,7 @@ Primary use: feature development and bug fixes.
 - `.changeset/`: changeset release descriptions.
 - `packages/lightnet/`: core Astro integration, UI, content models, and i18n.
 - `packages/cli/`: command-line tooling.
-- `packages/decap-admin/`: deprecated Decap CMS integration. New experimental Admin UI lives in `packages/lightnet/admin`
+- `packages/decap-admin/`: deprecated Decap CMS integration.
 - `playground/`: example sites (useful for manual testing).
 
 ## Default scope
@@ -16,7 +16,6 @@ Primary use: feature development and bug fixes.
 - UI work: start in `packages/lightnet/` (components, layouts, pages).
 - Content models and i18n: start in `packages/lightnet/src/content/` and `packages/lightnet/src/i18n/`.
 - CLI features or fixes: start in `packages/cli/`.
-- Admin work: start in `packages/lightnet/admin/`.
 
 ## Stack
 

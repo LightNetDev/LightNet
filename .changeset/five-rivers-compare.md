@@ -26,22 +26,6 @@ Example:
 }
 ```
 
-## Migrating
-
-1. Run:
-   `npx @lightnet/cli migrate-to-v4 --locales <comma-separated-site-locales>`
-2. Fix any unresolved translation keys printed by the script.
-3. Ensure every label map contains all and only your configured site locales.
-
-When adding a new site locale:
-`npx @lightnet/cli add-site-locale --locale <new-locale> --source-locale <fallback-locale>`
-
-Legacy migration subcommands were removed. Use `migrate-to-v4` for v4 label migration and `add-site-locale` for locale expansion.
-
-`migrate-to-v4` now also removes migrated label translation keys from
-`src/translations/*.yml` when safe. Keys still referenced elsewhere are kept
-and reported.
-
 ## Updated fields
 
 - Config: `title`, `logo.alt`, `languages[].label`, `mainMenu[].label`

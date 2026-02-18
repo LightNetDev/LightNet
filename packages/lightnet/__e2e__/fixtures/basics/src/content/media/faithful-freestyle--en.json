@@ -4,7 +4,7 @@
   "type": "book",
   "dateCreated": "2024-04-21",
   "authors": ["Sk8 Ministries"],
-  "content": [{ "url": "/files/example.pdf" }],
+  "content": [{ "type": "upload", "url": "/files/example.pdf" }],
   "image": "./images/cover.jpg",
   "language": "en",
   "categories": ["christian-living"],

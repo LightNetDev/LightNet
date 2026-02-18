@@ -10,6 +10,7 @@
   "commonId": "external-video-fallback",
   "content": [
     {
+      "type": "link",
       "url": "https://www.jesusfilm.org/watch/jesus.html/english.html"
     }
   ],

@@ -11,6 +11,7 @@
   "commonId": "shred-and-serve",
   "content": [
     {
+      "type": "upload",
       "url": "/files/example.pdf"
     }
   ],

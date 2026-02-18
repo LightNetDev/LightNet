@@ -9,6 +9,7 @@
   "commonId": "external-audio-fallback",
   "content": [
     {
+      "type": "link",
       "url": "https://www.desiringgod.org/messages/contrite-courage"
     }
   ],
