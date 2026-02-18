@@ -267,4 +267,4 @@ export type Language = z.input<typeof languageSchema>
 export type Link = z.input<typeof linkSchema>
 
 export type LightnetConfig = z.input<typeof configSchema>
-export type PreparedLightnetConfig = z.output<typeof extendedConfigSchema>
+export type ExtendedLightnetConfig = z.output<typeof extendedConfigSchema>
