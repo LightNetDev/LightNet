@@ -1,4 +1,8 @@
 {
-  "label": "x.category.christian-living",
+  "label": {
+    "en": "Christian Living",
+    "de": "Glaubensleben",
+    "ar": "الحياة المسيحية"
+  },
   "image": "../../assets/sample-images/5.webp"
 }

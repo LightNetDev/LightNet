@@ -8,17 +8,17 @@ import lightnet from "lightnet"
 const languages = [
   {
     code: "en",
-    label: "English",
+    label: { en: "English", de: "English", ar: "English" },
     isDefaultSiteLanguage: true,
   },
   {
     code: "de",
-    label: "Deutsch",
+    label: { en: "Deutsch", de: "Deutsch", ar: "Deutsch" },
     isSiteLanguage: true,
   },
   {
     code: "ar",
-    label: "العربية",
+    label: { en: "العربية", de: "العربية", ar: "العربية" },
     isSiteLanguage: true,
   },
 ]
@@ -30,7 +30,11 @@ export default defineConfig({
   },
   integrations: [
     lightnet({
-      title: "x.site.title",
+      title: {
+        en: "Sk8 Ministries",
+        de: "Sk8 Ministries",
+        ar: "خدمات التزلج على الألواح",
+      },
       credits: true,
       logo: { src: "./src/assets/logo.png" },
       languages,
@@ -41,33 +45,28 @@ export default defineConfig({
       mainMenu: [
         {
           href: "/",
-          label: "ln.home.title",
+          label: { en: "Home", de: "Startseite", ar: "الصفحة الرئيسية" },
         },
         {
           href: "/media",
-          label: "ln.search.title",
+          label: { en: "Search", de: "Suche", ar: "بحث" },
         },
         {
           href: "/about",
-          label: "x.navigation.about",
+          label: { en: "About", de: "Über uns", ar: "من نحن" },
         },
         {
           href: "/admin",
-          label: "Admin",
+          label: { en: "Admin", de: "Admin", ar: "Admin" },
           requiresLocale: false,
         },
         {
           href: "https://www.om.org/eng/mediaworks/lightnet",
-          label: "LightNet",
+          label: { en: "LightNet", de: "LightNet", ar: "LightNet" },
         },
       ],
       searchPage: {
         filterByLocale: true,
-      },
-      experimental: {
-        admin: {
-          enabled: true,
-        },
       },
     }),
   ],

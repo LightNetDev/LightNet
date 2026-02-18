@@ -1,5 +1,8 @@
 import { z } from "astro/zod"
 
+import { isBcp47 } from "../i18n/bcp-47"
+import { inlineTranslationSchema } from "../i18n/inline-translation"
+
 /**
  * Link Schema.
  */
@@ -12,9 +15,9 @@ const linkSchema = z.object({
   href: z.string(),
   /**
    * Label to be used for the link.
-   * Can either be a translation key or a fixed string.
+   * Must define values for all site locales.
    */
-  label: z.string(),
+  label: inlineTranslationSchema,
   /**
    * If this is set to true the currentLocale will be appended to
    * the href path. Eg. for href="/about"
@@ -38,13 +41,13 @@ const languageSchema = z
      * This will be the identifier of this language and will
      * also appear on the URL paths of the website.
      */
-    code: z.string(),
+    code: z
+      .string()
+      .refine(isBcp47, "Language code must be a valid BCP-47 language tag."),
     /**
      * The name of the language that will be shown on the Website.
-     *
-     * Can either be a fixed string or a translation key.
      */
-    label: z.string(),
+    label: inlineTranslationSchema,
     /**
      * Should this language be used as a site language?
      *
@@ -123,7 +126,7 @@ export const configSchema = z.object({
   /**
    * Title of the web site.
    */
-  title: z.string(),
+  title: inlineTranslationSchema,
   /**
    * All languages: content languages and site languages.
    */
@@ -155,9 +158,9 @@ export const configSchema = z.object({
       src: z.string(),
       /**
        * Alt attribute to add for screen reader etc.
-       * This can be a fixed string or a translation key.
+       * Must define values for all site locales.
        */
-      alt: z.string().optional(),
+      alt: inlineTranslationSchema.optional(),
       /**
        * Size in px to use for the logo on the header bar.
        * The size will be applied to the shorter side of your logo image.

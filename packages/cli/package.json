@@ -3,14 +3,14 @@
   "type": "module",
   "license": "MIT",
   "version": "2.0.1",
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet",
     "directory": "packages/cli"
   },
   "scripts": {
-    "translation-status": "./index.mjs "
+    "translation-status": "node ./index.mjs translation-status"
   },
   "bugs": {
     "url": "https://github.com/LightNetDev/lightnet/issues"

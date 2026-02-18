@@ -1,4 +1,8 @@
 {
-  "label": "x.category.biographies-and-memoirs",
+  "label": {
+    "en": "Biographies & Memoirs",
+    "de": "Biografien & Lebensgeschiten",
+    "ar": "السير الذاتية والمذكرات"
+  },
   "image": "../../assets/sample-images/3.webp"
 }

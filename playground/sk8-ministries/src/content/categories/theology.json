@@ -1,4 +1,8 @@
 {
-  "label": "x.category.theology",
+  "label": {
+    "en": "Theology",
+    "de": "Theologie",
+    "ar": "علم اللاهوت"
+  },
   "image": "../../assets/sample-images/1.webp"
 }

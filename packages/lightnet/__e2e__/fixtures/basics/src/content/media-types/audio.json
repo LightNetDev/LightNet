@@ -1,5 +1,8 @@
 {
-  "label": "type.audio",
+  "label": {
+    "en": "Audio",
+    "de": "Audio"
+  },
   "detailsPage": {
     "layout": "audio"
   },

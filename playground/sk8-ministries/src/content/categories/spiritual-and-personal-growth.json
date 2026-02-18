@@ -1,4 +1,8 @@
 {
-  "label": "x.category.spiritual-and-personal-growth",
+  "label": {
+    "en": "Spiritual & Personal Growth",
+    "de": "Spirituelles & Persönliche Entwicklung",
+    "ar": "النمو الروحي والشخصي"
+  },
   "image": "../../assets/sample-images/3.webp"
 }

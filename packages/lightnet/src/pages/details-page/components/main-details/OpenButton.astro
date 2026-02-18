@@ -1,16 +1,17 @@
 ---
 import Icon from "../../../../components/Icon"
 import { getMediaItem } from "../../../../content/get-media-items"
+import { type InlineTranslation } from "../../../../i18n/inline-translation"
 import { createContentMetadata } from "../../utils/create-content-metadata"
 
 interface Props {
   mediaId: string
-  openActionLabel: string
+  openActionLabel: InlineTranslation
   className?: string
 }
 const { mediaId, openActionLabel, className } = Astro.props
 const item = await getMediaItem(mediaId)
-const content = createContentMetadata(item.data.content[0])
+const content = createContentMetadata(item.data.content[0], Astro.locals.i18n.t)
 ---
 
 <a

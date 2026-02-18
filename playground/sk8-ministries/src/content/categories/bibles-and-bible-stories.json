@@ -1,4 +1,8 @@
 {
-  "label": "x.category.bibles-and-bible-stories",
+  "label": {
+    "en": "Bibles & Bible Stories",
+    "de": "Bibeln & Bibelgeschichten",
+    "ar": "كتب وقصص الكتاب المقدس"
+  },
   "image": "../../assets/sample-images/2.webp"
 }

@@ -1,4 +1,8 @@
 {
-  "label": "x.category.ethics-and-social-issues",
+  "label": {
+    "en": "Ethics & Social Issues",
+    "de": "Ethik & Soziale Fragen",
+    "ar": "الأخلاقيات والقضايا الاجتماعية"
+  },
   "image": "../../assets/sample-images/4.webp"
 }

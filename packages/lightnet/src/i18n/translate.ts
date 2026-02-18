@@ -2,6 +2,10 @@ import { AstroError } from "astro/errors"
 import i18next, { type TOptions } from "i18next"
 import config from "virtual:lightnet/config"
 
+import {
+  type InlineTranslation,
+  resolveInlineTranslation,
+} from "./inline-translation"
 import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLanguage } from "./resolve-language"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
@@ -11,7 +15,10 @@ export type TranslationKey =
   | LightNetTranslationKey
   | (string & NonNullable<unknown>)
 
-export type TranslateFn = (key: TranslationKey, options?: TOptions) => string
+export type TranslateFn = (
+  input: TranslationKey | InlineTranslation,
+  options?: TOptions,
+) => string
 
 const languageCodes = [
   ...new Set(
@@ -51,15 +58,17 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
     defaultLocale,
     "en",
   ]
-  return (key, options) => {
-    const value = t(key, { fallbackLng, ...options })
+  return (input, options) => {
+    if (typeof input !== "string") {
+      return resolveInlineTranslation(input, resolvedLocale)
+    }
+
+    const value = t(input, { fallbackLng, ...options })
     // i18next will return the key if no translation is found.
-    // If a value starts with ln. or x. we consider it to be
-    // a untranslated translation key.
-    if (value.match(/^(?:ln|x)\../i)) {
+    if (value === input) {
       throw new AstroError(
-        `Missing translation: '${key}' is undefined for language '${resolvedLocale}'.`,
-        `To fix the issue, add a translation for '${key}' to src/translations/${resolvedLocale}.yml`,
+        `Missing translation: '${input}' is undefined for language '${resolvedLocale}'.`,
+        `To fix the issue, add a translation for '${input}' to src/translations/${resolvedLocale}.yml`,
       )
     }
     return value

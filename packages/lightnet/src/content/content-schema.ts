@@ -3,6 +3,10 @@ import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
 
+import {
+  type InlineTranslation,
+  inlineTranslationSchema,
+} from "../i18n/inline-translation"
 import { imageSchema } from "./astro-image"
 
 /**
@@ -12,12 +16,9 @@ export const categorySchema = z.object({
   /**
    * Name of the category.
    *
-   * This can either be a translation key or a string that will be displayed as is.
-   * LightNet will try to use it as translation key first if no translation is found it will use the string as is.
-   *
-   * @example "category.biography"
+   * Label translated for all configured site locales.
    */
-  label: z.string(),
+  label: inlineTranslationSchema,
 
   /* Relative path to the thumbnail image of this category.
    *
@@ -37,10 +38,9 @@ export const mediaCollectionSchema = z.object({
   /**
    * Name of the collection.
    *
-   * This can either be a translation key or a string that will be displayed as is.
-   * LightNet will try to use it as translation key first if no translation is found it will use the string as is.
+   * Label translated for all configured site locales.
    */
-  label: z.string(),
+  label: inlineTranslationSchema,
 })
 
 /**
@@ -153,10 +153,10 @@ export const mediaItemSchema = z.object({
          */
         url: z.string(),
         /**
-         * The name of the content. If this is not set. The file name
-         * from URL will be used. This can either be a fixed string or a translation key.
+         * The name of the content translated for all configured site locales.
+         * If this is not set, the file name from URL will be used.
          */
-        label: z.string().optional(),
+        label: inlineTranslationSchema.optional(),
       }),
     )
     .min(1),
@@ -188,11 +188,9 @@ export const mediaTypeSchema = z
     /**
      * Name of this media type that will be shown on the pages.
      *
-     * This can either be a fixed string or a translation key.
-     *
-     * @example "media-type.book"
+     * Label translated for all configured site locales.
      */
-    label: z.string(),
+    label: inlineTranslationSchema,
     /**
      * Defines how the cover image for a media item of this type is rendered.
      *
@@ -220,11 +218,9 @@ export const mediaTypeSchema = z
            * of the "Open" button to be more matching to your media item.
            * For example you could change the text to be "Read" for a book media type.
            *
-           * The label is a translation key.
-           *
-           * @example "ln.details.open"
+           * Label translated for all configured site locales.
            */
-          openActionLabel: z.string().optional(),
+          openActionLabel: inlineTranslationSchema.optional(),
           /**
            * (Deprecated) Specifies the style of the cover image.
            *
@@ -323,6 +319,7 @@ export const mediaItemEntrySchema = z.object({
 })
 
 export type MediaItemEntry = z.infer<typeof mediaItemEntrySchema>
+export type ContentLabel = InlineTranslation
 
 export const mediaTypeEntrySchema = z.object({
   id: z.string(),

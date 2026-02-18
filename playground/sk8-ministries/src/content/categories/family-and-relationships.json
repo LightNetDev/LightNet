@@ -1,4 +1,8 @@
 {
-  "label": "x.category.family-and-relationships",
+  "label": {
+    "en": "Family & Relationships",
+    "de": "Familie & Beziehungen",
+    "ar": "الأسرة والعلاقات"
+  },
   "image": "../../assets/sample-images/5.webp"
 }

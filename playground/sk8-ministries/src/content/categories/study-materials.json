@@ -1,4 +1,8 @@
 {
-  "label": "x.category.study-materials",
+  "label": {
+    "en": "Study Materials",
+    "de": "Studienmaterialien",
+    "ar": "مواد دراسية"
+  },
   "image": "../../assets/sample-images/1.webp"
 }

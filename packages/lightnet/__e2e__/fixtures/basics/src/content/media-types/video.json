@@ -1,5 +1,8 @@
 {
-  "label": "type.video",
+  "label": {
+    "en": "Video",
+    "de": "Video"
+  },
   "detailsPage": {
     "layout": "video"
   },

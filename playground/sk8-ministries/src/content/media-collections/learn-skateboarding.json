@@ -1,3 +1,7 @@
 {
-  "label": "Learn Skateboarding"
+  "label": {
+    "en": "Learn Skateboarding",
+    "de": "Learn Skateboarding",
+    "ar": "Learn Skateboarding"
+  }
 }

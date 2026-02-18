@@ -12,11 +12,19 @@
   "commonId": "ride-the-ramp-of-faith",
   "content": [
     {
-      "label": "eBook",
+      "label": {
+        "en": "eBook",
+        "de": "eBook",
+        "ar": "eBook"
+      },
       "url": "/files/example.epub"
     },
     {
-      "label": "Table of Contents",
+      "label": {
+        "en": "Table of Contents",
+        "de": "Table of Contents",
+        "ar": "Table of Contents"
+      },
       "url": "/files/example.pdf"
     }
   ],

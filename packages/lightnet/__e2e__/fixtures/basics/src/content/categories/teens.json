@@ -1,3 +1,6 @@
 {
-  "label": "category.teens"
+  "label": {
+    "en": "Teens",
+    "de": "Teens"
+  }
 }

@@ -1,4 +1,8 @@
 {
-  "label": "x.category.support-and-counseling",
+  "label": {
+    "en": "Support & Counseling",
+    "de": "Hilfe & Beratung",
+    "ar": "الدعم والإرشاد"
+  },
   "image": "../../assets/sample-images/4.webp"
 }

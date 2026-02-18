@@ -1,14 +1,24 @@
 import { expect, test } from "vitest"
 
+import type { TranslateFn } from "../../../src/i18n/translate"
 import { createContentMetadata } from "../../../src/pages/details-page/utils/create-content-metadata"
 
+const t: TranslateFn = (k) => {
+  if (typeof k === "string") {
+    return k
+  }
+  return k["en"]
+}
+
 test("Should create complete content metadata", () => {
-  expect(createContentMetadata({ url: "https://some.host/some.pDf" })).toEqual({
+  expect(
+    createContentMetadata({ url: "https://some.host/some.pDf" }, t),
+  ).toEqual({
     url: "https://some.host/some.pDf",
     canBeOpened: true,
     type: "text",
     target: "_blank",
-    label: "some",
+    labelText: "some",
     isExternal: true,
     extension: "pdf",
   })
@@ -19,7 +29,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: true,
       target: "_blank",
-      label: "youtube.com",
+      labelText: "youtube.com",
       isExternal: true,
       extension: "",
       type: "link",
@@ -30,7 +40,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: true,
       target: "_blank",
-      label: "wikipedia.org",
+      labelText: "wikipedia.org",
       isExternal: true,
       extension: "",
       type: "link",
@@ -42,7 +52,7 @@ test("Should create complete content metadata", () => {
       canBeOpened: true,
       type: "text",
       target: "_blank",
-      label: "some",
+      labelText: "some",
       isExternal: true,
       extension: "pdf",
     },
@@ -53,7 +63,7 @@ test("Should create complete content metadata", () => {
       type: "link",
       canBeOpened: false,
       target: "_blank",
-      label: "some",
+      labelText: "some",
       isExternal: true,
       extension: "unknown",
     },
@@ -64,7 +74,7 @@ test("Should create complete content metadata", () => {
       canBeOpened: true,
       type: "text",
       target: "_self",
-      label: "my",
+      labelText: "my",
       isExternal: false,
       extension: "pdf",
     },
@@ -74,7 +84,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: true,
       target: "_self",
-      label: "my-id",
+      labelText: "my-id",
       isExternal: false,
       extension: "",
       type: "link",
@@ -85,7 +95,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: false,
       target: "_self",
-      label: "my",
+      labelText: "my",
       isExternal: false,
       type: "link",
       extension: "unknown",
@@ -96,7 +106,7 @@ test("Should create complete content metadata", () => {
     expected: {
       canBeOpened: false,
       target: "_self",
-      label: "some",
+      labelText: "some",
       isExternal: false,
       extension: "zip",
       type: "package",
@@ -104,19 +114,9 @@ test("Should create complete content metadata", () => {
   },
   {
     url: "/some.zip",
-    label: "foo",
+    label: { en: "foo" },
     expected: {
-      label: "foo",
-      isExternal: false,
-      extension: "zip",
-      type: "package",
-    },
-  },
-  {
-    url: "/some.zip",
-    label: "",
-    expected: {
-      label: "some",
+      labelText: "foo",
       isExternal: false,
       extension: "zip",
       type: "package",
@@ -124,12 +124,26 @@ test("Should create complete content metadata", () => {
   },
 ].forEach(({ url, expected, label }) => {
   test(`Should create content metadata for url '${url}' ${label !== undefined ? `and label '${label}'` : ""}`, () => {
-    expect(createContentMetadata({ url, label })).toMatchObject(expected)
+    expect(createContentMetadata({ url, label }, t)).toMatchObject(expected)
   })
 })
 
 test("Should override name with input", () => {
   expect(
-    createContentMetadata({ url: "/path/to/a.file", label: "My file" }),
-  ).toMatchObject({ label: "My file" })
+    createContentMetadata(
+      { url: "/path/to/a.file", label: { en: "My file" } },
+      t,
+    ),
+  ).toMatchObject({ labelText: "My file" })
+})
+
+test("Should resolve localized content labels by locale", () => {
+  const result = createContentMetadata(
+    {
+      url: "/files/book.pdf",
+      label: { en: "Read", de: "Lesen" },
+    },
+    t,
+  )
+  expect(result.labelText).toBe("Read")
 })
