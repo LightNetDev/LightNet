@@ -2,6 +2,7 @@
 import react from "@astrojs/react"
 import tailwind from "@astrojs/tailwind"
 import type { AstroIntegration } from "astro"
+import { AstroError } from "astro/errors"
 
 import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
@@ -70,8 +71,15 @@ export function lightnet(
           react(),
         )
 
+        if (astroConfig.site) {
+          throw new AstroError(
+            "Conflicting site configuration",
+            "Remove `site` from `astro.config.*` and set `siteUrl` in the LightNet config instead.",
+          )
+        }
+
         updateConfig({
-          site: astroConfig.site ?? config.siteUrl,
+          site: config.siteUrl,
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },

@@ -1,5 +1,6 @@
 import type { AstroIntegration, ViteUserConfig } from "astro"
 import { verifySchema } from "lightnet/utils"
+
 import {
   adminConfigSchema,
   type ExtendedSveltiaAdminConfig,
