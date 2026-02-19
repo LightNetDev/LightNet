@@ -14,7 +14,7 @@ function getWidth(logo: ImageMetadata) {
   return Math.floor(size * Math.max(1, logo.width / logo.height))
 }
 
-const { t } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
 
 const logoAlt = (() => {
   if (config.logo?.alt) {
@@ -29,7 +29,7 @@ const logoAlt = (() => {
 
 <a
   class="flex items-center gap-3 font-bold text-gray-600 md:text-lg"
-  href={localizePath(Astro.currentLocale, "/")}
+  href={localizePath(currentLocale, "/")}
 >
   {
     logo &&

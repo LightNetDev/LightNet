@@ -27,7 +27,7 @@ interface Props {
 // this is in the return type of getEntry
 const items = Astro.props.items.filter((item) => !!item)
 
-const { t, direction } = Astro.locals.i18n
+const { t, direction, currentLocale } = Astro.locals.i18n
 
 const mediaTypes = Object.fromEntries(
   (await getMediaTypes()).map((type) => [
@@ -50,7 +50,7 @@ const mediaTypes = Object.fromEntries(
           href={
             item.disabled
               ? "javascript:void(0)"
-              : detailsPagePath(Astro.currentLocale, {
+              : detailsPagePath(currentLocale, {
                   id: item.id,
                 })
           }

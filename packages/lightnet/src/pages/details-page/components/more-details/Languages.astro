@@ -14,7 +14,7 @@ const item = await getMediaItem(Astro.props.mediaId)
 const { mediaId } = Astro.props
 const translations = await getTranslations(mediaId)
 
-const { t } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
 ---
 
 <div>
@@ -27,7 +27,7 @@ const { t } = Astro.locals.i18n
       translations.map((translation) => (
         <li class="flex rounded-lg border border-gray-200 px-4 py-1 text-gray-600 hover:bg-gray-200">
           <a
-            href={detailsPagePath(Astro.currentLocale, translation)}
+            href={detailsPagePath(currentLocale, translation)}
             hreflang={translation.language}
           >
             {resolveTranslatedLanguage(translation.language, t).labelText}

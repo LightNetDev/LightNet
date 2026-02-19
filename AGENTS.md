@@ -69,5 +69,6 @@ Primary use: feature development and bug fixes.
 ## Verification
 
 - Always run `pnpm fmt` for every task that changes code or styles.
-- Only run tests when you are told to do so.
+- Always run unit tests with `pnpm test`
+- Only run end to end tests `pnpm e2e` when you are told to do so.
 - If `pnpm fmt` or tests are not run, say so and why.

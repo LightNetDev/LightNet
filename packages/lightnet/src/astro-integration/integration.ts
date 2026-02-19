@@ -83,19 +83,6 @@ export function lightnet(
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },
-          i18n: {
-            defaultLocale: config.defaultLocale,
-            locales: config.locales,
-            routing: {
-              redirectToDefaultLocale: false,
-              // We need to set this to false to allow for
-              // admin paths without locale. But actually
-              // the default locale will be prefixed for regular
-              // LightNet pages.
-              prefixDefaultLocale: false,
-              fallbackType: "rewrite",
-            },
-          },
         })
       },
     },

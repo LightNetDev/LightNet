@@ -33,7 +33,7 @@ const {
   ...sectionProps
 } = Astro.props
 
-const t = Astro.locals.i18n.t
+const { t, currentLocale } = Astro.locals.i18n
 
 const types = Object.fromEntries(
   (await getMediaTypes()).map((type) => [
@@ -99,7 +99,7 @@ const coverImageStyle =
         {items.map((item) => (
           <li>
             <a
-              href={detailsPagePath(Astro.currentLocale, item)}
+              href={detailsPagePath(currentLocale, item)}
               class="group flex flex-col gap-3"
             >
               <CoverImageDecorator
@@ -140,7 +140,7 @@ const coverImageStyle =
           aria-roledescription="slide"
         >
           <a
-            href={detailsPagePath(Astro.currentLocale, item)}
+            href={detailsPagePath(currentLocale, item)}
             class="group flex h-full flex-col justify-end gap-3"
           >
             <CoverImageDecorator
