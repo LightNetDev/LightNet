@@ -10,7 +10,6 @@ export default defineConfig({
       logo: { src: "./src/assets/logo.png" },
       siteUrl: "https://lightnet.community",
       title: { en: "Basic Test", de: "Basic Test" },
-      credits: true,
       languages: {
         en: {
           label: { en: "English", de: "English" },

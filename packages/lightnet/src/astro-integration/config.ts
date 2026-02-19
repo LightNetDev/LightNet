@@ -156,7 +156,7 @@ export const configSchema = z.object({
   /**
    * Enable displaying a “Powered by LightNet” link in your site’s footer.
    */
-  credits: z.boolean().default(false),
+  credits: z.boolean().default(true),
   /**
    * Link to manifest file within public/ folder
    */
