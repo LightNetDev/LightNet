@@ -71,6 +71,7 @@ export function lightnet(
         )
 
         updateConfig({
+          site: astroConfig.site ?? config.siteUrl,
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },

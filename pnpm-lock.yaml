@@ -69,25 +69,6 @@ importers:
         specifier: ^2.8.2
         version: 2.8.2
 
-  packages/decap-admin:
-    dependencies:
-      astro:
-        specifier: ^5.1.0
-        version: 5.17.2(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
-      lightnet:
-        specifier: ^3.0.0
-        version: link:../lightnet
-      sharp:
-        specifier: ^0.34.0
-        version: 0.34.5
-      yaml:
-        specifier: ^2.8.2
-        version: 2.8.2
-    devDependencies:
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
   packages/lightnet:
     dependencies:
       '@astrojs/react':
@@ -166,9 +147,9 @@ importers:
       '@astrojs/tailwind':
         specifier: ^6.0.2
         version: 6.0.2(astro@5.17.2(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@3.4.19(yaml@2.8.2))
-      '@lightnet/decap-admin':
-        specifier: ^3.1.4
-        version: link:../../../../decap-admin
+      '@lightnet/sveltia-admin':
+        specifier: ^4.0.0
+        version: link:../../../../sveltia-admin
       astro:
         specifier: ^5.17.2
         version: 5.17.2(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -191,6 +172,22 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/sveltia-admin:
+    dependencies:
+      '@sveltia/cms':
+        specifier: ^0.140.0
+        version: 0.140.5
+      astro:
+        specifier: ^5.1.0
+        version: 5.17.2(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
+      lightnet:
+        specifier: ^3.0.0
+        version: link:../lightnet
+    devDependencies:
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   playground/sk8-ministries:
     dependencies:
       '@astrojs/react':
@@ -199,6 +196,9 @@ importers:
       '@astrojs/tailwind':
         specifier: ^6.0.2
         version: 6.0.2(astro@5.17.2(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@3.4.19(yaml@2.8.2))
+      '@lightnet/sveltia-admin':
+        specifier: ^4.0.0
+        version: link:../../packages/sveltia-admin
       astro:
         specifier: ^5.17.2
         version: 5.17.2(@types/node@25.0.3)(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.57.1)(terser@5.39.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -1186,6 +1186,9 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@sveltia/cms@0.140.5':
+    resolution: {integrity: sha512-2xMZzGlRQMaKxRg78mU/dwWWaad1bxuq1UrKYgumYXu63T+9q32RorbQOSSpaa2UQ8TmZ7f3hVtkyNhKT1PQoA==}
 
   '@tailwindcss/typography@0.5.19':
     resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
@@ -5095,6 +5098,8 @@ snapshots:
   '@shikijs/vscode-textmate@10.0.2': {}
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@sveltia/cms@0.140.5': {}
 
   '@tailwindcss/typography@0.5.19(tailwindcss@3.4.19(yaml@2.8.2))':
     dependencies:

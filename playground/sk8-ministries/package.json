@@ -15,6 +15,7 @@
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.17.2",
     "lightnet": "^3.12.0",
+    "@lightnet/sveltia-admin": "^4.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "sharp": "^0.34.5",

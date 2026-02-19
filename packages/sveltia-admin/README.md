@@ -1,6 +1,6 @@
-# @lightnet/decap-cms
+# @lightnet/sveltia-admin
 
-**Experimental** Administration UI for LightNet sites. This is built as an [Astro Integration](https://docs.astro.build/en/guides/integrations-guide/) that uses [Decap CMS](https://decapcms.org/) to administrate LightNet´s content folders.
+**Experimental** Administration UI for LightNet sites. This is built as an [Astro Integration](https://docs.astro.build/en/guides/integrations-guide/) that uses [Sveltia CMS](https://sveltiacms.app/) to administrate LightNet´s content folders.
 
 ## Documentation
 

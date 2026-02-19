@@ -8,7 +8,7 @@ Primary use: feature development and bug fixes.
 - `.changeset/`: changeset release descriptions.
 - `packages/lightnet/`: core Astro integration, UI, content models, and i18n.
 - `packages/cli/`: command-line tooling.
-- `packages/decap-admin/`: deprecated Decap CMS integration.
+- `packages/sveltia-admin/`: Sveltia CMS based admin interface.
 - `playground/`: example sites (useful for manual testing).
 
 ## Default scope

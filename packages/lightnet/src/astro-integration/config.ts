@@ -114,6 +114,13 @@ const faviconSchema = z.object({
  */
 export const configSchema = z.object({
   /**
+   * Url of this site
+   *
+   * @example: "https://media-library.com"
+   */
+  siteUrl: z.string().url(),
+
+  /**
    * Title of the web site.
    */
   title: inlineTranslationSchema,
