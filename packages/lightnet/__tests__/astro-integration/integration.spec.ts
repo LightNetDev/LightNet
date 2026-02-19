@@ -18,7 +18,7 @@ test("Should not inject Astro i18n config", () => {
     },
   })
 
-  const setupHook = integration.hooks["astro:config:setup"]
+  const setupHook = integration.hooks["astro:config:setup"]!
   const updateConfig = vi.fn()
 
   setupHook({
