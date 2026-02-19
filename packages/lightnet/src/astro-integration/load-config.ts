@@ -1,5 +1,6 @@
 import YAML from "yaml"
 
+import { verifySchema } from "../utils/verify-schema"
 import { configSchema } from "./config"
 
 /**
@@ -28,7 +29,12 @@ export const loadConfig = async () => {
   const settings = await loadSettings()
   const translations = await loadTranslations()
   const languages = await loadLanguages()
-  return configSchema.partial().parse({ ...settings, translations, languages })
+  return verifySchema(
+    configSchema.partial(),
+    { ...settings, translations, languages },
+    "Invalid LightNet config loaded from /src/config",
+    "Fix the configuration issues listed below. Check /src/config/*.json, /src/config/languages/*.json, and /src/config/translations/*.(yml|yaml):",
+  )
 }
 
 const loadSettings = async () => {
