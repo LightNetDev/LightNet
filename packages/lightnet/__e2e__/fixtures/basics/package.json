@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "private": "true",
+  "scripts": {
+    "dev": "astro dev"
+  },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",

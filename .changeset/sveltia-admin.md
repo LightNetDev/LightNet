@@ -1,5 +1,5 @@
 ---
-"@lightnet/sveltia-admin": minor
+"@lightnet/sveltia-admin": major
 ---
 
 Add an experimental LightNet administration UI based on Sveltia CMS.
