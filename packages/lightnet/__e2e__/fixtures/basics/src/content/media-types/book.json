@@ -3,9 +3,9 @@
     "en": "Book",
     "de": "Buch"
   },
+  "coverImageStyle": "book",
   "detailsPage": {
     "layout": "default",
-    "coverStyle": "book",
     "openActionLabel": {
       "en": "Read",
       "de": "Lesen"
