@@ -21,9 +21,25 @@ export function lightnet(
         logger,
         addMiddleware,
       }) => {
+        if (
+          astroConfig.site &&
+          lightnetConfig.site &&
+          astroConfig.site !== lightnetConfig.site
+        ) {
+          throw new AstroError(
+            "Conflicting site configuration",
+            `LightNet config \`site\` (${lightnetConfig.site}) does not match Astro \`site\` (${astroConfig.site}). Set only one value or make them exactly equal.`,
+          )
+        }
+
+        const effectiveConfig = {
+          ...lightnetConfig,
+          site: lightnetConfig.site ?? astroConfig.site,
+        }
+
         const config = verifySchema(
           extendedConfigSchema,
-          lightnetConfig,
+          effectiveConfig,
           "Invalid LightNet configuration",
           "Fix these errors on the LightNet configuration:",
         )
@@ -71,15 +87,8 @@ export function lightnet(
           react(),
         )
 
-        if (astroConfig.site) {
-          throw new AstroError(
-            "Conflicting site configuration",
-            "Remove `site` from `astro.config.*` and set `siteUrl` in the LightNet config instead.",
-          )
-        }
-
         updateConfig({
-          site: config.siteUrl,
+          site: config.site,
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },

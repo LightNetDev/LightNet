@@ -2,35 +2,16 @@
 lightnet: major
 ---
 
-`astro.config.*` `site` is no longer supported when using LightNet.
+LightNet config now requires `site` setting to configure the domain of this site.
 
-`siteUrl` is now required in the LightNet config and is the single source of truth for the site URL.
+This is the same like Astro`s site setting but it is mandatory.
+If you have set Astro site. You do not need to change it.
+
+- If LightNet `site` is empty and Astro `site` is set, LightNet uses Astro `site`.
+- If both are set, LightNet only fails when they are not exactly equal.
+- If only LightNet `site` is set, LightNet writes it to Astro `site`.
+- If neither is set, config validation fails.
 
 To migrate:
 
-1. Remove `site` from `astro.config.*`.
-2. Set `siteUrl` in `lightnet({ ... })`.
-
-Example:
-
-```ts
-// before
-export default defineConfig({
-  site: "https://example.org",
-  integrations: [
-    lightnet({
-      /* ... */
-    }),
-  ],
-})
-
-// after
-export default defineConfig({
-  integrations: [
-    lightnet({
-      siteUrl: "https://example.org",
-      // ...
-    }),
-  ],
-})
-```
+- Add site setting to LightNet config

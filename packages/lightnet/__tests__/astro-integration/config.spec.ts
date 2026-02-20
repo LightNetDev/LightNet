@@ -3,7 +3,7 @@ import { expect, test } from "vitest"
 import { configSchema } from "../../src/astro-integration/config"
 
 const requiredConfig = {
-  siteUrl: "https://lightnet.community",
+  site: "https://lightnet.community",
   title: { en: "LightNet" },
   languages: {
     en: {

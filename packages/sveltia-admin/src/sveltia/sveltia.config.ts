@@ -11,7 +11,7 @@ import { mediaTypeCollection } from "./collections/media-types"
 export const config: CmsConfig = {
   backend: sveltiaAdminConfig.backend ?? {
     name: "github",
-    repo: lightnetConfig.siteUrl,
+    repo: lightnetConfig.site,
   },
   media_folder: `${sveltiaAdminConfig.baseFolder}public/files`,
   public_folder: "/files",
@@ -38,7 +38,7 @@ export const config: CmsConfig = {
     },
   },
   editor: { preview: false },
-  site_url: lightnetConfig.siteUrl,
+  site_url: lightnetConfig.site,
   output: {
     omit_empty_optional_fields: true,
   },

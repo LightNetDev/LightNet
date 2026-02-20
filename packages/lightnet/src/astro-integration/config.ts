@@ -118,7 +118,7 @@ export const configSchema = z.object({
    *
    * @example: "https://media-library.com"
    */
-  siteUrl: z.string().url(),
+  site: z.string().url(),
 
   /**
    * Title of the web site.

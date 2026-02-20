@@ -8,7 +8,7 @@ export default defineConfig({
     lightnet({
       ...(await loadConfig()),
       logo: { src: "./src/assets/logo.png" },
-      siteUrl: "https://lightnet.community",
+      site: "https://lightnet.community",
       title: { en: "Basic Test", de: "Basic Test" },
       languages: {
         en: {
