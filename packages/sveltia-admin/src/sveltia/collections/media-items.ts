@@ -47,7 +47,6 @@ export const mediaItemCollection: Collection = {
       widget: "image",
       choose_url: false,
       media_folder: sveltiaAdminConfig.imagesFolder,
-
       pattern: [
         "\\.(jpg|png|jpeg|webp)$",
         "Unsupported image format. Supported formats are jpg, png, webp",
@@ -136,6 +135,7 @@ export const mediaItemCollection: Collection = {
       name: "collections",
       label: "Collections",
       widget: "list",
+      label_singular: "Collection",
       required: false,
       summary: "{{fields.collection}}",
       fields: [
@@ -144,6 +144,7 @@ export const mediaItemCollection: Collection = {
           label: "Collection",
           widget: "relation",
           collection: "media-collections",
+          dropdown_threshold: 1,
           value_field: "{{slug}}",
           search_fields: ["{{slug}}"],
         },

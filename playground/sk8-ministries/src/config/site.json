@@ -5,7 +5,7 @@
     "de": "Sk8 Ministries",
     "ar": "خدمات التزلج على الألواح"
   },
-  "logo": { "src": "src/assets/logo.png" },
+  "logo": { "src": "./src/assets/logo.png" },
   "favicon": [
     { "href": "favicon.ico", "sizes": "32x32" },
     { "href": "favicon.svg" }
