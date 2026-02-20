@@ -21,9 +21,9 @@ export type TranslateFn = (
 
 const languageCodes = [
   ...new Set(
-    Object.entries(config.languages)
-      .filter(([_, lng]) => lng.isSiteLanguage)
-      .flatMap(([bcp47, lng]) => [bcp47, ...lng.fallbackLanguages, "en"]),
+    config.languages
+      .filter((lng) => lng.isSiteLanguage)
+      .flatMap((lng) => [lng.code, ...lng.fallbackLanguages, "en"]),
   ),
 ]
 
