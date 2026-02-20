@@ -2,14 +2,28 @@
 "lightnet": major
 ---
 
-Stop auto-configuring Astro `i18n` in the LightNet integration and rely on `Astro.locals.i18n.currentLocale` for locale-aware behavior.
+Decouple LightNet from Astro `i18n` routing auto-configuration.
 
-## Breaking changes
+## Breaking change (`lightnet`)
 
-- LightNet no longer injects Astro `i18n` config (`locales`, `defaultLocale`, `routing`) during integration setup.
-- Internal LightNet components no longer use `Astro.currentLocale`.
+LightNet no longer writes Astro `i18n` config (`locales`, `defaultLocale`, `routing`) during integration setup.
+Locale-aware logic now resolves through `Astro.locals.i18n.currentLocale` instead of `Astro.currentLocale`.
 
 ## Migration
 
-- In LightNet pages/components, use `Astro.locals.i18n.currentLocale` instead of `Astro.currentLocale`.
-- If your project depends on Astro's `i18n` config for non-LightNet routes or utilities, configure Astro `i18n` explicitly in your own `astro.config.*`.
+1. In LightNet pages and components, replace `Astro.currentLocale` with `Astro.locals.i18n.currentLocale`.
+2. If your project depends on Astro `i18n` for non-LightNet routes or utilities, define `i18n` explicitly in your own `astro.config.*`.
+
+Use a config like this to keep the previous routing behavior:
+
+```
+i18n: {
+  defaultLocale: "en", // your default site locale
+  locales: ["en", "de"], // all supported site locales
+  routing: {
+    redirectToDefaultLocale: false,
+    prefixDefaultLocale: true,
+    fallbackType: "rewrite",
+  },
+},
+```
