@@ -16,9 +16,9 @@ export const mediaTypeCollection: Collection = {
     {
       name: "icon",
       label: "Icon",
-      pattern: ["^mdi--.+", "Prefix icon name with 'mdi--'"],
+      prefix: "mdi--",
       widget: "string",
-      hint: "Find icons on https://pictogrammers.com/library/mdi/. Prefix icon name with 'mdi--'",
+      hint: "Find available icons on https://pictogrammers.com/library/mdi/.",
     },
     {
       name: "coverImageStyle",
