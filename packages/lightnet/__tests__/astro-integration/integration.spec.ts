@@ -3,16 +3,16 @@ import { expect, test, vi } from "vitest"
 import { lightnet } from "../../src/astro-integration/integration"
 
 const requiredLightnetConfig = {
-  title: { en: "LightNet" },
+  title: { en: "LightNet", de: "LightNet" },
   languages: [
     {
       code: "en",
-      label: { en: "English" },
+      label: { en: "English", de: "Englisch" },
       isDefaultSiteLanguage: true,
     },
     {
       code: "de",
-      label: { en: "German" },
+      label: { en: "German", de: "Deutsch" },
       isSiteLanguage: true,
     },
   ],
@@ -145,5 +145,23 @@ test("Should fail schema validation when no site is set", () => {
   expect(error).toMatchObject({
     message: "Invalid LightNet configuration",
     hint: expect.stringContaining("site: Required"),
+  })
+})
+
+test("Should include path when inline translation misses a site locale", () => {
+  const error = getThrownError(() =>
+    runSetup({
+      lightnetConfig: {
+        title: { en: "LightNet" },
+      },
+      astroSite: "https://lightnet.community",
+    }),
+  )
+
+  expect(error).toMatchObject({
+    message: "Invalid LightNet configuration",
+    hint: expect.stringContaining(
+      'title.de: Missing translation for locale "de"',
+    ),
   })
 })

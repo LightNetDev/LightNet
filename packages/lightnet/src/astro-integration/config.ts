@@ -3,7 +3,8 @@ import { z } from "astro/zod"
 import { isBcp47 } from "../i18n/bcp-47"
 import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLocales } from "./resolve-locales"
-import { validateUniqueLanguageCodes } from "./validate-unique-language-codes"
+import { validateInlineTranslations } from "./validators/validate-inline-translations"
+import { validateUniqueLanguageCodes } from "./validators/validate-unique-language-codes"
 
 /**
  * Translations by BCP-47 tags.
@@ -293,11 +294,14 @@ export const configSchema = z.object({
   experimental: z.object({}).optional(),
 })
 
-export const extendedConfigSchema = configSchema.transform((config) => {
+export const extendedConfigSchema = configSchema.transform((config, ctx) => {
+  const locales = resolveLocales(config)
+  const defaultLocale = resolveDefaultLocale(config)
+  validateInlineTranslations(config, locales, ctx)
   return {
     ...config,
-    locales: resolveLocales(config),
-    defaultLocale: resolveDefaultLocale(config),
+    locales,
+    defaultLocale,
   }
 })
 
