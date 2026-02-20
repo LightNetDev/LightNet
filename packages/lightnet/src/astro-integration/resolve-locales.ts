@@ -1,11 +1,5 @@
-import type { Language } from "./config"
+import type { Language } from "../astro-integration/config"
 
-export const resolveLocales = ({
-  languages,
-}: {
-  languages: Record<string, Language>
-}) => {
-  return Object.entries(languages)
-    .filter(([_, l]) => l.isSiteLanguage)
-    .map(([bcp47]) => bcp47)
+export const resolveLocales = ({ languages }: { languages: Language[] }) => {
+  return languages.filter((l) => l.isSiteLanguage).map((l) => l.code)
 }

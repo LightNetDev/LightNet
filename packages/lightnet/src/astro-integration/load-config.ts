@@ -1,3 +1,4 @@
+import { AstroError } from "astro/errors"
 import YAML from "yaml"
 
 import { verifySchema } from "../utils/verify-schema"
@@ -51,18 +52,57 @@ const loadSettings = async () => {
 }
 
 const loadLanguages = async () => {
-  // Map /src/config/languages/{bcp47}.json -> languages[bcp47]
-  const languages: Record<string, unknown> = {}
+  // Load /src/config/languages/{bcp47}.json as a flat languages array.
+  const languages: unknown[] = []
   for await (const [path, languageImport] of Object.entries(
     import.meta.glob("/src/config/languages/*.json", {
       import: "default",
     }),
   )) {
     const [fileName] = path.split("/").slice(-1)
-    const lang = fileName.replace(/\.json/, "")
-    languages[lang] = await languageImport()
+    const fileCode = fileName.replace(/\.json$/, "")
+    const language = parseLanguageFile({
+      fileName,
+      fileCode,
+      language: await languageImport(),
+    })
+    languages.push(language)
   }
   return languages
+}
+
+export const parseLanguageFile = ({
+  fileName,
+  fileCode,
+  language,
+}: {
+  fileName: string
+  fileCode: string
+  language: unknown
+}) => {
+  if (!language || typeof language !== "object") {
+    throw new AstroError(
+      `Invalid language config in /src/config/languages/${fileName}`,
+      `Expected ${fileName} to contain an object with "code": "${fileCode}".`,
+    )
+  }
+
+  const code = (language as { code?: unknown }).code
+  if (typeof code !== "string") {
+    throw new AstroError(
+      `Invalid language config in /src/config/languages/${fileName}`,
+      `Missing required string "code". Expected "code": "${fileCode}" in ${fileName}.`,
+    )
+  }
+
+  if (code !== fileCode) {
+    throw new AstroError(
+      `Invalid language config in /src/config/languages/${fileName}`,
+      `Language code mismatch: expected "${fileCode}" from filename, received "${code}" in ${fileName}.`,
+    )
+  }
+
+  return language
 }
 
 const loadTranslations = async () => {

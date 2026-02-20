@@ -10,16 +10,18 @@ export default defineConfig({
       logo: { src: "./src/assets/logo.png" },
       site: "https://lightnet.community",
       title: { en: "Basic Test", de: "Basic Test" },
-      languages: {
-        en: {
+      languages: [
+        {
+          code: "en",
           label: { en: "English", de: "English" },
           isDefaultSiteLanguage: true,
         },
-        de: {
+        {
+          code: "de",
           label: { en: "Deutsch", de: "Deutsch" },
           isSiteLanguage: true,
         },
-      },
+      ],
       favicon: [{ href: "favicon.svg" }],
       mainMenu: [
         {

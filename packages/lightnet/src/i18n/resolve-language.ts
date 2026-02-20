@@ -4,8 +4,12 @@ import config from "virtual:lightnet/config"
 
 import type { TranslateFn } from "./translate"
 
+const languages = Object.fromEntries(
+  config.languages.map((lang) => [lang.code, lang]),
+)
+
 export const resolveLanguage = (bcp47: string) => {
-  const language = config.languages[bcp47]
+  const language = languages[bcp47]
 
   if (!language) {
     throw new AstroError(
@@ -15,7 +19,6 @@ export const resolveLanguage = (bcp47: string) => {
   }
   return {
     ...language,
-    bcp47,
     direction: i18next.dir(bcp47),
   }
 }
@@ -24,7 +27,6 @@ export const resolveTranslatedLanguage = (bcp47: string, t: TranslateFn) => {
   const language = resolveLanguage(bcp47)
   return {
     ...language,
-    bcp47,
     labelText: t(language.label),
   }
 }

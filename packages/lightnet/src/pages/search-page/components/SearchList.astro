@@ -27,7 +27,7 @@ const mediaTypes = Object.fromEntries(
 
 const languages = Object.fromEntries(
   contentLanguages.map((language) => [
-    language.bcp47,
+    language.code,
     { direction: language.direction, labelText: t(language.label) },
   ]),
 )

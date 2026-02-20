@@ -25,7 +25,7 @@ const mediaTypes = sortByLabelText(
 
 const languages = sortByLabelText(
   contentLanguages.map((language) => ({
-    id: language.bcp47,
+    id: language.code,
     labelText: t(language.label),
   })),
 )
@@ -39,7 +39,7 @@ const categoriesFilterEnabled = categories.length > 0
 const filterByLocale = !!config.searchPage?.filterByLocale
 let initialLanguageFilter: string | undefined = undefined
 const hasContentLanguage = contentLanguages.find(
-  ({ bcp47 }) => bcp47 === currentLocale,
+  ({ code }) => code === currentLocale,
 )
 if (
   filterByLocale &&

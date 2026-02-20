@@ -1,5 +1,6 @@
 import { z } from "astro/zod"
 
+import { isBcp47 } from "../i18n/bcp-47"
 import { inlineTranslationSchema } from "../i18n/inline-translation"
 import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLocales } from "./resolve-locales"
@@ -32,10 +33,18 @@ const linkSchema = z.object({
 })
 
 /**
- * Language configuration for one BCP-47 locale key.
+ * Language configuration for one BCP-47 locale.
  */
 const languageSchema = z
   .object({
+    /**
+     * BCP-47 code for this language.
+     *
+     * @example "pt-BR"
+     */
+    code: z.string().refine(isBcp47, {
+      message: "Invalid BCP-47 language code",
+    }),
     /**
      * Display name for this language (for example in language switchers).
      *
@@ -125,7 +134,7 @@ export const configSchema = z.object({
    */
   title: inlineTranslationSchema,
   /**
-   * All supported languages, keyed by BCP-47 code.
+   * All supported languages.
    *
    * Include both:
    * - site UI languages (`isSiteLanguage: true`)
@@ -134,21 +143,24 @@ export const configSchema = z.object({
    * Mark exactly one entry as `isDefaultSiteLanguage: true`.
    *
    * @example
-   * {
-   *   "en": {
+   * [
+   *   {
+   *     code: "en",
    *     label: { en: "English", de: "Englisch" },
    *     isDefaultSiteLanguage: true
    *   },
-   *   "de": {
+   *   {
+   *     code: "de",
    *     label: { en: "German", de: "Deutsch" },
    *     isSiteLanguage: true
    *   },
-   *   "pt-BR": {
+   *   {
+   *     code: "pt-BR",
    *     label: { en: "Portuguese (Brazil)", de: "Portugiesisch (Brasilien)" }
    *   }
-   * }
+   * ]
    */
-  languages: z.record(languageSchema),
+  languages: languageSchema.array(),
   /**
    * Favicons for your site.
    */
@@ -264,11 +276,13 @@ export const configSchema = z.object({
   experimental: z.object({}).optional(),
 })
 
-export const extendedConfigSchema = configSchema.transform((config) => ({
-  ...config,
-  locales: resolveLocales(config),
-  defaultLocale: resolveDefaultLocale(config),
-}))
+export const extendedConfigSchema = configSchema.transform((config) => {
+  return {
+    ...config,
+    locales: resolveLocales(config),
+    defaultLocale: resolveDefaultLocale(config),
+  }
+})
 
 export type Language = z.input<typeof languageSchema>
 export type Link = z.input<typeof linkSchema>
