@@ -7,6 +7,8 @@ import { validateUniqueLanguageCodes } from "./validate-unique-language-codes"
 
 /**
  * Translations by BCP-47 tags.
+ * We can only do basic validation here because we cannot access locales
+ * from the same config.
  *
  * @example
  * {
@@ -14,7 +16,7 @@ import { validateUniqueLanguageCodes } from "./validate-unique-language-codes"
  *   en: "Hello"
  * }
  */
-export const inlineTranslationSchema = z.record(z.string())
+export const inlineTranslationSchema = z.record(z.string().nonempty())
 
 /**
  * Link Schema.

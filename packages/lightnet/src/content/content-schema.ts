@@ -2,9 +2,26 @@ import { glob } from "astro/loaders"
 import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
+import config from "virtual:lightnet/config"
 
-import { inlineTranslationSchema } from "../i18n/inline-translation"
 import { imageSchema } from "./astro-image"
+
+/**
+ * Translations by BCP-47 tag
+ * This will use the lightnet configuration to make sure, no
+ * locales are missing.
+ *
+ * @example
+ * {
+ *    de: "Hallo",
+ *    en: "Hello"
+ * }
+ */
+export const inlineTranslationSchema = z.object(
+  Object.fromEntries(
+    config.locales.map((locale) => [locale, z.string().nonempty()]),
+  ),
+)
 
 /**
  * Category Schema

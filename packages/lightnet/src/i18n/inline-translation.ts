@@ -1,12 +1,5 @@
 import { AstroError } from "astro/errors"
-import { z } from "astro/zod"
-import config from "virtual:lightnet/config"
 
-export const inlineTranslationSchema = z.object(
-  Object.fromEntries(
-    config.locales.map((locale) => [locale, z.string().nonempty()]),
-  ),
-)
 export type InlineTranslation = Record<string, string>
 
 export function resolveInlineTranslation(
