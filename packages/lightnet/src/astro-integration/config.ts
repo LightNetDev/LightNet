@@ -1,10 +1,20 @@
 import { z } from "astro/zod"
 
 import { isBcp47 } from "../i18n/bcp-47"
-import { inlineTranslationSchema } from "../i18n/inline-translation"
 import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLocales } from "./resolve-locales"
 import { validateUniqueLanguageCodes } from "./validate-unique-language-codes"
+
+/**
+ * Translations by BCP-47 tags.
+ *
+ * @example
+ * {
+ *   de: "Hallo",
+ *   en: "Hello"
+ * }
+ */
+export const inlineTranslationSchema = z.record(z.string())
 
 /**
  * Link Schema.
