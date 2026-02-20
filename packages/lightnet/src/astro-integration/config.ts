@@ -4,6 +4,7 @@ import { isBcp47 } from "../i18n/bcp-47"
 import { inlineTranslationSchema } from "../i18n/inline-translation"
 import { resolveDefaultLocale } from "./resolve-default-locale"
 import { resolveLocales } from "./resolve-locales"
+import { validateUniqueLanguageCodes } from "./validate-unique-language-codes"
 
 /**
  * Link Schema.
@@ -89,6 +90,10 @@ const languageSchema = z
     isSiteLanguage: language.isDefaultSiteLanguage || language.isSiteLanguage,
   }))
 
+const languagesSchema = z
+  .array(languageSchema)
+  .superRefine(validateUniqueLanguageCodes)
+
 const absolutePath = (path: string) =>
   `${path.startsWith("/") ? "" : "/"}${path}`
 
@@ -160,7 +165,7 @@ export const configSchema = z.object({
    *   }
    * ]
    */
-  languages: languageSchema.array(),
+  languages: languagesSchema,
   /**
    * Favicons for your site.
    */
