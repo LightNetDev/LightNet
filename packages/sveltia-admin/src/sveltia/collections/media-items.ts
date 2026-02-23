@@ -6,7 +6,7 @@ export const mediaItemCollection: Collection = {
   name: "media",
   label: "Media Items",
   label_singular: "Media Item",
-  folder: `${sveltiaAdminConfig.baseFolder}src/content/media`,
+  folder: `${sveltiaAdminConfig.siteRootInRepo}src/content/media`,
   create: true,
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",

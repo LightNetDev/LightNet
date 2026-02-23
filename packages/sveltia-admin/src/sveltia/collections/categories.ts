@@ -7,7 +7,7 @@ export const categoriesCollection: Collection = {
   name: "categories",
   label: "Categories",
   label_singular: "Category",
-  folder: `${sveltiaAdminConfig.baseFolder}src/content/categories`,
+  folder: `${sveltiaAdminConfig.siteRootInRepo}src/content/categories`,
   create: true,
   format: "json",
   slug: "{{fields._slug}}",

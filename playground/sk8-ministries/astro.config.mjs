@@ -9,6 +9,6 @@ export default defineConfig({
   },
   integrations: [
     lightnet(await loadConfig()),
-    lightnetSveltiaAdmin({ baseFolder: "playground/sk8-ministries/" }),
+    lightnetSveltiaAdmin({ siteRootInRepo: "playground/sk8-ministries" }),
   ],
 })

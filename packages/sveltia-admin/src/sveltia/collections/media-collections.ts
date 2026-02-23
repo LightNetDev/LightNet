@@ -8,7 +8,7 @@ export const mediaCollectionCollection: Collection = {
   label: "Media Collections",
   label_singular: "Media Collection",
   create: true,
-  folder: `${sveltiaAdminConfig.baseFolder}src/content/media-collections`,
+  folder: `${sveltiaAdminConfig.siteRootInRepo}src/content/media-collections`,
   format: "json",
   slug: "{{fields._slug}}",
   summary: "{{filename}}",

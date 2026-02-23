@@ -55,9 +55,14 @@ export const adminConfigSchema = z.object({
   backend: gitlabSchema.or(githubSchema).optional(),
 
   /**
-   * todo
+   * Path from the repository root to the LightNet site root.
+   * Set this when the site lives in a subdirectory (for example, in a monorepo).
+   * Leave empty when the site is at the repository root.
    */
-  baseFolder: z.string().default(""),
+  siteRootInRepo: z
+    .string()
+    .default("")
+    .transform((path) => (path && !path.endsWith("/") ? path + "/" : path)),
 })
 
 export type SveltiaAdminConfig = z.input<typeof adminConfigSchema>

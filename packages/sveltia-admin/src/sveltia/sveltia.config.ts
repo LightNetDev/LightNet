@@ -13,7 +13,7 @@ export const config: CmsConfig = {
     name: "github",
     repo: lightnetConfig.site,
   },
-  media_folder: `${sveltiaAdminConfig.baseFolder}public/files`,
+  media_folder: `${sveltiaAdminConfig.siteRootInRepo}public/files`,
   public_folder: "/files",
   media_libraries: {
     stock_assets: {

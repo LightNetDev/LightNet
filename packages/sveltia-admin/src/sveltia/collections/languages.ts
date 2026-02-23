@@ -7,7 +7,7 @@ import { inlineTranslation } from "../utils/inline-translation"
 export const languagesCollection: Collection = {
   name: "languages",
   label: "Languages",
-  folder: `${sveltiaAdminConfig.baseFolder}src/config/languages`,
+  folder: `${sveltiaAdminConfig.siteRootInRepo}src/config/languages`,
   format: "json",
   summary: `{{label.${lightnetConfig.defaultLocale}}}`,
   slug: "{{code}}",
