@@ -29,14 +29,15 @@ export const siteConfigCollection: FileCollection = {
       fields: [
         {
           name: "mainMenu",
-          label: "Main Menu",
+          label: "Main Menu Entries",
+          label_singular: "Main Menu Entry",
           widget: "list",
           collapsed: "auto",
           summary: `{{label.${config.defaultLocale}}}`,
           fields: [
             {
               name: "href",
-              label: "Path",
+              label: "URL Path",
               widget: "string",
             },
             inlineTranslation({
@@ -45,10 +46,11 @@ export const siteConfigCollection: FileCollection = {
             }),
             {
               name: "requiresLocale",
-              label: "Requires Locale Prefix",
+              label: "Add Site Language to URL Path",
               required: false,
               default: true,
               widget: "boolean",
+              hint: "Turn this off to keep internal URL paths exactly as entered. External URLs are not affected.",
             },
           ],
         },
