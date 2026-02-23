@@ -46,7 +46,7 @@ export const mediaItemCollection: Collection = {
       label: "Image",
       widget: "image",
       choose_url: false,
-      media_folder: sveltiaAdminConfig.imagesFolder,
+      media_folder: "images",
       pattern: [
         "\\.(jpg|png|jpeg|webp)$",
         "Unsupported image format. Supported formats are jpg, png, webp",

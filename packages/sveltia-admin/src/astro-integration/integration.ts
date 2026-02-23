@@ -1,4 +1,5 @@
 import type { AstroIntegration, ViteUserConfig } from "astro"
+import { AstroError } from "astro/errors"
 import { verifySchema } from "lightnet/utils"
 
 import {
@@ -14,6 +15,13 @@ export default function lightnetSveltiaAdmin(
     name: "@lightnet/sveltia-admin",
     hooks: {
       "astro:config:setup": ({ injectRoute, updateConfig }) => {
+        if (Object.hasOwn(config, "imagesFolder")) {
+          throw new AstroError(
+            "Invalid LightNet Administration UI configuration",
+            "Fix these errors on the sveltiaAdmin configuration inside astro.config.mjs:\n\n- imagesFolder: `imagesFolder` was removed. Remove this option from `sveltiaAdmin(...)`. Image paths now always resolve from the content-adjacent `images` folder.",
+          )
+        }
+
         const preparedConfig = verifySchema(
           adminConfigSchema,
           config,

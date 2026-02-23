@@ -40,10 +40,6 @@ export const adminConfigSchema = z.object({
    */
   path: z.string().default("admin"),
   /**
-   * Name of the images folder next to the content files.
-   */
-  imagesFolder: z.string().default("images"),
-  /**
    * Maximum upload file size in megabytes.
    *
    * Default is 25 (this aligns with Cloudflare's max file size).
