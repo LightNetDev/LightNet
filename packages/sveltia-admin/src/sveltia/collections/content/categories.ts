@@ -1,7 +1,7 @@
 import type { Collection } from "@sveltia/cms"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { inlineTranslation } from "../utils/inline-translation"
+import { inlineTranslation } from "../../utils/inline-translation"
 
 export const categoriesCollection: Collection = {
   name: "categories",

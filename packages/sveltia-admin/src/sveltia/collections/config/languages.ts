@@ -2,7 +2,7 @@ import type { Collection } from "@sveltia/cms"
 import lightnetConfig from "virtual:lightnet/config"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { inlineTranslation } from "../utils/inline-translation"
+import { inlineTranslation } from "../../utils/inline-translation"
 
 export const languagesCollection: Collection = {
   name: "languages",
