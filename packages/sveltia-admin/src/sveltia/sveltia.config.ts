@@ -2,15 +2,14 @@ import type { CmsConfig } from "@sveltia/cms"
 import lightnetConfig from "virtual:lightnet/config"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { categoriesCollection } from "./collections/categories"
-import { languagesCollection } from "./collections/languages"
-import { mediaCollectionCollection } from "./collections/media-collections"
-import { mediaItemCollection } from "./collections/media-items"
-import { mediaTypeCollection } from "./collections/media-types"
+import { configCollections } from "./collections/config"
+import { contentCollections } from "./collections/content"
 
 export const config: CmsConfig = {
   backend: sveltiaAdminConfig.backend ?? {
     name: "github",
+    // Sveltia CMS uses repo as unique site identifier for IndexedDB
+    // https://github.com/sveltia/sveltia-cms/issues/630
     repo: lightnetConfig.site,
   },
   media_folder: `${sveltiaAdminConfig.siteRootInRepo}public/files`,
@@ -47,13 +46,10 @@ export const config: CmsConfig = {
     maxlength: 60,
   },
   collections: [
-    languagesCollection,
+    ...configCollections,
     {
       divider: true,
     },
-    categoriesCollection,
-    mediaItemCollection,
-    mediaTypeCollection,
-    mediaCollectionCollection,
+    ...contentCollections,
   ],
 }
