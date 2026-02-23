@@ -53,6 +53,7 @@ export const mediaItemCollection: Collection = {
         "\\.(jpg|png|jpeg|webp)$",
         "Unsupported image format. Supported formats are jpg, png, webp",
       ],
+      hint: "When you upload an image, it is automatically resized (up to 2048 pixels) and saved in a web-friendly format.",
     },
     {
       name: "content",
