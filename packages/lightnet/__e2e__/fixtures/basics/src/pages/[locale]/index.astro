@@ -11,6 +11,6 @@ const allItems = await getMediaItems()
   <MediaGallerySection
     title={Astro.locals.i18n.t("home.all-items")}
     items={allItems}
-    layout="book"
+    itemWidth="narrow"
   />
 </Page>

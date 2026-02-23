@@ -5,13 +5,13 @@
     "de": "Buch"
   },
   "icon": "mdi--book-open-blank-variant",
+  "coverImageStyle": "book",
   "detailsPage": {
     "layout": "default",
     "openActionLabel": {
       "en": "Read",
       "ar": "اقرأ",
       "de": "Lesen"
-    },
-    "coverStyle": "book"
+    }
   }
 }
