@@ -12,6 +12,7 @@ export const categoriesCollection: Collection = {
   format: "json",
   slug: "{{fields._slug}}",
   summary: "{{filename}}",
+  sortable_fields: ["slug"],
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {

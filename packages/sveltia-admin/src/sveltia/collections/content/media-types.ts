@@ -11,6 +11,7 @@ export const mediaTypeCollection: Collection = {
   summary: "{{filename}}",
   format: "json",
   slug: "{{fields._slug}}",
+  sortable_fields: ["slug"],
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {

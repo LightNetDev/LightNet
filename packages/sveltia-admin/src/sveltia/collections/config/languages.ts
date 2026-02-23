@@ -11,6 +11,7 @@ export const languagesCollection: Collection = {
   format: "json",
   summary: `{{label.${lightnetConfig.defaultLocale}}}`,
   slug: "{{code}}",
+  sortable_fields: [`label.${lightnetConfig.defaultLocale}`],
   fields: [
     {
       name: "code",
