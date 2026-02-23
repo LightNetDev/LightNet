@@ -30,7 +30,8 @@
         "en": "Admin",
         "ar": "Admin",
         "de": "Admin"
-      }
+      },
+      "requiresLocale": false
     },
     {
       "href": "https://www.om.org/eng/mediaworks/lightnet",
