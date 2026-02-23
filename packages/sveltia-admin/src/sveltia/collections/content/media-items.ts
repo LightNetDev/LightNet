@@ -2,11 +2,13 @@ import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
+import { projectPath } from "../../utils/path"
+
 export const mediaItemCollection: Collection = {
   name: "media",
   label: "Media Items",
   label_singular: "Media Item",
-  folder: `${sveltiaAdminConfig.siteRootInRepo}src/content/media`,
+  folder: projectPath("src/content/media"),
   create: true,
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",

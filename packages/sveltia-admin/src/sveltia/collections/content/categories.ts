@@ -1,13 +1,13 @@
 import type { Collection } from "@sveltia/cms"
-import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { inlineTranslation } from "../../utils/inline-translation"
+import { projectPath } from "../../utils/path"
 
 export const categoriesCollection: Collection = {
   name: "categories",
   label: "Categories",
   label_singular: "Category",
-  folder: `${sveltiaAdminConfig.siteRootInRepo}src/content/categories`,
+  folder: projectPath("src/content/categories"),
   create: true,
   format: "json",
   slug: "{{fields._slug}}",

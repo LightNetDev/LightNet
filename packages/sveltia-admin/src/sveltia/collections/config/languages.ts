@@ -1,13 +1,13 @@
 import type { Collection } from "@sveltia/cms"
 import lightnetConfig from "virtual:lightnet/config"
-import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { inlineTranslation } from "../../utils/inline-translation"
+import { projectPath } from "../../utils/path"
 
 export const languagesCollection: Collection = {
   name: "languages",
   label: "Languages",
-  folder: `${sveltiaAdminConfig.siteRootInRepo}src/config/languages`,
+  folder: projectPath("src/config/languages"),
   format: "json",
   summary: `{{label.${lightnetConfig.defaultLocale}}}`,
   slug: "{{code}}",

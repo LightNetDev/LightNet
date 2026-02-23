@@ -1,13 +1,13 @@
 import type { Collection } from "@sveltia/cms"
-import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { inlineTranslation } from "../../utils/inline-translation"
+import { projectPath } from "../../utils/path"
 
 export const mediaTypeCollection: Collection = {
   name: "media-types",
   label: "Media Types",
   label_singular: "Media Type",
-  folder: `${sveltiaAdminConfig.siteRootInRepo}src/content/media-types`,
+  folder: projectPath("src/content/media-types"),
   summary: "{{filename}}",
   format: "json",
   slug: "{{fields._slug}}",

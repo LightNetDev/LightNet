@@ -55,10 +55,7 @@ export const adminConfigSchema = z.object({
    * Set this when the site lives in a subdirectory (for example, in a monorepo).
    * Leave empty when the site is at the repository root.
    */
-  siteRootInRepo: z
-    .string()
-    .default("")
-    .transform((path) => (path && !path.endsWith("/") ? path + "/" : path)),
+  siteRootInRepo: z.string().default(""),
 })
 
 export type SveltiaAdminConfig = z.input<typeof adminConfigSchema>
