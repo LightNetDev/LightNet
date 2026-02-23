@@ -20,7 +20,7 @@ type MediaItem = {
 
 type Props = Omit<SectionProps, "maxWidth"> & {
   items: (MediaItem | undefined)[]
-  itemWidth: "narrow" | "wide"
+  itemWidth?: "narrow" | "wide"
   layout?: "grid" | "carousel"
 }
 
@@ -43,6 +43,23 @@ const types = Object.fromEntries(
 // We allow for undefined values because
 // this is in the return type of getEntry
 const items = itemsInput.filter((item) => !!item)
+
+const { landscapeCount, portraitCount } = items.slice(0, 10).reduce(
+  (acc, item) => {
+    const { width, height } = item.data.image
+    if (width > height) {
+      acc.landscapeCount += 1
+    }
+    if (height > width) {
+      acc.portraitCount += 1
+    }
+    return acc
+  },
+  { landscapeCount: 0, portraitCount: 0 },
+)
+
+const resolvedItemWidth =
+  itemWidth ?? (landscapeCount > portraitCount ? "wide" : "narrow")
 
 const imageSizes = {
   narrow:
@@ -80,7 +97,7 @@ const gridLayouts = {
     <Section {...sectionProps}>
       <ol
         class="grid items-end justify-between gap-4 md:gap-8"
-        class:list={gridLayouts[itemWidth]}
+        class:list={gridLayouts[resolvedItemWidth]}
       >
         {items.map((item) => {
           const coverImageStyle = types[item.data.type.id].coverImageStyle
@@ -102,7 +119,7 @@ const gridLayouts = {
                     src={item.data.image}
                     alt=""
                     widths={[128, 256, 512, 768]}
-                    sizes={imageSizes[itemWidth]}
+                    sizes={imageSizes[resolvedItemWidth]}
                   />
                 </CoverImageDecorator>
 
@@ -128,7 +145,7 @@ const gridLayouts = {
         const coverImageStyle = types[item.data.type.id].coverImageStyle
         return (
           <li
-            class={`carousel-item--${itemWidth} h-full`}
+            class={`carousel-item--${resolvedItemWidth} h-full`}
             role="group"
             aria-roledescription="slide"
           >
@@ -145,7 +162,7 @@ const gridLayouts = {
                   src={item.data.image}
                   alt=""
                   widths={[128, 256, 512, 768]}
-                  sizes={imageSizes[itemWidth]}
+                  sizes={imageSizes[resolvedItemWidth]}
                 />
               </CoverImageDecorator>
 

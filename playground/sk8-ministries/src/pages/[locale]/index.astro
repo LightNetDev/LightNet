@@ -51,7 +51,6 @@ const { t, currentLocale } = Astro.locals.i18n
     title={t("home.our-latest-books")}
     titleHref={searchPagePath(currentLocale, { type: "book" })}
     items={latestBooks}
-    itemWidth="narrow"
   />
 
   <HighlightSection
@@ -67,6 +66,5 @@ const { t, currentLocale } = Astro.locals.i18n
   <MediaGallerySection
     title={t(learnSkateboarding.data.label)}
     items={learnSkateboardingItems}
-    itemWidth="wide"
   />
 </Page>
