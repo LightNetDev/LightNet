@@ -9,6 +9,7 @@ export const languagesCollection: Collection = {
   label: "Languages",
   folder: projectPath("src/config/languages"),
   format: "json",
+  icon: "language",
   summary: `{{label.${lightnetConfig.defaultLocale}}}`,
   slug: "{{code}}",
   sortable_fields: [`label.${lightnetConfig.defaultLocale}`],

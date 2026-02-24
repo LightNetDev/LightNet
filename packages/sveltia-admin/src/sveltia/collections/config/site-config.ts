@@ -7,10 +7,12 @@ import { projectPath } from "../../utils/path"
 export const siteConfigCollection: FileCollection = {
   name: "site-config",
   label: "Site Configuration",
+  icon: "settings",
   files: [
     {
       name: "general",
       label: "General",
+      icon: "home",
       file: projectPath("src/config/general.json"),
       fields: [
         {
@@ -25,6 +27,7 @@ export const siteConfigCollection: FileCollection = {
     {
       name: "navigation",
       label: "Navigation",
+      icon: "menu",
       file: projectPath("src/config/navigation.json"),
       fields: [
         {
