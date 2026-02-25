@@ -14,7 +14,7 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
     "@lightnet/sveltia-admin": "^3.0.0",
-    "astro": "^5.17.3",
+    "astro": "^5.18.0",
     "lightnet": "^3.12.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
