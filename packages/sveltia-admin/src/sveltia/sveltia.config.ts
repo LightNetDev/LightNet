@@ -4,6 +4,7 @@ import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { configCollections } from "./collections/config"
 import { contentCollections } from "./collections/content"
+import { projectPath } from "./utils/path"
 
 export const config: CmsConfig = {
   backend: sveltiaAdminConfig.backend ?? {
@@ -12,8 +13,8 @@ export const config: CmsConfig = {
     // https://github.com/sveltia/sveltia-cms/issues/630
     repo: lightnetConfig.site,
   },
-  media_folder: `${sveltiaAdminConfig.siteRootInRepo}public/files`,
-  public_folder: "/files",
+  media_folder: projectPath("src/assets"),
+  public_folder: "/src/assets",
   media_libraries: {
     stock_assets: {
       providers: [],

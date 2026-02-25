@@ -72,6 +72,8 @@ export const mediaItemCollection: Collection = {
               label: "File",
               widget: "file",
               choose_url: false,
+              media_folder: projectPath("public/files"),
+              public_folder: "/files",
               hint: `Maximum file size is ${sveltiaAdminConfig.maxFileSize} MB.`,
               media_library: {
                 config: {
