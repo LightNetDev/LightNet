@@ -17,6 +17,7 @@ export const config: CmsConfig = {
   },
   media_folder: projectPath("src/assets"),
   public_folder: "/src/assets",
+  app_title: "LightNet Admin",
   ...(logoSrc && {
     logo: {
       src: logoSrc,
