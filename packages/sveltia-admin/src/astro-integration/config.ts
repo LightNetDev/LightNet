@@ -49,19 +49,6 @@ export const adminConfigSchema = z.object({
    * Connected Git Host.
    */
   backend: gitlabSchema.or(githubSchema).optional(),
-  /**
-   * Logo to use for the administration UI.
-   *
-   * If not set, the administration UI falls back to LightNet's logo (if any).
-   */
-  logo: z
-    .object({
-      /**
-       * Absolute URL or absolute path to the logo image.
-       */
-      src: z.string(),
-    })
-    .optional(),
 
   /**
    * Path from the repository root to the LightNet site root.

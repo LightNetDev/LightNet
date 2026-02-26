@@ -11,7 +11,6 @@ export default defineConfig({
     lightnet(await loadConfig()),
     lightnetSveltiaAdmin({
       siteRootInRepo: "/playground/sk8-ministries",
-      logo: { src: "./src//assets/logo.svg" },
     }),
   ],
 })

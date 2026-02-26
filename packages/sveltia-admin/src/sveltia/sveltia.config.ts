@@ -2,11 +2,10 @@ import type { CmsConfig } from "@sveltia/cms"
 import lightnetConfig from "virtual:lightnet/config"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
+import lightnetLogo from "../assets/lightnet-logo.svg?url"
 import { configCollections } from "./collections/config"
 import { contentCollections } from "./collections/content"
 import { projectPath } from "./utils/path"
-
-const logoSrc = sveltiaAdminConfig.logo?.src ?? lightnetConfig.logo?.src
 
 export const config: CmsConfig = {
   backend: sveltiaAdminConfig.backend ?? {
@@ -18,11 +17,9 @@ export const config: CmsConfig = {
   media_folder: projectPath("src/assets"),
   public_folder: "/src/assets",
   app_title: "LightNet Admin",
-  ...(logoSrc && {
-    logo: {
-      src: logoSrc,
-    },
-  }),
+  logo: {
+    src: lightnetLogo,
+  },
   media_libraries: {
     stock_assets: {
       providers: [],
