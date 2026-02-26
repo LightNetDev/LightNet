@@ -6,6 +6,8 @@ import { configCollections } from "./collections/config"
 import { contentCollections } from "./collections/content"
 import { projectPath } from "./utils/path"
 
+const logoSrc = sveltiaAdminConfig.logo?.src ?? lightnetConfig.logo?.src
+
 export const config: CmsConfig = {
   backend: sveltiaAdminConfig.backend ?? {
     name: "github",
@@ -15,6 +17,11 @@ export const config: CmsConfig = {
   },
   media_folder: projectPath("src/assets"),
   public_folder: "/src/assets",
+  ...(logoSrc && {
+    logo: {
+      src: logoSrc,
+    },
+  }),
   media_libraries: {
     stock_assets: {
       providers: [],
