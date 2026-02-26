@@ -22,3 +22,10 @@ declare module "virtual:lightnet/components/CustomFooter" {
   const CustomFooter: ((props: Record<string, any>) => any) | undefined
   export default CustomFooter
 }
+
+declare module "virtual:lightnet/components/media-item-edit-button-controller" {
+  const mediaItemEditButtonController:
+    | { shouldShow: () => boolean; createHref: (mediaId: string) => string }
+    | undefined
+  export default mediaItemEditButtonController
+}

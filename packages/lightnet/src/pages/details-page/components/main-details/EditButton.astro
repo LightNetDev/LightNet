@@ -1,5 +1,11 @@
 ---
+import mediaItemEditButtonController from "virtual:lightnet/components/media-item-edit-button-controller"
+
 import Icon from "../../../../components/Icon"
+
+if (!mediaItemEditButtonController) {
+  return
+}
 
 interface Props {
   mediaId: string
@@ -11,18 +17,25 @@ const { mediaId } = Astro.props
 <a
   class="hidden cursor-pointer items-center gap-2 font-bold text-gray-700 underline"
   id="edit-btn"
-  data-admin-enabled={false}
-  href={`/admin/media/${mediaId}`}
+  data-media-id={mediaId}
+  href="#"
   ><Icon className="mdi--square-edit-outline" ariaLabel="" />
   {Astro.locals.i18n.t("ln.details.edit")}</a
 >
 <script>
+  import mediaItemEditButtonController from "virtual:lightnet/components/media-item-edit-button-controller"
+
   const btn: HTMLAnchorElement | null = document.querySelector("#edit-btn")
-  const showEditButton =
-    btn?.dataset.adminEnabled === "true" &&
-    (import.meta.env.DEV || localStorage.getItem("ln-admin-enabled") === "true")
-  if (showEditButton) {
-    btn?.classList.remove("hidden")
-    btn?.classList.add("flex")
+  const mediaId = btn?.dataset.mediaId
+
+  if (
+    mediaItemEditButtonController &&
+    btn &&
+    mediaId &&
+    mediaItemEditButtonController.shouldShow()
+  ) {
+    btn.href = mediaItemEditButtonController.createHref(mediaId)
+    btn.classList.remove("hidden")
+    btn.classList.add("flex")
   }
 </script>
