@@ -2,6 +2,7 @@ import type { Collection } from "@sveltia/cms"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
+import config from "virtual:lightnet/config"
 
 export const categoriesCollection: Collection = {
   name: "categories",
@@ -11,8 +12,8 @@ export const categoriesCollection: Collection = {
   create: true,
   format: "json",
   slug: "{{fields._slug}}",
-  summary: "{{filename}}",
-  sortable_fields: ["slug"],
+  summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
+  sortable_fields: ["slug", `label`],
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {

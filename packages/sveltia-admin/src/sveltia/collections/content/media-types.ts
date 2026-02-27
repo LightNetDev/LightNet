@@ -2,16 +2,17 @@ import type { Collection } from "@sveltia/cms"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
+import config from "virtual:lightnet/config"
 
 export const mediaTypeCollection: Collection = {
   name: "media-types",
   label: "Media Types",
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
-  summary: "{{filename}}",
   format: "json",
   slug: "{{fields._slug}}",
-  sortable_fields: ["slug"],
+  summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
+  sortable_fields: ["slug", `label`],
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {

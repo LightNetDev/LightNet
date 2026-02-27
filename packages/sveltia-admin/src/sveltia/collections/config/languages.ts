@@ -3,6 +3,7 @@ import lightnetConfig from "virtual:lightnet/config"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
+import config from "virtual:lightnet/config"
 
 export const languagesCollection: Collection = {
   name: "languages",
@@ -10,9 +11,9 @@ export const languagesCollection: Collection = {
   folder: projectPath("src/config/languages"),
   format: "json",
   icon: "language",
-  summary: `{{label.${lightnetConfig.defaultLocale}}}`,
   slug: "{{code}}",
-  sortable_fields: [`label.${lightnetConfig.defaultLocale}`],
+  summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
+  sortable_fields: ["slug", `label`],
   fields: [
     {
       name: "code",

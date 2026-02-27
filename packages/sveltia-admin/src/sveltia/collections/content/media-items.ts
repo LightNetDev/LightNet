@@ -13,15 +13,9 @@ export const mediaItemCollection: Collection = {
   create: true,
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",
-  sortable_fields: [
-    "commit_date",
-    "commonId",
-    "commit_author",
-    "dateCreated",
-    "language",
-  ],
   slug: "{{fields._slug}}",
-  summary: "{{filename}} - {{title}}",
+  sortable_fields: ["dateCreated", "language", "slug", "title"],
+  summary: "{{title}} ({{slug}})",
   view_groups: [
     { label: "Language", field: "language", pattern: ".*" },
     { label: "Type", field: "type", pattern: ".*" },
@@ -34,6 +28,7 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       collection: "media-types",
       value_field: "{{slug}}",
+      display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
     },
     {
       name: "language",
@@ -41,8 +36,7 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       collection: "languages",
       value_field: "{{slug}}",
-      display_fields: [`{{slug}} - {{label.${config.defaultLocale}}}`],
-      search_fields: ["{{slug}}", `{{label.${config.defaultLocale}}}`],
+      display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
     },
     {
       name: "image",
@@ -165,7 +159,7 @@ export const mediaItemCollection: Collection = {
           collection: "media-collections",
           dropdown_threshold: 1,
           value_field: "{{slug}}",
-          search_fields: ["{{slug}}"],
+          display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
         },
         {
           name: "index",
