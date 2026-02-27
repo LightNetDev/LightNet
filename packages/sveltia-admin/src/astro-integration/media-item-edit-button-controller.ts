@@ -1,6 +1,3 @@
-const ADMIN_PATH_TOKEN = "__LIGHTNET_ADMIN_PATH__"
-
-export const mediaItemEditButtonControllerSource = `
 const parseCachedUser = () => {
   try {
     const cachedUser = localStorage.getItem("sveltia-cms.user")
@@ -23,12 +20,6 @@ export default {
       typeof cachedUser.backendName === "string"
     )
   },
-  createHref: (mediaId) =>
-    "${ADMIN_PATH_TOKEN}#/collections/media/entries/" +
-    encodeURIComponent(mediaId),
-}
-`
-
-export function mediaItemButtonController(path: string): string {
-  return mediaItemEditButtonControllerSource.replaceAll(ADMIN_PATH_TOKEN, path)
+  createHref: (mediaId: string) =>
+    "/admin#/collections/media/entries/" + encodeURIComponent(mediaId),
 }
