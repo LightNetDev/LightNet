@@ -16,6 +16,9 @@
   "keywords": [
     "astro-integration"
   ],
+  "scripts": {
+    "test": "vitest"
+  },
   "exports": {
     ".": "./src/astro-integration/integration.ts",
     "./Admin.astro": "./src/Admin.astro",
@@ -29,7 +32,8 @@
     "@sveltia/cms": "^0.143.3"
   },
   "devDependencies": {
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=22"

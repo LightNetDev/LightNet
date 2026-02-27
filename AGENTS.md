@@ -64,11 +64,12 @@ Primary use: feature development and bug fixes.
 - `pnpm build`
 - `pnpm typecheck`
 - `pnpm fmt` (run lint and prettier with auto-fix)
-- `pnpm test` or `pnpm e2e` (packages/lightnet)
+- `pnpm test` (unit tests for `packages/lightnet` and `packages/sveltia-admin`)
+- `pnpm e2e` (end-to-end tests for `packages/lightnet`)
 
 ## Verification
 
 - Always run `pnpm fmt` for every task that changes code or styles.
-- Always run unit tests with `pnpm test`
+- Always run unit tests with `pnpm test` (this validates both `packages/lightnet` and `packages/sveltia-admin`).
 - Only run end to end tests `pnpm e2e` when you are told to do so.
 - If `pnpm fmt` or tests are not run, say so and why.
