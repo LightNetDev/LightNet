@@ -5,14 +5,16 @@ export type InlineTranslation = Record<string, string>
 export function resolveInlineTranslation(
   inlineTranslation: InlineTranslation,
   currentLocale: string,
+  defaultLocale: string,
 ): string {
-  const value = inlineTranslation[currentLocale]
-  if (value) {
-    return value
-  }
+  const currentLocaleValue = inlineTranslation[currentLocale]
+  if (currentLocaleValue) return currentLocaleValue
+
+  const defaultLocaleValue = inlineTranslation[defaultLocale]
+  if (defaultLocaleValue) return defaultLocaleValue
 
   throw new AstroError(
-    `Missing localized translation for locale "${currentLocale}"`,
-    `Available translations: ${JSON.stringify(inlineTranslation)}. Add "${currentLocale}" to this inline translation map.`,
+    `Missing localized translation for locales "${currentLocale}" and "${defaultLocale}"`,
+    `Available translations: ${JSON.stringify(inlineTranslation)}. Add "${currentLocale}" or "${defaultLocale}" to this inline translation map.`,
   )
 }

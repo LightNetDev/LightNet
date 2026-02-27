@@ -8,6 +8,7 @@ export const validateInlineTranslations = (
     logo?: { alt?: Record<string, string> }
   },
   locales: string[],
+  defaultLocale: string,
   ctx: z.RefinementCtx,
 ) => {
   const validateInlineTranslation = (
@@ -18,14 +19,22 @@ export const validateInlineTranslations = (
       return
     }
 
-    for (const locale of locales) {
-      if (locale in inlineTranslation) {
+    if (!(defaultLocale in inlineTranslation)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Missing translation for default locale "${defaultLocale}"`,
+        path: [...path, defaultLocale],
+      })
+    }
+
+    for (const locale of Object.keys(inlineTranslation)) {
+      if (locales.includes(locale)) {
         continue
       }
 
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `Missing translation for locale "${locale}"`,
+        message: `Invalid locale "${locale}". Inline translations only support configured site locales: ${locales.join(", ")}`,
         path: [...path, locale],
       })
     }

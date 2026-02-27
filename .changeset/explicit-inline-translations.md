@@ -13,7 +13,7 @@ String values passed to `t(...)` are now treated strictly as translation keys.
 If a key is missing, LightNet throws a translation error.
 
 Locale-map label objects can be passed directly to `t(...)`, and are resolved by
-the current locale.
+the current locale first, then the default locale.
 
 Example:
 
@@ -34,6 +34,8 @@ Example:
 ## Validation rules
 
 - Locale-map keys must be valid BCP-47 tags.
-- All configured site locales are required.
+- The default site locale is required.
+- Other configured site locales are optional.
+- Locale keys must be configured site locales.
 - Extra locale keys are rejected.
 - Label values must be non-empty strings.

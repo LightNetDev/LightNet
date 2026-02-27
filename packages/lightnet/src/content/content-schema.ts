@@ -8,8 +8,8 @@ import { imageSchema } from "./astro-image"
 
 /**
  * Translations by BCP-47 tag
- * This will use the lightnet configuration to make sure, no
- * locales are missing.
+ * This uses the LightNet configuration to require the default locale
+ * and allow optional values for other configured site locales.
  *
  * @example
  * {
@@ -17,11 +17,18 @@ import { imageSchema } from "./astro-image"
  *    en: "Hello"
  * }
  */
-export const inlineTranslationSchema = z.object(
-  Object.fromEntries(
-    config.locales.map((locale) => [locale, z.string().nonempty()]),
-  ),
-)
+const optionalLocales = config.locales.filter((l) => l !== config.defaultLocale)
+export const inlineTranslationSchema = z
+  .object({
+    [config.defaultLocale]: z.string().nonempty(),
+    ...Object.fromEntries(
+      optionalLocales.map((locale) => [
+        locale,
+        z.string().nonempty().optional(),
+      ]),
+    ),
+  })
+  .strict()
 
 /**
  * Category Schema
@@ -30,7 +37,7 @@ export const categorySchema = z.object({
   /**
    * Name of the category.
    *
-   * Label translated for all configured site locales.
+   * Label translated for the default locale. Other configured site locales are optional.
    */
   label: inlineTranslationSchema,
 
@@ -52,7 +59,7 @@ export const mediaCollectionSchema = z.object({
   /**
    * Name of the collection.
    *
-   * Label translated for all configured site locales.
+   * Label translated for the default locale. Other configured site locales are optional.
    */
   label: inlineTranslationSchema,
 })
@@ -176,7 +183,8 @@ export const mediaItemSchema = z.object({
          */
         url: z.string(),
         /**
-         * The name of the content translated for all configured site locales.
+         * The name of the content translated for the default locale.
+         * Other configured site locales are optional.
          * If this is not set, the file name from URL will be used.
          */
         label: inlineTranslationSchema.optional(),
@@ -210,7 +218,7 @@ export const mediaTypeSchema = z.object({
   /**
    * Name of this media type that will be shown on the pages.
    *
-   * Label translated for all configured site locales.
+   * Label translated for the default locale. Other configured site locales are optional.
    */
   label: inlineTranslationSchema,
   /**
@@ -240,7 +248,7 @@ export const mediaTypeSchema = z.object({
          * of the "Open" button to be more matching to your media item.
          * For example you could change the text to be "Read" for a book media type.
          *
-         * Label translated for all configured site locales.
+         * Label translated for the default locale. Other configured site locales are optional.
          */
         openActionLabel: inlineTranslationSchema.optional(),
       }),

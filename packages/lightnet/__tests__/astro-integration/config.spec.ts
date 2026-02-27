@@ -76,7 +76,7 @@ test("Should reject object-based language config", () => {
   ).toThrowError(/Expected array, received object/)
 })
 
-test("Should reject missing locale in title inline translation", () => {
+test("Should accept missing non-default locale in title inline translation", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
     languages: [
@@ -95,22 +95,10 @@ test("Should reject missing locale in title inline translation", () => {
     },
   })
 
-  expect(parsed.success).toBe(false)
-  if (parsed.success) {
-    return
-  }
-
-  expect(parsed.error.issues).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        message: 'Missing translation for locale "de"',
-        path: ["title", "de"],
-      }),
-    ]),
-  )
+  expect(parsed.success).toBe(true)
 })
 
-test("Should reject missing locale in nested inline translation", () => {
+test("Should reject missing default locale in nested inline translation", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
     languages: [
@@ -133,7 +121,7 @@ test("Should reject missing locale in nested inline translation", () => {
       {
         href: "/about",
         label: {
-          en: "About",
+          de: "Uber",
         },
         requiresLocale: true,
       },
@@ -148,20 +136,20 @@ test("Should reject missing locale in nested inline translation", () => {
   expect(parsed.error.issues).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        message: 'Missing translation for locale "de"',
-        path: ["mainMenu", 0, "label", "de"],
+        message: 'Missing translation for default locale "en"',
+        path: ["mainMenu", 0, "label", "en"],
       }),
     ]),
   )
 })
 
-test("Should reject missing locale in language label inline translation", () => {
+test("Should reject missing default locale in language label inline translation", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
     languages: [
       {
         code: "en",
-        label: { en: "English" },
+        label: { de: "Englisch" },
         isDefaultSiteLanguage: true,
       },
       {
@@ -184,20 +172,20 @@ test("Should reject missing locale in language label inline translation", () => 
   expect(parsed.error.issues).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        message: 'Missing translation for locale "de"',
-        path: ["languages", 0, "label", "de"],
+        message: 'Missing translation for default locale "en"',
+        path: ["languages", 0, "label", "en"],
       }),
     ]),
   )
 })
 
-test("Should accept config when inline translations cover all site locales", () => {
-  const config = configSchema.parse({
+test("Should reject unsupported locale in inline translation", () => {
+  const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
     languages: [
       {
         code: "en",
-        label: { en: "English", de: "Englisch" },
+        label: { en: "English", fr: "Anglais" },
         isDefaultSiteLanguage: true,
       },
       {
@@ -210,11 +198,46 @@ test("Should accept config when inline translations cover all site locales", () 
       en: "LightNet",
       de: "LichtNet",
     },
+  })
+
+  expect(parsed.success).toBe(false)
+  if (parsed.success) {
+    return
+  }
+
+  expect(parsed.error.issues).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        message:
+          'Invalid locale "fr". Inline translations only support configured site locales: en, de',
+        path: ["languages", 0, "label", "fr"],
+      }),
+    ]),
+  )
+})
+
+test("Should accept config when inline translations define default locale", () => {
+  const config = configSchema.parse({
+    ...requiredConfig,
+    languages: [
+      {
+        code: "en",
+        label: { en: "English" },
+        isDefaultSiteLanguage: true,
+      },
+      {
+        code: "de",
+        label: { en: "German" },
+        isSiteLanguage: true,
+      },
+    ],
+    title: {
+      en: "LightNet",
+    },
     logo: {
       src: "/src/assets/logo.png",
       alt: {
         en: "LightNet logo",
-        de: "LightNet Logo",
       },
     },
     mainMenu: [
@@ -222,7 +245,6 @@ test("Should accept config when inline translations cover all site locales", () 
         href: "/about",
         label: {
           en: "About",
-          de: "Uber",
         },
         requiresLocale: true,
       },

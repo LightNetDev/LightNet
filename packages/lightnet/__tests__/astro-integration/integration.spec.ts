@@ -148,11 +148,11 @@ test("Should fail schema validation when no site is set", () => {
   })
 })
 
-test("Should include path when inline translation misses a site locale", () => {
+test("Should include path when inline translation misses default locale", () => {
   const error = getThrownError(() =>
     runSetup({
       lightnetConfig: {
-        title: { en: "LightNet" },
+        title: { de: "LightNet" },
       },
       astroSite: "https://lightnet.community",
     }),
@@ -161,7 +161,7 @@ test("Should include path when inline translation misses a site locale", () => {
   expect(error).toMatchObject({
     message: "Invalid LightNet configuration",
     hint: expect.stringContaining(
-      'title.de: Missing translation for locale "de"',
+      'title.en: Missing translation for default locale "en"',
     ),
   })
 })

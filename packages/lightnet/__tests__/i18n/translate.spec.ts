@@ -7,3 +7,8 @@ test("Should load built-in translations for non-default site locales", () => {
   expect(t("ln.search.title")).toBe("Suche")
   expect(t("ln.header.select-language")).toBe("Sprache auswählen")
 })
+
+test("Should fallback inline translations to default locale", () => {
+  const t = useTranslate("de")
+  expect(t({ en: "Open" })).toBe("Open")
+})

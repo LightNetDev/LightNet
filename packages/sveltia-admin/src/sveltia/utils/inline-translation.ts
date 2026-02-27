@@ -21,5 +21,9 @@ export const inlineTranslation = (options: Options): Field => ({
   summary: `{{${config.defaultLocale}}}`,
   ...options,
   widget: "object",
-  fields: locales.map((locale) => ({ ...locale, widget: "string" })),
+  fields: locales.map((locale) => ({
+    ...locale,
+    widget: "string",
+    required: locale.name === config.defaultLocale,
+  })),
 })

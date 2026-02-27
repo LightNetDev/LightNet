@@ -58,7 +58,11 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
   ]
   return (input, options) => {
     if (typeof input !== "string") {
-      return resolveInlineTranslation(input, resolvedLocale)
+      return resolveInlineTranslation(
+        input,
+        resolvedLocale,
+        config.defaultLocale,
+      )
     }
 
     const value = t(input, { fallbackLng, ...options })

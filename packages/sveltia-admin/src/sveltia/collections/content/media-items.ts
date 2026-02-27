@@ -2,6 +2,7 @@ import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
+import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
 
 export const mediaItemCollection: Collection = {
@@ -81,6 +82,13 @@ export const mediaItemCollection: Collection = {
                 },
               },
             },
+            inlineTranslation({
+              name: "label",
+              label: "Label",
+              hint: "Optional: Set a custom label for this content item. If omitted, LightNet uses the file or link name.",
+              required: false,
+              collapsed: "auto",
+            }),
           ],
         },
         {
@@ -95,6 +103,12 @@ export const mediaItemCollection: Collection = {
               type: "url",
               pattern: ["^https?://", "Link must start with http(s)://"],
             },
+            inlineTranslation({
+              name: "label",
+              label: "Label",
+              required: false,
+              collapsed: "auto",
+            }),
           ],
         },
       ],

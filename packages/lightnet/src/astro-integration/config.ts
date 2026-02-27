@@ -31,7 +31,8 @@ const linkSchema = z.object({
   href: z.string(),
   /**
    * Label to be used for the link.
-   * Must define values for all site locales.
+   * Must define a value for the default site locale.
+   * Other configured site locales are optional.
    */
   label: inlineTranslationSchema,
   /**
@@ -206,7 +207,8 @@ export const configSchema = z.object({
       src: z.string(),
       /**
        * Alt attribute to add for screen reader etc.
-       * Must define values for all site locales.
+       * Must define a value for the default site locale.
+       * Other configured site locales are optional.
        */
       alt: inlineTranslationSchema.optional(),
       /**
@@ -297,7 +299,7 @@ export const configSchema = z.object({
 export const extendedConfigSchema = configSchema.transform((config, ctx) => {
   const locales = resolveLocales(config)
   const defaultLocale = resolveDefaultLocale(config)
-  validateInlineTranslations(config, locales, ctx)
+  validateInlineTranslations(config, locales, defaultLocale, ctx)
   return {
     ...config,
     locales,
