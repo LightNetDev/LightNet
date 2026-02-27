@@ -1,10 +1,10 @@
+import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
+import type { TranslateFn } from "../i18n/translate"
 import { verifySchema } from "../utils/verify-schema"
 import { mediaTypeEntrySchema } from "./content-schema"
-import { AstroError } from "astro/errors"
 import { getMediaItems } from "./get-media-items"
-import type { TranslateFn } from "../i18n/translate"
 
 const typesById = Object.fromEntries(
   (await loadTypes()).map((type) => [type.id, type]),
