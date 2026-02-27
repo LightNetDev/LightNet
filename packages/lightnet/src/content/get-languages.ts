@@ -1,4 +1,5 @@
 import { resolveLanguage } from "../i18n/resolve-language"
+import type { TranslateFn } from "../i18n/translate"
 import { getMediaItems } from "./get-media-items"
 
 /**
@@ -12,3 +13,15 @@ export const contentLanguages = Object.values(
     ]),
   ),
 )
+
+export const getUsedLanguages = async (
+  currentLocale: string,
+  t: TranslateFn,
+) => {
+  return contentLanguages
+    .map((language) => ({
+      ...language,
+      labelText: t(language.label),
+    }))
+    .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
+}
