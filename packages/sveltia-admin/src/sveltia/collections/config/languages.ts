@@ -1,13 +1,14 @@
 import type { Collection } from "@sveltia/cms"
-import lightnetConfig from "virtual:lightnet/config"
+import config from "virtual:lightnet/config"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
-import config from "virtual:lightnet/config"
 
 export const languagesCollection: Collection = {
   name: "languages",
   label: "Languages",
+  description:
+    "Define site and content languages [[Read documentation]](https://docs.lightnet.community/build/i18n/fundamentals/)",
   folder: projectPath("src/config/languages"),
   format: "json",
   icon: "language",

@@ -7,6 +7,8 @@ import { projectPath } from "../../utils/path"
 export const siteConfigCollection: FileCollection = {
   name: "site-config",
   label: "Site Configuration",
+  description:
+    "Configure general site settings. Examples: site title, URL, menu links. [[Read documentation]](https://docs.lightnet.community/build/configuration/reference/)",
   icon: "settings",
   files: [
     {

@@ -1,12 +1,14 @@
 import type { Collection } from "@sveltia/cms"
+import config from "virtual:lightnet/config"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
-import config from "virtual:lightnet/config"
 
 export const mediaTypeCollection: Collection = {
   name: "media-types",
   label: "Media Types",
+  description:
+    "Define different content formats. Examples: books, videos, audio. [Read documentation](https://docs.lightnet.community/content/media-types/)",
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
   format: "json",

@@ -1,12 +1,14 @@
 import type { Collection } from "@sveltia/cms"
+import config from "virtual:lightnet/config"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
-import config from "virtual:lightnet/config"
 
 export const categoriesCollection: Collection = {
   name: "categories",
   label: "Categories",
+  description:
+    "Organize and filter media items by topic. Examples: discipleship, youth, prayer. [Read documentation](https://docs.lightnet.community/content/categories/)",
   label_singular: "Category",
   folder: projectPath("src/content/categories"),
   create: true,

@@ -8,6 +8,8 @@ import { projectPath } from "../../utils/path"
 export const mediaItemCollection: Collection = {
   name: "media",
   label: "Media Items",
+  description:
+    "Add content entries to the media library. Examples: a book PDF, a YouTube link. [Read documentation](https://docs.lightnet.community/content/media-items/)",
   label_singular: "Media Item",
   folder: projectPath("src/content/media"),
   create: true,
