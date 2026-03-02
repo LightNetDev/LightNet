@@ -1,3 +1,3 @@
-import { siteConfigCollection } from "./site-config"
+import { lightnetConfigCollection } from "./lightnet-config"
 
-export const configCollections = [siteConfigCollection]
+export const configCollections = [lightnetConfigCollection]

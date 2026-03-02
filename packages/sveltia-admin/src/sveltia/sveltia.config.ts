@@ -51,11 +51,6 @@ export const config: CmsConfig = {
     clean_accents: true,
     maxlength: 60,
   },
-  collections: [
-    ...configCollections,
-    {
-      divider: true,
-    },
-    ...contentCollections,
-  ],
+  singletons: [...configCollections],
+  collections: [...contentCollections],
 }

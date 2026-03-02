@@ -5,9 +5,10 @@ import { mediaItemCollection } from "./media-items"
 import { mediaTypeCollection } from "./media-types"
 
 export const contentCollections = [
-  languagesCollection,
-  categoriesCollection,
   mediaItemCollection,
-  mediaTypeCollection,
+  { divider: true },
+  categoriesCollection,
+  languagesCollection,
   mediaCollectionCollection,
+  mediaTypeCollection,
 ]

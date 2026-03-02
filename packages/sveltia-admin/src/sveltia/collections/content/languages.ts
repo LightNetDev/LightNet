@@ -8,11 +8,10 @@ export const languagesCollection: Collection = {
   name: "languages",
   label: "Languages",
   description:
-    "Define content languages. Examples: en, de, ar. [Read documentation](https://docs.lightnet.community/build/i18n/fundamentals/)",
+    "Define content languages and site. Examples: en, de, ar. [Read documentation](https://docs.lightnet.community/build/i18n/fundamentals/)",
   label_singular: "Language",
   folder: projectPath("src/content/languages"),
   format: "json",
-  icon: "language",
   slug: "{{code}}",
   summary: `{{label.${config.defaultLocale}}}  ({{code}})`,
   sortable_fields: ["code", "label"],
