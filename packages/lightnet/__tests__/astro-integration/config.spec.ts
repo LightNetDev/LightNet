@@ -56,26 +56,20 @@ test("Should reject object-based siteLanguages config", () => {
   ).toThrowError(/Expected array, received object/)
 })
 
-test("Should reject defaultSiteLanguage missing from siteLanguages", () => {
+test("Should allow defaultSiteLanguage outside siteLanguages", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
     siteLanguages: ["en", "de"],
     defaultSiteLanguage: "fr",
+    title: {
+      fr: "LightNet",
+    },
   })
 
-  expect(parsed.success).toBe(false)
-  if (parsed.success) {
-    return
-  }
-
-  expect(parsed.error.issues).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        message: 'defaultSiteLanguage "fr" must be included in siteLanguages',
-        path: ["defaultSiteLanguage"],
-      }),
-    ]),
-  )
+  expect(parsed.success).toBe(true)
+  if (!parsed.success) return
+  expect(parsed.data.locales).toEqual(["fr", "en", "de"])
+  expect(parsed.data.defaultLocale).toBe("fr")
 })
 
 test("Should reject fallbackLanguages key missing from siteLanguages", () => {
@@ -102,7 +96,7 @@ test("Should reject fallbackLanguages key missing from siteLanguages", () => {
   )
 })
 
-test("Should reject fallbackLanguages value missing from siteLanguages", () => {
+test("Should allow fallbackLanguages values outside siteLanguages", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
     siteLanguages: ["en", "de"],
@@ -111,20 +105,7 @@ test("Should reject fallbackLanguages value missing from siteLanguages", () => {
     },
   })
 
-  expect(parsed.success).toBe(false)
-  if (parsed.success) {
-    return
-  }
-
-  expect(parsed.error.issues).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        message:
-          'fallbackLanguages value "fr" must be included in siteLanguages',
-        path: ["fallbackLanguages", "de", 0],
-      }),
-    ]),
-  )
+  expect(parsed.success).toBe(true)
 })
 
 test("Should accept missing non-default locale in title inline translation", () => {
