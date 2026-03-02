@@ -39,13 +39,27 @@ test("Should require only default locale in inline translation fields", () => {
 })
 
 test("Should expose optional inline label for media content upload and link items", () => {
-  const contentField = mediaItemCollection.fields.find(
-    (field) => "name" in field && field.name === "content",
-  ) as {
-    types: Array<{
+  const fields = (mediaItemCollection as { fields: unknown[] }).fields
+  const contentField = fields.find(
+    (
+      field,
+    ): field is {
       name: string
-      fields?: Array<{ name: string; required?: boolean }>
-    }>
+      types: Array<{
+        name: string
+        fields?: Array<{ name: string; required?: boolean }>
+      }>
+    } =>
+      typeof field === "object" &&
+      field !== null &&
+      "name" in field &&
+      (field as { name?: unknown }).name === "content" &&
+      "types" in field &&
+      Array.isArray((field as { types?: unknown }).types),
+  )
+
+  if (!contentField) {
+    throw new Error("content field is missing in media item collection")
   }
 
   const uploadType = contentField.types.find((type) => type.name === "upload")

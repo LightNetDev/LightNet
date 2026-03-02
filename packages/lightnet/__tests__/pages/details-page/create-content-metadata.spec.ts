@@ -7,7 +7,7 @@ const t: TranslateFn = (k) => {
   if (typeof k === "string") {
     return k
   }
-  return k["en"]
+  return k["en"] ?? ""
 }
 
 test("Should create complete content metadata", () => {

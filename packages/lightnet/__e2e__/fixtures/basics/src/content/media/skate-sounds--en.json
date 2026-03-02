@@ -5,7 +5,10 @@
   "dateCreated": "2024-04-21",
   "authors": ["Sk8 Ministries"],
   "content": [
-    { "type": "upload", "url": "/files/example-audio.mp3" },
+    {
+      "type": "upload",
+      "url": "/files/example-audio.mp3"
+    },
     {
       "type": "link",
       "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"

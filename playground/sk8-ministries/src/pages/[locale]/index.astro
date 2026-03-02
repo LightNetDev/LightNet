@@ -3,6 +3,7 @@ export { getLocalePaths as getStaticPaths } from "lightnet/i18n"
 
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
+import { getEntries } from "astro:content"
 import {
   CategoriesSection,
   HeroSection,
@@ -27,10 +28,9 @@ const learnSkateboarding = await getEntry(
 if (!learnSkateboarding) {
   throw new AstroError("Media Collection 'learn-skateboarding' not found")
 }
-
-const learnSkateboardingItems = await getMediaItems({
-  where: { collection: "learn-skateboarding" },
-})
+const learnSkateboardingItems = await getEntries(
+  learnSkateboarding.data.mediaItems,
+)
 
 const { t, currentLocale } = Astro.locals.i18n
 ---

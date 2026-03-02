@@ -6,7 +6,7 @@ vi.mock("astro:content", () => ({
   reference: () => z.string(),
 }))
 
-const { categorySchema, inlineTranslationSchema } =
+const { categorySchema, inlineTranslationSchema, mediaCollectionSchema } =
   await import("../../src/content/content-schema")
 
 test("Should accept inline translation with only default locale", () => {
@@ -54,4 +54,25 @@ test("Should accept category label with default locale only", () => {
   })
 
   expect(parsed.success).toBe(true)
+})
+
+test("Should accept media collection with media item references", () => {
+  const parsed = mediaCollectionSchema.safeParse({
+    label: {
+      en: "Collection",
+    },
+    mediaItems: ["book-a--en", "book-b--en"],
+  })
+
+  expect(parsed.success).toBe(true)
+})
+
+test("Should reject media collection without media item references", () => {
+  const parsed = mediaCollectionSchema.safeParse({
+    label: {
+      en: "Collection",
+    },
+  })
+
+  expect(parsed.success).toBe(false)
 })

@@ -147,33 +147,6 @@ export const mediaItemCollection: Collection = {
       search_fields: ["{{slug}}"],
     },
     {
-      name: "collections",
-      label: "Collections",
-      widget: "list",
-      label_singular: "Collection",
-      required: false,
-      summary: "{{fields.collection}}",
-      fields: [
-        {
-          name: "collection",
-          label: "Collection",
-          widget: "relation",
-          collection: "media-collections",
-          dropdown_threshold: 1,
-          value_field: "{{slug}}",
-          display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
-        },
-        {
-          name: "index",
-          label: "Index",
-          hint: "The position of the media item inside the collection",
-          required: false,
-          widget: "number",
-          value_type: "int",
-        },
-      ],
-    },
-    {
       name: "description",
       label: "Description",
       widget: "markdown",

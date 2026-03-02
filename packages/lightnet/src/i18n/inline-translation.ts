@@ -1,6 +1,6 @@
 import { AstroError } from "astro/errors"
 
-export type InlineTranslation = Record<string, string>
+export type InlineTranslation = Record<string, string | undefined>
 
 export function resolveInlineTranslation(
   inlineTranslation: InlineTranslation,

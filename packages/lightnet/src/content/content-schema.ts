@@ -62,6 +62,13 @@ export const mediaCollectionSchema = z.object({
    * Label translated for the default locale. Other configured site locales are optional.
    */
   label: inlineTranslationSchema,
+  /**
+   * Ordered list of media items included in this collection.
+   * The array order defines how items are shown when querying by collection.
+   *
+   * @example ["my-book--en", "my-video--en"]
+   */
+  mediaItems: z.array(reference("media")),
 })
 
 /**
@@ -117,26 +124,6 @@ export const mediaItemSchema = z.object({
    * @example ["family"]
    */
   categories: z.array(reference("categories")).nullish(),
-  /**
-   * List of media collections this media item is included.
-   * Collections can be used to group media items into series, playlists...
-   *
-   * @example [{collection:"my-series"}]
-   */
-  collections: z
-    .array(
-      z.object({
-        /**
-         * Id of the collection.
-         */
-        collection: reference("media-collections"),
-        /**
-         * Position of the item inside the collection.
-         */
-        index: z.number().optional(),
-      }),
-    )
-    .nullish(),
   /**
    * BCP-47 name of the language this media item is in.
    *
@@ -334,3 +321,10 @@ export const categoryEntrySchema = z.object({
   id: z.string(),
   data: categorySchema,
 })
+
+export const mediaCollectionEntrySchema = z.object({
+  id: z.string(),
+  data: mediaCollectionSchema,
+})
+
+export type MediaCollectionEntry = z.infer<typeof mediaCollectionEntrySchema>

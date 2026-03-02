@@ -13,6 +13,11 @@ import {
   queryMediaItems,
 } from "../src/content/query-media-items"
 
-export const getMediaItems = (
+export const getMediaItems = async (
   query?: MediaItemQuery<CollectionEntry<"media">>,
-) => queryMediaItems(getCollection("media"), query ?? {})
+) =>
+  queryMediaItems(
+    getCollection("media"),
+    getCollection("media-collections"),
+    query ?? {},
+  )

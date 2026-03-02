@@ -1,5 +1,4 @@
-import { compareMediaCollectionItems } from "./compare-media-collection-items"
-import type { MediaItemEntry } from "./content-schema"
+import type { MediaCollectionEntry, MediaItemEntry } from "./content-schema"
 
 export type MediaItemQuery<TMediaItem extends MediaItemEntry> = {
   /**
@@ -9,9 +8,7 @@ export type MediaItemQuery<TMediaItem extends MediaItemEntry> = {
     type?: TMediaItem["data"]["type"]["id"]
     language?: string
     category?: NonNullable<TMediaItem["data"]["categories"]>[number]["id"]
-    collection?: NonNullable<
-      TMediaItem["data"]["collections"]
-    >[number]["collection"]["id"]
+    collection?: MediaCollectionEntry["id"]
   }
   orderBy?: "dateCreated" | "title"
   limit?: number
@@ -19,6 +16,7 @@ export type MediaItemQuery<TMediaItem extends MediaItemEntry> = {
 
 export const queryMediaItems = async <TMediaItem extends MediaItemEntry>(
   allItems: Promise<TMediaItem[]>,
+  mediaCollections: Promise<MediaCollectionEntry[]>,
   query: MediaItemQuery<TMediaItem>,
 ) => {
   const { where = {}, orderBy, limit } = query
@@ -35,14 +33,18 @@ export const queryMediaItems = async <TMediaItem extends MediaItemEntry>(
       (item) => !!item.data.categories?.find(({ id }) => id === where.category),
     )
   }
+
+  let mediaCollection: MediaCollectionEntry | undefined
   if (where.collection) {
-    filters.push(
-      (item) =>
-        !!item.data.collections?.find(
-          ({ collection }) => collection.id === where.collection,
-        ),
+    mediaCollection = (await mediaCollections).find(
+      (mc) => mc.id === where.collection,
     )
+    const mediaIdsInCollection = new Set(
+      mediaCollection?.data.mediaItems.map(({ id }) => id),
+    )
+    filters.push((item) => mediaIdsInCollection.has(item.id))
   }
+
   const combinedFilter = (item: TMediaItem) =>
     filters.every((filter) => filter(item))
 
@@ -58,9 +60,17 @@ export const queryMediaItems = async <TMediaItem extends MediaItemEntry>(
       item1.data.title.localeCompare(item2.data.title),
     )
   }
-  const { collection } = where
-  if (!orderBy && collection) {
-    items.sort((a, b) => compareMediaCollectionItems(a, b, collection))
+
+  if (!orderBy && mediaCollection) {
+    const positionMap = new Map<string, number>()
+    mediaCollection.data.mediaItems.forEach((item, index) =>
+      positionMap.set(item.id, index),
+    )
+
+    items.sort(
+      (item1, item2) =>
+        (positionMap.get(item1.id) ?? -1) - (positionMap.get(item2.id) ?? -1),
+    )
   }
 
   return items.slice(0, limit)

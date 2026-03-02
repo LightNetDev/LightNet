@@ -4,7 +4,10 @@
   "type": "video",
   "dateCreated": "2024-04-21",
   "content": [
-    { "type": "link", "url": "https://www.youtube.com/watch?v=tnpLkUQZODc" }
+    {
+      "type": "link",
+      "url": "https://www.youtube.com/watch?v=tnpLkUQZODc"
+    }
   ],
   "image": "./images/how-to-kickflip--en.webp",
   "authors": ["Skiddy Skates"],
