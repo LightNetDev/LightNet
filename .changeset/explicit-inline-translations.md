@@ -28,8 +28,8 @@ Example:
 
 ## Updated fields
 
-- Config: `title`, `logo.alt`, `languages[].label`, `mainMenu[].label`
-- Content: `categories.label`, `media-collections.label`, `media-types.label`, `media[].content[].label`, `media-types.detailsPage.openActionLabel`
+- Config: `title`, `logo.alt`, `mainMenu[].label`
+- Content: `languages.label`, `categories.label`, `media-collections.label`, `media-types.label`, `media[].content[].label`, `media-types.detailsPage.openActionLabel`
 
 ## Validation rules
 

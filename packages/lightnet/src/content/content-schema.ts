@@ -177,7 +177,7 @@ export const mediaItemSchema = z.object({
          *
          * @example "upload"
          */
-        type: z.enum(["upload", "link"]).optional(),
+        type: z.enum(["upload", "link"]),
         /**
          * Urls might be:
          * - links to youtube videos

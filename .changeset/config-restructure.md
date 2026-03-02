@@ -3,14 +3,18 @@
 "@lightnet/sveltia-admin": major
 ---
 
-Restructure LightNet config to support split file loading.
+Restructure LightNet config and language definitions.
 
 ## Breaking changes
 
-- Translation data is now expected in `config.translations` (directly or via `loadConfig()`), instead of being implicitly consumed from runtime translation files.
+- LightNet config now uses explicit locale settings:
+  - `defaultSiteLanguage: string`
+  - `siteLanguages: string[]`
+  - `fallbackLanguages: Record<string, string[]>`
+- Config labels now use inline locale maps instead of plain strings.
 - `resolveDefaultLocale` is no longer exported from `lightnet/i18n`.
 
-## Language config note
+## Language definitions
 
 Language definitions are now content entries:
 
@@ -18,17 +22,6 @@ Language definitions are now content entries:
 - each file must define `{ code, label }`
 - file name (without extension) must equal the `code` value
 
-When using split config files:
+## Sveltia Admin
 
-- Configure locale behavior in `/src/config/*.json` with:
-  - `siteLanguages: string[]`
-  - `defaultSiteLanguage: string`
-  - `fallbackLanguages: Record<string, string[]>`
-
-## New
-
-- Export `loadConfig()` from `lightnet` to load and merge config from:
-  - `/src/config/*.json`
-  - `/src/translations/*.(yml|yaml)`
-  - `/src/config/translations/*.(yml|yaml)`
-- Sveltia Admin now manages `languages` from `/src/content/languages` as a content collection.
+Sveltia Admin now manages `languages` from `/src/content/languages` as a content collection.
