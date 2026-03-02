@@ -1,4 +1,4 @@
-import type { CollectionFile, FileCollection } from "@sveltia/cms"
+import type { CollectionFile } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
 
 import { inlineTranslation } from "../../utils/inline-translation"
