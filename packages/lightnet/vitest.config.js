@@ -16,7 +16,6 @@ export default defineConfig({
         fallbackLanguages: { de: ["en"] },
         locales: ["en", "de"],
         defaultLocale: "en",
-        translations: {},
         internalDomains: [],
       },
       { site: "https://sk8-ministries.dev" },

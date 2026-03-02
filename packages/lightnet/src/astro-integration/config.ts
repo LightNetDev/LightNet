@@ -90,7 +90,7 @@ export const configSchema = z.object({
    *
    * @example: "https://media-library.com"
    */
-  site: z.string().url(),
+  site: z.string().url().optional(),
 
   /**
    * Title of the web site.
@@ -203,26 +203,6 @@ export const configSchema = z.object({
       hideHeaderSearchIcon: z.boolean().default(false),
     })
     .optional(),
-
-  /**
-   * UI translations keyed by BCP-47 locale code.
-   *
-   * Each locale contains a flat translation map: `translationKey -> translated string`.
-   * Use dot-separated keys for grouping (for example `menu.home`).
-   *
-   * @example
-   * {
-   *   "en": {
-   *     "menu.home": "Home",
-   *     "search.placeholder": "Search"
-   *   },
-   *   "de": {
-   *     "menu.home": "Startseite",
-   *     "search.placeholder": "Suchen"
-   *   }
-   * }
-   */
-  translations: z.record(z.record(z.string())).default({}),
   /**
    * Experimental features. Subject to change with any release.
    */

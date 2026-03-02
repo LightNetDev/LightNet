@@ -56,6 +56,19 @@ test("Should reject object-based siteLanguages config", () => {
   ).toThrowError(/Expected array, received object/)
 })
 
+test("Should reject removed translations config field", () => {
+  expect(() =>
+    configSchema.parse({
+      ...requiredConfig,
+      translations: {
+        en: {
+          "home.all-items": "All items",
+        },
+      },
+    }),
+  ).toThrowError(/Expected never, received object/)
+})
+
 test("Should allow defaultSiteLanguage outside siteLanguages", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,

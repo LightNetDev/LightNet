@@ -1,14 +1,15 @@
-// @ts-check
 import lightnetSveltiaAdmin from "@lightnet/sveltia-admin"
 import { defineConfig } from "astro/config"
-import lightnet, { loadConfig } from "lightnet"
+import lightnet from "lightnet"
+
+import lightnetConfig from "./lightnet.config.json"
 
 export default defineConfig({
   devToolbar: {
     enabled: false,
   },
   integrations: [
-    lightnet(await loadConfig()),
+    lightnet(lightnetConfig),
     lightnetSveltiaAdmin({
       siteRootInRepo: "/playground/sk8-ministries",
     }),

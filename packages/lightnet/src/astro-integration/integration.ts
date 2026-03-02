@@ -8,9 +8,7 @@ import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
 
-export function lightnet(
-  lightnetConfig: Partial<LightnetConfig>,
-): AstroIntegration {
+export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
   return {
     name: "lightnet",
     hooks: {

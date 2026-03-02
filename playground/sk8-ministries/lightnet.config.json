@@ -1,4 +1,21 @@
 {
+  "site": "https://sk8-ministries.pages.dev",
+  "title": {
+    "en": "Sk8 Ministries",
+    "de": "Sk8 Ministries",
+    "ar": "خدمات التزلج على الألواح"
+  },
+  "logo": { "src": "./src/assets/logo.png" },
+  "favicon": [
+    { "href": "favicon.ico", "sizes": "32x32" },
+    { "href": "favicon.svg" }
+  ],
+  "credits": true,
+  "searchPage": {
+    "filterByLocale": true
+  },
+  "siteLanguages": ["en", "de", "ar"],
+  "defaultSiteLanguage": "en",
   "mainMenu": [
     {
       "href": "/",
