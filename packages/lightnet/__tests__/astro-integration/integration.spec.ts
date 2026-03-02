@@ -134,7 +134,9 @@ test("Should fail schema validation when no site is set", () => {
 
   expect(error).toMatchObject({
     message: "Invalid LightNet configuration",
-    hint: expect.stringContaining("site: Required"),
+    hint: expect.stringContaining(
+      "Set `site` in your LightNet config or Astro config",
+    ),
   })
 })
 

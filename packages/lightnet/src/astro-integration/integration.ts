@@ -35,6 +35,13 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           site: lightnetConfig.site ?? astroConfig.site,
         }
 
+        if (!effectiveConfig.site) {
+          throw new AstroError(
+            "Invalid LightNet configuration",
+            "Set `site` in your LightNet config or Astro config. At least one of them is required.",
+          )
+        }
+
         const config = verifySchema(
           extendedConfigSchema,
           effectiveConfig,
