@@ -6,7 +6,7 @@ const groupItemsByCommonId = async () => {
     if (!itemsByCommonId.has(commonId)) {
       itemsByCommonId.set(commonId, [])
     }
-    itemsByCommonId.get(commonId)?.push({ id, language })
+    itemsByCommonId.get(commonId)?.push({ id, language: language.id })
   })
   itemsByCommonId.forEach((value, key) => {
     if (value.length < 2) {

@@ -4,16 +4,6 @@ vi.mock("virtual:lightnet/config", () => ({
   default: {
     defaultLocale: "en",
     locales: ["en", "de"],
-    languages: [
-      {
-        code: "en",
-        label: { en: "English" },
-      },
-      {
-        code: "de",
-        label: { en: "German" },
-      },
-    ],
   },
 }))
 

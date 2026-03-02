@@ -1,4 +1,3 @@
-import { AstroError } from "astro/errors"
 import YAML from "yaml"
 
 import { verifySchema } from "../utils/verify-schema"
@@ -12,7 +11,6 @@ import { configSchema } from "./config"
  *
  * It collects and validates:
  * - base settings from `/src/config/*.json`
- * - language definitions from `/src/config/languages/*.json`
  * - translations from `/src/config/translations/*.(yml|yaml)`
  *
  * Typical usage:
@@ -29,12 +27,11 @@ import { configSchema } from "./config"
 export const loadConfig = async () => {
   const settings = await loadSettings()
   const translations = await loadTranslations()
-  const languages = await loadLanguages()
   return verifySchema(
     configSchema.partial(),
-    { ...settings, translations, languages },
+    { ...settings, translations },
     "Invalid LightNet config loaded from /src/config",
-    "Fix the configuration issues listed below. Check /src/config/*.json, /src/config/languages/*.json, and /src/config/translations/*.(yml|yaml):",
+    "Fix the configuration issues listed below. Check /src/config/*.json and /src/config/translations/*.(yml|yaml):",
   )
 }
 
@@ -49,60 +46,6 @@ const loadSettings = async () => {
     Object.assign(settings, await settingsImport())
   }
   return settings
-}
-
-const loadLanguages = async () => {
-  // Load /src/config/languages/{bcp47}.json as a flat languages array.
-  const languages: unknown[] = []
-  for await (const [path, languageImport] of Object.entries(
-    import.meta.glob("/src/config/languages/*.json", {
-      import: "default",
-    }),
-  )) {
-    const [fileName] = path.split("/").slice(-1)
-    const fileCode = fileName.replace(/\.json$/, "")
-    const language = parseLanguageFile({
-      fileName,
-      fileCode,
-      language: await languageImport(),
-    })
-    languages.push(language)
-  }
-  return languages
-}
-
-export const parseLanguageFile = ({
-  fileName,
-  fileCode,
-  language,
-}: {
-  fileName: string
-  fileCode: string
-  language: unknown
-}) => {
-  if (!language || typeof language !== "object") {
-    throw new AstroError(
-      `Invalid language config in /src/config/languages/${fileName}`,
-      `Expected ${fileName} to contain an object with "code": "${fileCode}".`,
-    )
-  }
-
-  const code = (language as { code?: unknown }).code
-  if (typeof code !== "string") {
-    throw new AstroError(
-      `Invalid language config in /src/config/languages/${fileName}`,
-      `Missing required string "code". Expected "code": "${fileCode}" in ${fileName}.`,
-    )
-  }
-
-  if (code !== fileCode) {
-    throw new AstroError(
-      `Invalid language config in /src/config/languages/${fileName}`,
-      `Language code mismatch: expected "${fileCode}" from filename, received "${code}" in ${fileName}.`,
-    )
-  }
-
-  return language
 }
 
 const loadTranslations = async () => {

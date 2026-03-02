@@ -4,18 +4,8 @@ import { lightnet } from "../../src/astro-integration/integration"
 
 const requiredLightnetConfig = {
   title: { en: "LightNet", de: "LightNet" },
-  languages: [
-    {
-      code: "en",
-      label: { en: "English", de: "Englisch" },
-      isDefaultSiteLanguage: true,
-    },
-    {
-      code: "de",
-      label: { en: "German", de: "Deutsch" },
-      isSiteLanguage: true,
-    },
-  ],
+  siteLanguages: ["en", "de"],
+  defaultSiteLanguage: "en",
 }
 
 const runSetup = ({

@@ -1,5 +1,6 @@
 ---
 "lightnet": major
+"@lightnet/sveltia-admin": major
 ---
 
 Restructure LightNet config to support split file loading.
@@ -11,21 +12,23 @@ Restructure LightNet config to support split file loading.
 
 ## Language config note
 
-`languages` continues to use the array shape:
+Language definitions are now content entries:
 
-- `languages: [{ code, label, ... }]`
-- `code` is required and validated as BCP-47.
+- `src/content/languages/{bcp47}.json`
+- each file must define `{ code, label }`
+- file name (without extension) must equal the `code` value
 
 When using split config files:
 
-- Keep one language per file in `/src/config/languages/*.json`
-- Each file must include a `code` field
-- The file name (without extension) must exactly equal the `code` value
+- Configure locale behavior in `/src/config/*.json` with:
+  - `siteLanguages: string[]`
+  - `defaultSiteLanguage: string`
+  - `fallbackLanguages: Record<string, string[]>`
 
 ## New
 
 - Export `loadConfig()` from `lightnet` to load and merge config from:
   - `/src/config/*.json`
-  - `/src/config/languages/*.json`
   - `/src/translations/*.(yml|yaml)`
   - `/src/config/translations/*.(yml|yaml)`
+- Sveltia Admin now manages `languages` from `/src/content/languages` as a content collection.

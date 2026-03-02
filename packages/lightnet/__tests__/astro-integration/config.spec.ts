@@ -8,13 +8,8 @@ import {
 const requiredConfig = {
   site: "https://lightnet.community",
   title: { en: "LightNet" },
-  languages: [
-    {
-      code: "en",
-      label: { en: "English" },
-      isDefaultSiteLanguage: true,
-    },
-  ],
+  siteLanguages: ["en"],
+  defaultSiteLanguage: "en",
 }
 
 test("Should default credits to true when omitted", () => {
@@ -32,64 +27,111 @@ test("Should preserve explicit credits false", () => {
   expect(config.credits).toBe(false)
 })
 
-test("Should reject invalid BCP-47 language code", () => {
+test("Should reject invalid BCP-47 site language code", () => {
   expect(() =>
     configSchema.parse({
       ...requiredConfig,
-      languages: [
-        {
-          ...requiredConfig.languages[0],
-          code: "en_US",
-        },
-      ],
+      siteLanguages: ["en_US"],
     }),
   ).toThrowError(/Invalid BCP-47 language code/)
 })
 
-test("Should reject duplicate language codes", () => {
+test("Should reject duplicate site language codes", () => {
   expect(() =>
     configSchema.parse({
       ...requiredConfig,
-      languages: [
-        requiredConfig.languages[0],
-        {
-          ...requiredConfig.languages[0],
-          isDefaultSiteLanguage: false,
-          isSiteLanguage: true,
-        },
-      ],
+      siteLanguages: ["en", "en"],
     }),
-  ).toThrowError(/Duplicate language code/)
+  ).toThrowError(/Duplicate site language code/)
 })
 
-test("Should reject object-based language config", () => {
+test("Should reject object-based siteLanguages config", () => {
   expect(() =>
     configSchema.parse({
       ...requiredConfig,
-      languages: {
-        en: {
-          label: { en: "English" },
-          isDefaultSiteLanguage: true,
-        },
+      siteLanguages: {
+        en: true,
       },
     }),
   ).toThrowError(/Expected array, received object/)
 })
 
+test("Should reject defaultSiteLanguage missing from siteLanguages", () => {
+  const parsed = extendedConfigSchema.safeParse({
+    ...requiredConfig,
+    siteLanguages: ["en", "de"],
+    defaultSiteLanguage: "fr",
+  })
+
+  expect(parsed.success).toBe(false)
+  if (parsed.success) {
+    return
+  }
+
+  expect(parsed.error.issues).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        message: 'defaultSiteLanguage "fr" must be included in siteLanguages',
+        path: ["defaultSiteLanguage"],
+      }),
+    ]),
+  )
+})
+
+test("Should reject fallbackLanguages key missing from siteLanguages", () => {
+  const parsed = extendedConfigSchema.safeParse({
+    ...requiredConfig,
+    siteLanguages: ["en", "de"],
+    fallbackLanguages: {
+      fr: ["en"],
+    },
+  })
+
+  expect(parsed.success).toBe(false)
+  if (parsed.success) {
+    return
+  }
+
+  expect(parsed.error.issues).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        message: 'fallbackLanguages key "fr" must be included in siteLanguages',
+        path: ["fallbackLanguages", "fr"],
+      }),
+    ]),
+  )
+})
+
+test("Should reject fallbackLanguages value missing from siteLanguages", () => {
+  const parsed = extendedConfigSchema.safeParse({
+    ...requiredConfig,
+    siteLanguages: ["en", "de"],
+    fallbackLanguages: {
+      de: ["fr"],
+    },
+  })
+
+  expect(parsed.success).toBe(false)
+  if (parsed.success) {
+    return
+  }
+
+  expect(parsed.error.issues).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        message:
+          'fallbackLanguages value "fr" must be included in siteLanguages',
+        path: ["fallbackLanguages", "de", 0],
+      }),
+    ]),
+  )
+})
+
 test("Should accept missing non-default locale in title inline translation", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
-    languages: [
-      requiredConfig.languages[0],
-      {
-        code: "de",
-        label: {
-          en: "German",
-          de: "Deutsch",
-        },
-        isSiteLanguage: true,
-      },
-    ],
+    siteLanguages: ["en", "de"],
+    defaultSiteLanguage: "en",
     title: {
       en: "LightNet",
     },
@@ -101,18 +143,8 @@ test("Should accept missing non-default locale in title inline translation", () 
 test("Should reject missing default locale in nested inline translation", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
-    languages: [
-      {
-        code: "en",
-        label: { en: "English", de: "Englisch" },
-        isDefaultSiteLanguage: true,
-      },
-      {
-        code: "de",
-        label: { en: "German", de: "Deutsch" },
-        isSiteLanguage: true,
-      },
-    ],
+    siteLanguages: ["en", "de"],
+    defaultSiteLanguage: "en",
     title: {
       en: "LightNet",
       de: "LichtNet",
@@ -143,60 +175,14 @@ test("Should reject missing default locale in nested inline translation", () => 
   )
 })
 
-test("Should reject missing default locale in language label inline translation", () => {
-  const parsed = extendedConfigSchema.safeParse({
-    ...requiredConfig,
-    languages: [
-      {
-        code: "en",
-        label: { de: "Englisch" },
-        isDefaultSiteLanguage: true,
-      },
-      {
-        code: "de",
-        label: { en: "German", de: "Deutsch" },
-        isSiteLanguage: true,
-      },
-    ],
-    title: {
-      en: "LightNet",
-      de: "LichtNet",
-    },
-  })
-
-  expect(parsed.success).toBe(false)
-  if (parsed.success) {
-    return
-  }
-
-  expect(parsed.error.issues).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        message: 'Missing translation for default locale "en"',
-        path: ["languages", 0, "label", "en"],
-      }),
-    ]),
-  )
-})
-
 test("Should reject unsupported locale in inline translation", () => {
   const parsed = extendedConfigSchema.safeParse({
     ...requiredConfig,
-    languages: [
-      {
-        code: "en",
-        label: { en: "English", fr: "Anglais" },
-        isDefaultSiteLanguage: true,
-      },
-      {
-        code: "de",
-        label: { en: "German", de: "Deutsch" },
-        isSiteLanguage: true,
-      },
-    ],
+    siteLanguages: ["en", "de"],
+    defaultSiteLanguage: "en",
     title: {
       en: "LightNet",
-      de: "LichtNet",
+      fr: "LumiereNet",
     },
   })
 
@@ -210,7 +196,7 @@ test("Should reject unsupported locale in inline translation", () => {
       expect.objectContaining({
         message:
           'Invalid locale "fr". Inline translations only support configured site locales: en, de',
-        path: ["languages", 0, "label", "fr"],
+        path: ["title", "fr"],
       }),
     ]),
   )
@@ -219,18 +205,8 @@ test("Should reject unsupported locale in inline translation", () => {
 test("Should accept config when inline translations define default locale", () => {
   const config = configSchema.parse({
     ...requiredConfig,
-    languages: [
-      {
-        code: "en",
-        label: { en: "English" },
-        isDefaultSiteLanguage: true,
-      },
-      {
-        code: "de",
-        label: { en: "German" },
-        isSiteLanguage: true,
-      },
-    ],
+    siteLanguages: ["en", "de"],
+    defaultSiteLanguage: "en",
     title: {
       en: "LightNet",
     },
@@ -249,6 +225,9 @@ test("Should accept config when inline translations define default locale", () =
         requiresLocale: true,
       },
     ],
+    fallbackLanguages: {
+      de: ["en"],
+    },
   })
 
   expect(config).toBeDefined()

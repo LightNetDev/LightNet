@@ -12,7 +12,7 @@ type MediaItem = {
   disabled?: boolean
   data: {
     title: string
-    language: string
+    language: { id: string }
     authors?: string[] | null
     type: { id: string }
     image: ImageMetadata
@@ -45,7 +45,7 @@ const mediaTypes = Object.fromEntries(
 <ol class="divide-y divide-gray-200">
   {
     items.map((item) => (
-      <li lang={item.data.language}>
+      <li lang={item.data.language.id}>
         <a
           href={
             item.disabled
@@ -79,7 +79,7 @@ const mediaTypes = Object.fromEntries(
 
           <div
             class="ms-4 flex grow flex-col justify-center sm:ms-6"
-            lang={item.data.language}
+            lang={item.data.language.id}
           >
             <p class="mb-1 line-clamp-3 text-balance font-bold text-gray-700 md:mb-3">
               <Icon

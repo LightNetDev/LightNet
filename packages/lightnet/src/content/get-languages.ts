@@ -8,8 +8,8 @@ import { getMediaItems } from "./get-media-items"
 export const contentLanguages = Object.values(
   Object.fromEntries(
     (await getMediaItems()).map(({ data: { language } }) => [
-      language,
-      resolveLanguage(language),
+      language.id,
+      resolveLanguage(language.id),
     ]),
   ),
 )

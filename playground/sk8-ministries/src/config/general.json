@@ -13,5 +13,7 @@
   "credits": true,
   "searchPage": {
     "filterByLocale": true
-  }
+  },
+  "siteLanguages": ["en", "de", "ar"],
+  "defaultSiteLanguage": "en"
 }

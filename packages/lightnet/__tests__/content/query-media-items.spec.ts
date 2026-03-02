@@ -50,7 +50,7 @@ const mediaItem = ({
       id: category,
       collection: "categories",
     })),
-    language,
+    language: { id: language, collection: "languages" },
     image,
     content: [{ type: "upload", url: "/files/example.pdf" }],
   },

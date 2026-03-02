@@ -6,7 +6,6 @@ import {
   type InlineTranslation,
   resolveInlineTranslation,
 } from "./inline-translation"
-import { resolveLanguage } from "./resolve-language"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
@@ -21,9 +20,11 @@ export type TranslateFn = (
 
 const languageCodes = [
   ...new Set(
-    config.languages
-      .filter((lng) => lng.isSiteLanguage)
-      .flatMap((lng) => [lng.code, ...lng.fallbackLanguages, "en"]),
+    config.siteLanguages.flatMap((lng) => [
+      lng,
+      ...(config.fallbackLanguages[lng] ?? []),
+      "en",
+    ]),
   ),
 ]
 
@@ -52,7 +53,7 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
   const resolvedLocale = bcp47 ?? config.defaultLocale
   const t = i18n.getFixedT<TranslationKey>(resolvedLocale)
   const fallbackLng = [
-    ...resolveLanguage(resolvedLocale).fallbackLanguages,
+    ...(config.fallbackLanguages[resolvedLocale] ?? []),
     config.defaultLocale,
     "en",
   ]
