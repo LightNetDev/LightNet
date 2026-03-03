@@ -14,8 +14,11 @@
   "searchPage": {
     "filterByLocale": true
   },
-  "siteLanguages": ["en", "de", "ar"],
-  "defaultSiteLanguage": "en",
+  "siteLanguages": [
+    { "code": "en", "isDefault": true },
+    { "code": "de" },
+    { "code": "ar" }
+  ],
   "mainMenu": [
     {
       "href": "/",

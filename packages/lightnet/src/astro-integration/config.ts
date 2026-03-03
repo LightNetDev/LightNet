@@ -2,10 +2,7 @@ import { z } from "astro/zod"
 
 import { isBcp47 } from "../i18n/bcp-47"
 import { validateInlineTranslations } from "./validators/validate-inline-translations"
-import {
-  validateFallbackLanguages,
-  validateSiteLanguages,
-} from "./validators/validate-site-languages"
+import { validateSiteLanguages } from "./validators/validate-site-languages"
 
 /**
  * Translations by BCP-47 tags.
@@ -52,6 +49,23 @@ const bcp47Schema = z.string().refine(isBcp47, {
   message: "Invalid BCP-47 language code",
 })
 
+const siteLanguageSchema = z.object({
+  /**
+   * BCP-47 language code for this locale.
+   * References a language from `src/content/languages`.
+   */
+  code: bcp47Schema,
+  /**
+   * Mark exactly one configured site language as default.
+   * This is used for the default interface language and for translation fallback.
+   */
+  isDefault: z.boolean().optional(),
+  /**
+   * Ordered fallback language codes used when a translation key is missing.
+   */
+  fallback: z.array(bcp47Schema).default([]),
+})
+
 const absolutePath = (path: string) =>
   `${path.startsWith("/") ? "" : "/"}${path}`
 
@@ -91,28 +105,14 @@ export const configSchema = z.object({
    * @example: "https://media-library.com"
    */
   site: z.string().url().optional(),
-
   /**
    * Title of the web site.
    */
   title: inlineTranslationSchema,
   /**
-   * Default site language used for `/` and as translation fallback.
+   * Interface languages for this site.
    */
-  defaultSiteLanguage: bcp47Schema,
-  /**
-   * Site languages used for localized routes and UI translations.
-   */
-  siteLanguages: z.array(bcp47Schema).superRefine(validateSiteLanguages),
-  /**
-   * Ordered fallback language codes for each site language.
-   *
-   * If a translation key is missing, LightNet checks these locales in order and uses the first
-   * one that provides a matching key.
-   *
-   * If no match is found, LightNet falls back to the default site language, then to English.
-   */
-  fallbackLanguages: z.record(z.array(bcp47Schema)).default({}),
+  siteLanguages: z.array(siteLanguageSchema).superRefine(validateSiteLanguages),
   /**
    * Favicons for your site.
    */
@@ -210,20 +210,17 @@ export const configSchema = z.object({
 })
 
 export const extendedConfigSchema = configSchema.transform((config, ctx) => {
-  const siteLanguages = [
-    ...new Set([config.defaultSiteLanguage, ...config.siteLanguages]),
-  ]
-  validateFallbackLanguages(config.fallbackLanguages, siteLanguages, ctx)
-  validateInlineTranslations(
-    config,
-    siteLanguages,
-    config.defaultSiteLanguage,
-    ctx,
-  )
+  const locales = config.siteLanguages.map((siteLanguage) => siteLanguage.code)
+  const defaultLocale =
+    config.siteLanguages.find((siteLanguage) => siteLanguage.isDefault)?.code ??
+    ""
+
+  validateInlineTranslations(config, locales, defaultLocale, ctx)
+
   return {
     ...config,
-    locales: siteLanguages,
-    defaultLocale: config.defaultSiteLanguage,
+    locales,
+    defaultLocale,
   }
 })
 

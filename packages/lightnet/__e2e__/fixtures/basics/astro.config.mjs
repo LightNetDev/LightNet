@@ -9,8 +9,7 @@ export default defineConfig({
       logo: { src: "./src/assets/logo.png" },
       site: "https://lightnet.community",
       title: { en: "Basic Test", de: "Basic Test" },
-      siteLanguages: ["en", "de"],
-      defaultSiteLanguage: "en",
+      siteLanguages: [{ code: "en", isDefault: true }, { code: "de" }],
       favicon: [{ href: "favicon.svg" }],
       mainMenu: [
         {

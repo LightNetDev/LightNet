@@ -1,36 +1,39 @@
 import { z } from "astro/zod"
 
+type SiteLanguage = {
+  code: string
+  isDefault?: boolean
+}
+
 export const validateSiteLanguages = (
-  siteLanguages: string[],
+  siteLanguages: SiteLanguage[],
   ctx: z.RefinementCtx,
 ) => {
   const seen = new Set<string>()
-  for (const [index, code] of siteLanguages.entries()) {
+  let defaultCount = 0
+
+  for (const [index, siteLanguage] of siteLanguages.entries()) {
+    const { code, isDefault } = siteLanguage
+
     if (!seen.has(code)) {
       seen.add(code)
-      continue
-    }
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: `Duplicate site language code "${code}"`,
-      path: [index],
-    })
-  }
-}
-
-export const validateFallbackLanguages = (
-  fallbackLanguages: Record<string, string[]>,
-  siteLanguagesArray: string[],
-  ctx: z.RefinementCtx,
-) => {
-  const siteLanguages = new Set(siteLanguagesArray)
-  for (const sourceLanguage of Object.keys(fallbackLanguages)) {
-    if (!siteLanguages.has(sourceLanguage)) {
+    } else {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `fallbackLanguages key "${sourceLanguage}" must be included in siteLanguages`,
-        path: ["fallbackLanguages", sourceLanguage],
+        message: `Duplicate site language code "${code}"`,
+        path: [index, "code"],
       })
     }
+
+    if (isDefault) {
+      defaultCount += 1
+    }
+  }
+
+  if (defaultCount !== 1) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Exactly one site language must define isDefault: true",
+    })
   }
 }

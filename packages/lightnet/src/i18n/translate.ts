@@ -18,11 +18,15 @@ export type TranslateFn = (
   options?: TOptions,
 ) => string
 
+const fallbackLanguages = Object.fromEntries(
+  config.siteLanguages.map(({ code, fallback }) => [code, fallback]),
+)
+
 const languageCodes = [
   ...new Set(
-    config.siteLanguages.flatMap((lng) => [
-      lng,
-      ...(config.fallbackLanguages[lng] ?? []),
+    config.siteLanguages.flatMap(({ code, fallback }) => [
+      code,
+      ...fallback,
       "en",
     ]),
   ),
@@ -53,7 +57,7 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
   const resolvedLocale = bcp47 ?? config.defaultLocale
   const t = i18n.getFixedT<TranslationKey>(resolvedLocale)
   const fallbackLng = [
-    ...(config.fallbackLanguages[resolvedLocale] ?? []),
+    ...(fallbackLanguages[resolvedLocale] ?? []),
     config.defaultLocale,
     "en",
   ]
