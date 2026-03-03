@@ -9,20 +9,27 @@ Example locale settings in LightNet config now look like:
 
 ```json
 {
-  "defaultSiteLanguage": "en",
-  "siteLanguages": ["en", "de"],
-  "fallbackLanguages": {
-    "de": ["en"]
-  }
+  "siteLanguages": [
+    {
+      "code": "en",
+      "isDefault": true
+    },
+    {
+      "code": "de",
+      "fallback": ["en"]
+    }
+  ]
 }
 ```
 
 ## Breaking changes
 
-- LightNet config now uses explicit locale settings:
-  - `defaultSiteLanguage: string`
-  - `siteLanguages: string[]`
-  - `fallbackLanguages: Record<string, string[]>`
+- LightNet config now uses explicit locale settings with `siteLanguages` as object entries.
+- Removed top-level `defaultSiteLanguage` from LightNet config.
+- Removed top-level `fallbackLanguages` from LightNet config.
+- `siteLanguages` no longer accepts a `string[]`.
+- `siteLanguages` now requires objects: `{ code, isDefault?, fallback? }`.
+- Exactly one `siteLanguages` item must define `isDefault: true`.
 - Config labels now use inline locale maps instead of plain strings.
 - `resolveDefaultLocale` is no longer exported from `lightnet/i18n`.
 - Language definitions are now content entries in `src/content/languages/{bcp47}.json`.
@@ -44,9 +51,12 @@ Example locale settings in LightNet config now look like:
 // after
 {
   "title": { "en": "My Library" },
-  "defaultSiteLanguage": "en",
-  "siteLanguages": ["en"],
-  "fallbackLanguages": {}
+  "siteLanguages": [
+    {
+      "code": "en",
+      "isDefault": true
+    }
+  ]
 }
 ```
 
@@ -62,4 +72,7 @@ Example locale settings in LightNet config now look like:
 }
 ```
 
-3. If your code imports `resolveDefaultLocale` from `lightnet/i18n`, remove that import and rely on current locale/default locale from `Astro.locals.i18n`.
+Notes:
+
+- `fallback` is optional and defaults to an empty array.
+- Fallback target language codes can still point to locales outside configured `siteLanguages`.
