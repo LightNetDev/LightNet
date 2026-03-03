@@ -2,13 +2,33 @@
 "@lightnet/sveltia-admin": major
 ---
 
-Remove the `imagesFolder` option from `@lightnet/sveltia-admin` config.
+The `imagesFolder` option was removed from `@lightnet/sveltia-admin`. Media item images now always resolve from the content-adjacent `images` folder.
 
-The admin integration now always resolves media item images from the content-adjacent `images` folder.
-Passing `imagesFolder` now throws an error during Astro integration setup.
+## Breaking changes
 
-## Migration notes
+- `imagesFolder` is no longer a valid integration option.
+- Passing `imagesFolder` now throws during Astro integration setup.
 
-- Remove `imagesFolder` from `lightnetSveltiaAdmin({ ... })` in `astro.config.*`.
-- Media item images now always use the `images` folder next to content files.
-- If your project still uses `_images`, rename that folder to `images`.
+## Migration
+
+1. Remove `imagesFolder` from your `lightnetSveltiaAdmin(...)` config.
+
+```ts
+// before
+lightnetSveltiaAdmin({
+  imagesFolder: "_images",
+})
+
+// after
+lightnetSveltiaAdmin({})
+```
+
+2. Ensure content image folders are named `images`.
+
+```text
+# before
+src/content/media/_images/
+
+# after
+src/content/media/images/
+```

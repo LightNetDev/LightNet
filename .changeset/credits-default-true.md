@@ -2,12 +2,21 @@
 "lightnet": major
 ---
 
-Change `credits` in the LightNet config to default to `true`.
+The `credits` option in LightNet config now defaults to `true`. Sites that omit this option will show the "Powered by LightNet" footer by default.
 
 ## Breaking changes
 
-- Sites that omit `credits` will now show the "Powered by LightNet" footer by default.
+- Omitting `credits` now enables credits by default.
 
 ## Migration
 
-Set `credits: false` in your LightNet config if you want to keep the previous behavior.
+If you want to keep the previous behavior (no credits by default), set `credits: false` explicitly.
+
+```json
+{
+  "title": { "en": "My Library" },
+  "defaultSiteLanguage": "en",
+  "siteLanguages": ["en"],
+  "credits": false
+}
+```

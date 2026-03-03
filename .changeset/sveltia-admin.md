@@ -2,13 +2,35 @@
 "@lightnet/sveltia-admin": major
 ---
 
-Add an experimental LightNet administration UI based on Sveltia CMS.
+An experimental LightNet administration UI based on Sveltia CMS was added. This replaces the previous experimental Decap-based admin integration.
 
-This replaces the previous experimental Decap-based administration UI
-(`@lightnet/decap-admin`) with a Sveltia-based integration.
+## Breaking changes
 
-## Migration notes
+- `@lightnet/decap-admin` is replaced by `@lightnet/sveltia-admin`.
+- The admin integration no longer accepts a `languages` option; languages are resolved from LightNet site config/content.
 
-- Replace imports from `@lightnet/decap-admin` with `@lightnet/sveltia-admin`.
-- Remove the `languages` option from admin integration config. Sveltia admin
-  now resolves languages from the LightNet site config.
+## Migration
+
+1. Replace package imports.
+
+```ts
+// before
+import decapAdmin from "@lightnet/decap-admin"
+
+// after
+import lightnetSveltiaAdmin from "@lightnet/sveltia-admin"
+```
+
+2. Update integration setup and remove `languages` option.
+
+```ts
+// before
+integrations: [
+  decapAdmin({
+    languages: ["en", "de"],
+  }),
+]
+
+// after
+integrations: [lightnetSveltiaAdmin({})]
+```

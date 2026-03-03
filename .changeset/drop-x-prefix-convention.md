@@ -2,10 +2,18 @@
 "lightnet": minor
 ---
 
-Support user translation keys without the `x.` prefix.
+User translation keys no longer need the `x.` prefix. You can now use direct keys like `site.title` and `home.bbq.title` while built-in LightNet keys remain under `ln.*`.
 
-LightNet now resolves user-defined translation keys such as `site.title` and
-`home.bbq.title` directly, in addition to existing built-in `ln.*` keys.
+Example:
 
-This removes the need to namespace user keys with `x.` in project translation
-files and template references.
+```yml
+# before
+x.home.title: "Welcome"
+
+# after
+home.title: "Welcome"
+```
+
+## Breaking changes
+
+- None.

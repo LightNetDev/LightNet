@@ -2,24 +2,29 @@
 "lightnet": major
 ---
 
-Rename `MediaGallerySection` props and update layout defaults.
+`MediaGallerySection` props were renamed and layout defaults were updated to improve API clarity.
+
+Example updated usage:
+
+```astro
+<MediaGallerySection items={items} itemWidth="narrow" layout="grid" />
+```
 
 ## Breaking changes
 
-- `MediaGallerySection` prop `layout` has been renamed to `itemWidth`.
-  - Old values `"book" | "video" | "portrait" | "landscape"` are removed.
-  - New values are `"narrow" | "wide"` and this prop is now optional.
-- `MediaGallerySection` prop `viewLayout` has been renamed to `layout`.
-- Default `MediaGallerySection.layout` is now `"carousel"` (previously `viewLayout` defaulted to `"grid"`).
-- `MediaGallerySection` no longer supports the old `layout` and `viewLayout` prop names.
+- `layout` (old item style prop) was renamed to `itemWidth`.
+- Old `layout` values (`"book" | "video" | "portrait" | "landscape"`) were removed.
+- `itemWidth` now supports `"narrow" | "wide"` and is optional.
+- `viewLayout` was renamed to `layout`.
+- Default layout is now `"carousel"`.
+- Old prop names `layout` (style meaning) and `viewLayout` are no longer supported.
 - If `itemWidth` is not set, it is inferred from the first 10 media items:
-  - More landscape images (`width > height`) => `"wide"`
-  - Otherwise => `"narrow"` (including tie/no-majority and all-square cases)
-- Explicit `itemWidth` still overrides the inferred default.
+  - more landscape images (`width > height`) => `"wide"`
+  - otherwise => `"narrow"`
 
 ## Migration
 
-Update your `MediaGallerySection` usage:
+Update component usage to the new prop names and values.
 
 ```astro
 <!-- before -->
@@ -32,4 +37,4 @@ Update your `MediaGallerySection` usage:
 <MediaGallerySection items={items} layout="grid" />
 ```
 
-`coverImageStyle` is now always sourced from the media type configuration for each item.
+`coverImageStyle` is now sourced from each media type configuration.

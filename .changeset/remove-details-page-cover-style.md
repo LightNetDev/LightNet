@@ -2,16 +2,16 @@
 "lightnet": major
 ---
 
-Remove deprecated `media-types.detailsPage.coverStyle` support.
+Deprecated `media-types.detailsPage.coverStyle` support was removed. Cover styling now belongs at top-level `coverImageStyle`.
 
 ## Breaking changes
 
-- `detailsPage.coverStyle` is no longer supported in media type definitions.
-- The schema migration that mapped `detailsPage.coverStyle` to `coverImageStyle` has been removed.
+- `detailsPage.coverStyle` is no longer supported.
+- Automatic schema migration from `detailsPage.coverStyle` to `coverImageStyle` was removed.
 
 ## Migration
 
-Move cover styling to top-level `coverImageStyle` in each media type.
+Move cover style values to top-level `coverImageStyle` in each media type file.
 
 ```json
 // before

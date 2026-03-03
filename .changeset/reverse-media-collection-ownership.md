@@ -2,21 +2,20 @@
 "lightnet": major
 ---
 
-Reverse media collection ownership from `media[].collections` to `media-collections[].mediaItems`.
+Collection ownership was reversed from `media[].collections` to `media-collections[].mediaItems`. Collections now own membership and order directly.
 
 ## Breaking changes
 
 - `media` entries no longer support the `collections` field.
-- `media-collections` entries now define membership and order through a new `mediaItems` field.
-- Collection order is now defined by array order in `media-collections/<id>.json`.
+- `media-collections` entries now define membership using `mediaItems`.
+- Collection ordering is now defined by the order of IDs in `mediaItems`.
 
 ## Migration
 
-Move collection references from each media item into each media collection.
-
-Before (`src/content/media/my-book--en.json`):
+1. Remove `collections` from each media item.
 
 ```json
+// before: src/content/media/my-book--en.json
 {
   "title": "My book",
   "collections": [
@@ -24,23 +23,21 @@ Before (`src/content/media/my-book--en.json`):
     { "collection": "featured", "index": 2 }
   ]
 }
-```
 
-After (`src/content/media/my-book--en.json`):
-
-```json
+// after
 {
   "title": "My book"
 }
 ```
 
-After (`src/content/media-collections/learn-series.json`):
+2. Add media membership and order to each media collection.
 
 ```json
+// src/content/media-collections/learn-series.json
 {
   "label": { "en": "Learn Series" },
   "mediaItems": ["my-book--en", "another-item--en"]
 }
 ```
 
-If you previously used per-item `index`, convert that ordering into the `mediaItems` array order.
+If you previously used per-item `index`, convert that ordering into `mediaItems` array order.

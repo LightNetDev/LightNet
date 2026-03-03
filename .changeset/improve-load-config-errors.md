@@ -2,4 +2,8 @@
 lightnet: patch
 ---
 
-Improved LightNet configuration validation error messages to make schema failures clearer and more actionable.
+LightNet configuration validation errors were improved to make schema failures clearer and more actionable.
+
+## Breaking changes
+
+- None.

@@ -2,15 +2,39 @@
 "lightnet": major
 ---
 
-Introduce a discriminated media content item schema with explicit `type` for each entry.
+Media item `content` entries now use explicit typed objects so storage intent is clear (`upload` vs `link`).
 
-## Breaking change (`lightnet`)
-
-Media item `content` entries must now use:
+Examples:
 
 - `{ "type": "upload", "url": "/files/example.pdf", "label"?: ... }`
 - `{ "type": "link", "url": "https://example.com/file.pdf", "label"?: ... }`
 
-The previous implicit shape `{ "url": ..., "label"?: ... }` is no longer accepted.
+## Breaking changes
 
-Use **upload** for file uploads your LightNet site controls, use **link** for web links that you do not control.
+- `content` entries are expected to use explicit `type` values (`upload` or `link`).
+
+## Migration
+
+Update media content entries to include `type`.
+
+```json
+// before
+{
+  "content": [
+    { "url": "/files/my-book.pdf", "label": { "en": "Read PDF" } }
+  ]
+}
+
+// after
+{
+  "content": [
+    {
+      "type": "upload",
+      "url": "/files/my-book.pdf",
+      "label": { "en": "Read PDF" }
+    }
+  ]
+}
+```
+
+Use `type: "upload"` for site-managed files and `type: "link"` for external URLs.
