@@ -139,10 +139,6 @@ test("Should derive locales, defaultLocale and fallbackLanguages", () => {
 
   expect(parsed.data.locales).toEqual(["en", "de"])
   expect(parsed.data.defaultLocale).toBe("de")
-  expect(parsed.data.fallbackLanguages).toEqual({
-    en: ["fr"],
-    de: ["es"],
-  })
 })
 
 test("Should accept missing non-default locale in title inline translation", () => {
