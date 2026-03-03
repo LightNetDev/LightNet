@@ -3,6 +3,9 @@ import { getMediaItem, getMediaItems } from "../../../content/get-media-items"
 const groupItemsByCommonId = async () => {
   const items = await getMediaItems()
   items.forEach(({ id, data: { commonId, language } }) => {
+    if (!commonId) {
+      return
+    }
     if (!itemsByCommonId.has(commonId)) {
       itemsByCommonId.set(commonId, [])
     }
@@ -24,6 +27,9 @@ export const getTranslations = async (mediaId: string) => {
     await groupItemsByCommonId()
   }
   const item = await getMediaItem(mediaId)
+  if (!item.data.commonId) {
+    return []
+  }
   const sameCommonId = itemsByCommonId.get(item.data.commonId)
   if (!sameCommonId) {
     return []

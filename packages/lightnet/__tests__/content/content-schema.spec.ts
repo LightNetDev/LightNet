@@ -11,6 +11,7 @@ const {
   inlineTranslationSchema,
   languageSchema,
   mediaCollectionSchema,
+  mediaItemSchema,
 } = await import("../../src/content/content-schema")
 
 test("Should accept inline translation with only default locale", () => {
@@ -90,4 +91,25 @@ test("Should reject language with invalid BCP-47 code", () => {
   })
 
   expect(parsed.success).toBe(false)
+})
+
+test("Should accept media item without commonId", () => {
+  const parsed = mediaItemSchema.safeParse({
+    title: "A book about love",
+    type: "book",
+    description: "Description",
+    authors: ["George Miller"],
+    dateCreated: "2024-09-10",
+    categories: ["family"],
+    language: "en",
+    image: {
+      src: "/images/a-book-about-love--en.jpg",
+      width: 600,
+      height: 900,
+      format: "webp",
+    },
+    content: [{ type: "upload", url: "/files/a-book-about-love.pdf" }],
+  })
+
+  expect(parsed.success).toBe(true)
 })

@@ -134,7 +134,8 @@ export const mediaItemCollection: Collection = {
       name: "commonId",
       label: "Common ID",
       widget: "string",
-      hint: "Use a shared Common ID to link translated versions of a media item.",
+      required: false,
+      hint: "Optional: Use a shared Common ID to link translated versions of a media item.",
     },
     {
       name: "categories",

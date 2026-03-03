@@ -98,15 +98,16 @@ export const languageSchema = z.object({
  */
 export const mediaItemSchema = z.object({
   /**
-   * Identifier of this media item. If other media items
-   * share the same commonId they will show up as translations.
+   * Optional identifier used to link translated variants of a media item.
+   * If other media items share the same commonId they will show up as translations.
+   * If omitted, the media item is treated as standalone and has no translations.
    * The common id will show up in the media item's url combined with it's language.
    *
    * We suggest you use the english name of the media item, all lower case, words separated with hyphens.
    *
    * @example "a-book-about-love"
    */
-  commonId: z.string(),
+  commonId: z.string().optional(),
   /**
    * Title of this media item.
    * This is expected to be in the language that is defined by the 'language' property.
