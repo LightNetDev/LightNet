@@ -9,9 +9,14 @@ export default defineConfig({
   plugins: [
     vitePluginLightnetConfig(
       {
-        title: "Sk8 Ministries",
+        title: { en: "Sk8 Ministries" },
         logo: { src: "./logo.svg" },
-        languages: [{ code: "en", label: "English" }],
+        siteLanguages: [
+          { code: "en", isDefault: true, fallback: [] },
+          { code: "de", fallback: ["en"] },
+        ],
+        locales: ["en", "de"],
+        defaultLocale: "en",
         internalDomains: [],
       },
       { site: "https://sk8-ministries.dev" },

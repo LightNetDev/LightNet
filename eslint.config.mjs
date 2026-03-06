@@ -1,7 +1,6 @@
 import pluginJs from "@eslint/js"
 import configPrettier from "eslint-config-prettier"
 import pluginAstro from "eslint-plugin-astro"
-import pluginReact from "eslint-plugin-react"
 import pluginSimpleImportSort from "eslint-plugin-simple-import-sort"
 import pluginUnusedImports from "eslint-plugin-unused-imports"
 import globals from "globals"
@@ -28,7 +27,6 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   configPrettier,
-  pluginReact.configs.flat["jsx-runtime"],
   ...pluginAstro.configs.recommended,
   {
     rules: {

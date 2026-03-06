@@ -1,4 +1,8 @@
 {
-  "label": "x.category.comics-and-graphic-novels",
-  "image": "../../assets/sample-images/1.webp"
+  "label": {
+    "en": "Comics & Graphic Novels",
+    "de": "Comics & Illustrierte Geschichten",
+    "ar": "القصص المصورة والروايات المصورة"
+  },
+  "image": "images/1.webp"
 }

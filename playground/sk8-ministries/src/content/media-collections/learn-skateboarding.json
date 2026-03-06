@@ -1,3 +1,11 @@
 {
-  "label": "Learn Skateboarding"
+  "label": {
+    "en": "Learn Skateboarding"
+  },
+  "mediaItems": [
+    "external-video-fallback--en",
+    "how-to-360-flip--en",
+    "how-to-kickflip--ar",
+    "how-to-kickflip--en"
+  ]
 }

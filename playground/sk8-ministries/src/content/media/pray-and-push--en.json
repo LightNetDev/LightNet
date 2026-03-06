@@ -5,14 +5,10 @@
   "categories": [
     "theology"
   ],
-  "collections": [
-    {
-      "collection": "how-to-articles"
-    }
-  ],
   "commonId": "pray-and-push",
   "content": [
     {
+      "type": "link",
       "url": "https://en.wikipedia.org/wiki/Ollie_(skateboarding)"
     }
   ],

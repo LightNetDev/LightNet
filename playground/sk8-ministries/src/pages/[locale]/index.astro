@@ -3,6 +3,7 @@ export { getLocalePaths as getStaticPaths } from "lightnet/i18n"
 
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
+import { getEntries } from "astro:content"
 import {
   CategoriesSection,
   HeroSection,
@@ -27,10 +28,9 @@ const learnSkateboarding = await getEntry(
 if (!learnSkateboarding) {
   throw new AstroError("Media Collection 'learn-skateboarding' not found")
 }
-
-const learnSkateboardingItems = await getMediaItems({
-  where: { collection: "learn-skateboarding" },
-})
+const learnSkateboardingItems = await getEntries(
+  learnSkateboarding.data.mediaItems,
+)
 
 const { t, currentLocale } = Astro.locals.i18n
 ---
@@ -38,8 +38,8 @@ const { t, currentLocale } = Astro.locals.i18n
 <Page>
   <HeroSection
     image={heroImage}
-    title={t("x.site.title")}
-    subtitle={t("x.ministry.slogan")}
+    title={t("site.title")}
+    subtitle={t("ministry.slogan")}
     titleSize="lg"
     subtitleSize="lg"
     showSearch={true}
@@ -48,26 +48,23 @@ const { t, currentLocale } = Astro.locals.i18n
   <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
 
   <MediaGallerySection
-    title={t("x.home.our-latest-books")}
+    title={t("home.our-latest-books")}
     titleHref={searchPagePath(currentLocale, { type: "book" })}
     items={latestBooks}
-    layout="book"
-    viewLayout="carousel"
   />
 
   <HighlightSection
     image={eventImage}
-    title={t("x.home.bbq.title")}
-    text={t("x.home.bbq.text")}
+    title={t("home.bbq.title")}
+    text={t("home.bbq.text")}
     link={{
       href: "mailto:some-email-address-from-the-ministry",
-      text: t("x.home.bbq.sign-up-now"),
+      text: t("home.bbq.sign-up-now"),
     }}
   />
 
   <MediaGallerySection
-    title={learnSkateboarding.data.label}
+    title={t(learnSkateboarding.data.label)}
     items={learnSkateboardingItems}
-    layout="video"
   />
 </Page>

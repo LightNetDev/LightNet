@@ -4,18 +4,18 @@ import { localizePath } from "../../utils/paths"
 import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
-const { t, locales } = Astro.locals.i18n
+const { t, locales, currentLocale } = Astro.locals.i18n
 
 const hasLocale =
-  Astro.currentLocale &&
-  (Astro.url.pathname.startsWith(`/${Astro.currentLocale}/`) ||
-    Astro.url.pathname === `/${Astro.currentLocale}`)
+  currentLocale &&
+  (Astro.url.pathname.startsWith(`/${currentLocale}/`) ||
+    Astro.url.pathname === `/${currentLocale}`)
 
 const translations = locales
   .map((locale) => ({
     locale,
     label: resolveTranslatedLanguage(locale, t).labelText,
-    active: locale === Astro.currentLocale,
+    active: locale === currentLocale,
     href: currentPathWithLocale(locale),
   }))
   .sort((a, b) => a.label.localeCompare(b.label))
@@ -23,7 +23,7 @@ const translations = locales
 function currentPathWithLocale(locale: string) {
   const currentPath = Astro.url.pathname
   const currentPathWithoutLocale = hasLocale
-    ? currentPath.slice(Astro.currentLocale.length + 1)
+    ? currentPath.slice(currentLocale.length + 1)
     : currentPath
   return localizePath(locale, currentPathWithoutLocale)
 }

@@ -3,13 +3,15 @@ import { fileURLToPath } from "node:url"
 
 import type { AstroConfig, AstroIntegrationLogger, ViteUserConfig } from "astro"
 
-import { type LightnetConfig } from "./config"
+import type { ExtendedLightnetConfig } from "./config"
 
 const CONFIG = "virtual:lightnet/config"
 const LOGO = "virtual:lightnet/logo"
 const PROJECT_CONTEXT = "virtual:lightnet/project-context"
 const CUSTOM_HEAD = "virtual:lightnet/components/CustomHead"
 const CUSTOM_FOOTER = "virtual:lightnet/components/CustomFooter"
+const MEDIA_ITEM_EDIT_BUTTON_CONTROLLER =
+  "virtual:lightnet/components/media-item-edit-button-controller"
 
 const VIRTUAL_MODULES = [
   CONFIG,
@@ -17,10 +19,11 @@ const VIRTUAL_MODULES = [
   PROJECT_CONTEXT,
   CUSTOM_HEAD,
   CUSTOM_FOOTER,
+  MEDIA_ITEM_EDIT_BUTTON_CONTROLLER,
 ] as const
 
 export function vitePluginLightnetConfig(
-  config: LightnetConfig,
+  config: ExtendedLightnetConfig,
   { root, srcDir, site }: Pick<AstroConfig, "root" | "srcDir" | "site">,
   logger: AstroIntegrationLogger,
 ): NonNullable<ViteUserConfig["plugins"]>[number] {
@@ -62,6 +65,8 @@ export function vitePluginLightnetConfig(
           return config.footerComponent
             ? `export { default } from ${resolveFilePath(config.footerComponent)};`
             : "export default undefined;"
+        case MEDIA_ITEM_EDIT_BUTTON_CONTROLLER:
+          return "export default undefined;"
       }
     },
   }

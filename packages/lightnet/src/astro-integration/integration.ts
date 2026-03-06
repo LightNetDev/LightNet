@@ -2,11 +2,10 @@
 import react from "@astrojs/react"
 import tailwind from "@astrojs/tailwind"
 import type { AstroIntegration } from "astro"
+import { AstroError } from "astro/errors"
 
-import { resolveDefaultLocale } from "../i18n/resolve-default-locale"
-import { resolveLocales } from "../i18n/resolve-locales"
 import { verifySchema } from "../utils/verify-schema"
-import { configSchema, type LightnetConfig } from "./config"
+import { extendedConfigSchema, type LightnetConfig } from "./config"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
 
 export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
@@ -20,11 +19,34 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         logger,
         addMiddleware,
       }) => {
+        if (
+          astroConfig.site &&
+          lightnetConfig.site &&
+          astroConfig.site !== lightnetConfig.site
+        ) {
+          throw new AstroError(
+            "Conflicting site configuration",
+            `LightNet config \`site\` (${lightnetConfig.site}) does not match Astro \`site\` (${astroConfig.site}). Set only one value or make them exactly equal.`,
+          )
+        }
+
+        const effectiveConfig = {
+          ...lightnetConfig,
+          site: lightnetConfig.site ?? astroConfig.site,
+        }
+
+        if (!effectiveConfig.site) {
+          throw new AstroError(
+            "Invalid LightNet configuration",
+            "Set `site` in your LightNet config or Astro config. At least one of them is required.",
+          )
+        }
+
         const config = verifySchema(
-          configSchema,
-          lightnetConfig,
+          extendedConfigSchema,
+          effectiveConfig,
           "Invalid LightNet configuration",
-          "Fix these errors on the LightNet configuration inside astro.config.mjs:",
+          "Fix these errors on the LightNet configuration:",
         )
 
         injectRoute({
@@ -71,21 +93,9 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         )
 
         updateConfig({
+          site: config.site,
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
-          },
-          i18n: {
-            defaultLocale: resolveDefaultLocale(config),
-            locales: resolveLocales(config),
-            routing: {
-              redirectToDefaultLocale: false,
-              // We need to set this to false to allow for
-              // admin paths without locale. But actually
-              // the default locale will be prefixed for regular
-              // LightNet pages.
-              prefixDefaultLocale: false,
-              fallbackType: "rewrite",
-            },
           },
         })
       },

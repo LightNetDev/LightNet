@@ -8,7 +8,7 @@ Primary use: feature development and bug fixes.
 - `.changeset/`: changeset release descriptions.
 - `packages/lightnet/`: core Astro integration, UI, content models, and i18n.
 - `packages/cli/`: command-line tooling.
-- `packages/decap-admin/`: deprecated Decap CMS integration. New experimental Admin UI lives in `packages/lightnet/admin`
+- `packages/sveltia-admin/`: Sveltia CMS based admin interface.
 - `playground/`: example sites (useful for manual testing).
 
 ## Default scope
@@ -16,7 +16,6 @@ Primary use: feature development and bug fixes.
 - UI work: start in `packages/lightnet/` (components, layouts, pages).
 - Content models and i18n: start in `packages/lightnet/src/content/` and `packages/lightnet/src/i18n/`.
 - CLI features or fixes: start in `packages/cli/`.
-- Admin work: start in `packages/lightnet/admin/`.
 
 ## Stack
 
@@ -56,6 +55,7 @@ Primary use: feature development and bug fixes.
 ## Changesets
 
 - Add a `.changeset/*.md` for changes that affect published packages.
+- For major updates include instructions on how to update sites that depend on the published package.
 - No changeset needed for playground-only changes.
 
 ## Commands
@@ -64,10 +64,13 @@ Primary use: feature development and bug fixes.
 - `pnpm build`
 - `pnpm typecheck`
 - `pnpm fmt` (run lint and prettier with auto-fix)
-- `pnpm test` or `pnpm e2e` (packages/lightnet)
+- `pnpm test` (unit tests for `packages/lightnet` and `packages/sveltia-admin`)
+- `pnpm e2e` (end-to-end tests for `packages/lightnet`)
 
 ## Verification
 
 - Always run `pnpm fmt` for every task that changes code or styles.
-- Only run tests when you are told to do so.
-- If `pnpm fmt` or tests are not run, say so and why.
+- Always run `pnpm typecheck` for every task that changes code or types.
+- Always run unit tests with `pnpm test` (this validates both `packages/lightnet` and `packages/sveltia-admin`).
+- Only run end to end tests `pnpm e2e` when you are told to do so.
+- If `pnpm fmt`, `pnpm typecheck`, or tests are not run, say so and why.

@@ -4,14 +4,10 @@
     "teens-and-young-adults",
     "support-and-counseling"
   ],
-  "collections": [
-    {
-      "collection": "learn-skateboarding"
-    }
-  ],
   "commonId": "how-to-360-flip",
   "content": [
     {
+      "type": "link",
       "url": "https://vimeo.com/28708485"
     }
   ],

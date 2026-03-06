@@ -18,8 +18,9 @@ const item = await getMediaItem(mediaId)
 if (item.data.content.length < minimumItems) {
   return
 }
+const { t, direction } = Astro.locals.i18n
 
-const content = item.data.content.map((c) => createContentMetadata(c))
+const content = item.data.content.map((c) => createContentMetadata(c, t))
 const typeIcons: { [k in UrlType]: string } = {
   audio: "mdi--music",
   text: "mdi--text",
@@ -29,8 +30,6 @@ const typeIcons: { [k in UrlType]: string } = {
   video: "mdi--video-outline",
   package: "mdi--zip-box-outline",
 } as const
-
-const { t, direction } = Astro.locals.i18n
 ---
 
 <ol
@@ -38,7 +37,7 @@ const { t, direction } = Astro.locals.i18n
 >
   {
     content.map(
-      ({ extension, label, type, canBeOpened, url, target }, index) => (
+      ({ extension, labelText, type, canBeOpened, url, target }, index) => (
         <li class="group -mt-px px-4 transition-colors ease-in-out hover:bg-gray-300 md:px-8">
           <a
             href={url}
@@ -53,7 +52,7 @@ const { t, direction } = Astro.locals.i18n
             </span>
 
             <div class="ms-4 line-clamp-1 shrink grow overflow-hidden sm:ms-8">
-              {t(label)}
+              {labelText}
             </div>
             <div class="me-4 ms-2 shrink-0 font-bold uppercase text-gray-600 sm:me-8">
               {extension}

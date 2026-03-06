@@ -1,9 +1,17 @@
 {
-  "label": "x.type.book",
+  "label": {
+    "en": "Book",
+    "ar": "كتاب",
+    "de": "Buch"
+  },
+  "icon": "mdi--book-open-blank-variant",
+  "coverImageStyle": "book",
   "detailsPage": {
     "layout": "default",
-    "coverStyle": "book",
-    "openActionLabel": "x.details.action.read"
-  },
-  "icon": "mdi--book-open-blank-variant"
+    "openActionLabel": {
+      "en": "Read",
+      "ar": "اقرأ",
+      "de": "Lesen"
+    }
+  }
 }

@@ -6,14 +6,13 @@ import config from "virtual:lightnet/config"
 
 import { getMediaItem } from "../../content/get-media-items"
 import { getMediaType } from "../../content/get-media-types"
-import { resolveLocales } from "../../i18n/resolve-locales"
 import AudioDetailsPage from "./AudioDetailsPage.astro"
 import DefaultDetailsPage from "./DefaultDetailsPage.astro"
 import VideoDetailsPage from "./VideoDetailsPage.astro"
 
 export const getStaticPaths = (async () => {
   const mediaItems = await getCollection("media")
-  return resolveLocales(config).flatMap((locale) =>
+  return config.locales.flatMap((locale) =>
     mediaItems.map(({ id: mediaId }) => ({ params: { mediaId, locale } })),
   )
 }) satisfies GetStaticPaths

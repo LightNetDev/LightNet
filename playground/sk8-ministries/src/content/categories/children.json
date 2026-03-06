@@ -1,4 +1,8 @@
 {
-  "label": "x.category.children",
-  "image": "../../assets/sample-images/4.webp"
+  "label": {
+    "en": "Children",
+    "de": "Kinder",
+    "ar": "الأطفال"
+  },
+  "image": "images/4.webp"
 }

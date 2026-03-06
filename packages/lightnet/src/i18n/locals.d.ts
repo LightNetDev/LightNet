@@ -16,10 +16,10 @@ type I18n = {
   t: import("./translate").TranslateFn
 
   /**
-   *  The current locale or the default locale if the current locale is not available.
+   *  The current locale resolved by LightNet from the URL pathname.
    *
-   *  In comparison to Astro.currentLocale this will always return a locale.
-   *  Use Astro.currentLocale if you want to know the locale that is included in the current path.
+   *  If no supported locale is present in the pathname,
+   *  this falls back to the configured default locale.
    */
   currentLocale: string
 

@@ -1,4 +1,8 @@
 {
-  "label": "x.category.teens-and-young-adults",
-  "image": "../../assets/sample-images/5.webp"
+  "label": {
+    "en": "Teens & Young Adults",
+    "de": "Teenager & Junge Erwachsene",
+    "ar": "المراهقون والشباب"
+  },
+  "image": "images/5.webp"
 }

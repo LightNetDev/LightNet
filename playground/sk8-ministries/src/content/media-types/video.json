@@ -1,5 +1,9 @@
 {
-  "label": "x.type.video",
+  "label": {
+    "en": "Video",
+    "de": "Video",
+    "ar": "فيديو"
+  },
   "coverImageStyle": "video",
   "detailsPage": {
     "layout": "video"

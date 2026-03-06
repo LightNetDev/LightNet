@@ -1,3 +1,6 @@
 {
-  "label": "category.christian-living"
+  "label": {
+    "en": "Christian Living",
+    "de": "Glaube leben"
+  }
 }

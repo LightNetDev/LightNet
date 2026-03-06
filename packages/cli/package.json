@@ -10,7 +10,7 @@
     "directory": "packages/cli"
   },
   "scripts": {
-    "translation-status": "./index.mjs "
+    "translation-status": "node ./index.mjs translation-status"
   },
   "bugs": {
     "url": "https://github.com/LightNetDev/lightnet/issues"
