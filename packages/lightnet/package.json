@@ -50,11 +50,11 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.19",
-    "@tanstack/react-virtual": "^3.13.20",
+    "@tanstack/react-virtual": "^3.13.21",
     "embla-carousel": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "fuse.js": "^7.1.0",
-    "i18next": "^25.8.14",
+    "i18next": "^25.8.17",
     "marked": "^17.0.4",
     "yaml": "^2.8.2"
   },
