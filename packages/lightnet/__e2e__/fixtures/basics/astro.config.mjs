@@ -4,10 +4,10 @@ import lightnet from "lightnet"
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://lightnet.community",
   integrations: [
     lightnet({
       logo: { src: "./src/assets/logo.png" },
-      site: "https://lightnet.community",
       title: { en: "Basic Test", de: "Basic Test" },
       siteLanguages: [{ code: "en", isDefault: true }, { code: "de" }],
       favicon: [{ href: "favicon.svg" }],

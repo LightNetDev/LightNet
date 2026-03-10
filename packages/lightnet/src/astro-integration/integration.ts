@@ -19,32 +19,16 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         logger,
         addMiddleware,
       }) => {
-        if (
-          astroConfig.site &&
-          lightnetConfig.site &&
-          astroConfig.site !== lightnetConfig.site
-        ) {
-          throw new AstroError(
-            "Conflicting site configuration",
-            `LightNet config \`site\` (${lightnetConfig.site}) does not match Astro \`site\` (${astroConfig.site}). Set only one value or make them exactly equal.`,
-          )
-        }
-
-        const effectiveConfig = {
-          ...lightnetConfig,
-          site: lightnetConfig.site ?? astroConfig.site,
-        }
-
-        if (!effectiveConfig.site) {
+        if (!astroConfig.site) {
           throw new AstroError(
             "Invalid LightNet configuration",
-            "Set `site` in your LightNet config or Astro config. At least one of them is required.",
+            "Set `site` in your Astro config. LightNet requires Astro `site` to be configured.",
           )
         }
 
         const config = verifySchema(
           extendedConfigSchema,
-          effectiveConfig,
+          lightnetConfig,
           "Invalid LightNet configuration",
           "Fix these errors on the LightNet configuration:",
         )
@@ -93,7 +77,6 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         )
 
         updateConfig({
-          site: config.site,
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },

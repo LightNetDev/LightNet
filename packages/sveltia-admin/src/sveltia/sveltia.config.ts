@@ -1,5 +1,5 @@
 import type { CmsConfig } from "@sveltia/cms"
-import lightnetConfig from "virtual:lightnet/config"
+import { site } from "astro:config/server"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import lightnetLogo from "../assets/lightnet-logo.svg?url"
@@ -11,7 +11,7 @@ export const config: CmsConfig = {
     name: "github",
     // Sveltia CMS uses repo as unique site identifier for IndexedDB
     // https://github.com/sveltia/sveltia-cms/issues/630
-    repo: lightnetConfig.site,
+    repo: site,
   },
   media_folder: projectPath("src/assets"),
   public_folder: "/src/assets",
@@ -42,7 +42,7 @@ export const config: CmsConfig = {
     },
   },
   editor: { preview: false },
-  site_url: lightnetConfig.site,
+  site_url: site,
   output: {
     omit_empty_optional_fields: true,
   },

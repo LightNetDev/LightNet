@@ -53,9 +53,7 @@ const getThrownError = (run: () => void) => {
 
 test("Should use lightnet.site and not inject Astro i18n config", () => {
   const { updateConfig } = runSetup({
-    lightnetConfig: {
-      site: "https://lightnet.community",
-    },
+    astroSite: "https://lightnet.community",
   })
 
   expect(updateConfig).toHaveBeenCalledWith({
@@ -80,62 +78,12 @@ test("Should use Astro site when lightnet.site is not set", () => {
   })
 })
 
-test("Should accept matching lightnet.site and Astro site", () => {
-  const { updateConfig } = runSetup({
-    lightnetConfig: {
-      site: "https://lightnet.community",
-    },
-    astroSite: "https://lightnet.community",
-  })
-
-  expect(updateConfig).toHaveBeenCalledWith({
-    site: "https://lightnet.community",
-    vite: {
-      plugins: expect.any(Array),
-    },
-  })
-})
-
-test("Should throw when lightnet.site and Astro site are different", () => {
-  const error = getThrownError(() =>
-    runSetup({
-      lightnetConfig: {
-        site: "https://lightnet.community",
-      },
-      astroSite: "https://example.org",
-    }),
-  )
-
-  expect(error).toMatchObject({
-    message: "Conflicting site configuration",
-    hint: expect.stringContaining("does not match Astro `site`"),
-  })
-})
-
-test("Should throw when lightnet.site and Astro site differ by slash", () => {
-  const error = getThrownError(() =>
-    runSetup({
-      lightnetConfig: {
-        site: "https://lightnet.community",
-      },
-      astroSite: "https://lightnet.community/",
-    }),
-  )
-
-  expect(error).toMatchObject({
-    message: "Conflicting site configuration",
-    hint: expect.stringContaining("does not match Astro `site`"),
-  })
-})
-
 test("Should fail schema validation when no site is set", () => {
   const error = getThrownError(() => runSetup({}))
 
   expect(error).toMatchObject({
     message: "Invalid LightNet configuration",
-    hint: expect.stringContaining(
-      "Set `site` in your LightNet config or Astro config",
-    ),
+    hint: expect.stringContaining("Set `site` in your Astro config"),
   })
 })
 

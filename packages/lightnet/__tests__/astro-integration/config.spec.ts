@@ -6,7 +6,6 @@ import {
 } from "../../src/astro-integration/config"
 
 const requiredConfig = {
-  site: "https://lightnet.community",
   title: { en: "LightNet" },
   siteLanguages: [{ code: "en", isDefault: true }],
 }
