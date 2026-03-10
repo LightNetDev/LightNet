@@ -13,13 +13,37 @@ DaisyUI was removed from LightNet's built-in Tailwind configuration. LightNet no
 
 If your site uses DaisyUI utilities/components, install and configure DaisyUI in your project Tailwind config.
 
+This is how LightNet used to configure DaisyUI:
+
 ```ts
 // tailwind.config.ts
 import daisyui from "daisyui"
 
+const primary = "#E6B15C"
+
 export default {
   plugins: [daisyui],
   daisyui: {
+    themes: [
+      {
+        lightnet: {
+          primary,
+          secondary: primary,
+          accent: primary,
+          neutral: "#030712",
+          error: "#9f1239",
+          "base-100": "#f9fafb",
+
+          "--rounded-box": "0.375rem", // border radius rounded-box utility class, used in card and other large boxes
+          "--rounded-btn": "0.375rem", // border radius rounded-btn utility class, used in buttons and similar element
+          "--rounded-badge": "0.375rem", // border radius rounded-badge utility class, used in badges and similar
+          "--tab-radius": "0.375rem", // border radius of tabs
+        },
+      },
+    ],
+    base: false, // applies background color and foreground color for root element by default
+    utils: true, // adds responsive and modifier utility classes
+    logs: false, // Shows info about daisyUI version and used config in the console when building your CSS
     prefix: "dy-",
   },
 }
