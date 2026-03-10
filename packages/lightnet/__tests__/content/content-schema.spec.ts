@@ -44,7 +44,7 @@ test("Should reject unsupported locale keys in inline translation", () => {
   expect(parsed.error.issues).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        message: expect.stringContaining("Unrecognized key(s) in object"),
+        message: expect.stringContaining("Unrecognized key"),
         path: [],
       }),
     ]),

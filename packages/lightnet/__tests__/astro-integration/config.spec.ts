@@ -61,7 +61,7 @@ test("Should reject string-based siteLanguages config", () => {
       ...requiredConfig,
       siteLanguages: ["en"],
     }),
-  ).toThrowError(/Expected object, received string/)
+  ).toThrowError(/expected object, received string/i)
 })
 
 test("Should reject siteLanguages without a default", () => {

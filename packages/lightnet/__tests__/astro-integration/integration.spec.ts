@@ -57,11 +57,11 @@ test("Should use lightnet.site and not inject Astro i18n config", () => {
   })
 
   expect(updateConfig).toHaveBeenCalledWith({
-    site: "https://lightnet.community",
     vite: {
       plugins: expect.any(Array),
     },
   })
+  expect(updateConfig.mock.calls[0][0]).not.toHaveProperty("site")
   expect(updateConfig.mock.calls[0][0]).not.toHaveProperty("i18n")
 })
 
@@ -71,11 +71,11 @@ test("Should use Astro site when lightnet.site is not set", () => {
   })
 
   expect(updateConfig).toHaveBeenCalledWith({
-    site: "https://lightnet.community",
     vite: {
       plugins: expect.any(Array),
     },
   })
+  expect(updateConfig.mock.calls[0][0]).not.toHaveProperty("site")
 })
 
 test("Should fail schema validation when no site is set", () => {
