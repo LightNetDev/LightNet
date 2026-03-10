@@ -2,12 +2,12 @@
 "lightnet": major
 ---
 
-Language configuration was split into two explicit sources:
+Language configuration is now split into two explicit sources:
 
-- Site locales are configured in `lightnet.config.*` via `siteLanguages`.
+- Site locales are configured in LightNet config in `astro.config.*` via `siteLanguages`.
 - Language metadata is stored as content entries in `src/content/languages/{bcp47}.json`.
 
-This removes duplicated language metadata from config and makes locale behavior explicit.
+This removes duplicated language metadata from config and makes locale behavior easier to reason about.
 
 Example `siteLanguages` config:
 
@@ -39,14 +39,14 @@ Example language content entry (`src/content/languages/en.json`):
 
 ## Breaking changes
 
-- Removed top-level `languages` from `lightnet.config.*`.
+- Removed top-level `languages` from LightNet config.
 - `siteLanguages` must use object entries: `{ code, isDefault?, fallback? }`.
 - Exactly one `siteLanguages` entry must have `isDefault: true`.
 - Language metadata now comes from `src/content/languages/{bcp47}.json` entries.
 
 ## Migration
 
-1. Replace legacy `languages` config with `siteLanguages`.
+1. Replace legacy `languages` config with `siteLanguages` in `astro.config.*`.
 
 ```json
 // before
@@ -78,7 +78,7 @@ Example language content entry (`src/content/languages/en.json`):
 }
 ```
 
-2. Move language metadata into `src/content/languages/*.json`.
+2. Move language labels and metadata into `src/content/languages/*.json`.
 
 ```json
 // src/content/languages/en.json
@@ -90,8 +90,6 @@ Example language content entry (`src/content/languages/en.json`):
   }
 }
 ```
-
-Notes:
 
 - `fallback` is optional and defaults to an empty array.
 - `code` values should be valid BCP-47 tags.
