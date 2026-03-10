@@ -3,7 +3,6 @@ import lightnetConfig from "virtual:lightnet/config"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import lightnetLogo from "../assets/lightnet-logo.svg?url"
-import { configCollections } from "./collections/config"
 import { contentCollections } from "./collections/content"
 import { projectPath } from "./utils/path"
 
@@ -51,6 +50,5 @@ export const config: CmsConfig = {
     clean_accents: true,
     maxlength: 60,
   },
-  singletons: [...configCollections],
   collections: [...contentCollections],
 }
