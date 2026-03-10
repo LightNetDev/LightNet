@@ -64,7 +64,8 @@ Validation rules:
 // after
 {
   "label": {
-    "en": "Books"
+    "en": "Books",
+    "de": "Bücher"
   }
 }
 ```
