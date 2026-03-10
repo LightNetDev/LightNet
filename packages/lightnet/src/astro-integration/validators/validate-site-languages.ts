@@ -19,7 +19,7 @@ export const validateSiteLanguages = (
       seen.add(code)
     } else {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: `Duplicate site language code "${code}"`,
         path: [index, "code"],
       })
@@ -32,7 +32,7 @@ export const validateSiteLanguages = (
 
   if (defaultCount !== 1) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Exactly one site language must define isDefault: true",
     })
   }

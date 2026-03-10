@@ -25,7 +25,7 @@
     "./config.json.ts": "./src/config.json.ts"
   },
   "peerDependencies": {
-    "astro": "^5.1.0",
+    "astro": "^6.0.0",
     "lightnet": "^3.0.0"
   },
   "dependencies": {

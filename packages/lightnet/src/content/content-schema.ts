@@ -140,7 +140,7 @@ export const mediaItemSchema = z.object({
    *
    * @example 2024-09-10
    */
-  dateCreated: z.string().date(),
+  dateCreated: z.iso.date(),
   /**
    * List of categories of this media item.
    *

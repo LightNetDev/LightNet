@@ -20,7 +20,7 @@ export const validateInlineTranslations = (
 
     if (!(defaultLocale in inlineTranslation)) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: `Missing translation for default locale "${defaultLocale}"`,
         path: [...path, defaultLocale],
       })
@@ -32,7 +32,7 @@ export const validateInlineTranslations = (
       }
 
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: `Invalid locale "${locale}". Inline translations only support configured site locales: ${locales.join(", ")}`,
         path: [...path, locale],
       })

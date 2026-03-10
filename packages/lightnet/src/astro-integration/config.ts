@@ -15,7 +15,10 @@ import { validateSiteLanguages } from "./validators/validate-site-languages"
  *   en: "Hello"
  * }
  */
-export const inlineTranslationSchema = z.record(z.string().nonempty())
+export const inlineTranslationSchema = z.record(
+  z.string(),
+  z.string().nonempty(),
+)
 
 /**
  * Link Schema.
