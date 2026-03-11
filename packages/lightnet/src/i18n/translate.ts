@@ -32,30 +32,35 @@ const languageCodes = [
   ),
 ]
 
-const translations = await prepareI18nextTranslations()
-export const translationKeys = [
-  ...new Set(
-    Object.values(translations)
-      .map(({ translation }) => translation)
-      .flatMap((oneLanguageTranslations) =>
-        Object.keys(oneLanguageTranslations),
-      ),
-  ),
-]
+export async function getTranslationKeys() {
+  const translations = await prepareI18nextTranslations()
+  return [
+    ...new Set(
+      Object.values(translations)
+        .map(({ translation }) => translation)
+        .flatMap((oneLanguageTranslations) =>
+          Object.keys(oneLanguageTranslations),
+        ),
+    ),
+  ]
+}
 
-const i18n = i18next.createInstance({ showSupportNotice: false })
-await i18n.init({
-  lng: config.defaultLocale,
-  // don't use name spacing
-  nsSeparator: false,
-  // only use flat keys
-  keySeparator: false,
-  resources: translations,
-})
-
-export function useTranslate(bcp47: string | undefined): TranslateFn {
+export async function useTranslate(
+  bcp47: string | undefined,
+): Promise<TranslateFn> {
   const resolvedLocale = bcp47 ?? config.defaultLocale
-  const t = i18n.getFixedT<TranslationKey>(resolvedLocale)
+  const translations = await prepareI18nextTranslations()
+  const i18n = i18next.createInstance({ showSupportNotice: false })
+
+  await i18n.init({
+    lng: config.defaultLocale,
+    // don't use name spacing
+    nsSeparator: false,
+    // only use flat keys
+    keySeparator: false,
+    resources: translations,
+  })
+
   const fallbackLng = [
     ...(fallbackLanguages[resolvedLocale] ?? []),
     config.defaultLocale,
@@ -70,6 +75,7 @@ export function useTranslate(bcp47: string | undefined): TranslateFn {
       )
     }
 
+    const t = i18n.getFixedT<TranslationKey>(resolvedLocale)
     const value = t(input, { fallbackLng, ...options })
     // i18next will return the key if no translation is found.
     if (value === input) {

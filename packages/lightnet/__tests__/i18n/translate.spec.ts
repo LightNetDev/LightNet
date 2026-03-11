@@ -5,14 +5,14 @@ const importTranslations = async () => import("../../src/i18n/translations")
 
 test("Should load built-in translations for non-default site locales", async () => {
   const { useTranslate } = await importTranslate()
-  const t = useTranslate("de")
+  const t = await useTranslate("de")
   expect(t("ln.search.title")).toBe("Suche")
   expect(t("ln.header.select-language")).toBe("Sprache auswählen")
 })
 
 test("Should fallback inline translations to default locale", async () => {
   const { useTranslate } = await importTranslate()
-  const t = useTranslate("de")
+  const t = await useTranslate("de")
   expect(t({ en: "Open" })).toBe("Open")
 })
 
