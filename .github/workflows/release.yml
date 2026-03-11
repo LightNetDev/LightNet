@@ -39,7 +39,7 @@ jobs:
         run: npm install -g npm@11.6.2 # OIDC requires 11.5.1 or later
 
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm install --frozen-lockfile
 
       - name: Create release PR
         id: changesets

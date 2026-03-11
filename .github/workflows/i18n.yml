@@ -21,7 +21,7 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
-      - run: pnpm i
+      - run: pnpm install --frozen-lockfile
       - run: pnpm --silent translation-status > packages/lightnet/src/i18n/translations/TRANSLATION-STATUS.md
         name: Generate translation status report
       - run: |
