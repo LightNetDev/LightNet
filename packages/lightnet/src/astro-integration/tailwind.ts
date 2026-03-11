@@ -49,6 +49,11 @@ async function getViteConfiguration(
     },
   }
 }
+
+// Astro v6 no longer supports Tailwind CSS v3 through `@astrojs/tailwind`,
+// so LightNet provides its own minimal integration for now.
+// Remove this in the next major release once Tailwind v4 is the baseline,
+// and then also remove `autoprefixer`, `postcss`, and `postcss-load-config`.
 function tailwindIntegration(): AstroIntegration {
   return {
     name: "@lightnet/tailwind",
