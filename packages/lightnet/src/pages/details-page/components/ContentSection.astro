@@ -1,4 +1,7 @@
 ---
+import IconChevronRight from "~icons/mdi/chevron-right.jsx"
+import IconDownload from "~icons/mdi/download.jsx"
+
 import Icon from "../../../components/Icon"
 import { getMediaItem } from "../../../content/get-media-items"
 import {
@@ -30,6 +33,7 @@ const typeIcons: { [k in UrlType]: string } = {
   video: "mdi--video-outline",
   package: "mdi--zip-box-outline",
 } as const
+const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <ol
@@ -57,13 +61,23 @@ const typeIcons: { [k in UrlType]: string } = {
             <div class="me-4 ms-2 shrink-0 font-bold uppercase text-gray-600 sm:me-8">
               {extension}
             </div>
-            <Icon
-              className={`${canBeOpened ? "mdi--chevron-right" : "mdi--download"} shrink-0 bg-gray-600 group-hover:bg-gray-800`}
-              ariaLabel={
-                canBeOpened ? t("ln.details.open") : t("ln.details.download")
-              }
-              flipIcon={direction === "rtl"}
-            />
+            {canBeOpened ? (
+              <>
+                <IconChevronRight
+                  className={`h-6 w-6 shrink-0 bg-gray-600 group-hover:bg-gray-800 ${iconDirectionClass}`}
+                  aria-hidden="true"
+                />
+                <span class="sr-only">{t("ln.details.open")}</span>
+              </>
+            ) : (
+              <>
+                <IconDownload
+                  className="h-6 w-6 shrink-0 bg-gray-600 group-hover:bg-gray-800"
+                  aria-hidden="true"
+                />
+                <span class="sr-only">{t("ln.details.download")}</span>
+              </>
+            )}
           </a>
           {index !== content.length - 1 && (
             <div class="h-px w-full bg-gray-300" />

@@ -1,7 +1,7 @@
 ---
 import mediaItemEditButtonController from "virtual:lightnet/components/media-item-edit-button-controller"
 
-import Icon from "../../../../components/Icon"
+import IconSquareEditOutline from "~icons/mdi/square-edit-outline.jsx"
 
 if (!mediaItemEditButtonController) {
   return
@@ -19,7 +19,7 @@ const { mediaId } = Astro.props
   id="edit-btn"
   data-media-id={mediaId}
   href="#"
-  ><Icon className="mdi--square-edit-outline" ariaLabel="" />
+  ><IconSquareEditOutline className="h-6 w-6" aria-hidden="true" />
   {Astro.locals.i18n.t("ln.details.edit")}</a
 >
 <script>

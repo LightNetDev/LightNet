@@ -1,3 +1,5 @@
+import IconChevronRight from "~icons/mdi/chevron-right.jsx"
+
 import CoverImageDecorator from "../../../components/CoverImageDecorator"
 import Icon from "../../../components/Icon"
 import { useI18n } from "../../../i18n/react/use-i18n"
@@ -32,6 +34,7 @@ export default function SearchListItem({
 }: Props) {
   const { currentLocale, direction } = useI18n()
   const coverImageStyle = mediaTypes[item.type].coverImageStyle
+  const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
   return (
     <a
       href={detailsPagePath(currentLocale, {
@@ -98,10 +101,9 @@ export default function SearchListItem({
           </p>
         </div>
       </div>
-      <Icon
-        className="my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 mdi--chevron-right sm:block md:group-hover:text-primary"
-        flipIcon={direction === "rtl"}
-        ariaLabel=""
+      <IconChevronRight
+        className={`my-auto me-4 ms-2 hidden h-6 w-6 shrink-0 text-gray-300 sm:block md:group-hover:text-primary ${iconDirectionClass}`}
+        aria-hidden="true"
       />
     </a>
   )

@@ -1,5 +1,6 @@
 ---
-import Icon from "../../../../components/Icon"
+import IconExternalLink from "~icons/mdi/external-link.jsx"
+
 import { getMediaItem } from "../../../../content/get-media-items"
 import { type InlineTranslation } from "../../../../i18n/inline-translation"
 import { createContentMetadata } from "../../utils/create-content-metadata"
@@ -23,10 +24,7 @@ const content = createContentMetadata(item.data.content[0], Astro.locals.i18n.t)
 >
   {
     content.isExternal && (
-      <Icon
-        ariaLabel={Astro.locals.i18n.t("ln.external-link")}
-        className={`shrink-0 mdi--external-link`}
-      />
+      <IconExternalLink className="h-6 w-6 shrink-0" aria-hidden="true" />
     )
   }
   {

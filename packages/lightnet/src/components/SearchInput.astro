@@ -1,5 +1,5 @@
 ---
-import Icon from "./Icon"
+import IconMagnify from "~icons/mdi/magnify.jsx"
 
 type Props = {
   className?: string
@@ -24,8 +24,9 @@ const { t, currentLocale } = Astro.locals.i18n
   />
   <button
     type="submit"
+    aria-label={t("ln.search.title")}
     class="flex items-center rounded-e-2xl border border-gray-100/95 bg-gray-800 px-4 py-3 text-gray-50 hover:bg-gray-950 hover:text-gray-300"
   >
-    <Icon className="mdi--magnify" ariaLabel={t("ln.search.title")} />
+    <IconMagnify className="h-6 w-6" aria-hidden="true" />
   </button>
 </form>

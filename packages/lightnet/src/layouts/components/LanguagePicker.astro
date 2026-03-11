@@ -1,4 +1,6 @@
 ---
+import IconWeb from "~icons/mdi/web.jsx"
+
 import { resolveTranslatedLanguage } from "../../i18n/resolve-language"
 import { localizePath } from "../../utils/paths"
 import Menu from "./Menu.astro"
@@ -33,7 +35,8 @@ const disabled = !hasLocale && Astro.url.pathname !== "/"
 
 {
   translations.length > 1 && (
-    <Menu disabled={disabled} icon="mdi--web" label="ln.header.select-language">
+    <Menu disabled={disabled} label="ln.header.select-language">
+      <IconWeb slot="icon" className="h-6 w-6" aria-hidden="true" />
       {translations.map(({ label, locale, active, href }) => (
         <MenuItem href={href} hreflang={locale} active={active}>
           {label}

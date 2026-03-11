@@ -2,6 +2,8 @@
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
 
+import IconChevronRight from "~icons/mdi/chevron-right.jsx"
+
 import { getMediaTypes } from "../content/get-media-types"
 import { detailsPagePath } from "../utils/paths"
 import CoverImageDecorator from "./CoverImageDecorator"
@@ -40,6 +42,7 @@ const mediaTypes = Object.fromEntries(
     },
   ]),
 )
+const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <ol class="divide-y divide-gray-200">
@@ -97,10 +100,9 @@ const mediaTypes = Object.fromEntries(
             </div>
           </div>
 
-          <Icon
-            className="mdi--chevron-right hidden sm:block md:group-hover:text-primary my-auto ms-2 me-4 shrink-0 text-2xl text-gray-300"
-            flipIcon={direction === "rtl"}
-            ariaLabel=""
+          <IconChevronRight
+            className={`my-auto me-4 ms-2 hidden h-6 w-6 shrink-0 text-gray-300 sm:block md:group-hover:text-primary ${iconDirectionClass}`}
+            aria-hidden="true"
           />
         </a>
       </li>
