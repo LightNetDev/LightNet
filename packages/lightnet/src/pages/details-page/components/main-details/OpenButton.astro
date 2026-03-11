@@ -1,5 +1,5 @@
 ---
-import IconExternalLink from "~icons/mdi/external-link.jsx"
+import { ExternalLinkIcon } from "lucide-react"
 
 import { getMediaItem } from "../../../../content/get-media-items"
 import { type InlineTranslation } from "../../../../i18n/inline-translation"
@@ -22,11 +22,7 @@ const content = createContentMetadata(item.data.content[0], Astro.locals.i18n.t)
   hreflang={item.data.language.id}
   class:list={[className]}
 >
-  {
-    content.isExternal && (
-      <IconExternalLink className="h-6 w-6 shrink-0" aria-hidden="true" />
-    )
-  }
+  {content.isExternal && <ExternalLinkIcon className="shrink-0" />}
   {
     content.canBeOpened
       ? Astro.locals.i18n.t(openActionLabel)

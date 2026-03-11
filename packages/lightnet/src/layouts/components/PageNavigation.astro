@@ -1,9 +1,6 @@
 ---
+import { ExternalLinkIcon, MenuIcon, SearchIcon } from "lucide-react"
 import config from "virtual:lightnet/config"
-
-import IconExternalLink from "~icons/mdi/external-link.jsx"
-import IconMagnify from "~icons/mdi/magnify.jsx"
-import IconMenu from "~icons/mdi/menu.jsx"
 
 import { localizePath, searchPagePath } from "../../utils/paths"
 import { isExternalUrl } from "../../utils/urls"
@@ -41,7 +38,7 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
         data-astro-prefetch="viewport"
         href={searchPagePath(currentLocale)}
       >
-        <IconMagnify className="h-6 w-6" aria-hidden="true" />
+        <SearchIcon />
       </a>
     )
   }
@@ -51,7 +48,7 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
   {
     !!items.length && (
       <Menu label="ln.header.open-main-menu">
-        <IconMenu slot="icon" className="h-6 w-6" aria-hidden="true" />
+        <MenuIcon slot="icon" />
         {items.map(({ label, path, isActive, isExternal }) => (
           <MenuItem
             href={path}
@@ -59,12 +56,7 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
             target={isExternal ? "_blank" : "_self"}
           >
             {t(label)}
-            {isExternal && (
-              <IconExternalLink
-                className="h-4 w-4 shrink-0"
-                aria-hidden="true"
-              />
-            )}
+            {isExternal && <ExternalLinkIcon className="shrink-0" />}
           </MenuItem>
         ))}
       </Menu>

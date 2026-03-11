@@ -1,5 +1,5 @@
 ---
-import IconChevronRight from "~icons/mdi/chevron-right.jsx"
+import { ChevronRightIcon } from "lucide-react"
 
 export interface Props {
   /**
@@ -83,9 +83,10 @@ const iconDirectionClass =
         {titleHref ? (
           <a href={titleHref} class="group flex items-center">
             {title}
-            <IconChevronRight
-              className={`-ms-2 h-10 w-10 transition-colors duration-75 ease-in-out group-hover:text-primary sm:h-12 sm:w-12 ${iconDirectionClass}`}
-              aria-hidden="true"
+            <ChevronRightIcon
+              size="2rem"
+              strokeWidth="3px"
+              className={`transition-colors duration-75 ease-in-out group-hover:text-primary ${iconDirectionClass}`}
             />
           </a>
         ) : (

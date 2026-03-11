@@ -1,4 +1,4 @@
-import IconChevronRight from "~icons/mdi/chevron-right.jsx"
+import { ChevronRightIcon } from "lucide-react"
 
 import { useI18n } from "../../../i18n/react/use-i18n"
 
@@ -19,9 +19,8 @@ export default function LoadingSkeleton() {
             <div className="h-4 w-3/4 rounded-md bg-gray-200 md:h-6"></div>
             <div className="h-4 w-5/6 rounded-md bg-gray-200 md:h-6"></div>
           </div>
-          <IconChevronRight
-            aria-hidden="true"
-            className={`my-auto me-4 ms-2 hidden h-6 w-6 shrink-0 text-gray-300 sm:block ${iconDirectionClass}`}
+          <ChevronRightIcon
+            className={`my-auto me-4 ms-2 hidden shrink-0 text-gray-300 sm:block ${iconDirectionClass}`}
           />
         </li>
       ))}

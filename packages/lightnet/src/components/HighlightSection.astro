@@ -1,8 +1,7 @@
 ---
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
-
-import IconArrowRight from "~icons/mdi/arrow-right.jsx"
+import { ArrowRightIcon } from "lucide-react"
 
 interface Props {
   image: ImageMetadata
@@ -59,10 +58,7 @@ const iconDirectionClass =
             href={link.href}
           >
             {link.text}
-            <IconArrowRight
-              className={`h-6 w-6 ${iconDirectionClass}`}
-              aria-hidden="true"
-            />
+            <ArrowRightIcon className={iconDirectionClass} />
           </a>
         )
       }

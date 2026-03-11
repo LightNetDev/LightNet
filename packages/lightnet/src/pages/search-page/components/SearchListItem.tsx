@@ -1,4 +1,4 @@
-import IconChevronRight from "~icons/mdi/chevron-right.jsx"
+import { ChevronRightIcon } from "lucide-react"
 
 import CoverImageDecorator from "../../../components/CoverImageDecorator"
 import Icon from "../../../components/Icon"
@@ -101,9 +101,8 @@ export default function SearchListItem({
           </p>
         </div>
       </div>
-      <IconChevronRight
-        className={`my-auto me-4 ms-2 hidden h-6 w-6 shrink-0 text-gray-300 sm:block md:group-hover:text-primary ${iconDirectionClass}`}
-        aria-hidden="true"
+      <ChevronRightIcon
+        className={`my-auto me-4 ms-2 hidden shrink-0 text-gray-300 sm:block md:group-hover:text-primary ${iconDirectionClass}`}
       />
     </a>
   )

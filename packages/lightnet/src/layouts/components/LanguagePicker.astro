@@ -1,5 +1,5 @@
 ---
-import IconWeb from "~icons/mdi/web.jsx"
+import { GlobeIcon } from "lucide-react"
 
 import { resolveTranslatedLanguage } from "../../i18n/resolve-language"
 import { localizePath } from "../../utils/paths"
@@ -36,7 +36,7 @@ const disabled = !hasLocale && Astro.url.pathname !== "/"
 {
   translations.length > 1 && (
     <Menu disabled={disabled} label="ln.header.select-language">
-      <IconWeb slot="icon" className="h-6 w-6" aria-hidden="true" />
+      <GlobeIcon slot="icon" />
       {translations.map(({ label, locale, active, href }) => (
         <MenuItem href={href} hreflang={locale} active={active}>
           {label}

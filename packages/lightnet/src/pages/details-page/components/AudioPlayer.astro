@@ -1,5 +1,5 @@
 ---
-import IconExternalLink from "~icons/mdi/external-link.jsx"
+import { ExternalLinkIcon } from "lucide-react"
 
 type Props = {
   src: string
@@ -37,7 +37,7 @@ const isMp3 = audioExtension.endsWith(".mp3")
       </span>
       <div class="flex h-full grow flex-col gap-3">
         <span class="flex items-center gap-2 font-semibold text-gray-900">
-          <IconExternalLink className="h-6 w-6 shrink-0" aria-hidden="true" />
+          <ExternalLinkIcon className="shrink-0" />
           {t("ln.external-link")}
         </span>
         <div class="h-2 w-full rounded-full bg-gray-200">

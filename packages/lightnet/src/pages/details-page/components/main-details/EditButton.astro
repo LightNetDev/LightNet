@@ -1,7 +1,6 @@
 ---
+import { SquarePenIcon } from "lucide-react"
 import mediaItemEditButtonController from "virtual:lightnet/components/media-item-edit-button-controller"
-
-import IconSquareEditOutline from "~icons/mdi/square-edit-outline.jsx"
 
 if (!mediaItemEditButtonController) {
   return
@@ -19,7 +18,7 @@ const { mediaId } = Astro.props
   id="edit-btn"
   data-media-id={mediaId}
   href="#"
-  ><IconSquareEditOutline className="h-6 w-6" aria-hidden="true" />
+  ><SquarePenIcon />
   {Astro.locals.i18n.t("ln.details.edit")}</a
 >
 <script>

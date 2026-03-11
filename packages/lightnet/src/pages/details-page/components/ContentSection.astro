@@ -1,6 +1,5 @@
 ---
-import IconChevronRight from "~icons/mdi/chevron-right.jsx"
-import IconDownload from "~icons/mdi/download.jsx"
+import { ChevronRightIcon, DownloadIcon } from "lucide-react"
 
 import Icon from "../../../components/Icon"
 import { getMediaItem } from "../../../content/get-media-items"
@@ -63,18 +62,14 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
             </div>
             {canBeOpened ? (
               <>
-                <IconChevronRight
-                  className={`h-6 w-6 shrink-0 bg-gray-600 group-hover:bg-gray-800 ${iconDirectionClass}`}
-                  aria-hidden="true"
+                <ChevronRightIcon
+                  className={`shrink-0 bg-gray-600 group-hover:bg-gray-800 ${iconDirectionClass}`}
                 />
                 <span class="sr-only">{t("ln.details.open")}</span>
               </>
             ) : (
               <>
-                <IconDownload
-                  className="h-6 w-6 shrink-0 bg-gray-600 group-hover:bg-gray-800"
-                  aria-hidden="true"
-                />
+                <DownloadIcon className="shrink-0 bg-gray-600 group-hover:bg-gray-800" />
                 <span class="sr-only">{t("ln.details.download")}</span>
               </>
             )}

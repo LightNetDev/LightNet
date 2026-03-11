@@ -1,6 +1,5 @@
 ---
-import IconChevronLeft from "~icons/mdi/chevron-left.jsx"
-import IconChevronRight from "~icons/mdi/chevron-right.jsx"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 import Section, { type Props as SectionProps } from "./Section.astro"
 
@@ -19,14 +18,14 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
         aria-label={t("ln.previous")}
         class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
       >
-        <IconChevronLeft className={`h-6 w-6 ${iconDirectionClass}`} />
+        <ChevronLeftIcon className={iconDirectionClass} />
       </button>
       <button
         data-button-next
         aria-label={t("ln.next")}
         class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
       >
-        <IconChevronRight className={`h-6 w-6 ${iconDirectionClass}`} />
+        <ChevronRightIcon className={iconDirectionClass} />
       </button>
     </div>
 
