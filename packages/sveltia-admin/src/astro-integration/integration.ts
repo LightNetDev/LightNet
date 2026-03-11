@@ -48,6 +48,9 @@ export default function lightnetSveltiaAdmin(
           },
         })
       },
+      "astro:server:start": ({ address }) => {
+        process.env.LIGHTNET_DEV_SITE_URL = `http://localhost:${address.port}`
+      },
     },
   }
 }
