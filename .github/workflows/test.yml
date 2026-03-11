@@ -42,7 +42,7 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
       - if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm --filter lightnet exec playwright install --with-deps chromium
       - run: pnpm e2e
       - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
