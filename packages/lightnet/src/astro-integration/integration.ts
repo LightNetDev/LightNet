@@ -1,11 +1,11 @@
 /// <reference path="../i18n/locals.d.ts" />
 import react from "@astrojs/react"
-import tailwind from "@astrojs/tailwind"
 import type { AstroIntegration } from "astro"
 import { AstroError } from "astro/errors"
 
 import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
+import tailwind from "./tailwind"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
 
 export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
@@ -71,10 +71,7 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
 
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
-        astroConfig.integrations.push(
-          tailwind({ applyBaseStyles: false }),
-          react(),
-        )
+        astroConfig.integrations.push(tailwind(), react())
 
         updateConfig({
           vite: {

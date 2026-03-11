@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@astrojs/react": "^5.0.0",
-    "@astrojs/tailwind": "^6.0.2",
     "@lightnet/sveltia-admin": "^3.0.0",
     "astro": "^6.0.0",
     "lightnet": "^3.12.2",
