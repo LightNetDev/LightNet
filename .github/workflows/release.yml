@@ -32,8 +32,8 @@ jobs:
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
 
       - name: Update npm
         run: npm install -g npm@11.6.2 # OIDC requires 11.5.1 or later
