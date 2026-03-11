@@ -48,6 +48,8 @@
     "@astrojs/react": "^5.0.0",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-virtual": "^3.13.21",
     "autoprefixer": "^10.4.27",
@@ -58,7 +60,8 @@
     "marked": "^17.0.4",
     "postcss": "^8.5.8",
     "postcss-load-config": "^6.0.1",
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.2",
+    "unplugin-icons": "^23.0.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",

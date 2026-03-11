@@ -1,12 +1,18 @@
+/// <reference types="unplugin-icons/types/react" />
 /// <reference path="../i18n/locals.d.ts" />
+import { fileURLToPath } from "node:url"
+
 import react from "@astrojs/react"
 import type { AstroIntegration } from "astro"
 import { AstroError } from "astro/errors"
+import Icons from "unplugin-icons/vite"
 
 import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
 import tailwind from "./tailwind"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
+
+const packageRoot = fileURLToPath(new URL("../..", import.meta.url))
 
 export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
   return {
@@ -75,7 +81,14 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
 
         updateConfig({
           vite: {
-            plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
+            plugins: [
+              vitePluginLightnetConfig(config, astroConfig, logger),
+              Icons({
+                compiler: "jsx",
+                jsx: "react",
+                collectionsNodeResolvePath: packageRoot,
+              }),
+            ],
           },
         })
       },

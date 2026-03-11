@@ -1,3 +1,4 @@
+/// <reference types="unplugin-icons/types/react" />
 export { default as CategoriesSection } from "../src/components/CategoriesSection.astro"
 export { default as HeroSection } from "../src/components/HeroSection.astro"
 export { default as HighlightSection } from "../src/components/HighlightSection.astro"
