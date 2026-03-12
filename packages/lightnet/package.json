@@ -47,9 +47,8 @@
   "dependencies": {
     "@astrojs/react": "^5.0.0",
     "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/lucide": "^1.2.96",
     "@iconify/tailwind": "^1.2.0",
-    "@svgr/core": "^8.1.0",
-    "@svgr/plugin-jsx": "^8.1.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-virtual": "^3.13.21",
     "autoprefixer": "^10.4.27",

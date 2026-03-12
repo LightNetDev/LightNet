@@ -26,7 +26,7 @@ export function lightnetStyles({
         },
       },
     },
-    plugins: [typography, addIconSelectors(["mdi"])],
+    plugins: [typography, addIconSelectors(["mdi", "lucide"])],
   }
 }
 

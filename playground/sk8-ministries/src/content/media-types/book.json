@@ -4,7 +4,7 @@
     "ar": "كتاب",
     "de": "Buch"
   },
-  "icon": "mdi--book-open-blank-variant",
+  "icon": "lucide--book-open-text",
   "coverImageStyle": "book",
   "detailsPage": {
     "layout": "default",

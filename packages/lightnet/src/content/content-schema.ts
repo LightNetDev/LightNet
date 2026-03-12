@@ -292,10 +292,10 @@ export const mediaTypeSchema = z.object({
     ])
     .optional(),
   /**
-   * Pick the media type's icon from https://pictogrammers.com/library/mdi/
-   * Prefix it's name with "mdi--"
+   * Pick the media type's icon from https://lucide.dev/icons/
+   * Prefix it's name with "lucide--"
    *
-   * @example "mdi--ab-testing"
+   * @example "lucide--book-open"
    */
   icon: z.string(),
 })

@@ -20,9 +20,12 @@ export const mediaTypeCollection: Collection = {
     {
       name: "icon",
       label: "Icon",
-      prefix: "mdi--",
+      pattern: [
+        "(?:mdi|lucide)--.+",
+        "Icon name must start with mdi-- or lucide--",
+      ],
       widget: "string",
-      hint: "Find available icons on https://pictogrammers.com/library/mdi/.",
+      hint: "Browse Lucide icons at https://lucide.dev/icons/ and enter the icon name with the 'lucide--' prefix, for example 'lucide--book-open'.",
     },
     {
       name: "coverImageStyle",

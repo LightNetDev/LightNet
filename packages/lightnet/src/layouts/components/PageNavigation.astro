@@ -56,7 +56,9 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
             target={isExternal ? "_blank" : "_self"}
           >
             {t(label)}
-            {isExternal && <ExternalLinkIcon className="shrink-0" />}
+            {isExternal && (
+              <ExternalLinkIcon size="1.2rem" className="shrink-0" />
+            )}
           </MenuItem>
         ))}
       </Menu>
