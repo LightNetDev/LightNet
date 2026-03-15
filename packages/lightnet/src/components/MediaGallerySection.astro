@@ -20,13 +20,13 @@ type MediaItem = {
 
 type Props = Omit<SectionProps, "maxWidth"> & {
   items: (MediaItem | undefined)[]
-  itemWidth?: "narrow" | "wide"
+  itemWidth?: "infer" | "narrow" | "wide"
   layout?: "grid" | "carousel"
 }
 
 const {
   items: itemsInput,
-  itemWidth,
+  itemWidth = "infer",
   layout = "carousel",
   ...sectionProps
 } = Astro.props
@@ -59,7 +59,11 @@ const { landscapeCount, portraitCount } = items.slice(0, 10).reduce(
 )
 
 const resolvedItemWidth =
-  itemWidth ?? (landscapeCount > portraitCount ? "wide" : "narrow")
+  itemWidth === "infer"
+    ? landscapeCount > portraitCount
+      ? "wide"
+      : "narrow"
+    : itemWidth
 
 const imageSizes = {
   narrow:
