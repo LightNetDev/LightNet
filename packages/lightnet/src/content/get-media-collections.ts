@@ -1,22 +1,25 @@
 import { getCollection } from "astro:content"
 
+import { lazy } from "../utils/lazy"
 import { verifySchemaAsync } from "../utils/verify-schema"
 import { mediaCollectionEntrySchema } from "./content-schema"
 
-const collectionsByMediaItemIds = (await loadMediaCollections())
-  .flatMap((collection) =>
-    collection.data.mediaItems.map(({ id }) => [id, collection.id]),
-  )
-  .reduce(
-    (collected, [mediaId, collectionId]) => {
-      collected[mediaId] = [...(collected[mediaId] ?? []), collectionId]
-      return collected
-    },
-    {} as Record<string, string[]>,
-  )
+const collectionsByMediaItemIds = lazy(async () =>
+  (await loadMediaCollections())
+    .flatMap((collection) =>
+      collection.data.mediaItems.map(({ id }) => [id, collection.id]),
+    )
+    .reduce(
+      (collected, [mediaId, collectionId]) => {
+        collected[mediaId] = [...(collected[mediaId] ?? []), collectionId]
+        return collected
+      },
+      {} as Record<string, string[]>,
+    ),
+)
 
 export const getCollectionsForMediaItem = async (mediaId: string) => {
-  return collectionsByMediaItemIds[mediaId] ?? []
+  return (await collectionsByMediaItemIds.get())[mediaId] ?? []
 }
 
 async function loadMediaCollections() {

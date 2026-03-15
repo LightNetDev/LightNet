@@ -2,20 +2,21 @@ import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
 import type { TranslateFn } from "../i18n/translate"
+import { lazy } from "../utils/lazy"
 import { verifySchema } from "../utils/verify-schema"
 import { mediaTypeEntrySchema } from "./content-schema"
 import { getMediaItems } from "./get-media-items"
 
-const typesById = Object.fromEntries(
-  (await loadTypes()).map((type) => [type.id, type]),
+const typesById = lazy(async () =>
+  Object.fromEntries((await loadTypes()).map((type) => [type.id, type])),
 )
 
-const contentTypes = new Set(
-  (await getMediaItems()).map((item) => item.data.type.id),
+const contentTypes = lazy(
+  async () => new Set((await getMediaItems()).map((item) => item.data.type.id)),
 )
 
 export const getMediaType = async (id: string) => {
-  const type = typesById[id]
+  const type = (await typesById.get())[id]
   if (!type) {
     throw new AstroError(
       `No media type found for id ${id}`,
@@ -29,13 +30,14 @@ export const getUsedMediaTypes = async (
   currentLocale: string,
   t: TranslateFn,
 ) => {
-  return Array.from(contentTypes, (typeId) => typesById[typeId])
+  const byId = await typesById.get()
+  return Array.from(await contentTypes.get(), (typeId) => byId[typeId])
     .map(({ id, data }) => ({ id, ...data, labelText: t(data.label) }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
 
 export const getMediaTypes = async () => {
-  return Object.values(typesById)
+  return Object.values(await typesById.get())
 }
 
 async function loadTypes() {

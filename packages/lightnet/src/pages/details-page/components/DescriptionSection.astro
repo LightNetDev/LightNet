@@ -10,7 +10,7 @@ const item = await getMediaItem(Astro.props.mediaId)
 
 const { description, language } = item.data
 
-const { direction, code: lang } = resolveLanguage(language.id)
+const { direction, code: lang } = await resolveLanguage(language.id)
 ---
 
 {

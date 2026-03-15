@@ -3,18 +3,21 @@ import { getCollection } from "astro:content"
 import i18next from "i18next"
 
 import { languageEntrySchema } from "../content/content-schema"
+import { lazy } from "../utils/lazy"
 import { verifySchema } from "../utils/verify-schema"
 import type { TranslateFn } from "./translate"
 
-const languages = Object.fromEntries(
-  (await loadLanguages()).map((language) => [
-    language.data.code,
-    language.data,
-  ]),
+const languages = lazy(async () =>
+  Object.fromEntries(
+    (await loadLanguages()).map((language) => [
+      language.data.code,
+      language.data,
+    ]),
+  ),
 )
 
-export const resolveLanguage = (bcp47: string) => {
-  const label = languages[bcp47]?.label
+export const resolveLanguage = async (bcp47: string) => {
+  const label = (await languages.get())[bcp47]?.label
 
   if (!label) {
     throw new AstroError(
@@ -29,8 +32,11 @@ export const resolveLanguage = (bcp47: string) => {
   }
 }
 
-export const resolveTranslatedLanguage = (bcp47: string, t: TranslateFn) => {
-  const language = resolveLanguage(bcp47)
+export const resolveTranslatedLanguage = async (
+  bcp47: string,
+  t: TranslateFn,
+) => {
+  const language = await resolveLanguage(bcp47)
   return {
     ...language,
     labelText: t(language.label),

@@ -18,7 +18,7 @@ export const onRequest: MiddlewareHandler = async ({ locals, url }, next) => {
       useTranslate(currentLocale),
       getTranslationKeys(),
     ])
-    const { direction } = resolveLanguage(currentLocale)
+    const { direction } = await resolveLanguage(currentLocale)
     locals.i18n = {
       t,
       currentLocale,
