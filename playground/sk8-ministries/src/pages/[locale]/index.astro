@@ -45,7 +45,7 @@ const { t, currentLocale } = Astro.locals.i18n
     showSearch={true}
   />
 
-  <CategoriesSection titleHref={`/${Astro.currentLocale}/categories`} />
+  <CategoriesSection titleHref={`/${currentLocale}/categories`} />
 
   <MediaGallerySection
     title={t("home.our-latest-books")}
