@@ -31,7 +31,7 @@ test("Should reject invalid BCP-47 site language code", () => {
       ...requiredConfig,
       siteLanguages: [{ code: "en_US", isDefault: true }],
     }),
-  ).toThrowError(/Invalid BCP-47 language code/)
+  ).toThrow(/Invalid BCP-47 language code/)
 })
 
 test("Should reject invalid BCP-47 fallback language code", () => {
@@ -43,7 +43,7 @@ test("Should reject invalid BCP-47 fallback language code", () => {
         { code: "de", fallback: ["es_MX"] },
       ],
     }),
-  ).toThrowError(/Invalid BCP-47 language code/)
+  ).toThrow(/Invalid BCP-47 language code/)
 })
 
 test("Should reject duplicate site language codes", () => {
@@ -52,7 +52,7 @@ test("Should reject duplicate site language codes", () => {
       ...requiredConfig,
       siteLanguages: [{ code: "en", isDefault: true }, { code: "en" }],
     }),
-  ).toThrowError(/Duplicate site language code/)
+  ).toThrow(/Duplicate site language code/)
 })
 
 test("Should reject string-based siteLanguages config", () => {
@@ -61,7 +61,7 @@ test("Should reject string-based siteLanguages config", () => {
       ...requiredConfig,
       siteLanguages: ["en"],
     }),
-  ).toThrowError(/expected object, received string/i)
+  ).toThrow(/expected object, received string/i)
 })
 
 test("Should reject siteLanguages without a default", () => {
