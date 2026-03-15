@@ -1,5 +1,5 @@
 ---
-import Icon from "./Icon"
+import { ChevronRightIcon } from "lucide-react"
 
 export interface Props {
   /**
@@ -64,6 +64,8 @@ const marginTopValues = {
   sm: "mt-16 md:mt-20",
   lg: "mt-24 md:mt-28",
 }
+const iconDirectionClass =
+  Astro.locals.i18n.direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <section
@@ -81,10 +83,10 @@ const marginTopValues = {
         {titleHref ? (
           <a href={titleHref} class="group flex items-center">
             {title}
-            <Icon
-              className="mdi--chevron-right group-hover:text-primary transition-colors ease-in-out duration-75 text-4xl sm:text-5xl -ms-2"
-              ariaLabel=""
-              flipIcon={Astro.locals.i18n.direction === "rtl"}
+            <ChevronRightIcon
+              size="2rem"
+              strokeWidth="3px"
+              className={`transition-colors duration-75 ease-in-out group-hover:text-primary ${iconDirectionClass}`}
             />
           </a>
         ) : (

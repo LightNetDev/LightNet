@@ -1,7 +1,11 @@
 {
-  "label": "x.type.audio",
+  "label": {
+    "en": "Audio",
+    "de": "Audio",
+    "ar": "صوتي"
+  },
   "detailsPage": {
     "layout": "audio"
   },
-  "icon": "mdi--music-box-outline"
+  "icon": "lucide--headphones"
 }

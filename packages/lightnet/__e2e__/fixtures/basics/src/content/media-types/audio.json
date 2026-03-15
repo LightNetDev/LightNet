@@ -1,7 +1,10 @@
 {
-  "label": "type.audio",
+  "label": {
+    "en": "Audio",
+    "de": "Audio"
+  },
   "detailsPage": {
     "layout": "audio"
   },
-  "icon": "mdi--music-box-outline"
+  "icon": "lucide--music"
 }

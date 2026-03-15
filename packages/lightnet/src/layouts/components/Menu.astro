@@ -1,13 +1,10 @@
 ---
-import Icon from "../../components/Icon"
-
 interface Props {
-  icon: string
   label: string
   disabled?: boolean
 }
 
-const { icon, label, disabled } = Astro.props
+const { label, disabled } = Astro.props
 ---
 
 <ln-menu class="relative flex h-full items-center">
@@ -17,7 +14,7 @@ const { icon, label, disabled } = Astro.props
     aria-label={Astro.locals.i18n.t(label)}
     class="flex rounded-md p-3 text-gray-600 hover:text-primary disabled:text-gray-300"
   >
-    <Icon className={icon} ariaLabel="" />
+    <slot name="icon" />
   </button>
 
   <ul

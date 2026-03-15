@@ -3,20 +3,24 @@
     "Sk8 Ministries"
   ],
   "categories": [],
-  "collections": [
-    {
-      "collection": "how-to-articles",
-      "index": 1
-    }
-  ],
   "commonId": "ride-the-ramp-of-faith",
   "content": [
     {
-      "label": "eBook",
+      "type": "upload",
+      "label": {
+        "en": "eBook",
+        "de": "eBook",
+        "ar": "eBook"
+      },
       "url": "/files/example.epub"
     },
     {
-      "label": "Table of Contents",
+      "type": "upload",
+      "label": {
+        "en": "Table of Contents",
+        "de": "Table of Contents",
+        "ar": "Table of Contents"
+      },
       "url": "/files/example.pdf"
     }
   ],

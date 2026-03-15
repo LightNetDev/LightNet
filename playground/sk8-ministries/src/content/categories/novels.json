@@ -1,4 +1,8 @@
 {
-  "label": "x.category.novels",
-  "image": "../../assets/sample-images/1.webp"
+  "label": {
+    "en": "Novels",
+    "de": "Romane",
+    "ar": "روايات"
+  },
+  "image": "images/1.webp"
 }

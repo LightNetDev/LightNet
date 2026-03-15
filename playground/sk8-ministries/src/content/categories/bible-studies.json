@@ -1,4 +1,8 @@
 {
-  "label": "x.category.bible-studies",
-  "image": "../../assets/sample-images/1.webp"
+  "label": {
+    "en": "Bible Studies",
+    "de": "Bibelstudien",
+    "ar": "دراسات كتابية"
+  },
+  "image": "images/1.webp"
 }

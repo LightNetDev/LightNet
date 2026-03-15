@@ -1,32 +1,66 @@
 import { AstroError } from "astro/errors"
+import { getCollection } from "astro:content"
 import i18next from "i18next"
-import config from "virtual:lightnet/config"
 
+import { languageEntrySchema } from "../content/content-schema"
+import { lazy } from "../utils/lazy"
+import { verifySchema } from "../utils/verify-schema"
 import type { TranslateFn } from "./translate"
 
-const languages = Object.fromEntries(
-  config.languages.map((lang) => [lang.code, lang]),
+const languages = lazy(async () =>
+  Object.fromEntries(
+    (await loadLanguages()).map((language) => [
+      language.data.code,
+      language.data,
+    ]),
+  ),
 )
 
-export const resolveLanguage = (bcp47: string) => {
-  const language = languages[bcp47]
+export const resolveLanguage = async (bcp47: string) => {
+  const label = (await languages.get())[bcp47]?.label
 
-  if (!language) {
+  if (!label) {
     throw new AstroError(
       `Missing language code "${bcp47}"`,
-      `To fix the issue, add a language with the code "${bcp47}" to the LightNet configuration in your astro.config.mjs file.`,
+      `To fix the issue, add a language entry at "src/content/languages/${bcp47}.json".`,
     )
   }
   return {
-    ...language,
+    code: bcp47,
+    label,
     direction: i18next.dir(bcp47),
   }
 }
 
-export const resolveTranslatedLanguage = (bcp47: string, t: TranslateFn) => {
-  const language = resolveLanguage(bcp47)
+export const resolveTranslatedLanguage = async (
+  bcp47: string,
+  t: TranslateFn,
+) => {
+  const language = await resolveLanguage(bcp47)
   return {
     ...language,
     labelText: t(language.label),
   }
+}
+
+async function loadLanguages() {
+  const languages: unknown[] = await getCollection("languages")
+  return languages
+    .map((language: unknown) =>
+      verifySchema(
+        languageEntrySchema,
+        language,
+        (id) => `Invalid language: "${id}"`,
+        (id) => `Fix these issues inside "src/content/languages/${id}.json":`,
+      ),
+    )
+    .map((language) => {
+      if (language.id === language.data.code) {
+        return language
+      }
+      throw new AstroError(
+        `Language code mismatch for "${language.id}"`,
+        `The language file id "${language.id}" must match its "code" value "${language.data.code}". Fix "src/content/languages/${language.id}.json".`,
+      )
+    })
 }

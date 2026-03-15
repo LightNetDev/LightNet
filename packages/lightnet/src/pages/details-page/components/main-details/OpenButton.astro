@@ -1,33 +1,28 @@
 ---
-import Icon from "../../../../components/Icon"
+import { ExternalLinkIcon } from "lucide-react"
+
 import { getMediaItem } from "../../../../content/get-media-items"
+import { type InlineTranslation } from "../../../../i18n/inline-translation"
 import { createContentMetadata } from "../../utils/create-content-metadata"
 
 interface Props {
   mediaId: string
-  openActionLabel: string
+  openActionLabel: InlineTranslation
   className?: string
 }
 const { mediaId, openActionLabel, className } = Astro.props
 const item = await getMediaItem(mediaId)
-const content = createContentMetadata(item.data.content[0])
+const content = createContentMetadata(item.data.content[0], Astro.locals.i18n.t)
 ---
 
 <a
   class="flex min-w-52 items-center justify-center gap-2 rounded-2xl bg-gray-800 px-6 py-3 font-bold text-gray-100 shadow-sm hover:bg-gray-950 hover:text-gray-300"
   href={content.url}
   target={content.target}
-  hreflang={item.data.language}
+  hreflang={item.data.language.id}
   class:list={[className]}
 >
-  {
-    content.isExternal && (
-      <Icon
-        ariaLabel={Astro.locals.i18n.t("ln.external-link")}
-        className={`shrink-0 mdi--external-link`}
-      />
-    )
-  }
+  {content.isExternal && <ExternalLinkIcon className="shrink-0" />}
   {
     content.canBeOpened
       ? Astro.locals.i18n.t(openActionLabel)

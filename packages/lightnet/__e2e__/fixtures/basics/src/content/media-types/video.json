@@ -1,7 +1,10 @@
 {
-  "label": "type.video",
+  "label": {
+    "en": "Video",
+    "de": "Video"
+  },
   "detailsPage": {
     "layout": "video"
   },
-  "icon": "mdi--video-outline"
+  "icon": "lucide--video"
 }

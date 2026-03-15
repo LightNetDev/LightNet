@@ -1,6 +1,6 @@
+import { SearchIcon } from "lucide-react"
 import { useRef } from "react"
 
-import Icon from "../../../components/Icon"
 import { createI18n, type I18nConfig } from "../../../i18n/react/i18n-context"
 import { useDebounce } from "../hooks/use-debounce"
 import { useSearchQueryParam } from "../hooks/use-search-query-param"
@@ -57,7 +57,7 @@ export default function SearchFilter({
           onInput={(e) => debouncedSetSearch(e.currentTarget.value)}
           onKeyDown={(e) => e.key === "Enter" && searchInput.current?.blur()}
         />
-        <Icon className="text-xl mdi--magnify" ariaLabel="" />
+        <SearchIcon className="shrink-0 text-gray-700" />
       </label>
       <div className="mb-8 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-6 md:mb-10">
         {languageFilterEnabled && (

@@ -3,13 +3,21 @@ import { fileURLToPath } from "node:url"
 
 import type { AstroConfig, AstroIntegrationLogger, ViteUserConfig } from "astro"
 
-import { type LightnetConfig } from "./config"
+import type { ExtendedLightnetConfig } from "./config"
 
 const CONFIG = "virtual:lightnet/config"
 const LOGO = "virtual:lightnet/logo"
 const PROJECT_CONTEXT = "virtual:lightnet/project-context"
 const CUSTOM_HEAD = "virtual:lightnet/components/CustomHead"
 const CUSTOM_FOOTER = "virtual:lightnet/components/CustomFooter"
+const MEDIA_ITEM_EDIT_BUTTON_CONTROLLER =
+  "virtual:lightnet/components/media-item-edit-button-controller"
+
+const TRANSLATION_RUNTIME_MODULES = [
+  fileURLToPath(new URL("../i18n/translations.ts", import.meta.url)),
+  fileURLToPath(new URL("../i18n/translate.ts", import.meta.url)),
+  fileURLToPath(new URL("../i18n/locals.ts", import.meta.url)),
+]
 
 const VIRTUAL_MODULES = [
   CONFIG,
@@ -17,10 +25,11 @@ const VIRTUAL_MODULES = [
   PROJECT_CONTEXT,
   CUSTOM_HEAD,
   CUSTOM_FOOTER,
+  MEDIA_ITEM_EDIT_BUTTON_CONTROLLER,
 ] as const
 
 export function vitePluginLightnetConfig(
-  config: LightnetConfig,
+  config: ExtendedLightnetConfig,
   { root, srcDir, site }: Pick<AstroConfig, "root" | "srcDir" | "site">,
   logger: AstroIntegrationLogger,
 ): NonNullable<ViteUserConfig["plugins"]>[number] {
@@ -33,14 +42,27 @@ export function vitePluginLightnetConfig(
       const module = VIRTUAL_MODULES.find((m) => m === id)
       if (module) return `\0${module}`
     },
-    handleHotUpdate({ file, server }) {
+    handleHotUpdate({ file, modules, server }) {
       const srcPath = resolve(fileURLToPath(root), "src/translations/")
       if (
         (file.endsWith(".yml") || file.endsWith(".yaml")) &&
         file.startsWith(srcPath)
       ) {
+        const affectedModules = [
+          ...modules,
+          ...TRANSLATION_RUNTIME_MODULES.flatMap((id) => {
+            const module = server.moduleGraph.getModuleById(id)
+            return module ? [module] : []
+          }),
+        ]
+
+        for (const module of affectedModules) {
+          server.moduleGraph.invalidateModule(module)
+        }
+
         logger.info(`Update translations ${file.slice(srcPath.length)}`)
-        server.restart()
+        server.ws.send({ type: "full-reload" })
+        return []
       }
     },
     load(id): string | undefined {
@@ -62,6 +84,8 @@ export function vitePluginLightnetConfig(
           return config.footerComponent
             ? `export { default } from ${resolveFilePath(config.footerComponent)};`
             : "export default undefined;"
+        case MEDIA_ITEM_EDIT_BUTTON_CONTROLLER:
+          return "export default undefined;"
       }
     },
   }

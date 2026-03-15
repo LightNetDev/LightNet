@@ -3,12 +3,13 @@
   "type": "module",
   "version": "0.0.1",
   "private": "true",
+  "scripts": {
+    "dev": "astro dev"
+  },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/tailwind": "^6.0.2",
-    "@lightnet/decap-admin": "^3.1.4",
-    "astro": "^5.17.2",
-    "lightnet": "^3.12.0",
+    "@astrojs/react": "^5.0.0",
+    "astro": "^6.0.4",
+    "lightnet": "^3.12.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "sharp": "^0.34.5",

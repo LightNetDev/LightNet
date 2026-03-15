@@ -1,5 +1,25 @@
 import { z } from "astro/zod"
 
+import { isBcp47 } from "../i18n/bcp-47"
+import { validateInlineTranslations } from "./validators/validate-inline-translations"
+import { validateSiteLanguages } from "./validators/validate-site-languages"
+
+/**
+ * Translations by BCP-47 tags.
+ * We can only do basic validation here because we cannot access locales
+ * from the same config.
+ *
+ * @example
+ * {
+ *   de: "Hallo",
+ *   en: "Hello"
+ * }
+ */
+export const inlineTranslationSchema = z.record(
+  z.string(),
+  z.string().nonempty(),
+)
+
 /**
  * Link Schema.
  */
@@ -12,9 +32,10 @@ const linkSchema = z.object({
   href: z.string(),
   /**
    * Label to be used for the link.
-   * Can either be a translation key or a fixed string.
+   * Must define a value for the default site locale.
+   * Other configured site locales are optional.
    */
-  label: z.string(),
+  label: inlineTranslationSchema,
   /**
    * If this is set to true the currentLocale will be appended to
    * the href path. Eg. for href="/about"
@@ -27,65 +48,26 @@ const linkSchema = z.object({
   requiresLocale: z.boolean().default(true),
 })
 
-/**
- * Language Schema.
- */
-const languageSchema = z
-  .object({
-    /**
-     * IETF BCP-47 language tag for this language.
-     *
-     * This will be the identifier of this language and will
-     * also appear on the URL paths of the website.
-     */
-    code: z.string(),
-    /**
-     * The name of the language that will be shown on the Website.
-     *
-     * Can either be a fixed string or a translation key.
-     */
-    label: z.string(),
-    /**
-     * Should this language be used as a site language?
-     *
-     * Make sure to provide translations inside the `src/translations/` folder.
-     *
-     * Default is `false`
-     */
-    isSiteLanguage: z.boolean().default(false),
-    /**
-     * Should this language be used as the default site language?
-     *
-     * The default language will be used as a fallback when translations are missing
-     * also this will be the language selected when a user visits the site on the `/` path.
-     *
-     * Setting this to `true` will also set `isSiteLanguage` to `true`.
-     *
-     * Default is `false`
-     */
-    isDefaultSiteLanguage: z.boolean().default(false),
-    /**
-     * An array of fallback language codes.
-     *
-     * This is used when no translation key is defined for this language.
-     * The system will iterate over this array in order and use the first language for which a
-     * matching translation key is found.
-     *
-     * If no match is found from the fallback languages, the system will
-     * attempt the translation using the default site language.
-     *
-     * If the translation still cannot be resolved, it will then fall back to the English
-     * translation as a final resort.
-     *
-     * @example ["fr", "it"]
-     */
-    fallbackLanguages: z.string().array().default([]),
-  })
-  .transform((language) => ({
-    ...language,
-    // if language is default site language also set is site language to true.
-    isSiteLanguage: language.isDefaultSiteLanguage || language.isSiteLanguage,
-  }))
+const bcp47Schema = z.string().refine(isBcp47, {
+  message: "Invalid BCP-47 language code",
+})
+
+const siteLanguageSchema = z.object({
+  /**
+   * BCP-47 language code for this locale.
+   * References a language from `src/content/languages`.
+   */
+  code: bcp47Schema,
+  /**
+   * Mark exactly one configured site language as default.
+   * This is used for the default interface language and for translation fallback.
+   */
+  isDefault: z.boolean().optional(),
+  /**
+   * Ordered fallback language codes used when a translation key is missing.
+   */
+  fallback: z.array(bcp47Schema).default([]),
+})
 
 const absolutePath = (path: string) =>
   `${path.startsWith("/") ? "" : "/"}${path}`
@@ -123,11 +105,11 @@ export const configSchema = z.object({
   /**
    * Title of the web site.
    */
-  title: z.string(),
+  title: inlineTranslationSchema,
   /**
-   * All languages: content languages and site languages.
+   * Interface languages for this site.
    */
-  languages: languageSchema.array(),
+  siteLanguages: z.array(siteLanguageSchema).superRefine(validateSiteLanguages),
   /**
    * Favicons for your site.
    */
@@ -135,7 +117,7 @@ export const configSchema = z.object({
   /**
    * Enable displaying a “Powered by LightNet” link in your site’s footer.
    */
-  credits: z.boolean().default(false),
+  credits: z.boolean().default(true),
   /**
    * Link to manifest file within public/ folder
    */
@@ -155,9 +137,10 @@ export const configSchema = z.object({
       src: z.string(),
       /**
        * Alt attribute to add for screen reader etc.
-       * This can be a fixed string or a translation key.
+       * Must define a value for the default site locale.
+       * Other configured site locales are optional.
        */
-      alt: z.string().optional(),
+      alt: inlineTranslationSchema.optional(),
       /**
        * Size in px to use for the logo on the header bar.
        * The size will be applied to the shorter side of your logo image.
@@ -223,8 +206,22 @@ export const configSchema = z.object({
   experimental: z.object({}).optional(),
 })
 
-export type Language = z.input<typeof languageSchema>
+export const extendedConfigSchema = configSchema.transform((config, ctx) => {
+  const locales = config.siteLanguages.map((siteLanguage) => siteLanguage.code)
+  const defaultLocale =
+    config.siteLanguages.find((siteLanguage) => siteLanguage.isDefault)?.code ??
+    ""
+
+  validateInlineTranslations(config, locales, defaultLocale, ctx)
+
+  return {
+    ...config,
+    locales,
+    defaultLocale,
+  }
+})
+
 export type Link = z.input<typeof linkSchema>
 
 export type LightnetConfig = z.input<typeof configSchema>
-export type PreparedLightnetConfig = z.output<typeof configSchema>
+export type ExtendedLightnetConfig = z.output<typeof extendedConfigSchema>

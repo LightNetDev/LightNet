@@ -1,10 +1,10 @@
 /**
  * Icon Component.
  *
- * @param className containing a material design icon name prefixed with 'mdi--'
+ * @param className containing a lucide icon name prefixed with 'lucide--'
  * @param ariaLabel accessibility label to be added e.g. for people using a screen reader. Empty string will hide the icon from a screen reader.
  * @param flipIcon if set to true this will mirror the icon along its x-axis. Useful for RTL layouts.
- * @see https://pictogrammers.com/library/mdi/ for available icons
+ * @see https://lucide.dev/icons/ for available icons
  * @returns icon
  */
 export default function Icon({

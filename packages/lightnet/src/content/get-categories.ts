@@ -2,30 +2,36 @@ import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
 import { type TranslateFn } from "../i18n/translate"
+import { lazy } from "../utils/lazy"
 import { verifySchemaAsync } from "../utils/verify-schema"
 import { categoryEntrySchema } from "./content-schema"
 import { getMediaItems } from "./get-media-items"
 
-const categoriesById = Object.fromEntries(
-  (await loadCategories()).map(({ id, data }) => [id, data]),
+const categoriesById = lazy(async () =>
+  Object.fromEntries(
+    (await loadCategories()).map(({ id, data }) => [id, data]),
+  ),
 )
 
-const contentCategories = Object.fromEntries(
-  (await getMediaItems())
-    .flatMap((item) => item.data.categories ?? [])
-    .map((c) => {
-      const category = categoriesById[c.id]
-      if (!category) {
-        throw new AstroError(
-          "Missing Category",
-          `A media item references a non-existent category: "${c.id}".\n` +
-            `To fix this, create a category file at:\n` +
-            `src/content/categories/${c.id}.json`,
-        )
-      }
-      return [c.id, category]
-    }),
-)
+const contentCategories = lazy(async () => {
+  const categories = await categoriesById.get()
+  return Object.fromEntries(
+    (await getMediaItems())
+      .flatMap((item) => item.data.categories ?? [])
+      .map((c) => {
+        const category = categories[c.id]
+        if (!category) {
+          throw new AstroError(
+            "Missing Category",
+            `A media item references a non-existent category: "${c.id}".\n` +
+              `To fix this, create a category file at:\n` +
+              `src/content/categories/${c.id}.json`,
+          )
+        }
+        return [c.id, category]
+      }),
+  )
+})
 
 /**
  * Get categories that are referenced from media items.
@@ -36,7 +42,8 @@ const contentCategories = Object.fromEntries(
  * @returns categories sorted by labelText
  */
 export async function getUsedCategories(currentLocale: string, t: TranslateFn) {
-  return [...Object.entries(contentCategories)]
+  const categories = await contentCategories.get()
+  return [...Object.entries(categories)]
     .map(([id, data]) => ({ id, ...data, labelText: t(data.label) }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
@@ -51,13 +58,14 @@ export async function getUsedCategories(currentLocale: string, t: TranslateFn) {
  * @returns categories sorted by labelText
  */
 export async function getCategories(currentLocale: string, t: TranslateFn) {
-  return [...Object.entries(categoriesById)]
+  const categories = await categoriesById.get()
+  return [...Object.entries(categories)]
     .map(([id, data]) => ({ id, ...data, labelText: t(data.label) }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
 
 export async function getCategory(id: string) {
-  const category = categoriesById[id]
+  const category = (await categoriesById.get())[id]
   if (!category) {
     throw new AstroError(
       `Missing category "${id}"`,

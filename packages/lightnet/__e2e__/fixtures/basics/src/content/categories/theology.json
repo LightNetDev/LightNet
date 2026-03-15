@@ -1,3 +1,6 @@
 {
-  "label": "category.theology"
+  "label": {
+    "en": "Theology",
+    "de": "Theologie"
+  }
 }

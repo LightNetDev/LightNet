@@ -1,3 +1,5 @@
+import type { InlineTranslation } from "../../../i18n/inline-translation"
+import type { TranslateFn } from "../../../i18n/translate"
 import { isExternalUrl } from "../../../utils/urls"
 
 export type UrlType =
@@ -43,13 +45,16 @@ const KNOWN_EXTENSIONS: Record<
   docx: { type: "text" },
 } as const
 
-export function createContentMetadata({
-  url,
-  label: customLabel,
-}: {
-  url: string
-  label?: string
-}) {
+export function createContentMetadata(
+  {
+    url,
+    label: customLabel,
+  }: {
+    url: string
+    label?: InlineTranslation
+  },
+  t: TranslateFn,
+) {
   const isExternal = isExternalUrl(url)
   const path = isExternal ? new URL(url).pathname : url
 
@@ -63,7 +68,8 @@ export function createContentMetadata({
   const fileName = hasExtension
     ? lastPathSegment.slice(0, -(extension.length + 1))
     : undefined
-  const label = customLabel || fileName || linkName
+
+  const labelText = (customLabel && t(customLabel)) ?? fileName ?? linkName
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
   const canBeOpened =
     !hasExtension || !!KNOWN_EXTENSIONS[extension]?.canBeOpened
@@ -72,7 +78,7 @@ export function createContentMetadata({
     url,
     extension,
     isExternal,
-    label,
+    labelText,
     canBeOpened,
     type,
     target: isExternal ? "_blank" : "_self",

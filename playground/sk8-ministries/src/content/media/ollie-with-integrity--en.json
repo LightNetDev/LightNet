@@ -5,15 +5,10 @@
   "categories": [
     "theology"
   ],
-  "collections": [
-    {
-      "collection": "how-to-articles",
-      "index": 2
-    }
-  ],
   "commonId": "ollie-with-integrity",
   "content": [
     {
+      "type": "link",
       "url": "https://en.wikipedia.org/wiki/Ollie_(skateboarding)"
     }
   ],

@@ -1,8 +1,7 @@
 ---
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
-
-import Icon from "./Icon"
+import { ArrowRightIcon } from "lucide-react"
 
 interface Props {
   image: ImageMetadata
@@ -17,6 +16,8 @@ interface Props {
 
 const { image, id, title, text, link, className, titleClass, textClass } =
   Astro.props
+const iconDirectionClass =
+  Astro.locals.i18n.direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <section
@@ -57,11 +58,7 @@ const { image, id, title, text, link, className, titleClass, textClass } =
             href={link.href}
           >
             {link.text}
-            <Icon
-              flipIcon={Astro.locals.i18n.direction === "rtl"}
-              className="mdi--arrow-right"
-              ariaLabel=""
-            />
+            <ArrowRightIcon className={iconDirectionClass} />
           </a>
         )
       }

@@ -1,9 +1,15 @@
 {
-  "label": "type.book",
+  "label": {
+    "en": "Book",
+    "de": "Buch"
+  },
+  "coverImageStyle": "book",
   "detailsPage": {
     "layout": "default",
-    "coverStyle": "book",
-    "openActionLabel": "details.action.read"
+    "openActionLabel": {
+      "en": "Read",
+      "de": "Lesen"
+    }
   },
-  "icon": "mdi--book-open-blank-variant"
+  "icon": "lucide--book-open-text"
 }

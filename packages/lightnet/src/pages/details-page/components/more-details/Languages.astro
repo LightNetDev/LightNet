@@ -14,23 +14,32 @@ const item = await getMediaItem(Astro.props.mediaId)
 const { mediaId } = Astro.props
 const translations = await getTranslations(mediaId)
 
-const { t } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
+const currentLanguage = await resolveTranslatedLanguage(
+  item.data.language.id,
+  t,
+)
+const translationLanguages = await Promise.all(
+  translations.map(async (translation) => ({
+    ...translation,
+    labelText: (await resolveTranslatedLanguage(translation.language, t))
+      .labelText,
+  })),
+)
 ---
 
 <div>
   <Label>{translations.length ? t("ln.languages") : t("ln.language")}</Label>
   <ul class="flex flex-wrap gap-2">
-    <li class="py-1 pe-2 text-gray-800">
-      {resolveTranslatedLanguage(item.data.language, t).labelText}
-    </li>
+    <li class="py-1 pe-2 text-gray-800">{currentLanguage.labelText}</li>
     {
-      translations.map((translation) => (
+      translationLanguages.map((translation) => (
         <li class="flex rounded-lg border border-gray-200 px-4 py-1 text-gray-600 hover:bg-gray-200">
           <a
-            href={detailsPagePath(Astro.currentLocale, translation)}
+            href={detailsPagePath(currentLocale, translation)}
             hreflang={translation.language}
           >
-            {resolveTranslatedLanguage(translation.language, t).labelText}
+            {translation.labelText}
           </a>
         </li>
       ))

@@ -1,29 +1,33 @@
 ---
+import { GlobeIcon } from "lucide-react"
+
 import { resolveTranslatedLanguage } from "../../i18n/resolve-language"
 import { localizePath } from "../../utils/paths"
 import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
-const { t, locales } = Astro.locals.i18n
+const { t, locales, currentLocale } = Astro.locals.i18n
 
 const hasLocale =
-  Astro.currentLocale &&
-  (Astro.url.pathname.startsWith(`/${Astro.currentLocale}/`) ||
-    Astro.url.pathname === `/${Astro.currentLocale}`)
+  currentLocale &&
+  (Astro.url.pathname.startsWith(`/${currentLocale}/`) ||
+    Astro.url.pathname === `/${currentLocale}`)
 
-const translations = locales
-  .map((locale) => ({
-    locale,
-    label: resolveTranslatedLanguage(locale, t).labelText,
-    active: locale === Astro.currentLocale,
-    href: currentPathWithLocale(locale),
-  }))
-  .sort((a, b) => a.label.localeCompare(b.label))
+const translations = (
+  await Promise.all(
+    locales.map(async (locale) => ({
+      locale,
+      label: (await resolveTranslatedLanguage(locale, t)).labelText,
+      active: locale === currentLocale,
+      href: currentPathWithLocale(locale),
+    })),
+  )
+).sort((a, b) => a.label.localeCompare(b.label))
 
 function currentPathWithLocale(locale: string) {
   const currentPath = Astro.url.pathname
   const currentPathWithoutLocale = hasLocale
-    ? currentPath.slice(Astro.currentLocale.length + 1)
+    ? currentPath.slice(currentLocale.length + 1)
     : currentPath
   return localizePath(locale, currentPathWithoutLocale)
 }
@@ -33,7 +37,8 @@ const disabled = !hasLocale && Astro.url.pathname !== "/"
 
 {
   translations.length > 1 && (
-    <Menu disabled={disabled} icon="mdi--web" label="ln.header.select-language">
+    <Menu disabled={disabled} label="ln.header.select-language">
+      <GlobeIcon slot="icon" />
       {translations.map(({ label, locale, active, href }) => (
         <MenuItem href={href} hreflang={locale} active={active}>
           {label}
