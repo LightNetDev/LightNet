@@ -11,6 +11,7 @@ export default defineConfig({
       title: { en: "Basic Test", de: "Basic Test" },
       siteLanguages: [{ code: "en", isDefault: true }, { code: "de" }],
       favicon: [{ href: "favicon.svg" }],
+      credits: true,
       mainMenu: [
         {
           href: "/",
