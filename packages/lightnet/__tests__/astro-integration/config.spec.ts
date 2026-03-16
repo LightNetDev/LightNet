@@ -10,10 +10,10 @@ const requiredConfig = {
   siteLanguages: [{ code: "en", isDefault: true }],
 }
 
-test("Should default credits to true when omitted", () => {
+test("Should default credits to false when omitted", () => {
   const config = configSchema.parse(requiredConfig)
 
-  expect(config.credits).toBe(true)
+  expect(config.credits).toBe(false)
 })
 
 test("Should preserve explicit credits false", () => {
