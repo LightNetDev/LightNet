@@ -14,7 +14,7 @@ export const languagesCollection: Collection = {
   format: "json",
   slug: "{{code}}",
   summary: `{{label.${config.defaultLocale}}}  ({{code}})`,
-  sortable_fields: ["code", "label"],
+  sortable_fields: [`label.${config.defaultLocale}`, "code"],
   fields: [
     {
       name: "code",
