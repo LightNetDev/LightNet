@@ -29,7 +29,7 @@
     "lightnet": "^3.0.0"
   },
   "dependencies": {
-    "@sveltia/cms": "^0.146.9"
+    "@sveltia/cms": "^0.146.10"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

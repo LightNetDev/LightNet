@@ -172,8 +172,8 @@ importers:
   packages/sveltia-admin:
     dependencies:
       '@sveltia/cms':
-        specifier: ^0.146.9
-        version: 0.146.9
+        specifier: ^0.146.10
+        version: 0.146.10
       astro:
         specifier: ^6.0.0
         version: 6.0.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.59.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -1071,8 +1071,8 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@sveltia/cms@0.146.9':
-    resolution: {integrity: sha512-lbKLtjT7LQgRQjFuMhG2nYaITAczDbAjdPPFddp5R6kFGXgwXcq7G6j0NHkRJtaa8EMnboJiAXyEBaE84z7H3Q==}
+  '@sveltia/cms@0.146.10':
+    resolution: {integrity: sha512-6JS982m9tcSztsHoz6506SI+BMDn8nk/aiCLxd5c8nx33cqslSz3djg15KwtbIE8AeTF9RpnDx78TXR+NYD5gw==}
 
   '@tailwindcss/typography@0.5.19':
     resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
@@ -1800,8 +1800,8 @@ packages:
     resolution: {integrity: sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==}
     engines: {node: '>=16'}
 
-  flatted@3.4.1:
-    resolution: {integrity: sha512-IxfVbRFVlV8V/yRaGzk0UVIcsKKHMSfYw66T/u4nTwlWteQePsxe//LjudR1AMX4tZW3WFCh3Zqa/sjlqpbURQ==}
+  flatted@3.4.2:
+    resolution: {integrity: sha512-PjDse7RzhcPkIJwy5t7KPWQSZ9cAbzQXcafsetQoD7sOJRQlGikNbx7yZp2OotDnJyrDcbyRq3Ttb18iYOqkxA==}
 
   flattie@1.1.1:
     resolution: {integrity: sha512-9UbaD6XdAL97+k/n+N7JwX46K/M6Zc6KcFYskrYL8wbBV/Uyk0CTAMY0VT+qiK5PM7AIc9aTWYtq65U7T+aCNQ==}
@@ -4166,7 +4166,7 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@sveltia/cms@0.146.9': {}
+  '@sveltia/cms@0.146.10': {}
 
   '@tailwindcss/typography@0.5.19(tailwindcss@3.4.19(yaml@2.8.2))':
     dependencies:
@@ -5056,10 +5056,10 @@ snapshots:
 
   flat-cache@4.0.1:
     dependencies:
-      flatted: 3.4.1
+      flatted: 3.4.2
       keyv: 4.5.4
 
-  flatted@3.4.1: {}
+  flatted@3.4.2: {}
 
   flattie@1.1.1: {}
 
