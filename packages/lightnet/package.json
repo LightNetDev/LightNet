@@ -45,7 +45,7 @@
     "tailwindcss": ">=3.4.0 <4.0.0"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.0",
+    "@astrojs/react": "^5.0.1",
     "@iconify-json/lucide": "^1.2.98",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",

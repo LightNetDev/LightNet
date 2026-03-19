@@ -11,9 +11,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.0",
+    "@astrojs/react": "^5.0.1",
     "@lightnet/sveltia-admin": "^3.0.0",
-    "astro": "^6.0.5",
+    "astro": "^6.0.6",
     "lightnet": "^3.12.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

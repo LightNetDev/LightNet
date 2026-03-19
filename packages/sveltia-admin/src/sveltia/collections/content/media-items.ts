@@ -16,7 +16,7 @@ export const mediaItemCollection: Collection = {
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",
   slug: "{{fields._slug}}",
-  sortable_fields: ["title", "slug", "dateCreated", "language"],
+  sortable_fields: ["slug", "dateCreated", "language"],
   summary: "{{title}} ({{slug}})",
   view_groups: [
     { label: "Language", field: "language", pattern: ".*" },

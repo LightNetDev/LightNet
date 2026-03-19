@@ -14,7 +14,6 @@ export const mediaTypeCollection: Collection = {
   format: "json",
   slug: "{{fields._slug}}",
   summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
-  sortable_fields: [`label.${config.defaultLocale}`, "slug"],
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {
