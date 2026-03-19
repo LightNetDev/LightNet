@@ -81,7 +81,7 @@ export const mediaItemCollection: Collection = {
             inlineTranslation({
               name: "label",
               label: "Label",
-              hint: "Optional: Set a custom label for this content item. If omitted, LightNet uses the file or link name.",
+              hint: "Optional. Defaults to the file name, for example 'bible' from 'bible.pdf'.",
               required: false,
               collapsed: "auto",
             }),
@@ -103,6 +103,7 @@ export const mediaItemCollection: Collection = {
               name: "label",
               label: "Label",
               required: false,
+              hint: "Optional. Defaults to the file name or link domain, for example 'youtube.com'.",
               collapsed: "auto",
             }),
           ],
