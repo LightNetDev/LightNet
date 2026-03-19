@@ -12,9 +12,7 @@ export function getConfig(
   return {
     backend: sveltiaAdminConfig.backend ?? {
       name: "github",
-      // Sveltia CMS uses repo as unique site identifier for IndexedDB
-      // https://github.com/sveltia/sveltia-cms/issues/630
-      repo: site,
+      repo: createLocalRepoPath(),
     },
     media_folder: projectPath("src/assets"),
     public_folder: "/src/assets",
@@ -55,6 +53,20 @@ export function getConfig(
     },
     collections: [...contentCollections],
   }
+}
+
+// Sveltia CMS uses repo as unique site identifier for IndexedDB
+// https://github.com/sveltia/sveltia-cms/issues/630
+// Also it expects repo in format <org>/<repo>
+// We do not want to require setting a path for local only settings so we generate
+// our path from site url.
+function createLocalRepoPath() {
+  return (
+    (site ?? "")
+      .replace(/^https?\:\/\//, "")
+      .replaceAll("/", "-")
+      .replaceAll(".", "-") + "/local-repository"
+  )
 }
 
 export const config = getConfig()
