@@ -63,7 +63,7 @@ export function getConfig(
 function createLocalRepoPath() {
   return (
     (site ?? "")
-      .replace(/^https?\:\/\//, "")
+      .replace(/^https?:\/\//, "")
       .replaceAll("/", "-")
       .replaceAll(".", "-") + "/local-repository"
   )
