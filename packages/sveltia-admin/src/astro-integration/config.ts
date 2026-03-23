@@ -56,6 +56,45 @@ export const adminConfigSchema = z.object({
    * Leave empty when the site is at the repository root.
    */
   siteRootInRepo: z.string().default(""),
+
+  /**
+   * Experimental config options are opt-in and might change with any release.
+   */
+  experimental: z
+    .object({
+      /**
+       * Enable editing LightNet languages through the admin UI.
+       *
+       * This expects a `languages.json` file at the LightNet site root
+       * (for example `/languages.json` inside your Astro site directory,
+       * not inside this package). That file should contain the full
+       * LightNet `languages` array, including each language's `code`,
+       * translated `label`, and any site-language flags like
+       * `isDefaultSiteLanguage` or `isSiteLanguage`.
+       *
+       * Your site's `astro.config.*` should import that file and pass it to
+       * `lightnet({ languages })`.
+       *
+       * @example
+       * import languages from "./languages.json" assert { type: "json" }
+       *
+       * export default defineConfig({
+       *   integrations: [
+       *     lightnet({ languages }),
+       *     lightnetSveltiaAdmin({
+       *       experimental: {
+       *         useLanguagesCollection: true,
+       *       },
+       *     }),
+       *   ],
+       * })
+       *
+       * This option is experimental and may change without a stable
+       * migration path.
+       */
+      useLanguagesCollection: z.boolean().default(false),
+    })
+    .optional(),
 })
 
 export type SveltiaAdminConfig = z.input<typeof adminConfigSchema>

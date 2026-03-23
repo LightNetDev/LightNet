@@ -1,4 +1,4 @@
 declare module "virtual:lightnet/sveltiaAdminConfig" {
-  const config: import("./integration").ExtendedSveltiaAdminConfig
+  const config: import("./config").ExtendedSveltiaAdminConfig
   export default config
 }

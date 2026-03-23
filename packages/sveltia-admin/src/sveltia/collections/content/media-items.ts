@@ -4,6 +4,7 @@ import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
+import { languagesSelect } from "./languages"
 
 export const mediaItemCollection: Collection = {
   name: "media",
@@ -32,17 +33,7 @@ export const mediaItemCollection: Collection = {
       value_field: "{{slug}}",
       display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
     },
-    {
-      name: "language",
-      label: "Language",
-      widget: "relation",
-      collection: "_singletons",
-      file: "languages",
-      value_field: "{{languages.*.code}}",
-      display_fields: [
-        `{{languages.*.label.${config.defaultLocale}}} ({{languages.*.code}})`,
-      ],
-    },
+    languagesSelect(),
     {
       name: "image",
       label: "Image",

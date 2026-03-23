@@ -1,10 +1,46 @@
 import type { CollectionFile } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
+import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { inlineTranslation } from "../../utils/inline-translation"
 import { projectPath } from "../../utils/path"
 
-export const languagesCollection: CollectionFile = {
+export const languagesSelect = () => {
+  if (sveltiaAdminConfig.experimental?.useLanguagesCollection) {
+    return {
+      name: "language",
+      label: "Language",
+      widget: "relation",
+      collection: "_singletons",
+      file: "languages",
+      value_field: "{{languages.*.code}}",
+      display_fields: [
+        `{{languages.*.label.${config.defaultLocale}}} ({{languages.*.code}})`,
+      ],
+    }
+  } else {
+    return {
+      name: "language",
+      label: "Language",
+      widget: "select",
+      options: config.languages.map(({ code, label }) => {
+        return {
+          label: `${label[config.defaultLocale]} (${code})`,
+          value: code,
+        }
+      }),
+    }
+  }
+}
+
+export const defineLanguagesCollection = () => {
+  if (!sveltiaAdminConfig.experimental?.useLanguagesCollection) {
+    return
+  }
+  return languagesCollection
+}
+
+const languagesCollection: CollectionFile = {
   name: "languages",
   label: "Languages",
   file: projectPath("languages.json"),
