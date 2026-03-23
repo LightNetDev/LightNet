@@ -55,12 +55,12 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "fuse.js": "^7.1.0",
-    "i18next": "^25.8.18",
+    "i18next": "^25.10.5",
     "lucide-react": "^0.577.0",
-    "marked": "^17.0.4",
+    "marked": "^17.0.5",
     "postcss": "^8.5.8",
     "postcss-load-config": "^6.0.1",
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
