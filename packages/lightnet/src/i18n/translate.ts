@@ -7,6 +7,7 @@ import {
   resolveInlineTranslation,
 } from "./inline-translation"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
+import { lazy } from "../utils/lazy"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
 export type TranslationKey =
@@ -37,8 +38,18 @@ const languageCodes = [
   ),
 ]
 
-export async function getTranslationKeys() {
-  const translations = await prepareI18nextTranslations()
+const i18nextTranslations = lazy(async () => {
+  const result: Record<string, { translation: Record<string, string> }> = {}
+  for (const bcp47 of languageCodes) {
+    result[bcp47] = {
+      translation: await loadTranslations(bcp47),
+    }
+  }
+  return result
+})
+
+const translationKeys = lazy(async () => {
+  const translations = await i18nextTranslations.get()
   return [
     ...new Set(
       Object.values(translations)
@@ -48,13 +59,19 @@ export async function getTranslationKeys() {
         ),
     ),
   ]
+})
+
+export function getTranslationKeys() {
+  return translationKeys.get()
 }
 
 export async function useTranslate(
   bcp47: string | undefined,
 ): Promise<TranslateFn> {
   const resolvedLocale = bcp47 ?? config.defaultLocale
-  const translations = await prepareI18nextTranslations()
+  const translations = await i18nextTranslations.get()
+  const availableTranslationKeys = new Set(await translationKeys.get())
+
   const i18n = i18next.createInstance({ showSupportNotice: false })
 
   await i18n.init({
@@ -85,8 +102,7 @@ export async function useTranslate(
       options?: TOptions,
     ) => string
     const value = t(input, { fallbackLng, ...options })
-    // i18next will return the key if no translation is found.
-    if (value === input) {
+    if (!availableTranslationKeys.has(input)) {
       throw new AstroError(
         `Missing translation: '${input}' is undefined for language '${resolvedLocale}'.`,
         `To fix the issue, add a translation for '${input}' to src/translations/${resolvedLocale}.yml`,
@@ -94,14 +110,4 @@ export async function useTranslate(
     }
     return value
   }
-}
-
-async function prepareI18nextTranslations() {
-  const result: Record<string, { translation: Record<string, string> }> = {}
-  for (const bcp47 of languageCodes) {
-    result[bcp47] = {
-      translation: await loadTranslations(bcp47),
-    }
-  }
-  return result
 }
