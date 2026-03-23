@@ -80,7 +80,10 @@ export async function useTranslate(
       )
     }
 
-    const t = i18n.getFixedT<TranslationKey>(resolvedLocale)
+    const t = i18n.getFixedT(resolvedLocale) as (
+      key: TranslationKey,
+      options?: TOptions,
+    ) => string
     const value = t(input, { fallbackLng, ...options })
     // i18next will return the key if no translation is found.
     if (value === input) {
