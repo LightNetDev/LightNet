@@ -2,12 +2,12 @@ import { AstroError } from "astro/errors"
 import i18next, { type TOptions } from "i18next"
 import config from "virtual:lightnet/config"
 
+import { lazy } from "../utils/lazy"
 import {
   type InlineTranslation,
   resolveInlineTranslation,
 } from "./inline-translation"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
-import { lazy } from "../utils/lazy"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
 export type TranslationKey =

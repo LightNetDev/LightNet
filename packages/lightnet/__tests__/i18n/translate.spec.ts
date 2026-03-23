@@ -19,7 +19,7 @@ test("Should fallback inline translations to default locale", async () => {
 test("Should fail on missing translation key", async () => {
   const { useTranslate } = await importTranslate()
   const t = await useTranslate("de")
-  expect(() => t("x.missing-translation")).toThrowError(
+  expect(() => t("x.missing-translation")).toThrow(
     "Missing translation: 'x.missing-translation' is undefined for language 'de'.",
   )
 })
