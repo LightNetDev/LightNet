@@ -22,9 +22,31 @@ test("Should fallback to default locale for unlocalized path", () => {
   expect(currentLocale).toBe("en")
 })
 
+test("Should resolve current locale from localized path under Astro base", () => {
+  const currentLocale = resolveCurrentLocaleFromPathname({
+    pathname: "/docs/de/media",
+    base: "/docs",
+    locales: ["en", "de"],
+    defaultLocale: "en",
+  })
+
+  expect(currentLocale).toBe("de")
+})
+
 test("Should fallback to default locale for root path", () => {
   const currentLocale = resolveCurrentLocaleFromPathname({
     pathname: "/",
+    locales: ["en", "de"],
+    defaultLocale: "en",
+  })
+
+  expect(currentLocale).toBe("en")
+})
+
+test("Should fallback to default locale for base root path", () => {
+  const currentLocale = resolveCurrentLocaleFromPathname({
+    pathname: "/docs",
+    base: "/docs",
     locales: ["en", "de"],
     defaultLocale: "en",
   })

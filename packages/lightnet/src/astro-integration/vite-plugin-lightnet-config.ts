@@ -7,7 +7,6 @@ import type { ExtendedLightnetConfig } from "./config"
 
 const CONFIG = "virtual:lightnet/config"
 const LOGO = "virtual:lightnet/logo"
-const PROJECT_CONTEXT = "virtual:lightnet/project-context"
 const CUSTOM_HEAD = "virtual:lightnet/components/CustomHead"
 const CUSTOM_FOOTER = "virtual:lightnet/components/CustomFooter"
 const MEDIA_ITEM_EDIT_BUTTON_CONTROLLER =
@@ -22,7 +21,6 @@ const TRANSLATION_RUNTIME_MODULES = [
 const VIRTUAL_MODULES = [
   CONFIG,
   LOGO,
-  PROJECT_CONTEXT,
   CUSTOM_HEAD,
   CUSTOM_FOOTER,
   MEDIA_ITEM_EDIT_BUTTON_CONTROLLER,
@@ -30,7 +28,7 @@ const VIRTUAL_MODULES = [
 
 export function vitePluginLightnetConfig(
   config: ExtendedLightnetConfig,
-  { root, srcDir, site }: Pick<AstroConfig, "root" | "srcDir" | "site">,
+  { root }: Pick<AstroConfig, "root">,
   logger: AstroIntegrationLogger,
 ): NonNullable<ViteUserConfig["plugins"]>[number] {
   const resolveFilePath = (id: string) =>
@@ -74,8 +72,6 @@ export function vitePluginLightnetConfig(
           return config.logo
             ? `import logo from ${resolveFilePath(config.logo.src)}; export default logo;`
             : "export default undefined;"
-        case PROJECT_CONTEXT:
-          return `export default ${JSON.stringify({ root, srcDir, site })}`
         case CUSTOM_HEAD:
           return config.headComponent
             ? `export { default } from ${resolveFilePath(config.headComponent)};`

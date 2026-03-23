@@ -1,6 +1,5 @@
 import config from "virtual:lightnet/config"
-import projectContext from "virtual:lightnet/project-context"
-import { expect, test } from "vitest"
+import { afterEach, expect, test, vi } from "vitest"
 
 import { isExternalUrl } from "../../src/utils/urls"
 
@@ -9,9 +8,15 @@ test("Should treat relative paths as internal", () => {
   expect(isExternalUrl("/page")).toBe(false)
 })
 
+afterEach(() => {
+  vi.unstubAllEnvs()
+})
+
 // absolute url that matches the configured site should be internal
-test("Should treat URLs matching projectContext.site as internal", () => {
-  expect(isExternalUrl(`${projectContext.site}/page`)).toBe(false)
+test("Should treat URLs matching import.meta.env.SITE as internal", () => {
+  vi.stubEnv("SITE", "https://sk8-ministries.dev")
+
+  expect(isExternalUrl("https://sk8-ministries.dev/page")).toBe(false)
 })
 
 // domains listed in internalDomains should be treated as internal

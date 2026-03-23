@@ -8,11 +8,6 @@ declare module "virtual:lightnet/logo" {
   export default logo
 }
 
-declare module "virtual:lightnet/project-context" {
-  const context: import("./project-context").ProjectContext
-  export default context
-}
-
 declare module "virtual:lightnet/components/CustomHead" {
   const CustomHead: ((props: Record<string, any>) => any) | undefined
   export default CustomHead
