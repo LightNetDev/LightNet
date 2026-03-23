@@ -9,7 +9,6 @@ vi.mock("astro:content", () => ({
 const {
   categorySchema,
   inlineTranslationSchema,
-  languageSchema,
   mediaCollectionSchema,
   mediaItemSchema,
 } = await import("../../src/content/content-schema")
@@ -82,17 +81,6 @@ test("Should reject media collection without media item references", () => {
   expect(parsed.success).toBe(false)
 })
 
-test("Should reject language with invalid BCP-47 code", () => {
-  const parsed = languageSchema.safeParse({
-    code: "en_US",
-    label: {
-      en: "English",
-    },
-  })
-
-  expect(parsed.success).toBe(false)
-})
-
 test("Should accept media item without commonId", () => {
   const parsed = mediaItemSchema.safeParse({
     title: "A book about love",
@@ -112,4 +100,25 @@ test("Should accept media item without commonId", () => {
   })
 
   expect(parsed.success).toBe(true)
+})
+
+test("Should reject media item with invalid BCP-47 language code", () => {
+  const parsed = mediaItemSchema.safeParse({
+    title: "A book about love",
+    type: "book",
+    description: "Description",
+    authors: ["George Miller"],
+    dateCreated: "2024-09-10",
+    categories: ["family"],
+    language: "en_US",
+    image: {
+      src: "/images/a-book-about-love--en.jpg",
+      width: 600,
+      height: 900,
+      format: "webp",
+    },
+    content: [{ type: "upload", url: "/files/a-book-about-love.pdf" }],
+  })
+
+  expect(parsed.success).toBe(false)
 })

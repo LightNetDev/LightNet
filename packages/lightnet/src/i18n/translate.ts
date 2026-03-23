@@ -19,16 +19,21 @@ export type TranslateFn = (
 ) => string
 
 const fallbackLanguages = Object.fromEntries(
-  config.siteLanguages.map(({ code, fallback }) => [code, fallback]),
+  config.languages.map(({ code, fallbackLanguages }) => [
+    code,
+    fallbackLanguages,
+  ]),
 )
 
 const languageCodes = [
   ...new Set(
-    config.siteLanguages.flatMap(({ code, fallback }) => [
-      code,
-      ...fallback,
-      "en",
-    ]),
+    config.languages
+      .filter(({ isSiteLanguage }) => isSiteLanguage)
+      .flatMap(({ code, fallbackLanguages }) => [
+        code,
+        ...fallbackLanguages,
+        "en",
+      ]),
   ),
 ]
 

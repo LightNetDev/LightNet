@@ -17,12 +17,12 @@ beforeEach(() => {
 
 test("Should return empty translations when commonId is missing", async () => {
   mocks.getMediaItems.mockResolvedValue([
-    { id: "book-en", data: { commonId: "book", language: { id: "en" } } },
-    { id: "book-de", data: { commonId: "book", language: { id: "de" } } },
+    { id: "book-en", data: { commonId: "book", language: "en" } },
+    { id: "book-de", data: { commonId: "book", language: "de" } },
   ])
   mocks.getMediaItem.mockResolvedValue({
     id: "standalone-en",
-    data: { language: { id: "en" } },
+    data: { language: "en" },
   })
 
   const { getTranslations } =
@@ -34,15 +34,15 @@ test("Should return empty translations when commonId is missing", async () => {
 
 test("Should return sorted translations and ignore unique or missing commonId", async () => {
   mocks.getMediaItems.mockResolvedValue([
-    { id: "book-de", data: { commonId: "book", language: { id: "de" } } },
-    { id: "book-en", data: { commonId: "book", language: { id: "en" } } },
-    { id: "book-es", data: { commonId: "book", language: { id: "es" } } },
-    { id: "guide-en", data: { commonId: "guide", language: { id: "en" } } },
-    { id: "standalone-fr", data: { language: { id: "fr" } } },
+    { id: "book-de", data: { commonId: "book", language: "de" } },
+    { id: "book-en", data: { commonId: "book", language: "en" } },
+    { id: "book-es", data: { commonId: "book", language: "es" } },
+    { id: "guide-en", data: { commonId: "guide", language: "en" } },
+    { id: "standalone-fr", data: { language: "fr" } },
   ])
   mocks.getMediaItem.mockResolvedValue({
     id: "book-en",
-    data: { commonId: "book", language: { id: "en" } },
+    data: { commonId: "book", language: "en" },
   })
 
   const { getTranslations } =

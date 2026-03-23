@@ -26,7 +26,7 @@ export const queryMediaItems = async <TMediaItem extends MediaItemEntry>(
     filters.push((item) => item.data.type.id === where.type)
   }
   if (where.language) {
-    filters.push((item) => item.data.language.id === where.language)
+    filters.push((item) => item.data.language === where.language)
   }
   if (where.category) {
     filters.push(

@@ -12,8 +12,8 @@ const contentLanguages = lazy(async () => {
   const languagesByCode = Object.fromEntries(
     await Promise.all(
       (await getMediaItems()).map(async ({ data: { language } }) => [
-        language.id,
-        await resolveLanguage(language.id),
+        language,
+        resolveLanguage(language),
       ]),
     ),
   )

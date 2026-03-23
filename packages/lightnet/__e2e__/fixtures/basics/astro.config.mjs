@@ -9,7 +9,18 @@ export default defineConfig({
     lightnet({
       logo: { src: "./src/assets/logo.png" },
       title: { en: "Basic Test", de: "Basic Test" },
-      siteLanguages: [{ code: "en", isDefault: true }, { code: "de" }],
+      languages: [
+        {
+          code: "en",
+          label: { en: "English", de: "English" },
+          isDefaultSiteLanguage: true,
+        },
+        {
+          code: "de",
+          label: { en: "Deutsch", de: "Deutsch" },
+          isSiteLanguage: true,
+        },
+      ],
       favicon: [{ href: "favicon.svg" }],
       credits: true,
       mainMenu: [

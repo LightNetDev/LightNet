@@ -13,7 +13,7 @@ type MediaItem = {
   disabled?: boolean
   data: {
     title: string
-    language: { id: string }
+    language: string
     authors?: string[] | null
     type: { id: string }
     image: ImageMetadata
@@ -47,7 +47,7 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 <ol class="divide-y divide-gray-200">
   {
     items.map((item) => (
-      <li lang={item.data.language.id}>
+      <li lang={item.data.language}>
         <a
           href={
             item.disabled
@@ -81,7 +81,7 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 
           <div
             class="ms-4 flex grow flex-col justify-center sm:ms-6"
-            lang={item.data.language.id}
+            lang={item.data.language}
           >
             <p class="mb-1 line-clamp-3 text-balance font-bold text-gray-700 md:mb-3">
               <Icon

@@ -19,7 +19,7 @@ const content = createContentMetadata(item.data.content[0], Astro.locals.i18n.t)
   class="flex min-w-52 items-center justify-center gap-2 rounded-2xl bg-gray-800 px-6 py-3 font-bold text-gray-100 shadow-sm hover:bg-gray-950 hover:text-gray-300"
   href={content.url}
   target={content.target}
-  hreflang={item.data.language.id}
+  hreflang={item.data.language}
   class:list={[className]}
 >
   {content.isExternal && <ExternalLinkIcon className="shrink-0" />}

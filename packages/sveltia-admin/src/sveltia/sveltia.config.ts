@@ -4,6 +4,7 @@ import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import lightnetLogo from "../assets/lightnet-logo.svg?url"
 import { contentCollections } from "./collections/content"
+import { languagesCollection } from "./collections/content/languages"
 import { projectPath } from "./utils/path"
 
 export function getConfig(
@@ -52,6 +53,7 @@ export function getConfig(
       maxlength: 60,
     },
     collections: [...contentCollections],
+    singletons: [languagesCollection],
   }
 }
 

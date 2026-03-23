@@ -1,31 +1,31 @@
 import { z } from "astro/zod"
 
-type SiteLanguage = {
+type Language = {
   code: string
-  isDefault?: boolean
+  isDefaultSiteLanguage?: boolean
 }
 
-export const validateSiteLanguages = (
-  siteLanguages: SiteLanguage[],
+export const validateLanguages = (
+  languages: Language[],
   ctx: z.RefinementCtx,
 ) => {
   const seen = new Set<string>()
   let defaultCount = 0
 
-  for (const [index, siteLanguage] of siteLanguages.entries()) {
-    const { code, isDefault } = siteLanguage
+  for (const [index, language] of languages.entries()) {
+    const { code, isDefaultSiteLanguage } = language
 
     if (!seen.has(code)) {
       seen.add(code)
     } else {
       ctx.addIssue({
         code: "custom",
-        message: `Duplicate site language code "${code}"`,
+        message: `Duplicate language code "${code}"`,
         path: [index, "code"],
       })
     }
 
-    if (isDefault) {
+    if (isDefaultSiteLanguage) {
       defaultCount += 1
     }
   }
@@ -33,7 +33,7 @@ export const validateSiteLanguages = (
   if (defaultCount !== 1) {
     ctx.addIssue({
       code: "custom",
-      message: "Exactly one site language must define isDefault: true",
+      message: "Exactly one language must define isDefaultSiteLanguage: true",
     })
   }
 }

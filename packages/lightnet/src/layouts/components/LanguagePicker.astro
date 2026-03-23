@@ -17,7 +17,7 @@ const translations = (
   await Promise.all(
     locales.map(async (locale) => ({
       locale,
-      label: (await resolveTranslatedLanguage(locale, t)).labelText,
+      label: resolveTranslatedLanguage(locale, t).labelText,
       active: locale === currentLocale,
       href: currentPathWithLocale(locale),
     })),

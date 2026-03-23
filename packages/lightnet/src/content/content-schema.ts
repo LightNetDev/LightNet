@@ -4,7 +4,6 @@ import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
 import config from "virtual:lightnet/config"
 
-import { isBcp47 } from "../i18n/bcp-47"
 import { imageSchema } from "./astro-image"
 
 /**
@@ -73,27 +72,6 @@ export const mediaCollectionSchema = z.object({
 })
 
 /**
- * Language Schema
- */
-export const languageSchema = z.object({
-  /**
-   * BCP-47 language code.
-   *
-   * Must match the file name without .json.
-   *
-   * @example "en"
-   */
-  code: z.string().refine(isBcp47, {
-    message: "Invalid BCP-47 language code",
-  }),
-  /**
-   * Language label translated for the default locale.
-   * Other configured site locales are optional.
-   */
-  label: inlineTranslationSchema,
-})
-
-/**
  * Media Item Schema
  */
 export const mediaItemSchema = z.object({
@@ -148,11 +126,11 @@ export const mediaItemSchema = z.object({
    */
   categories: z.array(reference("categories")).nullish(),
   /**
-   * Reference to the language entry this media item is in.
+   * BCP-47 language code of this media item.
    *
    * @example "en"
    */
-  language: reference("languages"),
+  language: z.string().nonempty(),
   /**
    * Relative path to the image of this media item. Eg. a book cover or video thumbnail.
    *
@@ -301,10 +279,6 @@ export const mediaTypeSchema = z.object({
 })
 
 export const LIGHTNET_COLLECTIONS = {
-  languages: defineCollection({
-    loader: glob({ pattern: "*.json", base: "./src/content/languages" }),
-    schema: languageSchema,
-  }),
   categories: defineCollection({
     loader: glob({ pattern: "*.json", base: "./src/content/categories" }),
     schema: createCategorySchema,
@@ -342,11 +316,6 @@ export type MediaItemEntry = z.infer<typeof mediaItemEntrySchema>
 export const mediaTypeEntrySchema = z.object({
   id: z.string(),
   data: mediaTypeSchema,
-})
-
-export const languageEntrySchema = z.object({
-  id: z.string(),
-  data: languageSchema,
 })
 
 export const categoryEntrySchema = z.object({

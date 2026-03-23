@@ -22,7 +22,7 @@ const { title, description, mainClass, locale } = Astro.props
 const configTitle = Astro.locals.i18n.t(config.title)
 
 const currentLocale = locale ?? Astro.locals.i18n.currentLocale
-const { direction } = await resolveLanguage(currentLocale)
+const { direction } = resolveLanguage(currentLocale)
 ---
 
 <!doctype html>

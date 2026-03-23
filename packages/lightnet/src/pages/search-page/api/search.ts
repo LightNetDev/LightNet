@@ -41,7 +41,7 @@ async function createSearchItem(mediaItem: MediaItemEntry) {
     authors,
     categories: categories?.map(({ id }) => id),
     description: markdownToText(description)?.slice(0, 350),
-    language: language.id,
+    language,
     image: { src, width, height },
   }
 }

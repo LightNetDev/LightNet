@@ -36,9 +36,12 @@ export const mediaItemCollection: Collection = {
       name: "language",
       label: "Language",
       widget: "relation",
-      collection: "languages",
-      value_field: "{{slug}}",
-      display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
+      collection: "_singletons",
+      file: "languages",
+      value_field: "{{languages.*.code}}",
+      display_fields: [
+        `{{languages.*.label.${config.defaultLocale}}} ({{languages.*.code}})`,
+      ],
     },
     {
       name: "image",

@@ -2,6 +2,8 @@ import lightnetSveltiaAdmin from "@lightnet/sveltia-admin"
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
 
+import languages from "./languages.json" assert { type: "json" }
+
 export default defineConfig({
   devToolbar: {
     enabled: false,
@@ -23,11 +25,7 @@ export default defineConfig({
       searchPage: {
         filterByLocale: true,
       },
-      siteLanguages: [
-        { code: "en", isDefault: true },
-        { code: "de" },
-        { code: "ar" },
-      ],
+      languages,
       mainMenu: [
         {
           href: "/",
