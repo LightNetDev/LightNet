@@ -1,5 +1,7 @@
 import { z } from "astro/zod"
 
+const normalizeAdminPath = (path: string) => path.replace(/^\/+|\/+$/g, "")
+
 /**
  * @see https://sveltiacms.app/en/docs/backends/gitlab
  */
@@ -38,7 +40,7 @@ export const adminConfigSchema = z.object({
    *
    * Default is /admin
    */
-  path: z.string().default("admin"),
+  path: z.string().default("admin").transform(normalizeAdminPath),
   /**
    * Maximum upload file size in megabytes.
    *

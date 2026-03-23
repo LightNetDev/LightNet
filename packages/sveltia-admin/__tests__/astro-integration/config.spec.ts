@@ -50,4 +50,12 @@ describe("adminConfigSchema", () => {
       branch: "main",
     })
   })
+
+  test("Should normalize admin paths with leading and trailing slashes", () => {
+    const config = adminConfigSchema.parse({
+      path: "/admin/",
+    })
+
+    expect(config.path).toBe("admin")
+  })
 })

@@ -27,10 +27,10 @@ test("Should inject media edit button controller when path is exactly 'admin'", 
   expect(source).toContain("media-item-edit-button-controller.ts")
 })
 
-test("Should inject undefined when path is '/admin'", () => {
+test("Should inject media edit button controller when path is '/admin'", () => {
   const source = loadMediaItemEditButtonController("/admin")
 
-  expect(source).toBe("export default undefined;")
+  expect(source).toContain("media-item-edit-button-controller.ts")
 })
 
 test("Should inject undefined when path is custom", () => {
@@ -39,8 +39,8 @@ test("Should inject undefined when path is custom", () => {
   expect(source).toBe("export default undefined;")
 })
 
-test("Should inject undefined when path is '/admin/'", () => {
+test("Should inject media edit button controller when path is '/admin/'", () => {
   const source = loadMediaItemEditButtonController("/admin/")
 
-  expect(source).toBe("export default undefined;")
+  expect(source).toContain("media-item-edit-button-controller.ts")
 })
