@@ -1,5 +1,6 @@
 ---
 import Page from "../layouts/Page.astro"
+import { localizePath } from "../utils/paths"
 ---
 
 <Page>
@@ -8,7 +9,7 @@ import Page from "../layouts/Page.astro"
       {Astro.locals.i18n.t("ln.404.page-not-found")}
     </p>
     <a
-      href={`/${Astro.locals.i18n.defaultLocale}`}
+      href={localizePath(Astro.locals.i18n.defaultLocale, "/")}
       class="rounded-2xl bg-gray-200 px-8 py-4 text-sm font-bold transition-colors ease-in-out hover:bg-gray-400"
       >{Astro.locals.i18n.t("ln.404.go-to-the-home-page")}</a
     >

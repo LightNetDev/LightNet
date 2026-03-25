@@ -1,4 +1,20 @@
 /**
+ * Prefix a site-internal path with Astro's configured base path.
+ *
+ * This helper trims any trailing slash from `BASE_URL`, ensures the input
+ * path starts with a leading slash, and concatenates the two values.
+ * Absolute URLs are out of scope for this helper.
+ *
+ * @param path internal path such as "/en/media", "/api/internal/search.json", or "/"
+ * @returns base-aware internal path
+ */
+export function pathWithBase(path: string) {
+  const normalizedBase = import.meta.env.BASE_URL.replace(/\/+$/, "")
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`
+  return `${normalizedBase}${normalizedPath}`
+}
+
+/**
  * Build path to media item page.
  *
  * @param language current locale
@@ -9,7 +25,7 @@ export function detailsPagePath(
   locale: string | undefined,
   { id }: { id: string },
 ) {
-  return `/${locale}/media/${id}`
+  return pathWithBase(`/${locale}/media/${id}`)
 }
 
 /**
@@ -42,7 +58,7 @@ export function searchPagePath(
     searchParams.append("type", filter.type)
   }
   const query = searchParams.size ? `?${searchParams.toString()}` : ""
-  return `/${locale}/media${query}`
+  return pathWithBase(`/${locale}/media${query}`)
 }
 
 /**
@@ -56,5 +72,7 @@ export function searchPagePath(
  * @returns resolved path. Eg. '/en/about' for input "en" and "/about"
  */
 export function localizePath(locale: string | undefined, path: string) {
-  return `${locale ? `/${locale}` : ""}/${path.replace(/^\//, "")}`
+  return pathWithBase(
+    `${locale ? `/${locale}` : ""}/${path.replace(/^\//, "")}`,
+  )
 }

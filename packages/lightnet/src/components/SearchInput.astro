@@ -1,6 +1,8 @@
 ---
 import { SearchIcon } from "lucide-react"
 
+import { searchPagePath } from "../utils/paths"
+
 type Props = {
   className?: string
 }
@@ -9,7 +11,7 @@ const { t, currentLocale } = Astro.locals.i18n
 ---
 
 <form
-  action={`/${currentLocale}/media`}
+  action={searchPagePath(currentLocale)}
   method="get"
   role="search"
   class="group flex w-full rounded-2xl shadow-sm outline outline-2 outline-offset-2 outline-transparent transition-all ease-in-out group-focus-within:outline-gray-400"

@@ -1,3 +1,8 @@
 ---
-return Astro.rewrite(`/${Astro.locals.i18n.defaultLocale}`)
+return Astro.rewrite(
+  (await import("../utils/paths")).localizePath(
+    Astro.locals.i18n.defaultLocale,
+    "/",
+  ),
+)
 ---

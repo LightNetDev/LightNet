@@ -1,3 +1,5 @@
+import { pathWithBase } from "../../../lightnet/src/utils/paths"
+
 const parseCachedUser = () => {
   try {
     const cachedUser = localStorage.getItem("sveltia-cms.user")
@@ -21,5 +23,5 @@ export default {
     )
   },
   createHref: (mediaId: string) =>
-    "/admin#/collections/media/entries/" + encodeURIComponent(mediaId),
+    `${pathWithBase("/admin")}#/collections/media/entries/${encodeURIComponent(mediaId)}`,
 }

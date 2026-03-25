@@ -1,6 +1,7 @@
 import Fuse from "fuse.js"
 import { useEffect, useMemo, useRef, useState } from "react"
 
+import { pathWithBase } from "../../../utils/paths"
 import type { SearchItem, SearchResponse } from "../api/search-response"
 import { observeSearchQuery, type SearchQuery } from "../utils/search-query"
 
@@ -9,6 +10,8 @@ interface Context {
   mediaTypes: Record<string, { labelText: string }>
   languages: Record<string, { labelText: string }>
 }
+
+const SEARCH_API_PATH = pathWithBase("/api/internal/search.json")
 
 export function useSearch({ categories, mediaTypes, languages }: Context) {
   const fuse = useRef<Fuse<SearchItem>>(undefined)
@@ -28,10 +31,10 @@ export function useSearch({ categories, mediaTypes, languages }: Context) {
     })
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/internal/search.json")
+        const response = await fetch(SEARCH_API_PATH)
         if (!response.ok) {
           throw new Error(
-            "Was not able to load search results from /api/internal/search.json.",
+            `Was not able to load search results from ${SEARCH_API_PATH}.`,
           )
         }
         const { items }: SearchResponse = await response.json()
