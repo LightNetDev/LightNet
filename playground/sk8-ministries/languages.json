@@ -13,9 +13,5 @@
     "code": "ar",
     "label": { "en": "العربية", "de": "العربية", "ar": "العربية" },
     "isSiteLanguage": true
-  },
-  {
-    "code": "es",
-    "label": { "en": "Spanish", "de": "Spanisch", "ar": "Espanol" }
   }
 ]
