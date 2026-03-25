@@ -11,7 +11,12 @@ const collectionsByMediaItemIds = lazy(async () =>
     )
     .reduce(
       (collected, [mediaId, collectionId]) => {
-        collected[mediaId] = [...(collected[mediaId] ?? []), collectionId]
+        const collectionIds = collected[mediaId] ?? []
+
+        if (!collectionIds.includes(collectionId)) {
+          collected[mediaId] = [...collectionIds, collectionId]
+        }
+
         return collected
       },
       {} as Record<string, string[]>,

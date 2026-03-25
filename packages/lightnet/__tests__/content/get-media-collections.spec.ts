@@ -44,7 +44,6 @@ test("Should build a reverse index and ignore duplicate media items in a collect
 
   expect(await getCollectionsForMediaItem("item-1")).toEqual([
     "series-a",
-    "series-a",
     "series-b",
   ])
   expect(await getCollectionsForMediaItem("item-2")).toEqual(["series-a"])
