@@ -143,6 +143,7 @@ export const mediaItemCollection: Collection = {
       name: "description",
       label: "Description",
       widget: "markdown",
+      required: false,
       editor_components: [],
       buttons: [
         "heading-one",
