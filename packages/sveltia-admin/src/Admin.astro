@@ -1,5 +1,8 @@
 ---
 import config from "virtual:lightnet/sveltiaAdminConfig"
+
+const basePath = import.meta.env.BASE_URL.replace(/\/+$/, "")
+const adminConfigUrl = `${basePath}/${config.path}/config.json`
 ---
 
 <!doctype html>
@@ -8,11 +11,7 @@ import config from "virtual:lightnet/sveltiaAdminConfig"
     <meta charset="utf-8" />
     <meta name="robots" content="noindex" />
     <title>LightNet Administration</title>
-    <link
-      href={`/${config.path}/config.json`}
-      type="application/json"
-      rel="cms-config-url"
-    />
+    <link href={adminConfigUrl} type="application/json" rel="cms-config-url" />
   </head>
   <body>
     <script>
