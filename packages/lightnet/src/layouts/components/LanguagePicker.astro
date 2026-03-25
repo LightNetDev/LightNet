@@ -8,10 +8,20 @@ import MenuItem from "./MenuItem.astro"
 
 const { t, locales, currentLocale } = Astro.locals.i18n
 
+const normalizedBase =
+  import.meta.env.BASE_URL !== "/"
+    ? import.meta.env.BASE_URL.replace(/\/+$/, "")
+    : ""
+const pathnameWithoutBase =
+  normalizedBase &&
+  (Astro.url.pathname === normalizedBase ||
+    Astro.url.pathname.startsWith(`${normalizedBase}/`))
+    ? Astro.url.pathname.slice(normalizedBase.length) || "/"
+    : Astro.url.pathname
 const hasLocale =
   currentLocale &&
-  (Astro.url.pathname.startsWith(`/${currentLocale}/`) ||
-    Astro.url.pathname === `/${currentLocale}`)
+  (pathnameWithoutBase.startsWith(`/${currentLocale}/`) ||
+    pathnameWithoutBase === `/${currentLocale}`)
 
 const translations = (
   await Promise.all(
@@ -25,14 +35,13 @@ const translations = (
 ).sort((a, b) => a.label.localeCompare(b.label))
 
 function currentPathWithLocale(locale: string) {
-  const currentPath = Astro.url.pathname
   const currentPathWithoutLocale = hasLocale
-    ? currentPath.slice(currentLocale.length + 1)
-    : currentPath
+    ? pathnameWithoutBase.slice(currentLocale.length + 1)
+    : pathnameWithoutBase
   return localizePath(locale, currentPathWithoutLocale)
 }
 
-const disabled = !hasLocale && Astro.url.pathname !== "/"
+const disabled = !hasLocale && pathnameWithoutBase !== "/"
 ---
 
 {
