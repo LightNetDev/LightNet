@@ -15,6 +15,25 @@ export function pathWithBase(path: string) {
 }
 
 /**
+ * Remove Astro's configured base path from a pathname when present.
+ *
+ * @param pathname pathname such as "/docs/en/media" or "/en/media"
+ * @param base Astro base path. Defaults to `import.meta.env.BASE_URL`.
+ * @returns pathname without the base prefix
+ */
+export function pathWithoutBase(
+  pathname: string,
+  base = import.meta.env.BASE_URL,
+) {
+  const normalizedBase = base !== "/" ? base.replace(/\/+$/, "") : ""
+
+  return normalizedBase &&
+    (pathname === normalizedBase || pathname.startsWith(`${normalizedBase}/`))
+    ? pathname.slice(normalizedBase.length) || "/"
+    : pathname
+}
+
+/**
  * Build path to media item page.
  *
  * @param language current locale

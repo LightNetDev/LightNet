@@ -1,3 +1,5 @@
+import { pathWithoutBase } from "../utils/paths"
+
 export function resolveCurrentLocaleFromPathname({
   pathname,
   base,
@@ -9,13 +11,7 @@ export function resolveCurrentLocaleFromPathname({
   locales: string[]
   defaultLocale: string
 }) {
-  const normalizedBase =
-    base && base !== "/" ? base.replace(/\/+$/, "") || "/" : undefined
-  const pathnameWithoutBase =
-    normalizedBase &&
-    (pathname === normalizedBase || pathname.startsWith(`${normalizedBase}/`))
-      ? pathname.slice(normalizedBase.length) || "/"
-      : pathname
+  const pathnameWithoutBase = base ? pathWithoutBase(pathname, base) : pathname
   const firstPathSegment = pathnameWithoutBase.split("/")[1]
 
   return locales.includes(firstPathSegment) ? firstPathSegment : defaultLocale

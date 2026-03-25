@@ -54,6 +54,30 @@ test("Should prefix internal API paths with Astro base", async () => {
   )
 })
 
+test("Should strip Astro base from pathname", async () => {
+  vi.stubEnv("BASE_URL", "/docs/")
+
+  const { pathWithoutBase } = await import("../../src/utils/paths")
+
+  expect(pathWithoutBase("/docs/en/media")).toBe("/en/media")
+  expect(pathWithoutBase("/docs")).toBe("/")
+})
+
+test("Should leave root-base pathname unchanged", async () => {
+  vi.stubEnv("BASE_URL", "/")
+
+  const { pathWithoutBase } = await import("../../src/utils/paths")
+
+  expect(pathWithoutBase("/en/media")).toBe("/en/media")
+})
+
+test("Should support explicit base when stripping pathname", async () => {
+  const { pathWithoutBase } = await import("../../src/utils/paths")
+
+  expect(pathWithoutBase("/custom/en/media", "/custom/")).toBe("/en/media")
+  expect(pathWithoutBase("/en/media", "/custom/")).toBe("/en/media")
+})
+
 test("Should preserve root path under Astro base", async () => {
   vi.stubEnv("BASE_URL", "/docs/")
 
