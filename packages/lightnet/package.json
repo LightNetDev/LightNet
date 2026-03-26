@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^5.0.1",
-    "@iconify-json/lucide": "^1.2.98",
+    "@iconify-json/lucide": "^1.2.99",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.19",
@@ -56,7 +56,7 @@
     "embla-carousel-wheel-gestures": "^8.1.0",
     "fuse.js": "^7.1.0",
     "i18next": "^25.10.9",
-    "lucide-react": "^1.6.0",
+    "lucide-react": "^1.7.0",
     "marked": "^17.0.5",
     "postcss": "^8.5.8",
     "postcss-load-config": "^6.0.1",
