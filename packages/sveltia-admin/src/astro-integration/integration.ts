@@ -2,13 +2,13 @@ import { fileURLToPath } from "node:url"
 
 import type { AstroIntegration, ViteUserConfig } from "astro"
 import { AstroError } from "astro/errors"
-import { verifySchema } from "lightnet/utils"
 
 import {
   adminConfigSchema,
   type ExtendedSveltiaAdminConfig,
   type SveltiaAdminConfig,
 } from "./config"
+import { verifySchema } from "./verify-schema"
 
 export default function lightnetSveltiaAdmin(
   config: SveltiaAdminConfig,

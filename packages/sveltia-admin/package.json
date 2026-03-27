@@ -25,8 +25,7 @@
     "./config.json.ts": "./src/config.json.ts"
   },
   "peerDependencies": {
-    "astro": "^6.0.0",
-    "lightnet": "^3.0.0"
+    "astro": "^6.0.0"
   },
   "dependencies": {
     "@sveltia/cms": "^0.150.1"

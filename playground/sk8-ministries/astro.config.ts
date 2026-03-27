@@ -73,7 +73,7 @@ export default defineConfig({
     lightnetSveltiaAdmin({
       siteRootInRepo: "/playground/sk8-ministries",
       experimental: {
-        useLanguagesCollection: false,
+        useLanguagesCollection: true,
       },
     }),
   ],

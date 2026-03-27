@@ -1,4 +1,4 @@
-import { pathWithBase } from "lightnet/utils"
+import { pathWithBase } from "../utils/paths"
 
 const parseCachedUser = () => {
   try {
