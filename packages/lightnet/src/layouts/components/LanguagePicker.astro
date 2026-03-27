@@ -6,7 +6,7 @@ import { localizePath, pathWithoutBase } from "../../utils/paths"
 import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
-const { t, locales, currentLocale } = Astro.locals.i18n
+const { locales, currentLocale, tInline } = Astro.locals.i18n
 
 const currentPath = pathWithoutBase(Astro.url.pathname)
 const hasLocale =
@@ -18,7 +18,7 @@ const translations = (
   await Promise.all(
     locales.map(async (locale) => ({
       locale,
-      label: resolveTranslatedLanguage(locale, t).labelText,
+      label: resolveTranslatedLanguage(locale, tInline).labelText,
       active: locale === currentLocale,
       href: currentPathWithLocale(locale),
     })),

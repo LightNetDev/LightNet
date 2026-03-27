@@ -1,20 +1,39 @@
 import { AstroError } from "astro/errors"
+import config from "virtual:lightnet/config"
 
 export type InlineTranslation = Record<string, string | undefined>
+export type InlineTranslationContext = {
+  path: (string | number)[]
+}
 
-export function resolveInlineTranslation(
-  inlineTranslation: InlineTranslation,
-  currentLocale: string,
-  defaultLocale: string,
-): string {
-  const currentLocaleValue = inlineTranslation[currentLocale]
-  if (currentLocaleValue) return currentLocaleValue
+export type InlineTranslateFn = (
+  translationMap: InlineTranslation,
+  context: InlineTranslationContext,
+) => string
 
-  const defaultLocaleValue = inlineTranslation[defaultLocale]
-  if (defaultLocaleValue) return defaultLocaleValue
+export function useInlineTranslate(currentLocale: string): InlineTranslateFn {
+  return (
+    inlineTranslation: InlineTranslation,
+    context: InlineTranslationContext,
+  ) => {
+    const currentLocaleValue = inlineTranslation[currentLocale]
+    if (currentLocaleValue) {
+      return currentLocaleValue
+    }
 
-  throw new AstroError(
-    `Missing localized translation for locales "${currentLocale}" and "${defaultLocale}"`,
-    `Available translations: ${JSON.stringify(inlineTranslation)}. Add "${currentLocale}" or "${defaultLocale}" to this inline translation map.`,
-  )
+    const defaultLocaleValue = inlineTranslation[config.defaultLocale]
+    if (defaultLocaleValue) {
+      return defaultLocaleValue
+    }
+
+    const availableLocales = Object.keys(inlineTranslation)
+    const availableLocalesText = availableLocales.length
+      ? availableLocales.map((locale) => `"${locale}"`).join(", ")
+      : "none"
+
+    throw new AstroError(
+      `Missing inline translation for "${context.path.join(".")}" in locales "${currentLocale}" and "${config.defaultLocale}"`,
+      `Available locales: ${availableLocalesText}. Add a value for "${currentLocale}" or "${config.defaultLocale}" to this inline translation map.`,
+    )
+  }
 }

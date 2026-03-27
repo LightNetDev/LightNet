@@ -21,19 +21,25 @@ test("Should accept inline translation with only default locale", () => {
   expect(parsed.success).toBe(true)
 })
 
-test("Should reject inline translation without default locale", () => {
+test("Should accept inline translation without a specific default locale", () => {
   const parsed = inlineTranslationSchema.safeParse({
     de: "Hallo",
   })
 
-  expect(parsed.success).toBe(false)
+  expect(parsed.success).toBe(true)
 })
 
-test("Should reject unsupported locale keys in inline translation", () => {
+test("Should accept arbitrary locale keys in inline translation", () => {
   const parsed = inlineTranslationSchema.safeParse({
     en: "Hello",
     fr: "Bonjour",
   })
+
+  expect(parsed.success).toBe(true)
+})
+
+test("Should reject empty inline translations", () => {
+  const parsed = inlineTranslationSchema.safeParse({})
 
   expect(parsed.success).toBe(false)
   if (parsed.success) {
@@ -43,7 +49,7 @@ test("Should reject unsupported locale keys in inline translation", () => {
   expect(parsed.error.issues).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        message: expect.stringContaining("Unrecognized key"),
+        message: "Inline translations must contain at least one entry",
         path: [],
       }),
     ]),

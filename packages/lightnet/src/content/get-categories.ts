@@ -1,7 +1,7 @@
 import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
-import { type TranslateFn } from "../i18n/translate"
+import type { InlineTranslateFn } from "../i18n/inline-translation"
 import { lazy } from "../utils/lazy"
 import { verifySchemaAsync } from "../utils/verify-schema"
 import { categoryEntrySchema } from "./content-schema"
@@ -38,13 +38,21 @@ const contentCategories = lazy(async () => {
  * Adds the translated name of the category and sorts by this name.
  *
  * @param currentLocale current locale
- * @param t translate function
  * @returns categories sorted by labelText
  */
-export async function getUsedCategories(currentLocale: string, t: TranslateFn) {
+export async function getUsedCategories(
+  currentLocale: string,
+  tInline: InlineTranslateFn,
+) {
   const categories = await contentCategories.get()
   return [...Object.entries(categories)]
-    .map(([id, data]) => ({ id, ...data, labelText: t(data.label) }))
+    .map(([id, data]) => ({
+      id,
+      ...data,
+      labelText: tInline(data.label, {
+        path: ["categories", id, "label"],
+      }),
+    }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
 
@@ -54,13 +62,21 @@ export async function getUsedCategories(currentLocale: string, t: TranslateFn) {
  * by media items use `getUsedCategories`.
  *
  * @param currentLocale current locale
- * @param t translate function
  * @returns categories sorted by labelText
  */
-export async function getCategories(currentLocale: string, t: TranslateFn) {
+export async function getCategories(
+  currentLocale: string,
+  tInline: InlineTranslateFn,
+) {
   const categories = await categoriesById.get()
   return [...Object.entries(categories)]
-    .map(([id, data]) => ({ id, ...data, labelText: t(data.label) }))
+    .map(([id, data]) => ({
+      id,
+      ...data,
+      labelText: tInline(data.label, {
+        path: ["categories", id, "label"],
+      }),
+    }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
 

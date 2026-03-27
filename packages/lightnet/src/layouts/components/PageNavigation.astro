@@ -9,24 +9,28 @@ import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
 const currentPath = Astro.url.pathname
-const { t, currentLocale } = Astro.locals.i18n
+const { t, tInline, currentLocale } = Astro.locals.i18n
 
-const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
-  const isExternal = isExternalUrl(href)
-  const path =
-    isExternal || !requiresLocale ? href : localizePath(currentLocale, href)
-  const isActive =
-    !isExternal &&
-    (currentPath === localizePath(currentLocale, href) ||
-      currentPath === localizePath(currentLocale, `${href}/`) ||
-      currentPath === href)
-  return {
-    path,
-    isExternal,
-    label,
-    isActive,
-  }
-})
+const items = (config.mainMenu ?? []).map(
+  ({ href, label, requiresLocale }, index) => {
+    const isExternal = isExternalUrl(href)
+    const path =
+      isExternal || !requiresLocale ? href : localizePath(currentLocale, href)
+    const isActive =
+      !isExternal &&
+      (currentPath === localizePath(currentLocale, href) ||
+        currentPath === localizePath(currentLocale, `${href}/`) ||
+        currentPath === href)
+    return {
+      path,
+      isExternal,
+      labelText: tInline(label, {
+        path: ["config", "mainMenu", index, "label"],
+      }),
+      isActive,
+    }
+  },
+)
 ---
 
 <nav class="-me-3 flex items-center">
@@ -49,13 +53,13 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
     !!items.length && (
       <Menu label="ln.header.open-main-menu">
         <MenuIcon slot="icon" />
-        {items.map(({ label, path, isActive, isExternal }) => (
+        {items.map(({ labelText, path, isActive, isExternal }) => (
           <MenuItem
             href={path}
             active={isActive}
             target={isExternal ? "_blank" : "_self"}
           >
-            {t(label)}
+            {labelText}
             {isExternal && (
               <ExternalLinkIcon size="1.2rem" className="shrink-0" />
             )}

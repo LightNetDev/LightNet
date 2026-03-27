@@ -16,6 +16,11 @@ type I18n = {
   t: import("./translate").TranslateFn
 
   /**
+   * Resolve an inline translation map to the language of the current locale.
+   */
+  tInline: import("./inline-translation").InlineTranslateFn
+
+  /**
    *  The current locale resolved by LightNet from the URL pathname.
    *
    *  If no supported locale is present in the pathname,

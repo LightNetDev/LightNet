@@ -2,14 +2,12 @@ import { glob } from "astro/loaders"
 import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { defineCollection, reference } from "astro:content"
-import config from "virtual:lightnet/config"
 
 import { imageSchema } from "./astro-image"
 
 /**
  * Translations by BCP-47 tag
- * This uses the LightNet configuration to require the default locale
- * and allow optional values for other configured site locales.
+ * Must contain at least one localized value.
  *
  * @example
  * {
@@ -17,18 +15,11 @@ import { imageSchema } from "./astro-image"
  *    en: "Hello"
  * }
  */
-const optionalLocales = config.locales.filter((l) => l !== config.defaultLocale)
 export const inlineTranslationSchema = z
-  .object({
-    [config.defaultLocale]: z.string().nonempty(),
-    ...Object.fromEntries(
-      optionalLocales.map((locale) => [
-        locale,
-        z.string().nonempty().optional(),
-      ]),
-    ),
+  .record(z.string(), z.string())
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "Inline translations must contain at least one entry",
   })
-  .strict()
 
 /**
  * Category Schema

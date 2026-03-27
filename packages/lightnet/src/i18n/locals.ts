@@ -1,6 +1,7 @@
 import type { MiddlewareHandler } from "astro"
 import config from "virtual:lightnet/config"
 
+import { useInlineTranslate } from "./inline-translation"
 import { resolveCurrentLocaleFromPathname } from "./resolve-current-locale"
 import { resolveLanguage } from "./resolve-language"
 import { getTranslationKeys, useTranslate } from "./translate"
@@ -19,9 +20,11 @@ export const onRequest: MiddlewareHandler = async ({ locals, url }, next) => {
       useTranslate(currentLocale),
       getTranslationKeys(),
     ])
+    const tInline = useInlineTranslate(currentLocale)
     const { direction } = resolveLanguage(currentLocale)
     locals.i18n = {
       t,
+      tInline,
       currentLocale,
       defaultLocale,
       direction,

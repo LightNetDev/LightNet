@@ -1,5 +1,7 @@
-import type { InlineTranslation } from "../../../i18n/inline-translation"
-import type { TranslateFn } from "../../../i18n/translate"
+import {
+  type InlineTranslateFn,
+  type InlineTranslation,
+} from "../../../i18n/inline-translation"
 import { isExternalUrl } from "../../../utils/urls"
 
 export type UrlType =
@@ -53,7 +55,8 @@ export function createContentMetadata(
     url: string
     label?: InlineTranslation
   },
-  t: TranslateFn,
+  tInline: InlineTranslateFn,
+  context: { path: (string | number)[] },
 ) {
   const isExternal = isExternalUrl(url)
   const path = isExternal ? new URL(url).pathname : url
@@ -69,7 +72,13 @@ export function createContentMetadata(
     ? lastPathSegment.slice(0, -(extension.length + 1))
     : undefined
 
-  const labelText = (customLabel && t(customLabel)) ?? fileName ?? linkName
+  const labelText =
+    (customLabel &&
+      tInline(customLabel, {
+        path: [...context.path, "label"],
+      })) ??
+    fileName ??
+    linkName
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
   const canBeOpened =
     !hasExtension || !!KNOWN_EXTENSIONS[extension]?.canBeOpened

@@ -3,10 +3,6 @@ import i18next, { type TOptions } from "i18next"
 import config from "virtual:lightnet/config"
 
 import { lazy } from "../utils/lazy"
-import {
-  type InlineTranslation,
-  resolveInlineTranslation,
-} from "./inline-translation"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
@@ -14,10 +10,7 @@ export type TranslationKey =
   | LightNetTranslationKey
   | (string & NonNullable<unknown>)
 
-export type TranslateFn = (
-  input: TranslationKey | InlineTranslation,
-  options?: TOptions,
-) => string
+export type TranslateFn = (input: TranslationKey, options?: TOptions) => string
 
 const fallbackLanguages = Object.fromEntries(
   config.languages.map(({ code, fallbackLanguages }) => [
@@ -89,14 +82,6 @@ export async function useTranslate(
     "en",
   ]
   return (input, options) => {
-    if (typeof input !== "string") {
-      return resolveInlineTranslation(
-        input,
-        resolvedLocale,
-        config.defaultLocale,
-      )
-    }
-
     const t = i18n.getFixedT(resolvedLocale) as (
       key: TranslationKey,
       options?: TOptions,

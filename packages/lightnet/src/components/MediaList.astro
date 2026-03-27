@@ -28,14 +28,16 @@ interface Props {
 // this is in the return type of getEntry
 const items = Astro.props.items.filter((item) => !!item)
 
-const { t, direction, currentLocale } = Astro.locals.i18n
+const { direction, currentLocale, tInline } = Astro.locals.i18n
 
 const mediaTypes = Object.fromEntries(
   (await getMediaTypes()).map((type) => [
     type.id,
     {
       id: type.id,
-      labelText: t(type.data.label),
+      labelText: tInline(type.data.label, {
+        path: ["media-types", type.id, "label"],
+      }),
       icon: type.data.icon,
       coverImageStyle: type.data.coverImageStyle,
     },

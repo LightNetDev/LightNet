@@ -7,17 +7,17 @@ import { getUsedMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchFilterReact from "./SearchFilter.tsx"
 
-const { t, currentLocale } = Astro.locals.i18n
+const { currentLocale, tInline } = Astro.locals.i18n
 
-const categories = (await getUsedCategories(currentLocale, t)).map(
+const categories = (await getUsedCategories(currentLocale, tInline)).map(
   ({ id, labelText }) => ({ id, labelText }),
 )
 
-const mediaTypes = (await getUsedMediaTypes(currentLocale, t)).map(
+const mediaTypes = (await getUsedMediaTypes(currentLocale, tInline)).map(
   ({ id, labelText }) => ({ id, labelText }),
 )
 
-const languages = (await getUsedLanguages(currentLocale, t)).map(
+const languages = (await getUsedLanguages(currentLocale, tInline)).map(
   ({ code: id, labelText }) => ({ id, labelText }),
 )
 

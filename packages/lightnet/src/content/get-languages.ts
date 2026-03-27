@@ -1,5 +1,5 @@
+import type { InlineTranslateFn } from "../i18n/inline-translation"
 import { resolveLanguage } from "../i18n/resolve-language"
-import type { TranslateFn } from "../i18n/translate"
 import { lazy } from "../utils/lazy"
 import { getMediaItems } from "./get-media-items"
 
@@ -22,12 +22,14 @@ const contentLanguages = lazy(async () => {
 
 export const getUsedLanguages = async (
   currentLocale: string,
-  t: TranslateFn,
+  tInline: InlineTranslateFn,
 ) => {
   return (await contentLanguages.get())
     .map((language) => ({
       ...language,
-      labelText: t(language.label),
+      labelText: tInline(language.label, {
+        path: ["languages", language.code, "label"],
+      }),
     }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }

@@ -10,12 +10,6 @@ test("Should load built-in translations for non-default site locales", async () 
   expect(t("ln.header.select-language")).toBe("Sprache auswählen")
 })
 
-test("Should fallback inline translations to default locale", async () => {
-  const { useTranslate } = await importTranslate()
-  const t = await useTranslate("de")
-  expect(t({ en: "Open" })).toBe("Open")
-})
-
 test("Should fail on missing translation key", async () => {
   const { useTranslate } = await importTranslate()
   const t = await useTranslate("de")
@@ -29,6 +23,37 @@ test("Should not load user translations for missing locale file", async () => {
   const translations = await loadTranslations("en")
   expect(translations["home.all-items"]).toBeUndefined()
   expect(translations["ln.search.title"]).toBe("Search")
+})
+
+test("Should fallback to configured fallback languages for missing keys", async () => {
+  vi.resetModules()
+  vi.doMock("../../src/i18n/translations", async () => {
+    const actual = await vi.importActual<
+      typeof import("../../src/i18n/translations")
+    >("../../src/i18n/translations")
+
+    return {
+      ...actual,
+      loadTranslations: vi.fn(async (bcp47: string) => {
+        if (bcp47 === "de") {
+          return {}
+        }
+        if (bcp47 === "en") {
+          return {
+            "x.fallback-only": "Fallback value",
+          }
+        }
+        return {}
+      }),
+    }
+  })
+
+  const { useTranslate } = await importTranslate()
+  const t = await useTranslate("de")
+  expect(t("x.fallback-only")).toBe("Fallback value")
+
+  vi.doUnmock("../../src/i18n/translations")
+  vi.resetModules()
 })
 
 test("Should allow translations whose value matches the key", async () => {
