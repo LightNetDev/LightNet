@@ -102,7 +102,7 @@ export async function useTranslate(
       options?: TOptions,
     ) => string
     const value = t(input, { fallbackLng, ...options })
-    if (!availableTranslationKeys.has(input)) {
+    if (value === input && !availableTranslationKeys.has(input)) {
       throw new AstroError(
         `Missing translation: '${input}' is undefined for language '${resolvedLocale}'.`,
         `To fix the issue, add a translation for '${input}' to src/translations/${resolvedLocale}.yml`,
