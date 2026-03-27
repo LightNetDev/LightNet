@@ -172,8 +172,8 @@ importers:
   packages/sveltia-admin:
     dependencies:
       '@sveltia/cms':
-        specifier: ^0.150.1
-        version: 0.150.1
+        specifier: ^0.151.0
+        version: 0.151.0
       astro:
         specifier: ^6.0.0
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.0)(typescript@5.9.3)(yaml@2.8.3)
@@ -1068,8 +1068,8 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@sveltia/cms@0.150.1':
-    resolution: {integrity: sha512-KyApLYitlcap+ENBi2FEOkcoU4HDN+ura3f0cw+rVSz752wJwMeZd93ai4L6DP35uTmAtrFm0h1mHUfaSRCjfw==}
+  '@sveltia/cms@0.151.0':
+    resolution: {integrity: sha512-JVRYa6jvQXn/H11jWMcHH7CaUsS5C781xS/vUJi2U9naY7XRtFvj8kIAzfPJJh6HA3imLryOK9gs/Vw+YvhxDQ==}
 
   '@tailwindcss/typography@0.5.19':
     resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
@@ -4168,7 +4168,7 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@sveltia/cms@0.150.1': {}
+  '@sveltia/cms@0.151.0': {}
 
   '@tailwindcss/typography@0.5.19(tailwindcss@3.4.19(yaml@2.8.3))':
     dependencies:

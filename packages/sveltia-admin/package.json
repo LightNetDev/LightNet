@@ -28,7 +28,7 @@
     "astro": "^6.0.0"
   },
   "dependencies": {
-    "@sveltia/cms": "^0.150.1"
+    "@sveltia/cms": "^0.151.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
