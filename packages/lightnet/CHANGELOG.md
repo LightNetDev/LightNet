@@ -1,5 +1,13 @@
 # lightnet
 
+## 4.0.2
+
+### Patch Changes
+
+- [#370](https://github.com/LightNetDev/LightNet/pull/370) [`1256c94`](https://github.com/LightNetDev/LightNet/commit/1256c94010948c2ab09f51ce26dfd5ed90e6e3e8) Thanks [@smn-cds](https://github.com/smn-cds)! - Publish the LightNet v4 documentation.
+
+  For upgrade steps, see https://docs.lightnet.community/run/upgrade-to/v4/
+
 ## 4.0.1
 
 ### Patch Changes
