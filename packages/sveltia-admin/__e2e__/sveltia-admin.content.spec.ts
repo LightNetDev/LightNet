@@ -130,7 +130,6 @@ test.describe("Sveltia admin content flows", () => {
     await categories.expectEntryVisible(summary)
 
     const reopened = await categories.openEditor(summary)
-    await reopened.getStringFieldByLabel("Slug").fill(slug)
     await reopened
       .getStringFieldByKeyPath("label.en")
       .fill("Discipleship Updated")
@@ -173,7 +172,6 @@ test.describe("Sveltia admin content flows", () => {
     })
 
     const reopened = await mediaItems.openEditor(summary)
-    await reopened.getStringFieldByLabel("Slug").fill(slug)
     await reopened.getStringFieldByLabel("Title").fill("Library Item Updated")
     await reopened.save()
 
