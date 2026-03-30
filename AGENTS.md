@@ -70,6 +70,11 @@ Primary use: feature development and bug fixes.
 ## Sveltia admin E2E
 
 - Sveltia admin Playwright tests live in `packages/sveltia-admin/__e2e__/`.
+- Regression coverage for `packages/sveltia-admin/__e2e__/` must stay inside the existing LightNet-backed fixtures (`admin-test-repo` and `admin-local-repo`) unless the user explicitly asks for a separate repro app or fixture site.
+- Do not create standalone Astro repro projects, ad hoc admin apps, or extra fixture sites just to reproduce Sveltia admin bugs. Prefer extending the existing LightNet-backed fixtures and package-owned collection coverage.
+- The `test-repo` backend does not auto-populate fixture files. The E2E harness must seed OPFS directory `sveltia-cms-test` from the existing `admin-test-repo` fixture before using `enterTestRepository()`.
+- When adding or changing seeded Sveltia test data, update the E2E seeding manifest/helper so new `src/content/**`, content-adjacent assets, and other repo-backed files such as `languages.json` are copied into OPFS.
+- Do not rely on persisted browser storage to make `test-repo` tests pass. Test-repo setup should be deterministic and recreated by the harness for each test session.
 - The page-object pattern for Sveltia admin tests should stay thin and generic.
 - Page objects should abstract Sveltia CMS UI mechanics only: collections, entries, editors, and field/widget interactions.
 - Do not add LightNet domain language to the page-object API. Avoid methods like `createMediaItem`, `createCategory`, `selectLanguage`, or `addLinkContent`.

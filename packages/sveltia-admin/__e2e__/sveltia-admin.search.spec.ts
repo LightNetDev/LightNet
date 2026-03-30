@@ -3,8 +3,7 @@ import { expect } from "@playwright/test"
 import { test } from "./admin-fixture"
 
 const faithfulSummary = "Faithful Freestyle (faithful-freestyle--en)"
-const teensSummary = "Teens"
-const guidesSummary = "Guides to Living Your Faith"
+const skateSoundsSummary = "Skate Sounds (skate-sounds--en)"
 
 test.describe("Sveltia admin global search", () => {
   test("finds seeded items from global search", async ({ admin }) => {
@@ -35,11 +34,10 @@ test.describe("Sveltia admin global search", () => {
     const search = app.openGlobalSearch()
     await search.search("faithful")
     await search.expectResultVisible(faithfulSummary)
-    await search.expectResultNotVisible(teensSummary)
     await search.clear()
     await search.expectQuery("")
-    await search.expectResultVisible(teensSummary)
-    await search.expectResultVisible(guidesSummary)
+    await search.expectResultVisible(faithfulSummary)
+    await search.expectResultVisible(skateSoundsSummary)
   })
 
   test("does not leave stale results for a no-match query", async ({

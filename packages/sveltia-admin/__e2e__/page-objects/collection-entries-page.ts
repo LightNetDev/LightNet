@@ -21,8 +21,16 @@ class CollectionPage {
     return collectionPaths[this.label]
   }
 
+  private escapeForRegExp(value: string) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  }
+
   private entrySummary(summary: string) {
-    return this.page.getByText(summary, { exact: true }).first()
+    return this.page
+      .getByRole("row", {
+        name: new RegExp(this.escapeForRegExp(summary)),
+      })
+      .first()
   }
 
   private createEntryButton() {
@@ -55,7 +63,7 @@ class CollectionPage {
   }
 
   async expectEntryNotVisible(summary: string) {
-    await expect(this.entrySummary(summary)).toBeHidden()
+    await expect(this.entrySummary(summary)).toHaveCount(0)
   }
 
   async openEditor(summary?: string) {
@@ -86,10 +94,7 @@ class CollectionPage {
   }
 
   async selectEntry(summary: string) {
-    const rowCheckbox = this.entrySummary(summary)
-      .locator('xpath=ancestor::*[.//input[@type="checkbox"]][1]')
-      .getByRole("checkbox")
-      .first()
+    const rowCheckbox = this.entrySummary(summary).getByRole("checkbox").first()
 
     if ((await rowCheckbox.count()) > 0) {
       await rowCheckbox.check()

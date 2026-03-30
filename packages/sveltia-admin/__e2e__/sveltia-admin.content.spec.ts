@@ -17,10 +17,9 @@ const seedLanguages = async (app: AdminApp) => {
   const languages = await app.openCollection("Languages")
   const editor = await languages.openEditor()
 
-  await editor.getListFieldByKeyPath("languages").addItem()
-  await editor.getStringFieldByKeyPath("languages.0.code").fill("en")
-  await editor.getStringFieldByKeyPath("languages.0.label.en").fill("English")
-  await editor.save()
+  await editor.expectFieldVisible("languages")
+  await editor.expectTextVisible("English")
+  await editor.cancel()
 }
 
 const seedCategory = async (app: AdminApp) => {
@@ -97,7 +96,7 @@ const createMediaEntry = async (
 
   if (categorySlug) {
     await editor
-      .getRelationFieldByLabel("Categories")
+      .getRelationFieldByKeyPath("categories")
       .selectOption(categorySlug)
   }
 

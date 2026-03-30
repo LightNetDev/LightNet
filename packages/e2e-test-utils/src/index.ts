@@ -1,4 +1,4 @@
-import { rm } from "node:fs/promises"
+import { mkdir, rm } from "node:fs/promises"
 import { createServer } from "node:net"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -59,6 +59,8 @@ const ensureServer = async (root: string) => {
     await Promise.all([
       rm(join(root, "dist"), { force: true, recursive: true }),
       rm(join(root, ".astro"), { force: true, recursive: true }),
+      mkdir(join(root, ".astro"), { recursive: true }),
+      mkdir(join(root, "node_modules", ".astro"), { recursive: true }),
     ])
 
     await build(config)

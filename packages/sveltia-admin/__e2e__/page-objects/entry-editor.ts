@@ -10,6 +10,10 @@ class EditorField {
     await expect(this.locator).toBeVisible()
   }
 
+  async expectHidden() {
+    await expect(this.locator).toBeHidden()
+  }
+
   async text() {
     return (await this.locator.innerText()).replace(/\s+/g, " ").trim()
   }
@@ -32,6 +36,26 @@ class EditorField {
     await expect(
       this.page.getByText(message, { exact: false }).first(),
     ).toBeVisible()
+  }
+
+  private menuButton() {
+    const namedButton = this.locator
+      .getByRole("button", { name: /show edit options|edit options/i })
+      .first()
+
+    return namedButton.or(
+      this.locator.locator('button[aria-haspopup="menu"]').first(),
+    )
+  }
+
+  async openMenu() {
+    await this.locator.scrollIntoViewIfNeeded()
+    await this.menuButton().click()
+  }
+
+  async revertChanges() {
+    await this.openMenu()
+    await this.page.getByRole("menuitem", { name: /revert changes/i }).click()
   }
 }
 
@@ -104,6 +128,18 @@ class ListField extends EditorField {
     const box = await item.boundingBox()
     return box?.y ?? Number.POSITIVE_INFINITY
   }
+
+  async removeItemByText(text: string) {
+    const item = this.locator.getByText(text, { exact: true }).first()
+    await expect(item).toBeVisible()
+
+    const removeButton = item
+      .locator("xpath=ancestor::*[.//button][1]")
+      .getByRole("button", { name: /remove/i })
+      .first()
+
+    await removeButton.click()
+  }
 }
 
 class TypedObjectField extends ListField {
@@ -123,6 +159,56 @@ class FileField extends EditorField {
 
   async expectUploadShellVisible() {
     await expect(this.locator.getByText(/Drop a file here or/)).toBeVisible()
+  }
+
+  private browseButton() {
+    return this.locator.getByRole("button", { name: /browse|replace/i }).first()
+  }
+
+  private assetDialog() {
+    return this.page.getByRole("dialog").last()
+  }
+
+  async openAssetBrowser() {
+    await this.locator.scrollIntoViewIfNeeded()
+    await this.browseButton().click()
+    await expect(this.assetDialog()).toBeVisible()
+  }
+
+  async openFieldAssets() {
+    const assetDialog = this.assetDialog()
+    const locationOption = assetDialog
+      .getByRole("option", { name: /field assets|collection assets/i })
+      .first()
+
+    if ((await locationOption.count()) > 0) {
+      await locationOption.click()
+      return
+    }
+
+    const locationControl = assetDialog
+      .getByRole("combobox", { name: /locations/i })
+      .first()
+
+    if ((await locationControl.count()) > 0) {
+      await locationControl.click()
+      await this.page
+        .getByRole("option", { name: /field assets|collection assets/i })
+        .first()
+        .click()
+      return
+    }
+
+    await assetDialog
+      .getByRole("button", { name: /field assets|collection assets/i })
+      .first()
+      .click()
+  }
+
+  expectAssetVisible(name: string) {
+    return expect(
+      this.assetDialog().getByText(name, { exact: true }).first(),
+    ).toBeVisible()
   }
 }
 
@@ -162,6 +248,10 @@ class EntryEditor {
 
   getRelationFieldByLabel(label: string) {
     return new RelationField(this.page, this.fieldLocatorByLabel(label))
+  }
+
+  getRelationFieldByKeyPath(keyPath: string) {
+    return new RelationField(this.page, this.fieldLocatorByKeyPath(keyPath))
   }
 
   getComboboxFieldByLabel(label: string, index = 0) {
@@ -214,6 +304,10 @@ class EntryEditor {
     await this.getFieldByKeyPath(keyPath).expectVisible()
   }
 
+  async expectFieldHidden(keyPath: string) {
+    await this.getFieldByKeyPath(keyPath).expectHidden()
+  }
+
   async expectUploadShellVisible(keyPath: string) {
     await this.getFileFieldByKeyPath(keyPath).expectUploadShellVisible()
   }
@@ -237,6 +331,10 @@ class EntryEditor {
 
   async expectTextVisible(pattern: RegExp | string) {
     await expect(this.page.getByText(pattern).first()).toBeVisible()
+  }
+
+  async expectTextNotVisible(pattern: RegExp | string) {
+    await expect(this.page.getByText(pattern).first()).toBeHidden()
   }
 }
 

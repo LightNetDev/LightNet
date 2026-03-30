@@ -1,14 +1,27 @@
 import type { AstroFixturePage } from "@internal/e2e-test-utils"
 import { expect } from "@playwright/test"
 
+import {
+  readTestRepositoryTextFile,
+  seedTestRepository,
+  type TestRepoSeedFile,
+} from "../test-repo-storage"
 import { collectionPaths } from "./collection-entries-page"
 import { CollectionsPage } from "./collections-page"
 import { GlobalSearch } from "./global-search"
 
 type CollectionLabel = keyof typeof collectionPaths
+type AdminAppOptions = {
+  testRepoSeedManifest?: TestRepoSeedFile[]
+}
 
 class AdminApp {
-  constructor(private readonly fixture: AstroFixturePage) {}
+  private testRepositoryPrepared = false
+
+  constructor(
+    private readonly fixture: AstroFixturePage,
+    private readonly options: AdminAppOptions = {},
+  ) {}
 
   get page() {
     return this.fixture.page
@@ -29,11 +42,28 @@ class AdminApp {
     ).toBeVisible()
   }
 
+  async prepareTestRepository() {
+    if (
+      this.testRepositoryPrepared ||
+      !this.options.testRepoSeedManifest?.length
+    ) {
+      return
+    }
+
+    await seedTestRepository(this.page, this.options.testRepoSeedManifest)
+    this.testRepositoryPrepared = true
+  }
+
   async enterTestRepository() {
+    await this.prepareTestRepository()
     await this.page
       .getByRole("button", { name: /Work with Test Repository/ })
       .click()
     await expect(this.page).toHaveURL(/#\/collections\/media/)
+  }
+
+  readTestRepositoryTextFile(path: string) {
+    return readTestRepositoryTextFile(this.page, path)
   }
 
   openCollection(label: CollectionLabel) {

@@ -11,6 +11,13 @@ class GlobalSearch {
     return this.page.getByRole("dialog").first()
   }
 
+  private resultsRegion() {
+    return this.page
+      .getByRole("group", { name: /search results/i })
+      .or(this.page.getByRole("grid", { name: /entries/i }))
+      .first()
+  }
+
   private searchbox() {
     return this.page
       .getByRole("searchbox")
@@ -19,13 +26,16 @@ class GlobalSearch {
   }
 
   private result(summary: string) {
-    return this.dialog().getByText(summary, { exact: true }).first()
+    return this.page
+      .getByRole("row", {
+        name: new RegExp(summary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+      })
+      .or(this.resultsRegion().getByText(summary, { exact: true }))
+      .first()
   }
 
   private clearButton() {
-    return this.dialog()
-      .getByRole("button", { name: /clear|reset/i })
-      .first()
+    return this.page.getByRole("button", { name: /clear|reset/i }).first()
   }
 
   async open() {
