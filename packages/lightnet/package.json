@@ -19,6 +19,13 @@
   "keywords": [
     "astro-integration"
   ],
+  "files": [
+    "exports",
+    "src",
+    "tailwind.config.ts",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "test": "vitest",
     "e2e": "playwright test"
