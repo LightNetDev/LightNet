@@ -23,7 +23,7 @@ export const categoriesCollection: Collection = {
       required: false,
       choose_url: false,
       widget: "image",
-      media_folder: "images",
+      media_folder: "./images",
       accept: "image/png, image/jpeg, image/webp",
       hint: "When you upload an image, it is automatically resized (up to 2048 pixels) and saved in a web-friendly format.",
     },
