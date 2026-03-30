@@ -21,14 +21,13 @@ The pinned dependency lives in [packages/sveltia-admin/package.json](packages/sv
 ## Workflow
 
 1. Inspect the current pinned version in `packages/sveltia-admin/package.json`.
-2. Check the latest published `@sveltia/cms` version.
-   Preferred sources:
-   - `pnpm view @sveltia/cms version`
-   - official npm package page
-   - official Sveltia release notes, changelog, or GitHub releases
+2. Check the latest published `@sveltia/cms` version with `pnpm view @sveltia/cms version`.
+   - Treat this as the primary source of truth for the latest stable npm release.
+   - Use web browsing only if the registry query fails or if you need release-note context after confirming a newer version exists.
 3. Compare the pinned version with the newest release.
 4. If there is no newer release, tell the user and stop unless they asked for a different target version.
 5. If there is a newer release:
+   - inspect upstream release notes, changelog entries, or GitHub releases only after confirming the newer version number
    - inspect upstream notes for breaking changes, behavior changes, or migration notes
    - summarize only the changes that look relevant to this repo's Sveltia admin usage
 6. Update the fixed version in `packages/sveltia-admin/package.json` to the chosen exact release.
@@ -92,3 +91,9 @@ When you finish, give the user:
 - any failures or regressions found
 - whether you think the problem is local compatibility work or an upstream Sveltia bug
 - if relevant, a ready-to-post issue draft using the required template
+
+## Efficiency Notes
+
+- For the simple question "what is the latest version?", prefer `pnpm view @sveltia/cms version` over web search.
+- Do not browse release pages until you know there is actually a newer version worth inspecting.
+- If `pnpm view` already shows the pinned version is current, stop early and avoid extra network lookups.
