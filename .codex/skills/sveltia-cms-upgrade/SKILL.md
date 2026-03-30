@@ -21,11 +21,11 @@ The pinned dependency lives in [packages/sveltia-admin/package.json](packages/sv
 ## Workflow
 
 1. Inspect the current pinned version in `packages/sveltia-admin/package.json`.
-2. Check the latest published `@sveltia/cms` version with `pnpm view @sveltia/cms version`.
-   - Treat this as the primary source of truth for the latest stable npm release.
-   - Use web browsing only if the registry query fails or if you need release-note context after confirming a newer version exists.
-3. Compare the pinned version with the newest release.
-4. If there is no newer release, tell the user and stop unless they asked for a different target version.
+2. Check whether the pinned package is behind with `pnpm outdated @sveltia/cms --filter @lightnet/sveltia-admin`.
+   - Treat this as the primary workflow because it is cleaner in this repo than `pnpm view` and avoids extra npm-style warning noise.
+   - If `pnpm outdated` shows no newer version, tell the user and stop unless they asked for a different target version.
+3. If `pnpm outdated` shows a newer version, note the suggested latest release.
+4. Use `pnpm view @sveltia/cms version` only as a fallback or confirmation step if the `outdated` output is unclear, missing, or needs verification.
 5. If there is a newer release:
    - inspect upstream release notes, changelog entries, or GitHub releases only after confirming the newer version number
    - inspect upstream notes for breaking changes, behavior changes, or migration notes
@@ -94,6 +94,7 @@ When you finish, give the user:
 
 ## Efficiency Notes
 
-- For the simple question "what is the latest version?", prefer `pnpm view @sveltia/cms version` over web search.
+- Prefer `pnpm outdated @sveltia/cms --filter @lightnet/sveltia-admin` for the first-pass upgrade check.
+- Use `pnpm view @sveltia/cms version` only as fallback or confirmation when needed.
 - Do not browse release pages until you know there is actually a newer version worth inspecting.
-- If `pnpm view` already shows the pinned version is current, stop early and avoid extra network lookups.
+- If the package is already current, stop early and avoid extra registry or web lookups.
