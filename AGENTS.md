@@ -67,6 +67,19 @@ Primary use: feature development and bug fixes.
 - `pnpm test` (unit tests for `packages/lightnet` and `packages/sveltia-admin`)
 - `pnpm e2e` (end-to-end tests for `packages/lightnet`)
 
+## Sveltia admin E2E
+
+- Sveltia admin Playwright tests live in `packages/sveltia-admin/__e2e__/`.
+- The page-object pattern for Sveltia admin tests should stay thin and generic.
+- Page objects should abstract Sveltia CMS UI mechanics only: collections, entries, editors, and field/widget interactions.
+- Do not add LightNet domain language to the page-object API. Avoid methods like `createMediaItem`, `createCategory`, `selectLanguage`, or `addLinkContent`.
+- Prefer generic flows such as `enterTestRepository`, `openCollection`, `createEntry`, `openEditor`, `save`, and `cancel`.
+- Put LightNet-specific test intent in the specs or test-local helper functions, not in the page-object classes.
+- Prefer label-based field accessors in tests, for example `getStringFieldByLabel("Slug")`.
+- Use key-path-based field accessors only when needed for nested or repeated Sveltia fields where labels are ambiguous, such as list items or inline translation objects.
+- Keep widget wrappers generic and named after Sveltia interaction types: string fields, relation fields, combobox fields, list fields, typed object fields, and file fields.
+- If you add new page-object helpers, name them after UI behavior, not content-domain meaning.
+
 ## Verification
 
 - Always run `pnpm fmt` for every task that changes code or styles.
