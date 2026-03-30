@@ -1,5 +1,4 @@
 import config from "virtual:lightnet/config"
-import projectContext from "virtual:lightnet/project-context"
 
 /**
  * Test if a given url is outside this site.
@@ -21,7 +20,7 @@ export function isExternalUrl(url: string) {
   if (config.internalDomains.includes(parsedUrl.hostname)) {
     return false
   }
-  const { site } = projectContext
+  const { SITE: site } = import.meta.env
   if (!site) {
     return true
   }

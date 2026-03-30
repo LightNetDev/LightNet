@@ -10,7 +10,7 @@
     "directory": "packages/cli"
   },
   "scripts": {
-    "translation-status": "./index.mjs "
+    "translation-status": "node ./index.mjs translation-status"
   },
   "bugs": {
     "url": "https://github.com/LightNetDev/lightnet/issues"
@@ -23,7 +23,7 @@
     "lightnet": "^3.0.0"
   },
   "dependencies": {
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.3"
   },
   "engines": {
     "node": ">=22"

@@ -1,9 +1,9 @@
 ---
 import { AstroError } from "astro/errors"
 import { getEntry } from "astro:content"
+import { getEntries } from "astro:content"
 
 import MediaList from "../../../components/MediaList.astro"
-import { getCollectionItems } from "../utils/get-collection-items"
 
 interface Props {
   collectionId: string
@@ -18,7 +18,7 @@ if (!collection) {
     `To fix the issue, add a media-collection at "src/content/media-collections/${collectionId}.json".`,
   )
 }
-const items = (await getCollectionItems(collection.id)).map((item) => ({
+const items = (await getEntries(collection.data.mediaItems)).map((item) => ({
   ...item,
   disabled: item.id === disableItem,
 }))
@@ -26,7 +26,7 @@ const items = (await getCollectionItems(collection.id)).map((item) => ({
 if (items.length < 2) {
   return
 }
-const t = Astro.locals.i18n.t
+const { t, tMap } = Astro.locals.i18n
 ---
 
 <section class="mx-auto mt-16 max-w-screen-md px-4 md:mt-20 md:px-8">
@@ -34,7 +34,11 @@ const t = Astro.locals.i18n.t
     {t("ln.details.part-of-collection")}
   </h2>
   <h3 class="mb-6 text-lg font-bold text-gray-700 sm:mb-8">
-    {t(collection.data.label)}
+    {
+      tMap(collection.data.label, {
+        path: ["media-collections", collectionId, "label"],
+      })
+    }
   </h3>
   <MediaList items={items} />
 </section>

@@ -1,8 +1,11 @@
-import Icon from "../../../components/Icon"
+import { ChevronRightIcon } from "lucide-react"
+
 import { useI18n } from "../../../i18n/react/use-i18n"
 
 export default function LoadingSkeleton() {
   const { direction } = useI18n()
+  const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
+
   return (
     <ul>
       {Array.from({ length: 8 }, (_, index) => (
@@ -16,10 +19,8 @@ export default function LoadingSkeleton() {
             <div className="h-4 w-3/4 rounded-md bg-gray-200 md:h-6"></div>
             <div className="h-4 w-5/6 rounded-md bg-gray-200 md:h-6"></div>
           </div>
-          <Icon
-            className="my-auto me-4 ms-2 hidden shrink-0 text-2xl text-gray-300 mdi--chevron-right sm:block"
-            flipIcon={direction === "rtl"}
-            ariaLabel=""
+          <ChevronRightIcon
+            className={`my-auto me-4 ms-2 hidden shrink-0 text-gray-300 sm:block ${iconDirectionClass}`}
           />
         </li>
       ))}

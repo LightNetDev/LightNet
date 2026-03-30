@@ -4,37 +4,32 @@ import lightnet from "lightnet"
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://test.com",
+  site: "https://lightnet.community",
   integrations: [
     lightnet({
-      title: "Basic Test",
       logo: { src: "./src/assets/logo.png" },
-      credits: true,
+      title: { en: "Basic Test", de: "Basic Test" },
       languages: [
         {
           code: "en",
-          label: "English",
+          label: { en: "English", de: "English" },
           isDefaultSiteLanguage: true,
         },
         {
           code: "de",
-          label: "Deutsch",
+          label: { en: "Deutsch", de: "Deutsch" },
           isSiteLanguage: true,
         },
       ],
       favicon: [{ href: "favicon.svg" }],
+      credits: true,
       mainMenu: [
         {
           href: "/",
-          label: "ln.home.title",
+          label: { en: "Home", de: "Startseite" },
         },
-        { href: "/media", label: "ln.search.title" },
+        { href: "/media", label: { en: "Search", de: "Suche" } },
       ],
-      experimental: {
-        admin: {
-          enabled: true,
-        },
-      },
     }),
   ],
 })

@@ -1,5 +1,17 @@
 ---
-import Icon from "../../../components/Icon"
+import {
+  ChevronRightIcon,
+  CodeIcon,
+  DownloadIcon,
+  ImageIcon,
+  LinkIcon,
+  type LucideIcon,
+  MusicIcon,
+  PackageIcon,
+  TextIcon,
+  VideoIcon,
+} from "lucide-react"
+
 import { getMediaItem } from "../../../content/get-media-items"
 import {
   createContentMetadata,
@@ -18,19 +30,23 @@ const item = await getMediaItem(mediaId)
 if (item.data.content.length < minimumItems) {
   return
 }
+const { t, tMap, direction } = Astro.locals.i18n
 
-const content = item.data.content.map((c) => createContentMetadata(c))
-const typeIcons: { [k in UrlType]: string } = {
-  audio: "mdi--music",
-  text: "mdi--text",
-  source: "mdi--code-tags",
-  link: "mdi--link-variant",
-  image: "mdi--image-outline",
-  video: "mdi--video-outline",
-  package: "mdi--zip-box-outline",
+const content = item.data.content.map((contentItem, index) =>
+  createContentMetadata(contentItem, tMap, {
+    path: ["media-items", mediaId, "content", index],
+  }),
+)
+const typeIcons: Record<UrlType, LucideIcon> = {
+  audio: MusicIcon,
+  text: TextIcon,
+  source: CodeIcon,
+  link: LinkIcon,
+  image: ImageIcon,
+  video: VideoIcon,
+  package: PackageIcon,
 } as const
-
-const { t, direction } = Astro.locals.i18n
+const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <ol
@@ -38,39 +54,46 @@ const { t, direction } = Astro.locals.i18n
 >
   {
     content.map(
-      ({ extension, label, type, canBeOpened, url, target }, index) => (
-        <li class="group -mt-px px-4 transition-colors ease-in-out hover:bg-gray-300 md:px-8">
-          <a
-            href={url}
-            target={target}
-            class="flex items-center justify-between py-8"
-          >
-            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-800">
-              <Icon
-                className={`${typeIcons[type]} text-gray-200`}
-                ariaLabel=""
-              />
-            </span>
+      ({ extension, labelText, type, canBeOpened, url, target }, index) => {
+        const TypeIcon = typeIcons[type]
 
-            <div class="ms-4 line-clamp-1 shrink grow overflow-hidden sm:ms-8">
-              {t(label)}
-            </div>
-            <div class="me-4 ms-2 shrink-0 font-bold uppercase text-gray-600 sm:me-8">
-              {extension}
-            </div>
-            <Icon
-              className={`${canBeOpened ? "mdi--chevron-right" : "mdi--download"} shrink-0 bg-gray-600 group-hover:bg-gray-800`}
-              ariaLabel={
-                canBeOpened ? t("ln.details.open") : t("ln.details.download")
-              }
-              flipIcon={direction === "rtl"}
-            />
-          </a>
-          {index !== content.length - 1 && (
-            <div class="h-px w-full bg-gray-300" />
-          )}
-        </li>
-      ),
+        return (
+          <li class="group -mt-px px-4 transition-colors ease-in-out hover:bg-gray-300 md:px-8">
+            <a
+              href={url}
+              target={target}
+              class="flex items-center justify-between py-8"
+            >
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200">
+                <TypeIcon size="1.2rem" />
+              </span>
+
+              <div class="ms-4 line-clamp-1 shrink grow overflow-hidden sm:ms-8">
+                {labelText}
+              </div>
+              <div class="me-4 ms-2 shrink-0 font-bold uppercase text-gray-600 sm:me-8">
+                {extension}
+              </div>
+              {canBeOpened ? (
+                <>
+                  <ChevronRightIcon
+                    className={`shrink-0 text-gray-600 group-hover:text-gray-800 ${iconDirectionClass}`}
+                  />
+                  <span class="sr-only">{t("ln.details.open")}</span>
+                </>
+              ) : (
+                <>
+                  <DownloadIcon className="shrink-0 text-gray-600 group-hover:text-gray-800" />
+                  <span class="sr-only">{t("ln.details.download")}</span>
+                </>
+              )}
+            </a>
+            {index !== content.length - 1 && (
+              <div class="h-px w-full bg-gray-300" />
+            )}
+          </li>
+        )
+      },
     )
   }
 </ol>

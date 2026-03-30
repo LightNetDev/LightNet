@@ -25,20 +25,20 @@ jobs:
       pull-requests: write
     name: Publish preview release
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Publish packages
         run: |
-          pnpm dlx pkg-pr-new publish --pnpm --no-template 'packages/lightnet' 'packages/decap-admin'
+          pnpm dlx pkg-pr-new publish --pnpm --no-template 'packages/lightnet' 'packages/sveltia-admin'

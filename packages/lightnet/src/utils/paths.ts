@@ -1,4 +1,39 @@
 /**
+ * Prefix a site-internal path with Astro's configured base path.
+ *
+ * This helper trims any trailing slash from `BASE_URL`, ensures the input
+ * path starts with a leading slash, and concatenates the two values.
+ * Absolute URLs are out of scope for this helper.
+ *
+ * @param path internal path such as "/en/media", "/api/internal/search.json", or "/"
+ * @returns base-aware internal path
+ */
+export function pathWithBase(path: string) {
+  const normalizedBase = import.meta.env.BASE_URL.replace(/\/+$/, "")
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`
+  return `${normalizedBase}${normalizedPath}`
+}
+
+/**
+ * Remove Astro's configured base path from a pathname when present.
+ *
+ * @param pathname pathname such as "/docs/en/media" or "/en/media"
+ * @param base Astro base path. Defaults to `import.meta.env.BASE_URL`.
+ * @returns pathname without the base prefix
+ */
+export function pathWithoutBase(
+  pathname: string,
+  base = import.meta.env.BASE_URL,
+) {
+  const normalizedBase = base !== "/" ? base.replace(/\/+$/, "") : ""
+
+  return normalizedBase &&
+    (pathname === normalizedBase || pathname.startsWith(`${normalizedBase}/`))
+    ? pathname.slice(normalizedBase.length) || "/"
+    : pathname
+}
+
+/**
  * Build path to media item page.
  *
  * @param language current locale
@@ -9,7 +44,7 @@ export function detailsPagePath(
   locale: string | undefined,
   { id }: { id: string },
 ) {
-  return `/${locale}/media/${id}`
+  return pathWithBase(`/${locale}/media/${id}`)
 }
 
 /**
@@ -42,7 +77,7 @@ export function searchPagePath(
     searchParams.append("type", filter.type)
   }
   const query = searchParams.size ? `?${searchParams.toString()}` : ""
-  return `/${locale}/media${query}`
+  return pathWithBase(`/${locale}/media${query}`)
 }
 
 /**
@@ -56,5 +91,7 @@ export function searchPagePath(
  * @returns resolved path. Eg. '/en/about' for input "en" and "/about"
  */
 export function localizePath(locale: string | undefined, path: string) {
-  return `${locale ? `/${locale}` : ""}/${path.replace(/^\//, "")}`
+  return pathWithBase(
+    `${locale ? `/${locale}` : ""}/${path.replace(/^\//, "")}`,
+  )
 }

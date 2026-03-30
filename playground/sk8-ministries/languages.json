@@ -1,0 +1,17 @@
+[
+  {
+    "code": "en",
+    "label": { "en": "English", "de": "English", "ar": "English" },
+    "isDefaultSiteLanguage": true
+  },
+  {
+    "code": "de",
+    "label": { "en": "Deutsch", "de": "Deutsch", "ar": "Deutsch" },
+    "isSiteLanguage": true
+  },
+  {
+    "code": "ar",
+    "label": { "en": "العربية", "de": "العربية", "ar": "العربية" },
+    "isSiteLanguage": true
+  }
+]

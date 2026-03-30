@@ -1,6 +1,0 @@
-src/env.d.ts
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/

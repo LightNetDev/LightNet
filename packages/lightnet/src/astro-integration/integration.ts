@@ -1,12 +1,11 @@
 /// <reference path="../i18n/locals.d.ts" />
 import react from "@astrojs/react"
-import tailwind from "@astrojs/tailwind"
 import type { AstroIntegration } from "astro"
+import { AstroError } from "astro/errors"
 
-import { resolveDefaultLocale } from "../i18n/resolve-default-locale"
-import { resolveLocales } from "../i18n/resolve-locales"
 import { verifySchema } from "../utils/verify-schema"
-import { configSchema, type LightnetConfig } from "./config"
+import { extendedConfigSchema, type LightnetConfig } from "./config"
+import tailwind from "./tailwind"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
 
 export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
@@ -20,11 +19,18 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         logger,
         addMiddleware,
       }) => {
+        if (!astroConfig.site) {
+          throw new AstroError(
+            "Invalid LightNet configuration",
+            "Set `site` in your Astro config. LightNet requires Astro `site` to be configured.",
+          )
+        }
+
         const config = verifySchema(
-          configSchema,
+          extendedConfigSchema,
           lightnetConfig,
           "Invalid LightNet configuration",
-          "Fix these errors on the LightNet configuration inside astro.config.mjs:",
+          "Fix these errors on the LightNet configuration:",
         )
 
         injectRoute({
@@ -65,27 +71,10 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
 
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
-        astroConfig.integrations.push(
-          tailwind({ applyBaseStyles: false }),
-          react(),
-        )
-
         updateConfig({
+          integrations: [tailwind(), react()],
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
-          },
-          i18n: {
-            defaultLocale: resolveDefaultLocale(config),
-            locales: resolveLocales(config),
-            routing: {
-              redirectToDefaultLocale: false,
-              // We need to set this to false to allow for
-              // admin paths without locale. But actually
-              // the default locale will be prefixed for regular
-              // LightNet pages.
-              prefixDefaultLocale: false,
-              fallbackType: "rewrite",
-            },
           },
         })
       },

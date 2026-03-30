@@ -1,11 +1,13 @@
 ---
-import Icon from "./Icon"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+
 import Section, { type Props as SectionProps } from "./Section.astro"
 
 type Props = SectionProps
 
 const { titleClass = "", ...props } = Astro.props
 const { t, direction } = Astro.locals.i18n
+const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <Section {...props} titleClass={"!mb-8 sm:!-mb-1 " + titleClass}>
@@ -15,22 +17,16 @@ const { t, direction } = Astro.locals.i18n
         data-button-prev
         aria-label={t("ln.previous")}
         class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
-        ><Icon
-          className="mdi--chevron-left"
-          ariaLabel=""
-          flipIcon={direction === "rtl"}
-        /></button
       >
+        <ChevronLeftIcon className={iconDirectionClass} />
+      </button>
       <button
         data-button-next
         aria-label={t("ln.next")}
         class="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200 text-gray-600 transition-colors ease-in-out hover:border-gray-400 disabled:bg-transparent disabled:text-gray-300 disabled:hover:border-gray-200"
-        ><Icon
-          className="mdi--chevron-right"
-          ariaLabel=""
-          flipIcon={direction === "rtl"}
-        /></button
       >
+        <ChevronRightIcon className={iconDirectionClass} />
+      </button>
     </div>
 
     <div data-carousel class="-m-4 overflow-hidden p-4">

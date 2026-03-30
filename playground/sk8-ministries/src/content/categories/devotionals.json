@@ -1,4 +1,8 @@
 {
-  "label": "x.category.devotionals",
-  "image": "../../assets/sample-images/2.webp"
+  "label": {
+    "en": "Devotionals",
+    "de": "Andachtsbücher",
+    "ar": "كتب التأملات الروحية"
+  },
+  "image": "images/2.webp"
 }

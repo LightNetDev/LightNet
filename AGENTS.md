@@ -8,7 +8,7 @@ Primary use: feature development and bug fixes.
 - `.changeset/`: changeset release descriptions.
 - `packages/lightnet/`: core Astro integration, UI, content models, and i18n.
 - `packages/cli/`: command-line tooling.
-- `packages/decap-admin/`: deprecated Decap CMS integration. New experimental Admin UI lives in `packages/lightnet/admin`
+- `packages/sveltia-admin/`: Sveltia CMS based admin interface.
 - `playground/`: example sites (useful for manual testing).
 
 ## Default scope
@@ -16,7 +16,6 @@ Primary use: feature development and bug fixes.
 - UI work: start in `packages/lightnet/` (components, layouts, pages).
 - Content models and i18n: start in `packages/lightnet/src/content/` and `packages/lightnet/src/i18n/`.
 - CLI features or fixes: start in `packages/cli/`.
-- Admin work: start in `packages/lightnet/admin/`.
 
 ## Stack
 
@@ -56,6 +55,7 @@ Primary use: feature development and bug fixes.
 ## Changesets
 
 - Add a `.changeset/*.md` for changes that affect published packages.
+- For major updates include instructions on how to update sites that depend on the published package.
 - No changeset needed for playground-only changes.
 
 ## Commands
@@ -64,10 +64,31 @@ Primary use: feature development and bug fixes.
 - `pnpm build`
 - `pnpm typecheck`
 - `pnpm fmt` (run lint and prettier with auto-fix)
-- `pnpm test` or `pnpm e2e` (packages/lightnet)
+- `pnpm test` (unit tests for `packages/lightnet` and `packages/sveltia-admin`)
+- `pnpm e2e` (end-to-end tests for `packages/lightnet`)
+
+## Sveltia admin E2E
+
+- Sveltia admin Playwright tests live in `packages/sveltia-admin/__e2e__/`.
+- Regression coverage for `packages/sveltia-admin/__e2e__/` must stay inside the existing LightNet-backed fixtures (`admin-test-repo` and `admin-local-repo`) unless the user explicitly asks for a separate repro app or fixture site.
+- Do not create standalone Astro repro projects, ad hoc admin apps, or extra fixture sites just to reproduce Sveltia admin bugs. Prefer extending the existing LightNet-backed fixtures and package-owned collection coverage.
+- The `test-repo` backend does not auto-populate fixture files. The E2E harness must seed OPFS directory `sveltia-cms-test` from the existing `admin-test-repo` fixture before using `enterTestRepository()`.
+- When adding or changing seeded Sveltia test data, update the E2E seeding manifest/helper so new `src/content/**`, content-adjacent assets, and other repo-backed files such as `languages.json` are copied into OPFS.
+- Do not rely on persisted browser storage to make `test-repo` tests pass. Test-repo setup should be deterministic and recreated by the harness for each test session.
+- The page-object pattern for Sveltia admin tests should stay thin and generic.
+- Page objects should abstract Sveltia CMS UI mechanics only: collections, entries, editors, and field/widget interactions.
+- Do not add LightNet domain language to the page-object API. Avoid methods like `createMediaItem`, `createCategory`, `selectLanguage`, or `addLinkContent`.
+- Prefer generic flows such as `enterTestRepository`, `openCollection`, `createEntry`, `openEditor`, `save`, and `cancel`.
+- Put LightNet-specific test intent in the specs or test-local helper functions, not in the page-object classes.
+- Prefer label-based field accessors in tests, for example `getStringFieldByLabel("Slug")`.
+- Use key-path-based field accessors only when needed for nested or repeated Sveltia fields where labels are ambiguous, such as list items or inline translation objects.
+- Keep widget wrappers generic and named after Sveltia interaction types: string fields, relation fields, combobox fields, list fields, typed object fields, and file fields.
+- If you add new page-object helpers, name them after UI behavior, not content-domain meaning.
 
 ## Verification
 
 - Always run `pnpm fmt` for every task that changes code or styles.
-- Only run tests when you are told to do so.
-- If `pnpm fmt` or tests are not run, say so and why.
+- Always run `pnpm typecheck` for every task that changes code or types.
+- Always run unit tests with `pnpm test` (this validates both `packages/lightnet` and `packages/sveltia-admin`).
+- Only run end to end tests `pnpm e2e` when you are told to do so.
+- If `pnpm fmt`, `pnpm typecheck`, or tests are not run, say so and why.

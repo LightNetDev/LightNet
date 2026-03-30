@@ -29,3 +29,8 @@ pnpm-debug.log*
 # Visual Studio Code
 *.code-workspace
 
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

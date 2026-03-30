@@ -9,8 +9,6 @@ import CoverImageDecorator from "./CoverImageDecorator"
 import Icon from "./Icon"
 import Section, { type Props as SectionProps } from "./Section.astro"
 
-type ItemStyle = "book" | "video" | "portrait" | "landscape"
-
 type MediaItem = {
   id: string
   data: {
@@ -22,23 +20,28 @@ type MediaItem = {
 
 type Props = Omit<SectionProps, "maxWidth"> & {
   items: (MediaItem | undefined)[]
-  layout: ItemStyle
-  viewLayout?: "grid" | "carousel"
+  itemWidth?: "infer" | "narrow" | "wide"
+  layout?: "grid" | "carousel"
 }
 
 const {
   items: itemsInput,
-  layout: itemStyle,
-  viewLayout = "grid",
+  itemWidth = "infer",
+  layout = "carousel",
   ...sectionProps
 } = Astro.props
 
-const t = Astro.locals.i18n.t
+const { currentLocale, tMap } = Astro.locals.i18n
 
 const types = Object.fromEntries(
   (await getMediaTypes()).map((type) => [
     type.id,
-    { ...type.data, labelText: t(type.data.label) },
+    {
+      ...type.data,
+      labelText: tMap(type.data.label, {
+        path: ["media-types", type.id, "label"],
+      }),
+    },
   ]),
 )
 
@@ -46,14 +49,26 @@ const types = Object.fromEntries(
 // this is in the return type of getEntry
 const items = itemsInput.filter((item) => !!item)
 
-const itemWidth = (
-  {
-    book: "narrow",
-    portrait: "narrow",
-    video: "wide",
-    landscape: "wide",
-  } as const
-)[itemStyle]
+const { landscapeCount, portraitCount } = items.slice(0, 10).reduce(
+  (acc, item) => {
+    const { width, height } = item.data.image
+    if (width > height) {
+      acc.landscapeCount += 1
+    }
+    if (height > width) {
+      acc.portraitCount += 1
+    }
+    return acc
+  },
+  { landscapeCount: 0, portraitCount: 0 },
+)
+
+const resolvedItemWidth =
+  itemWidth === "infer"
+    ? landscapeCount > portraitCount
+      ? "wide"
+      : "narrow"
+    : itemWidth
 
 const imageSizes = {
   narrow:
@@ -84,23 +99,68 @@ const gridLayouts = {
   narrow: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
   wide: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
 } as const
-
-const coverImageStyle =
-  (["book", "video"] as const).find((style) => itemStyle === style) ?? "default"
 ---
 
 {
-  viewLayout === "grid" && (
+  layout === "grid" && (
     <Section {...sectionProps}>
       <ol
         class="grid items-end justify-between gap-4 md:gap-8"
-        class:list={gridLayouts[itemWidth]}
+        class:list={gridLayouts[resolvedItemWidth]}
       >
-        {items.map((item) => (
-          <li>
+        {items.map((item) => {
+          const coverImageStyle = types[item.data.type.id].coverImageStyle
+          return (
+            <li>
+              <a
+                href={detailsPagePath(currentLocale, item)}
+                class="group flex flex-col gap-3"
+              >
+                <CoverImageDecorator
+                  style={coverImageStyle}
+                  className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+                >
+                  <Image
+                    class="h-full w-full object-cover"
+                    class:list={[
+                      coverImageStyle === "video" && "absolute top-0",
+                    ]}
+                    src={item.data.image}
+                    alt=""
+                    widths={[128, 256, 512, 768]}
+                    sizes={imageSizes[resolvedItemWidth]}
+                  />
+                </CoverImageDecorator>
+
+                <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
+                  <Icon
+                    className={`${types[item.data.type.id].icon} me-2 align-bottom`}
+                    ariaLabel={types[item.data.type.id].labelText}
+                  />
+                  {item.data.title}
+                </span>
+              </a>
+            </li>
+          )
+        })}
+      </ol>
+    </Section>
+  )
+}
+{
+  layout === "carousel" && (
+    <CarouselSection {...sectionProps}>
+      {items.map((item) => {
+        const coverImageStyle = types[item.data.type.id].coverImageStyle
+        return (
+          <li
+            class={`carousel-item--${resolvedItemWidth} h-full`}
+            role="group"
+            aria-roledescription="slide"
+          >
             <a
-              href={detailsPagePath(Astro.currentLocale, item)}
-              class="group flex flex-col gap-3"
+              href={detailsPagePath(currentLocale, item)}
+              class="group flex h-full flex-col justify-end gap-3"
             >
               <CoverImageDecorator
                 style={coverImageStyle}
@@ -108,11 +168,10 @@ const coverImageStyle =
               >
                 <Image
                   class="h-full w-full object-cover"
-                  class:list={[itemStyle === "video" && "absolute top-0"]}
                   src={item.data.image}
                   alt=""
                   widths={[128, 256, 512, 768]}
-                  sizes={imageSizes[itemWidth]}
+                  sizes={imageSizes[resolvedItemWidth]}
                 />
               </CoverImageDecorator>
 
@@ -125,47 +184,8 @@ const coverImageStyle =
               </span>
             </a>
           </li>
-        ))}
-      </ol>
-    </Section>
-  )
-}
-{
-  viewLayout === "carousel" && (
-    <CarouselSection {...sectionProps}>
-      {items.map((item) => (
-        <li
-          class={`carousel-item--${itemWidth} h-full`}
-          role="group"
-          aria-roledescription="slide"
-        >
-          <a
-            href={detailsPagePath(Astro.currentLocale, item)}
-            class="group flex h-full flex-col justify-end gap-3"
-          >
-            <CoverImageDecorator
-              style={coverImageStyle}
-              className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
-            >
-              <Image
-                class="h-full w-full object-cover"
-                src={item.data.image}
-                alt=""
-                widths={[128, 256, 512, 768]}
-                sizes={imageSizes[itemWidth]}
-              />
-            </CoverImageDecorator>
-
-            <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
-              <Icon
-                className={`${types[item.data.type.id].icon} me-2 align-bottom`}
-                ariaLabel={types[item.data.type.id].labelText}
-              />
-              {item.data.title}
-            </span>
-          </a>
-        </li>
-      ))}
+        )
+      })}
     </CarouselSection>
   )
 }

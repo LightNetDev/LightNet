@@ -1,15 +1,17 @@
 ---
-import Icon from "./Icon"
+import { SearchIcon } from "lucide-react"
+
+import { searchPagePath } from "../utils/paths"
 
 type Props = {
   className?: string
 }
 
-const { t } = Astro.locals.i18n
+const { t, currentLocale } = Astro.locals.i18n
 ---
 
 <form
-  action={`/${Astro.currentLocale}/media`}
+  action={searchPagePath(currentLocale)}
   method="get"
   role="search"
   class="group flex w-full rounded-2xl shadow-sm outline outline-2 outline-offset-2 outline-transparent transition-all ease-in-out group-focus-within:outline-gray-400"
@@ -24,8 +26,9 @@ const { t } = Astro.locals.i18n
   />
   <button
     type="submit"
+    aria-label={t("ln.search.title")}
     class="flex items-center rounded-e-2xl border border-gray-100/95 bg-gray-800 px-4 py-3 text-gray-50 hover:bg-gray-950 hover:text-gray-300"
   >
-    <Icon className="mdi--magnify" ariaLabel={t("ln.search.title")} />
+    <SearchIcon />
   </button>
 </form>

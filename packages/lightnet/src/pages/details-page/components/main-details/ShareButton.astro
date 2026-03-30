@@ -1,5 +1,6 @@
 ---
-import Icon from "../../../../components/Icon"
+import { ForwardIcon } from "lucide-react"
+
 import Toast from "../../../../components/Toast"
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
   class="flex cursor-pointer items-center gap-2 font-bold text-gray-700 underline"
   class:list={[Astro.props.className]}
   id="share-btn"
-  ><Icon className="mdi--share" ariaLabel="" />
+  ><ForwardIcon />
   {Astro.locals.i18n.t("ln.details.share")}</button
 >
 <Toast id="share-success" variant="success">

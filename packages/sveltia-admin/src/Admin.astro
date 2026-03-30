@@ -1,0 +1,25 @@
+---
+import config from "virtual:lightnet/sveltiaAdminConfig"
+
+import { pathWithBase } from "./utils/paths"
+---
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>LightNet Administration</title>
+    <link
+      href={pathWithBase(`/${config.path}/config.json`)}
+      type="application/json"
+      rel="cms-config-url"
+    />
+  </head>
+  <body>
+    <script>
+      import { init } from "@sveltia/cms"
+      init({})
+    </script>
+  </body>
+</html>

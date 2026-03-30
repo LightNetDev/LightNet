@@ -1,16 +1,11 @@
 declare module "virtual:lightnet/config" {
-  const config: import("./config").PreparedLightnetConfig
+  const config: import("./config").ExtendedLightnetConfig
   export default config
 }
 
 declare module "virtual:lightnet/logo" {
   const logo: ImageMetadata | undefined = import("astro").ImageMetadata
   export default logo
-}
-
-declare module "virtual:lightnet/project-context" {
-  const context: import("./project-context").ProjectContext
-  export default context
 }
 
 declare module "virtual:lightnet/components/CustomHead" {
@@ -21,4 +16,11 @@ declare module "virtual:lightnet/components/CustomHead" {
 declare module "virtual:lightnet/components/CustomFooter" {
   const CustomFooter: ((props: Record<string, any>) => any) | undefined
   export default CustomFooter
+}
+
+declare module "virtual:lightnet/components/media-item-edit-button-controller" {
+  const mediaItemEditButtonController:
+    | { shouldShow: () => boolean; createHref: (mediaId: string) => string }
+    | undefined
+  export default mediaItemEditButtonController
 }

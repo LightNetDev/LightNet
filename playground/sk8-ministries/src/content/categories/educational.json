@@ -1,4 +1,8 @@
 {
-  "label": "x.category.educational",
-  "image": "../../assets/sample-images/3.webp"
+  "label": {
+    "en": "Educational",
+    "de": "Schulung",
+    "ar": "تعليمية"
+  },
+  "image": "images/3.webp"
 }

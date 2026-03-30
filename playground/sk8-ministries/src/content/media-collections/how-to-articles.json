@@ -1,3 +1,13 @@
 {
-  "label": "Guides to Living Your Faith"
+  "label": {
+    "en": "Guides to Living Your Faith"
+  },
+  "mediaItems": [
+    "ride-the-ramp-of-faith--en",
+    "ollie-with-integrity--en",
+    "faithful-freestyle--en",
+    "pray-and-push--en",
+    "roll-righteously--en",
+    "shred-and-serve--en"
+  ]
 }

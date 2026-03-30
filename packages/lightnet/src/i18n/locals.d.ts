@@ -16,10 +16,28 @@ type I18n = {
   t: import("./translate").TranslateFn
 
   /**
-   *  The current locale or the default locale if the current locale is not available.
+   * Resolve a translation map to the language of the current locale.
    *
-   *  In comparison to Astro.currentLocale this will always return a locale.
-   *  Use Astro.currentLocale if you want to know the locale that is included in the current path.
+   * Use this for inline translation maps, such as labels from config or content entries.
+   *
+   * @param translationMap Localized values keyed by locale code.
+   * @param context Describes where the map came from. Pass the original
+   * field path so missing-translation messages can point to the exact config
+   * or content field that needs a value, for example `["config", "title"]`
+   * or `["content", 0, "label"]`.
+   *
+   * @example
+   * Astro.locals.i18n.tMap(config.title, {
+   *   path: ["config", "title"],
+   * })
+   */
+  tMap: import("./translate-map").TranslateMapFn
+
+  /**
+   *  The current locale resolved by LightNet from the URL pathname.
+   *
+   *  If no supported locale is present in the pathname,
+   *  this falls back to the configured default locale.
    */
   currentLocale: string
 

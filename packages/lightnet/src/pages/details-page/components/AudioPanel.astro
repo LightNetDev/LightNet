@@ -9,11 +9,15 @@ interface Props {
 }
 
 const { mediaId, className } = Astro.props
-const { t } = Astro.locals.i18n
+const { tMap } = Astro.locals.i18n
 
 const item = await getMediaItem(mediaId)
 
-const content = item.data.content.map((c) => createContentMetadata(c))
+const content = item.data.content.map((contentItem, index) =>
+  createContentMetadata(contentItem, tMap, {
+    path: ["media-items", mediaId, "content", index],
+  }),
+)
 ---
 
 <ol
@@ -24,7 +28,7 @@ const content = item.data.content.map((c) => createContentMetadata(c))
   {
     content.map((c) => (
       <li>
-        {content.length > 1 && <div class="mb-3 font-bold">{t(c.label)}</div>}
+        {content.length > 1 && <div class="mb-3 font-bold">{c.labelText}</div>}
         <AudioPlayer className="w-full" src={c.url} />
       </li>
     ))

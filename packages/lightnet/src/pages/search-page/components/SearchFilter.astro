@@ -2,35 +2,26 @@
 import config from "virtual:lightnet/config"
 
 import { getUsedCategories } from "../../../content/get-categories"
-import { contentLanguages } from "../../../content/get-languages"
-import { getMediaTypes } from "../../../content/get-media-types"
+import { getUsedLanguages } from "../../../content/get-languages"
+import { getUsedMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchFilterReact from "./SearchFilter.tsx"
 
-const { t, currentLocale } = Astro.locals.i18n
+const { currentLocale, tMap } = Astro.locals.i18n
 
-const sortByLabelText = (array: { id: string; labelText: string }[]) =>
-  array.sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
-
-const categories = (await getUsedCategories(currentLocale, t)).map(
+const categories = (await getUsedCategories(currentLocale, tMap)).map(
   ({ id, labelText }) => ({ id, labelText }),
 )
 
-const mediaTypes = sortByLabelText(
-  (await getMediaTypes()).map((type) => ({
-    id: type.id,
-    labelText: t(type.data.label),
-  })),
+const mediaTypes = (await getUsedMediaTypes(currentLocale, tMap)).map(
+  ({ id, labelText }) => ({ id, labelText }),
 )
 
-const languages = sortByLabelText(
-  contentLanguages.map((language) => ({
-    id: language.code,
-    labelText: t(language.label),
-  })),
+const languages = (await getUsedLanguages(currentLocale, tMap)).map(
+  ({ code: id, labelText }) => ({ id, labelText }),
 )
 
-const languageFilterEnabled = contentLanguages.length > 1
+const languageFilterEnabled = languages.length > 1
 const typesFilterEnabled = mediaTypes.length > 1
 // Not every media item has a category. So it makes
 // sense to have the filter when there is only one category.
@@ -38,9 +29,7 @@ const categoriesFilterEnabled = categories.length > 0
 
 const filterByLocale = !!config.searchPage?.filterByLocale
 let initialLanguageFilter: string | undefined = undefined
-const hasContentLanguage = contentLanguages.find(
-  ({ code }) => code === currentLocale,
-)
+const hasContentLanguage = languages.find(({ id }) => id === currentLocale)
 if (
   filterByLocale &&
   currentLocale &&

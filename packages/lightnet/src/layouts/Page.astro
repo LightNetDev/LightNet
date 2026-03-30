@@ -6,6 +6,7 @@ import CustomHead from "virtual:lightnet/components/CustomHead"
 import config from "virtual:lightnet/config"
 
 import { resolveLanguage } from "../i18n/resolve-language"
+import { pathWithBase } from "../utils/paths"
 import Favicon from "./components/Favicon.astro"
 import Footer from "./components/Footer.astro"
 import Header from "./components/Header.astro"
@@ -19,9 +20,10 @@ interface Props {
 }
 
 const { title, description, mainClass, locale } = Astro.props
-const configTitle = Astro.locals.i18n.t(config.title)
-
 const currentLocale = locale ?? Astro.locals.i18n.currentLocale
+const configTitle = Astro.locals.i18n.tMap(config.title, {
+  path: ["config", "title"],
+})
 const { direction } = resolveLanguage(currentLocale)
 ---
 
@@ -34,7 +36,7 @@ const { direction } = resolveLanguage(currentLocale)
     <title>{title ? `${title} | ${configTitle}` : configTitle}</title>
     {description && <meta name="description" content={description} />}
     {config.manifest && <link rel="manifest" href={config.manifest} />}
-    <link rel="prefetch" href="/api/internal/search.json" />
+    <link rel="prefetch" href={pathWithBase("/api/internal/search.json")} />
     <Favicon />
     <ViewTransition />
   </head>

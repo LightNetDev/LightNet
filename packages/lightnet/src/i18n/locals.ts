@@ -1,23 +1,30 @@
 import type { MiddlewareHandler } from "astro"
 import config from "virtual:lightnet/config"
 
-import { resolveDefaultLocale } from "./resolve-default-locale"
+import { resolveCurrentLocaleFromPathname } from "./resolve-current-locale"
 import { resolveLanguage } from "./resolve-language"
-import { resolveLocales } from "./resolve-locales"
-import { translationKeys, useTranslate } from "./translate"
+import { getTranslationKeys, useTranslate } from "./translate"
+import { useTranslateMap } from "./translate-map"
 
-export const onRequest: MiddlewareHandler = (
-  { locals, currentLocale: astroCurrentLocale },
-  next,
-) => {
+export const onRequest: MiddlewareHandler = async ({ locals, url }, next) => {
   if (!locals.i18n) {
-    const t = useTranslate(astroCurrentLocale)
-    const defaultLocale = resolveDefaultLocale(config)
-    const locales = resolveLocales(config)
-    const currentLocale = astroCurrentLocale ?? defaultLocale
+    const defaultLocale = config.defaultLocale
+    const locales = config.locales
+    const currentLocale = resolveCurrentLocaleFromPathname({
+      pathname: url.pathname,
+      base: import.meta.env.BASE_URL,
+      locales,
+      defaultLocale,
+    })
+    const [t, translationKeys] = await Promise.all([
+      useTranslate(currentLocale),
+      getTranslationKeys(),
+    ])
+    const tMap = useTranslateMap(currentLocale)
     const { direction } = resolveLanguage(currentLocale)
     locals.i18n = {
       t,
+      tMap,
       currentLocale,
       defaultLocale,
       direction,

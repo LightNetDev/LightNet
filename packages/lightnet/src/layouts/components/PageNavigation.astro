@@ -1,7 +1,7 @@
 ---
+import { ExternalLinkIcon, MenuIcon, SearchIcon } from "lucide-react"
 import config from "virtual:lightnet/config"
 
-import Icon from "../../components/Icon"
 import { localizePath, searchPagePath } from "../../utils/paths"
 import { isExternalUrl } from "../../utils/urls"
 import LanguagePicker from "./LanguagePicker.astro"
@@ -9,26 +9,28 @@ import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
 const currentPath = Astro.url.pathname
-const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
-  const isExternal = isExternalUrl(href)
-  const path =
-    isExternal || !requiresLocale
-      ? href
-      : localizePath(Astro.currentLocale, href)
-  const isActive =
-    !isExternal &&
-    (currentPath === localizePath(Astro.currentLocale, href) ||
-      currentPath === localizePath(Astro.currentLocale, `${href}/`) ||
-      currentPath === href)
-  return {
-    path,
-    isExternal,
-    label,
-    isActive,
-  }
-})
+const { t, tMap, currentLocale } = Astro.locals.i18n
 
-const t = Astro.locals.i18n.t
+const items = (config.mainMenu ?? []).map(
+  ({ href, label, requiresLocale }, index) => {
+    const isExternal = isExternalUrl(href)
+    const path =
+      isExternal || !requiresLocale ? href : localizePath(currentLocale, href)
+    const isActive =
+      !isExternal &&
+      (currentPath === localizePath(currentLocale, href) ||
+        currentPath === localizePath(currentLocale, `${href}/`) ||
+        currentPath === href)
+    return {
+      path,
+      isExternal,
+      labelText: tMap(label, {
+        path: ["config", "mainMenu", index, "label"],
+      }),
+      isActive,
+    }
+  },
+)
 ---
 
 <nav class="-me-3 flex items-center">
@@ -38,9 +40,9 @@ const t = Astro.locals.i18n.t
         class="flex p-3 text-gray-600 hover:text-primary"
         aria-label={t("ln.search.title")}
         data-astro-prefetch="viewport"
-        href={searchPagePath(Astro.currentLocale)}
+        href={searchPagePath(currentLocale)}
       >
-        <Icon className="mdi--magnify" ariaLabel="" />
+        <SearchIcon />
       </a>
     )
   }
@@ -49,19 +51,17 @@ const t = Astro.locals.i18n.t
 
   {
     !!items.length && (
-      <Menu icon="mdi--menu" label="ln.header.open-main-menu">
-        {items.map(({ label, path, isActive, isExternal }) => (
+      <Menu label="ln.header.open-main-menu">
+        <MenuIcon slot="icon" />
+        {items.map(({ labelText, path, isActive, isExternal }) => (
           <MenuItem
             href={path}
             active={isActive}
             target={isExternal ? "_blank" : "_self"}
           >
-            {t(label)}
+            {labelText}
             {isExternal && (
-              <Icon
-                className="mdi--external-link shrink-0 text-base"
-                ariaLabel=""
-              />
+              <ExternalLinkIcon size="1.2rem" className="shrink-0" />
             )}
           </MenuItem>
         ))}

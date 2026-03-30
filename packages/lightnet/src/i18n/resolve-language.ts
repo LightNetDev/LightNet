@@ -2,10 +2,10 @@ import { AstroError } from "astro/errors"
 import i18next from "i18next"
 import config from "virtual:lightnet/config"
 
-import type { TranslateFn } from "./translate"
+import type { TranslateMapFn } from "./translate-map"
 
 const languages = Object.fromEntries(
-  config.languages.map((lang) => [lang.code, lang]),
+  config.languages.map((language) => [language.code, language]),
 )
 
 export const resolveLanguage = (bcp47: string) => {
@@ -14,7 +14,7 @@ export const resolveLanguage = (bcp47: string) => {
   if (!language) {
     throw new AstroError(
       `Missing language code "${bcp47}"`,
-      `To fix the issue, add a language with the code "${bcp47}" to the LightNet configuration in your astro.config.mjs file.`,
+      `To fix the issue, add a language with the code "${bcp47}" to the LightNet configuration in your astro.config file.`,
     )
   }
   return {
@@ -23,10 +23,15 @@ export const resolveLanguage = (bcp47: string) => {
   }
 }
 
-export const resolveTranslatedLanguage = (bcp47: string, t: TranslateFn) => {
+export const resolveTranslatedLanguage = (
+  bcp47: string,
+  tMap: TranslateMapFn,
+) => {
   const language = resolveLanguage(bcp47)
   return {
     ...language,
-    labelText: t(language.label),
+    labelText: tMap(language.label, {
+      path: ["languages", bcp47, "label"],
+    }),
   }
 }

@@ -6,18 +6,31 @@ import { defineCollection, reference } from "astro:content"
 import { imageSchema } from "./astro-image"
 
 /**
+ * Translations by BCP-47 tag
+ * Must contain at least one localized value.
+ *
+ * @example
+ * {
+ *    de: "Hallo",
+ *    en: "Hello"
+ * }
+ */
+export const inlineTranslationSchema = z
+  .record(z.string(), z.string())
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "Inline translations must contain at least one entry",
+  })
+
+/**
  * Category Schema
  */
 export const categorySchema = z.object({
   /**
    * Name of the category.
    *
-   * This can either be a translation key or a string that will be displayed as is.
-   * LightNet will try to use it as translation key first if no translation is found it will use the string as is.
-   *
-   * @example "category.biography"
+   * Label translated for the default locale. Other configured site locales are optional.
    */
-  label: z.string(),
+  label: inlineTranslationSchema,
 
   /* Relative path to the thumbnail image of this category.
    *
@@ -37,10 +50,16 @@ export const mediaCollectionSchema = z.object({
   /**
    * Name of the collection.
    *
-   * This can either be a translation key or a string that will be displayed as is.
-   * LightNet will try to use it as translation key first if no translation is found it will use the string as is.
+   * Label translated for the default locale. Other configured site locales are optional.
    */
-  label: z.string(),
+  label: inlineTranslationSchema,
+  /**
+   * Ordered list of media items included in this collection.
+   * The array order defines how items are shown when querying by collection.
+   *
+   * @example ["my-book--en", "my-video--en"]
+   */
+  mediaItems: z.array(reference("media")),
 })
 
 /**
@@ -48,15 +67,16 @@ export const mediaCollectionSchema = z.object({
  */
 export const mediaItemSchema = z.object({
   /**
-   * Identifier of this media item. If other media items
-   * share the same commonId they will show up as translations.
+   * Optional identifier used to link translated variants of a media item.
+   * If other media items share the same commonId they will show up as translations.
+   * If omitted, the media item is treated as standalone and has no translations.
    * The common id will show up in the media item's url combined with it's language.
    *
    * We suggest you use the english name of the media item, all lower case, words separated with hyphens.
    *
    * @example "a-book-about-love"
    */
-  commonId: z.string(),
+  commonId: z.string().optional(),
   /**
    * Title of this media item.
    * This is expected to be in the language that is defined by the 'language' property.
@@ -89,7 +109,7 @@ export const mediaItemSchema = z.object({
    *
    * @example 2024-09-10
    */
-  dateCreated: z.string().date(),
+  dateCreated: z.iso.date(),
   /**
    * List of categories of this media item.
    *
@@ -97,31 +117,11 @@ export const mediaItemSchema = z.object({
    */
   categories: z.array(reference("categories")).nullish(),
   /**
-   * List of media collections this media item is included.
-   * Collections can be used to group media items into series, playlists...
-   *
-   * @example [{collection:"my-series"}]
-   */
-  collections: z
-    .array(
-      z.object({
-        /**
-         * Id of the collection.
-         */
-        collection: reference("media-collections"),
-        /**
-         * Position of the item inside the collection.
-         */
-        index: z.number().optional(),
-      }),
-    )
-    .nullish(),
-  /**
-   * BCP-47 name of the language this media item is in.
+   * BCP-47 language code of this media item.
    *
    * @example "en"
    */
-  language: z.string(),
+  language: z.string().nonempty(),
   /**
    * Relative path to the image of this media item. Eg. a book cover or video thumbnail.
    *
@@ -140,6 +140,15 @@ export const mediaItemSchema = z.object({
     .array(
       z.object({
         /**
+         * Storage kind for this content item.
+         *
+         * - `"upload"`: a file managed by this LightNet site (typically a relative path like `/files/...`)
+         * - `"link"`: an external URL (typically `https://...`)
+         *
+         * @example "upload"
+         */
+        type: z.enum(["upload", "link"]),
+        /**
          * Urls might be:
          * - links to youtube videos
          * - links to vimeo videos
@@ -153,10 +162,11 @@ export const mediaItemSchema = z.object({
          */
         url: z.string(),
         /**
-         * The name of the content. If this is not set. The file name
-         * from URL will be used. This can either be a fixed string or a translation key.
+         * The name of the content translated for the default locale.
+         * Other configured site locales are optional.
+         * If this is not set, the file name from URL will be used.
          */
-        label: z.string().optional(),
+        label: inlineTranslationSchema.optional(),
       }),
     )
     .min(1),
@@ -183,111 +193,81 @@ export const createCategorySchema = ({ image }: SchemaContext) =>
 /**
  * Media Type Schema
  */
-export const mediaTypeSchema = z
-  .object({
-    /**
-     * Name of this media type that will be shown on the pages.
-     *
-     * This can either be a fixed string or a translation key.
-     *
-     * @example "media-type.book"
-     */
-    label: z.string(),
-    /**
-     * Defines how the cover image for a media item of this type is rendered.
-     *
-     * Options:
-     * - `"default"` — Renders the media item image with no modifications.
-     * - `"book"` — Adds a book fold effect and sharper edges, styled like a book cover.
-     * - `"video"` — Constrains the image to a 16:9 aspect ratio with a black background.
-     *
-     * @default "default"
-     */
-    coverImageStyle: z.enum(["default", "book", "video"]).default("default"),
-    /**
-     * What media item details page to use for media items with this type.
-     *
-     */
-    detailsPage: z
-      .discriminatedUnion("layout", [
-        z.object({
-          /**
-           * Details page for all media types.
-           */
-          layout: z.literal("default"),
-          /**
-           * Label for the open action button. Use this if you want to change the text
-           * of the "Open" button to be more matching to your media item.
-           * For example you could change the text to be "Read" for a book media type.
-           *
-           * The label is a translation key.
-           *
-           * @example "ln.details.open"
-           */
-          openActionLabel: z.string().optional(),
-          /**
-           * (Deprecated) Specifies the style of the cover image.
-           *
-           * Use `coverImageStyle` instead. This option will be removed in a future major release.
-           *
-           * Supported values:
-           * - `"default"` — unmodified media item image
-           * - `"book"` — styled as a book cover (book fold, sharper edges)
-           *
-           * @example "book"
-           * @deprecated Use `coverImageStyle` instead
-           */
-          coverStyle: z.enum(["default", "book"]).default("default"),
-        }),
-        z.object({
-          /**
-           * Custom details page.
-           */
-          layout: z.literal("custom"),
-          /**
-           * This references a custom component name to be used for the
-           * details page. The custom component has be located at src/details-pages/
-           *
-           * @example "MyArticleDetails.astro"
-           */
-          customComponent: z.string(),
-        }),
-        z.object({
-          /**
-           * Detail page for videos.
-           */
-          layout: z.literal("video"),
-        }),
-        z.object({
-          /**
-           * Detail page for audio files.
-           *
-           * This only supports mp3 files.
-           */
-          layout: z.literal("audio"),
-        }),
-      ])
-      .optional(),
-    /**
-     * Pick the media type's icon from https://pictogrammers.com/library/mdi/
-     * Prefix it's name with "mdi--"
-     *
-     * @example "mdi--ab-testing"
-     */
-    icon: z.string(),
-  })
-  .transform((mediaType) => {
-    // migrate old cover images style to new property
-    const hasDeprecatedBookCover =
-      mediaType.detailsPage?.layout === "default" &&
-      mediaType.detailsPage.coverStyle === "book"
-    return {
-      ...mediaType,
-      coverImageStyle: hasDeprecatedBookCover
-        ? "book"
-        : mediaType.coverImageStyle,
-    }
-  })
+export const mediaTypeSchema = z.object({
+  /**
+   * Name of this media type that will be shown on the pages.
+   *
+   * Label translated for the default locale. Other configured site locales are optional.
+   */
+  label: inlineTranslationSchema,
+  /**
+   * Defines how the cover image for a media item of this type is rendered.
+   *
+   * Options:
+   * - `"default"` — Renders the media item image with no modifications.
+   * - `"book"` — Adds a book fold effect and sharper edges, styled like a book cover.
+   * - `"video"` — Constrains the image to a 16:9 aspect ratio with a black background.
+   *
+   * @default "default"
+   */
+  coverImageStyle: z.enum(["default", "book", "video"]).default("default"),
+  /**
+   * What media item details page to use for media items with this type.
+   *
+   */
+  detailsPage: z
+    .discriminatedUnion("layout", [
+      z.object({
+        /**
+         * Details page for all media types.
+         */
+        layout: z.literal("default"),
+        /**
+         * Label for the open action button. Use this if you want to change the text
+         * of the "Open" button to be more matching to your media item.
+         * For example you could change the text to be "Read" for a book media type.
+         *
+         * Label translated for the default locale. Other configured site locales are optional.
+         */
+        openActionLabel: inlineTranslationSchema.optional(),
+      }),
+      z.object({
+        /**
+         * Custom details page.
+         */
+        layout: z.literal("custom"),
+        /**
+         * This references a custom component name to be used for the
+         * details page. The custom component has be located at src/details-pages/
+         *
+         * @example "MyArticleDetails.astro"
+         */
+        customComponent: z.string(),
+      }),
+      z.object({
+        /**
+         * Detail page for videos.
+         */
+        layout: z.literal("video"),
+      }),
+      z.object({
+        /**
+         * Detail page for audio files.
+         *
+         * This only supports mp3 files.
+         */
+        layout: z.literal("audio"),
+      }),
+    ])
+    .optional(),
+  /**
+   * Pick the media type's icon from https://lucide.dev/icons/
+   * Prefix it's name with "lucide--"
+   *
+   * @example "lucide--book-open"
+   */
+  icon: z.string(),
+})
 
 export const LIGHTNET_COLLECTIONS = {
   categories: defineCollection({
@@ -333,3 +313,10 @@ export const categoryEntrySchema = z.object({
   id: z.string(),
   data: categorySchema,
 })
+
+export const mediaCollectionEntrySchema = z.object({
+  id: z.string(),
+  data: mediaCollectionSchema,
+})
+
+export type MediaCollectionEntry = z.infer<typeof mediaCollectionEntrySchema>

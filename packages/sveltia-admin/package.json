@@ -1,0 +1,45 @@
+{
+  "name": "@lightnet/sveltia-admin",
+  "description": "Admin UI for LightNet based on Sveltia CMS.",
+  "type": "module",
+  "license": "MIT",
+  "version": "3.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LightNetDev/lightnet",
+    "directory": "packages/sveltia-admin"
+  },
+  "bugs": {
+    "url": "https://github.com/LightNetDev/lightnet/issues"
+  },
+  "homepage": "https://lightnet.community",
+  "keywords": [
+    "astro-integration"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "e2e": "playwright test"
+  },
+  "exports": {
+    ".": "./src/astro-integration/integration.ts",
+    "./Admin.astro": "./src/Admin.astro",
+    "./config.json.ts": "./src/config.json.ts"
+  },
+  "peerDependencies": {
+    "astro": "^6.0.0"
+  },
+  "dependencies": {
+    "@sveltia/cms": "0.151.4",
+    "lightnet": "^3.12.2"
+  },
+  "devDependencies": {
+    "@internal/e2e-test-utils": "workspace:^0.0.1",
+    "@playwright/test": "^1.58.2",
+    "astro": "^6.1.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

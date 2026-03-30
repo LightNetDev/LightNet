@@ -10,7 +10,7 @@ interface Props {
 
 const item = await getMediaItem(Astro.props.mediaId)
 
-const { t } = Astro.locals.i18n
+const { t, tMap, currentLocale } = Astro.locals.i18n
 
 const categories = await Promise.all(
   item.data.categories?.map(({ id }) => getCategory(id)) ?? [],
@@ -25,11 +25,13 @@ const categories = await Promise.all(
         {categories.map(async (category) => (
           <li class="flex rounded-lg bg-gray-200 px-4 py-1 text-gray-500 hover:bg-gray-300">
             <a
-              href={searchPagePath(Astro.currentLocale, {
+              href={searchPagePath(currentLocale, {
                 category: category.id,
               })}
             >
-              {t(category.label)}
+              {tMap(category.label, {
+                path: ["categories", category.id, "label"],
+              })}
             </a>
           </li>
         ))}

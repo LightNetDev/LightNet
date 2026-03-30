@@ -2,8 +2,7 @@
 import type { ImageMetadata } from "astro"
 import { getImage } from "astro:assets"
 import { Image } from "astro:assets"
-
-import Icon from "./Icon"
+import { ExternalLinkIcon } from "lucide-react"
 
 interface Props {
   /**
@@ -146,7 +145,7 @@ async function parseUrl(
           </span>
         </div>
         <div class="absolute bottom-0 end-0 start-0 z-20 flex items-center gap-2 rounded bg-black/70 px-4 py-4 text-sm font-medium text-white backdrop-blur md:text-sm">
-          <Icon className="mdi--external-link" ariaLabel="" />
+          <ExternalLinkIcon className="shrink-0" />
           {t("ln.external-link")}
         </div>
       </a>

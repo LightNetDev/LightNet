@@ -1,0 +1,23 @@
+{
+  "name": "@e2e/sveltia-admin-test-repo",
+  "type": "module",
+  "version": "0.0.1",
+  "private": "true",
+  "scripts": {
+    "dev": "astro dev"
+  },
+  "dependencies": {
+    "@astrojs/react": "^5.0.2",
+    "@lightnet/sveltia-admin": "workspace:^3.0.0",
+    "astro": "^6.1.1",
+    "lightnet": "workspace:^3.12.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

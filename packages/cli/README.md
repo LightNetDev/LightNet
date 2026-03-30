@@ -1,5 +1,7 @@
 # LightNet CLI
 
-This is work in progress... 🏗️.
+Available commands:
 
-Currently only the SDK translation status is reported.
+- `npx @lightnet/cli translation-status`
+
+Run commands from your LightNet project root.

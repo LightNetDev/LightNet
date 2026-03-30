@@ -1,0 +1,18 @@
+[
+  {
+    "code": "en",
+    "label": {
+      "en": "English",
+      "de": "Englisch"
+    },
+    "isDefaultSiteLanguage": true
+  },
+  {
+    "code": "de",
+    "label": {
+      "en": "German",
+      "de": "Deutsch"
+    },
+    "isSiteLanguage": true
+  }
+]
