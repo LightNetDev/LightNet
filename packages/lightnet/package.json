@@ -9,6 +9,9 @@
     "url": "https://github.com/LightNetDev/lightnet",
     "directory": "packages/lightnet"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/LightNetDev/lightnet/issues"
   },
