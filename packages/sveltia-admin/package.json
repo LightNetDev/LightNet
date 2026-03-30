@@ -3,7 +3,7 @@
   "description": "Admin UI for LightNet based on Sveltia CMS.",
   "type": "module",
   "license": "MIT",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet",
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@sveltia/cms": "0.151.4",
-    "lightnet": "^3.12.2"
+    "lightnet": "^4.0.0"
   },
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^0.0.1",

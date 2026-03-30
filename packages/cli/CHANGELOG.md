@@ -1,5 +1,12 @@
 # @lightnet/cli
 
+## 3.0.0
+
+### Patch Changes
+
+- Updated dependencies [[`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce), [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce)]:
+  - lightnet@4.0.0
+
 ## 2.0.1
 
 ### Patch Changes

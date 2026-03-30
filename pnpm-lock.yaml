@@ -60,7 +60,7 @@ importers:
   packages/cli:
     dependencies:
       lightnet:
-        specifier: ^3.0.0
+        specifier: ^4.0.0
         version: link:../lightnet
       yaml:
         specifier: ^2.8.3
@@ -163,7 +163,7 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: ^3.12.2
+        specifier: ^4.0.0
         version: link:../../..
       react:
         specifier: ^19.2.4
@@ -187,7 +187,7 @@ importers:
         specifier: 0.151.4
         version: 0.151.4
       lightnet:
-        specifier: ^3.12.2
+        specifier: ^4.0.0
         version: link:../lightnet
     devDependencies:
       '@internal/e2e-test-utils':
@@ -212,13 +212,13 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: workspace:^3.0.0
+        specifier: workspace:^4.0.0
         version: link:../../..
       astro:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:^3.12.2
+        specifier: workspace:^4.0.0
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.4
@@ -242,13 +242,13 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: workspace:^3.0.0
+        specifier: workspace:^4.0.0
         version: link:../../..
       astro:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:^3.12.2
+        specifier: workspace:^4.0.0
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.4
@@ -272,13 +272,13 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: ^3.0.0
+        specifier: ^4.0.0
         version: link:../../packages/sveltia-admin
       astro:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: ^3.12.2
+        specifier: ^4.0.0
         version: link:../../packages/lightnet
       react:
         specifier: ^19.2.4
