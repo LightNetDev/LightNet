@@ -13,14 +13,20 @@ type PostcssInlineOptions =
       plugins?: AcceptedPlugin[]
     })
 
+function isInlinePostCssOptions(
+  postcssInlineOptions: PostcssInlineOptions,
+): postcssInlineOptions is Exclude<PostcssInlineOptions, undefined | string> {
+  return (
+    typeof postcssInlineOptions === "object" && postcssInlineOptions !== null
+  )
+}
+
 async function getPostCssConfig(
   root: string,
   postcssInlineOptions: PostcssInlineOptions,
 ) {
   let postcssConfigResult
-  if (
-    !(typeof postcssInlineOptions === "object" && postcssInlineOptions !== null)
-  ) {
+  if (!isInlinePostCssOptions(postcssInlineOptions)) {
     const searchPath =
       typeof postcssInlineOptions === "string" ? postcssInlineOptions : root
     try {
@@ -36,8 +42,16 @@ async function getViteConfiguration(
   postcssInlineOptions: PostcssInlineOptions,
 ) {
   const postcssConfigResult = await getPostCssConfig(root, postcssInlineOptions)
-  const postcssOptions = postcssConfigResult?.options ?? {}
-  const postcssPlugins = postcssConfigResult?.plugins?.slice() ?? []
+  const inlinePostcssOptions = isInlinePostCssOptions(postcssInlineOptions)
+    ? postcssInlineOptions
+    : null
+  const postcssOptions = inlinePostcssOptions
+    ? { ...inlinePostcssOptions }
+    : (postcssConfigResult?.options ?? {})
+  const postcssPlugins =
+    inlinePostcssOptions?.plugins?.slice() ??
+    postcssConfigResult?.plugins?.slice() ??
+    []
   postcssPlugins.push(tailwindPlugin())
   postcssPlugins.push(autoprefixerPlugin())
   return {
