@@ -2,7 +2,7 @@
   "name": "@lightnet/cli",
   "type": "module",
   "license": "MIT",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   },
   "homepage": "https://lightnet.community",
   "peerDependencies": {
-    "lightnet": "^3.0.0"
+    "lightnet": "^4.0.0"
   },
   "dependencies": {
     "yaml": "^2.8.3"

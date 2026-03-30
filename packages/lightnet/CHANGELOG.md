@@ -1,5 +1,54 @@
 # lightnet
 
+## 4.0.0
+
+### Major Changes
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - LightNet now targets Astro v6, so sites using LightNet should upgrade their Astro app and follow the Astro v6 migration guide.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - LightNet no longer injects Astro `i18n` routing config during setup, and locale-aware code should now use `Astro.locals.i18n.currentLocale`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Label fields now use explicit inline locale maps across config and content, and `t(...)` treats string input strictly as a translation key.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - `MediaGallerySection` props were renamed for clarity, with `layout` becoming `itemWidth`, `viewLayout` becoming `layout`, and the default layout changing to `"carousel"`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Media item `content` entries now require explicit typed objects with `type: "upload"` or `type: "link"`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - DaisyUI was removed from LightNet's built-in Tailwind configuration, so projects using `dy-` classes must install and configure DaisyUI themselves.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Deprecated `media-types.detailsPage.coverStyle` support was removed, and cover styling now belongs at top-level `coverImageStyle`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - The `verifySchema` and `verifySchemaAsync` utility exports were removed from `lightnet/utils`.
+  Replace them with Zod's native parse functions.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Collection ownership was reversed from `media[].collections` to `media-collections[].mediaItems`, so collections now define membership and order directly.
+
+### Minor Changes
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - User translation keys no longer need the `x.` prefix, so custom keys can use direct names like `site.title` while built-in LightNet keys remain under `ln.*`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - LightNet now uses Lucide icons, and projects should update custom icon names from the deprecated `mdi--` prefix to `lucide--`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - LightNet no longer depends on `@astrojs/tailwind`, so sites should remove that package and use LightNet's built-in Tailwind implementation instead.
+
+### Patch Changes
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - `commonId` is now optional for media items in both `lightnet` schema validation and `@lightnet/sveltia-admin`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Avoid a dev-time Vite dependency re-optimization caused by mutating Astro integrations during startup.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Export `pathWithBase` from `lightnet/utils` and use that public entrypoint inside `@lightnet/sveltia-admin` so published installs resolve the media edit button controller correctly.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Strip the Astro `base` path before resolving the current locale from the URL pathname so localized pages render with the correct site language under deployments like `/docs/de/...`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Preserve inline Vite PostCSS options when LightNet injects Tailwind and Autoprefixer so existing user plugins and PostCSS settings are not dropped.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix i18n missing-key detection so translations are validated by key presence instead of comparing the translated value to the key.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Respect Astro `base` paths when LightNet builds internal page and API URLs so localized links, redirects, search form actions, and search API requests work correctly under subpath deployments such as `/docs`.
+
+- [#361](https://github.com/LightNetDev/LightNet/pull/361) [`65b3eec`](https://github.com/LightNetDev/LightNet/commit/65b3eec5b68565237b46c6423d21257ad4747dce) Thanks [@smn-cds](https://github.com/smn-cds)! - Deduplicate media-collection memberships so repeated media items in one collection do not render the same collection multiple times.
+
 ## 3.12.2
 
 ### Patch Changes
