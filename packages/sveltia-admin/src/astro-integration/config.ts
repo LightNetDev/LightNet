@@ -34,6 +34,11 @@ const githubSchema = z
     base_url: githubConfig.baseUrl,
   }))
 
+// Internal testing backend used by the Playwright harness.
+const testRepoSchema = z.object({
+  name: z.literal("test-repo"),
+})
+
 export const adminConfigSchema = z.object({
   /**
    * Path for the admin page.
@@ -50,7 +55,7 @@ export const adminConfigSchema = z.object({
   /**
    * Connected Git Host.
    */
-  backend: gitlabSchema.or(githubSchema).optional(),
+  backend: gitlabSchema.or(githubSchema).or(testRepoSchema).optional(),
 
   /**
    * Path from the repository root to the LightNet site root.

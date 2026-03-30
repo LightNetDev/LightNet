@@ -17,7 +17,8 @@
     "astro-integration"
   ],
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "e2e": "playwright test"
   },
   "exports": {
     ".": "./src/astro-integration/integration.ts",
@@ -28,9 +29,12 @@
     "astro": "^6.0.0"
   },
   "dependencies": {
-    "@sveltia/cms": "^0.151.3"
+    "@sveltia/cms": "0.151.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@internal/e2e-test-utils": "workspace:*",
+    "astro": "^6.1.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.2"
   },

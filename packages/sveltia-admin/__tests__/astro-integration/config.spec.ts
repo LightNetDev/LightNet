@@ -51,6 +51,18 @@ describe("adminConfigSchema", () => {
     })
   })
 
+  test("Should allow the internal test-repo backend", () => {
+    const config = adminConfigSchema.parse({
+      backend: {
+        name: "test-repo",
+      },
+    })
+
+    expect(config.backend).toEqual({
+      name: "test-repo",
+    })
+  })
+
   test("Should normalize admin paths with leading and trailing slashes", () => {
     const config = adminConfigSchema.parse({
       path: "/admin/",

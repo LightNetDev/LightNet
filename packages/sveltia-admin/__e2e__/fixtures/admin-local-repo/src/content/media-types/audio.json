@@ -1,0 +1,10 @@
+{
+  "label": {
+    "en": "Audio",
+    "de": "Audio"
+  },
+  "detailsPage": {
+    "layout": "audio"
+  },
+  "icon": "lucide--music"
+}

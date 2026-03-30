@@ -1,0 +1,10 @@
+{
+  "label": {
+    "en": "Video",
+    "de": "Video"
+  },
+  "detailsPage": {
+    "layout": "video"
+  },
+  "icon": "lucide--video"
+}
