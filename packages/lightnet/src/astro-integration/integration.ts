@@ -71,9 +71,8 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
 
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
-        astroConfig.integrations.push(tailwind(), react())
-
         updateConfig({
+          integrations: [tailwind(), react()],
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },

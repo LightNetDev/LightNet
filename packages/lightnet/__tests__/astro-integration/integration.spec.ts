@@ -68,6 +68,10 @@ test("Should use lightnet.site and not inject Astro i18n config", () => {
   })
 
   expect(updateConfig).toHaveBeenCalledWith({
+    integrations: expect.arrayContaining([
+      expect.objectContaining({ name: "@lightnet/tailwind" }),
+      expect.objectContaining({ name: "@astrojs/react" }),
+    ]),
     vite: {
       plugins: expect.any(Array),
     },
@@ -82,6 +86,10 @@ test("Should use Astro site when lightnet.site is not set", () => {
   })
 
   expect(updateConfig).toHaveBeenCalledWith({
+    integrations: expect.arrayContaining([
+      expect.objectContaining({ name: "@lightnet/tailwind" }),
+      expect.objectContaining({ name: "@astrojs/react" }),
+    ]),
     vite: {
       plugins: expect.any(Array),
     },
