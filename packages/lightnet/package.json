@@ -63,7 +63,7 @@
     "yaml": "^2.8.3"
   },
   "devDependencies": {
-    "@internal/e2e-test-utils": "workspace:*",
+    "@internal/e2e-test-utils": "workspace:^0.0.1",
     "@playwright/test": "^1.58.2",
     "@types/react": "^19.2.14",
     "astro": "^6.1.1",

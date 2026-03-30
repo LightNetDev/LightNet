@@ -7,10 +7,10 @@
     "dev": "astro dev"
   },
   "dependencies": {
-    "@lightnet/sveltia-admin": "workspace:*",
     "@astrojs/react": "^5.0.2",
+    "@lightnet/sveltia-admin": "workspace:^3.0.0",
     "astro": "^6.1.1",
-    "lightnet": "workspace:*",
+    "lightnet": "workspace:^3.12.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "sharp": "^0.34.5",

@@ -29,11 +29,12 @@
     "astro": "^6.0.0"
   },
   "dependencies": {
-    "@sveltia/cms": "0.151.3"
+    "@sveltia/cms": "0.151.3",
+    "lightnet": "^3.12.2"
   },
   "devDependencies": {
+    "@internal/e2e-test-utils": "workspace:^0.0.1",
     "@playwright/test": "^1.58.2",
-    "@internal/e2e-test-utils": "workspace:*",
     "astro": "^6.1.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.2"

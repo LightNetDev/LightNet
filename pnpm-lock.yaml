@@ -136,7 +136,7 @@ importers:
         version: 2.8.3
     devDependencies:
       '@internal/e2e-test-utils':
-        specifier: workspace:*
+        specifier: workspace:^0.0.1
         version: link:../e2e-test-utils
       '@playwright/test':
         specifier: ^1.58.2
@@ -186,9 +186,12 @@ importers:
       '@sveltia/cms':
         specifier: 0.151.3
         version: 0.151.3
+      lightnet:
+        specifier: ^3.12.2
+        version: link:../lightnet
     devDependencies:
       '@internal/e2e-test-utils':
-        specifier: workspace:*
+        specifier: workspace:^0.0.1
         version: link:../e2e-test-utils
       '@playwright/test':
         specifier: ^1.58.2
@@ -209,13 +212,13 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: workspace:*
+        specifier: workspace:^3.0.0
         version: link:../../..
       astro:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:*
+        specifier: workspace:^3.12.2
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.4
@@ -239,13 +242,13 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: workspace:*
+        specifier: workspace:^3.0.0
         version: link:../../..
       astro:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:*
+        specifier: workspace:^3.12.2
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.4
