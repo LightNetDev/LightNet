@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.0.1
+
+### Patch Changes
+
+- [#368](https://github.com/LightNetDev/LightNet/pull/368) [`e47f57b`](https://github.com/LightNetDev/LightNet/commit/e47f57b620ef269f49341e976d71b50e42c23f8a) Thanks [@smn-cds](https://github.com/smn-cds)! - Limit published package contents to runtime files only.
+
 ## 4.0.0
 
 ### Major Changes
