@@ -1,14 +1,14 @@
 import { expect, test } from "vitest"
 
-import { useInlineTranslate } from "../../../src/i18n/inline-translation"
+import { useTranslateMap } from "../../../src/i18n/translate-map"
 import { createContentMetadata } from "../../../src/pages/details-page/utils/create-content-metadata"
 
-const tInline = useInlineTranslate("en")
-const tInlineDe = useInlineTranslate("de")
+const tMap = useTranslateMap("en")
+const tMapDe = useTranslateMap("de")
 
 test("Should create complete content metadata", () => {
   expect(
-    createContentMetadata({ url: "https://some.host/some.pDf" }, tInline, {
+    createContentMetadata({ url: "https://some.host/some.pDf" }, tMap, {
       path: ["content", 0],
     }),
   ).toEqual({
@@ -123,7 +123,7 @@ test("Should create complete content metadata", () => {
 ].forEach(({ url, expected, label }) => {
   test(`Should create content metadata for url '${url}' ${label !== undefined ? `and label '${label}'` : ""}`, () => {
     expect(
-      createContentMetadata({ url, label }, tInline, {
+      createContentMetadata({ url, label }, tMap, {
         path: ["content", 0],
       }),
     ).toMatchObject(expected)
@@ -134,7 +134,7 @@ test("Should override name with input", () => {
   expect(
     createContentMetadata(
       { url: "/path/to/a.file", label: { en: "My file" } },
-      tInline,
+      tMap,
       { path: ["content", 0] },
     ),
   ).toMatchObject({ labelText: "My file" })
@@ -146,7 +146,7 @@ test("Should resolve localized content labels by locale", () => {
       url: "/files/book.pdf",
       label: { en: "Read", de: "Lesen" },
     },
-    tInlineDe,
+    tMapDe,
     { path: ["content", 0] },
   )
   expect(result.labelText).toBe("Lesen")

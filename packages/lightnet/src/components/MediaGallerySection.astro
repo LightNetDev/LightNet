@@ -31,14 +31,14 @@ const {
   ...sectionProps
 } = Astro.props
 
-const { currentLocale, tInline } = Astro.locals.i18n
+const { currentLocale, tMap } = Astro.locals.i18n
 
 const types = Object.fromEntries(
   (await getMediaTypes()).map((type) => [
     type.id,
     {
       ...type.data,
-      labelText: tInline(type.data.label, {
+      labelText: tMap(type.data.label, {
         path: ["media-types", type.id, "label"],
       }),
     },

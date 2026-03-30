@@ -1,7 +1,7 @@
 import {
-  type InlineTranslateFn,
-  type InlineTranslation,
-} from "../../../i18n/inline-translation"
+  type TranslateMapFn,
+  type TranslationMap,
+} from "../../../i18n/translate-map"
 import { isExternalUrl } from "../../../utils/urls"
 
 export type UrlType =
@@ -53,9 +53,9 @@ export function createContentMetadata(
     label: customLabel,
   }: {
     url: string
-    label?: InlineTranslation
+    label?: TranslationMap
   },
-  tInline: InlineTranslateFn,
+  tMap: TranslateMapFn,
   context: { path: (string | number)[] },
 ) {
   const isExternal = isExternalUrl(url)
@@ -74,7 +74,7 @@ export function createContentMetadata(
 
   const labelText =
     (customLabel &&
-      tInline(customLabel, {
+      tMap(customLabel, {
         path: [...context.path, "label"],
       })) ??
     fileName ??

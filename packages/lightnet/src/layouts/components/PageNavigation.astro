@@ -9,7 +9,7 @@ import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
 const currentPath = Astro.url.pathname
-const { t, tInline, currentLocale } = Astro.locals.i18n
+const { t, tMap, currentLocale } = Astro.locals.i18n
 
 const items = (config.mainMenu ?? []).map(
   ({ href, label, requiresLocale }, index) => {
@@ -24,7 +24,7 @@ const items = (config.mainMenu ?? []).map(
     return {
       path,
       isExternal,
-      labelText: tInline(label, {
+      labelText: tMap(label, {
         path: ["config", "mainMenu", index, "label"],
       }),
       isActive,

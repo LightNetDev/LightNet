@@ -16,9 +16,22 @@ type I18n = {
   t: import("./translate").TranslateFn
 
   /**
-   * Resolve an inline translation map to the language of the current locale.
+   * Resolve a translation map to the language of the current locale.
+   *
+   * Use this for inline translation maps, such as labels from config or content entries.
+   *
+   * @param translationMap Localized values keyed by locale code.
+   * @param context Describes where the map came from. Pass the original
+   * field path so missing-translation messages can point to the exact config
+   * or content field that needs a value, for example `["config", "title"]`
+   * or `["content", 0, "label"]`.
+   *
+   * @example
+   * Astro.locals.i18n.tMap(config.title, {
+   *   path: ["config", "title"],
+   * })
    */
-  tInline: import("./inline-translation").InlineTranslateFn
+  tMap: import("./translate-map").TranslateMapFn
 
   /**
    *  The current locale resolved by LightNet from the URL pathname.

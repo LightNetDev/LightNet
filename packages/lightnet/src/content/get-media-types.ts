@@ -1,7 +1,7 @@
 import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
-import type { InlineTranslateFn } from "../i18n/inline-translation"
+import type { TranslateMapFn } from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchema } from "../utils/verify-schema"
 import { mediaTypeEntrySchema } from "./content-schema"
@@ -28,14 +28,14 @@ export const getMediaType = async (id: string) => {
 
 export const getUsedMediaTypes = async (
   currentLocale: string,
-  tInline: InlineTranslateFn,
+  tMap: TranslateMapFn,
 ) => {
   const byId = await typesById.get()
   return Array.from(await contentTypes.get(), (typeId) => byId[typeId])
     .map(({ id, data }) => ({
       id,
       ...data,
-      labelText: tInline(data.label, {
+      labelText: tMap(data.label, {
         path: ["media-types", id, "label"],
       }),
     }))

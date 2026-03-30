@@ -2,7 +2,7 @@ import { AstroError } from "astro/errors"
 import i18next from "i18next"
 import config from "virtual:lightnet/config"
 
-import type { InlineTranslateFn } from "./inline-translation"
+import type { TranslateMapFn } from "./translate-map"
 
 const languages = Object.fromEntries(
   config.languages.map((language) => [language.code, language]),
@@ -25,12 +25,12 @@ export const resolveLanguage = (bcp47: string) => {
 
 export const resolveTranslatedLanguage = (
   bcp47: string,
-  tInline: InlineTranslateFn,
+  tMap: TranslateMapFn,
 ) => {
   const language = resolveLanguage(bcp47)
   return {
     ...language,
-    labelText: tInline(language.label, {
+    labelText: tMap(language.label, {
       path: ["languages", bcp47, "label"],
     }),
   }

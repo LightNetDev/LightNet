@@ -2,19 +2,19 @@
 import { ExternalLinkIcon } from "lucide-react"
 
 import { getMediaItem } from "../../../../content/get-media-items"
-import type { InlineTranslation } from "../../../../i18n/inline-translation"
+import type { TranslationMap } from "../../../../i18n/translate-map"
 import { createContentMetadata } from "../../utils/create-content-metadata"
 
 interface Props {
   mediaId: string
-  openActionLabel: InlineTranslation
+  openActionLabel: TranslationMap
   className?: string
 }
 const { mediaId, openActionLabel, className } = Astro.props
-const { tInline } = Astro.locals.i18n
+const { tMap } = Astro.locals.i18n
 const item = await getMediaItem(mediaId)
-const content = createContentMetadata(item.data.content[0], tInline, {
-  path: ["content", 0],
+const content = createContentMetadata(item.data.content[0], tMap, {
+  path: ["media-items", mediaId, "content", 0],
 })
 ---
 
@@ -28,7 +28,7 @@ const content = createContentMetadata(item.data.content[0], tInline, {
   {content.isExternal && <ExternalLinkIcon className="shrink-0" />}
   {
     content.canBeOpened
-      ? tInline(openActionLabel, {
+      ? tMap(openActionLabel, {
           path: [
             "media-types",
             item.data.type.id,

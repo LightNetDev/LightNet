@@ -1,7 +1,7 @@
 import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
-import type { InlineTranslateFn } from "../i18n/inline-translation"
+import type { TranslateMapFn } from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchemaAsync } from "../utils/verify-schema"
 import { categoryEntrySchema } from "./content-schema"
@@ -42,14 +42,14 @@ const contentCategories = lazy(async () => {
  */
 export async function getUsedCategories(
   currentLocale: string,
-  tInline: InlineTranslateFn,
+  tMap: TranslateMapFn,
 ) {
   const categories = await contentCategories.get()
   return [...Object.entries(categories)]
     .map(([id, data]) => ({
       id,
       ...data,
-      labelText: tInline(data.label, {
+      labelText: tMap(data.label, {
         path: ["categories", id, "label"],
       }),
     }))
@@ -66,14 +66,14 @@ export async function getUsedCategories(
  */
 export async function getCategories(
   currentLocale: string,
-  tInline: InlineTranslateFn,
+  tMap: TranslateMapFn,
 ) {
   const categories = await categoriesById.get()
   return [...Object.entries(categories)]
     .map(([id, data]) => ({
       id,
       ...data,
-      labelText: tInline(data.label, {
+      labelText: tMap(data.label, {
         path: ["categories", id, "label"],
       }),
     }))
