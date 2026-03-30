@@ -3,6 +3,7 @@ import { expect } from "@playwright/test"
 
 import { collectionPaths } from "./collection-entries-page"
 import { CollectionsPage } from "./collections-page"
+import { GlobalSearch } from "./global-search"
 
 type CollectionLabel = keyof typeof collectionPaths
 
@@ -15,6 +16,10 @@ class AdminApp {
 
   private get collections() {
     return new CollectionsPage(this.page)
+  }
+
+  private get globalSearch() {
+    return new GlobalSearch(this.page)
   }
 
   async goto(path = "/admin/index.html") {
@@ -33,6 +38,10 @@ class AdminApp {
 
   openCollection(label: CollectionLabel) {
     return this.collections.openCollection(label)
+  }
+
+  openGlobalSearch() {
+    return this.globalSearch
   }
 
   expectVisibleCollections(labels: CollectionLabel[]) {
