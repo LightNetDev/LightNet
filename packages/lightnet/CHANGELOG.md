@@ -1,5 +1,13 @@
 # lightnet
 
+## 4.0.3
+
+### Patch Changes
+
+- [#372](https://github.com/LightNetDev/LightNet/pull/372) [`e5eb8b0`](https://github.com/LightNetDev/LightNet/commit/e5eb8b06a7684bf5d9090f885e04fcc5eea417ac) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix dev translation HMR so editing `src/translations/*.yml` invalidates the full SSR importer chain and refreshes translated UI content.
+
+- [#372](https://github.com/LightNetDev/LightNet/pull/372) [`e5eb8b0`](https://github.com/LightNetDev/LightNet/commit/e5eb8b06a7684bf5d9090f885e04fcc5eea417ac) Thanks [@smn-cds](https://github.com/smn-cds)! - Restore Language type export from "lightnet"
+
 ## 4.0.2
 
 ### Patch Changes

@@ -10,7 +10,7 @@
     "@astrojs/react": "^5.0.2",
     "@lightnet/sveltia-admin": "workspace:^4.0.1",
     "astro": "^6.1.1",
-    "lightnet": "workspace:^4.0.2",
+    "lightnet": "workspace:^4.0.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "sharp": "^0.34.5",
