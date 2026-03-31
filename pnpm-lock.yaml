@@ -218,7 +218,7 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:^4.0.2
+        specifier: workspace:^4.0.3
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.4
@@ -248,7 +248,7 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:^4.0.2
+        specifier: workspace:^4.0.3
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.4
