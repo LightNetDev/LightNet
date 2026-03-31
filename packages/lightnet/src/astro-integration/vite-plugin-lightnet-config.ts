@@ -40,22 +40,14 @@ export function vitePluginLightnetConfig(
       const module = VIRTUAL_MODULES.find((m) => m === id)
       if (module) return `\0${module}`
     },
-    handleHotUpdate({ file, modules, server }) {
+    handleHotUpdate({ file, server }) {
       const srcPath = resolve(fileURLToPath(root), "src/translations/")
       if (
         (file.endsWith(".yml") || file.endsWith(".yaml")) &&
         file.startsWith(srcPath)
       ) {
-        const affectedModules = [
-          ...modules,
-          ...TRANSLATION_RUNTIME_MODULES.flatMap((id) => {
-            const module = server.moduleGraph.getModuleById(id)
-            return module ? [module] : []
-          }),
-        ]
-
-        for (const module of affectedModules) {
-          server.moduleGraph.invalidateModule(module)
+        for (const filePath of [file, ...TRANSLATION_RUNTIME_MODULES]) {
+          server.moduleGraph.onFileChange(filePath)
         }
 
         logger.info(`Update translations ${file.slice(srcPath.length)}`)

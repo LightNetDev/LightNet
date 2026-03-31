@@ -31,7 +31,11 @@ const languageCodes = [
   ),
 ]
 
-const i18nextTranslations = lazy(async () => {
+// In dev we avoid memoizing translations so YAML edits are reflected after HMR.
+const cacheInProduction = <TReturn>(compute: () => TReturn) =>
+  import.meta.env.DEV ? { get: compute } : lazy(compute)
+
+const i18nextTranslations = cacheInProduction(async () => {
   const result: Record<string, { translation: Record<string, string> }> = {}
   for (const bcp47 of languageCodes) {
     result[bcp47] = {
@@ -41,7 +45,7 @@ const i18nextTranslations = lazy(async () => {
   return result
 })
 
-const translationKeys = lazy(async () => {
+const translationKeys = cacheInProduction(async () => {
   const translations = await i18nextTranslations.get()
   return [
     ...new Set(
