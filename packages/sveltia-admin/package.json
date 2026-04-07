@@ -37,15 +37,15 @@
     "astro": "^6.0.0"
   },
   "dependencies": {
-    "@sveltia/cms": "0.151.4",
-    "lightnet": "^4.0.0"
+    "@sveltia/cms": "0.152.2",
+    "lightnet": "^4.0.3"
   },
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^0.0.1",
-    "@playwright/test": "^1.58.2",
-    "astro": "^6.1.1",
+    "@playwright/test": "^1.59.1",
+    "astro": "^6.1.4",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.3"
   },
   "engines": {
     "node": ">=22"
