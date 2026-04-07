@@ -6,6 +6,8 @@ import Toast from "../../../../components/Toast"
 interface Props {
   className?: string
 }
+
+const { t } = Astro.locals.i18n
 ---
 
 <button
@@ -13,10 +15,10 @@ interface Props {
   class:list={[Astro.props.className]}
   id="share-btn"
   ><ForwardIcon />
-  {Astro.locals.i18n.t("ln.details.share")}</button
+  {t("ln.details.share")}</button
 >
-<Toast id="share-success" variant="success">
-  {Astro.locals.i18n.t("ln.share.url-copied-to-clipboard")}
+<Toast client:idle id="share-success" variant="success">
+  {t("ln.share.url-copied-to-clipboard")}
 </Toast>
 <script>
   import { showToastById } from "../../../../components/showToast"

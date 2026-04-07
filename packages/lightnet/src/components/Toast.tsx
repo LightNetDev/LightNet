@@ -31,7 +31,7 @@ export default function Toast({
   return (
     <div
       id={id}
-      className={`pointer-events-none fixed bottom-4 end-0 flex justify-end px-4 opacity-0 transition duration-300 will-change-transform ${className}`}
+      className={`pointer-events-none fixed bottom-4 end-0 hidden justify-end px-4 opacity-0 transition duration-300 will-change-transform ${className}`}
       data-toast="true"
       data-variant={variant}
       data-toast-hidden-transform={hiddenTransform}
