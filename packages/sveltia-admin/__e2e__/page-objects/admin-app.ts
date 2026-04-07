@@ -83,12 +83,15 @@ class AdminApp {
       this.page.getByRole("button", { name: /Work with Local Repository/ }),
     ).toBeVisible()
     await expect(this.page.getByText(/local-repository/)).toBeVisible()
-    await expect(
-      this.page.getByRole("button", { name: /^Sign In with GitHub$/ }),
-    ).toBeVisible()
+    const githubSignInButtons = this.page
+      .getByRole("button")
+      .filter({ hasText: /Sign In with .*GitHub/ })
+
+    await expect(githubSignInButtons).toHaveCount(2)
+    await expect(githubSignInButtons.first()).toBeVisible()
     await expect(
       this.page.getByRole("button", {
-        name: /Sign In with GitHub Using Token/,
+        name: /Sign In with .*GitHub.*Using Token/,
       }),
     ).toBeVisible()
   }
