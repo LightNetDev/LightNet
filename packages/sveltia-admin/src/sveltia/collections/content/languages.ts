@@ -53,6 +53,7 @@ const languagesCollection: CollectionFile = {
       label: "Languages",
       label_singular: "Language",
       allow_duplicate: false,
+      allow_reorder: false,
       root: true,
       collapsed: "auto",
       summary: `{{label.${config.defaultLocale}}}  ({{code}})`,
