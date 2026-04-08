@@ -50,6 +50,7 @@ export function getConfig(
     },
     slug: {
       clean_accents: true,
+      encoding: "ascii",
       maxlength: 60,
     },
     collections: [...contentCollections],

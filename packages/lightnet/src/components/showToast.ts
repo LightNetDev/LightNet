@@ -29,6 +29,7 @@ export function showToast(
     window.clearTimeout(Number(existingTimeoutId))
   }
 
+  element.style.display = "flex"
   element.style.opacity = "100%"
   element.style.transform = overshootTransform
   element.dataset.toastVisible = "true"
@@ -45,6 +46,7 @@ export function showToast(
     element.style.opacity = "0%"
     element.style.transform = hiddenTransform
     element.dataset.toastVisible = "false"
+    element.style.display = "hidden"
     delete element.dataset[TIMEOUT_DATA_KEY]
   }, duration)
 

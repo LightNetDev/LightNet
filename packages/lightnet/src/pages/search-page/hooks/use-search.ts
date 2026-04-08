@@ -11,10 +11,16 @@ interface Context {
   languages: Record<string, { labelText: string }>
 }
 
+type EnrichedSearchItem = SearchItem & {
+  translatedCategories: string[] | null | undefined
+  translatedType: string
+  translatedLanguage: string
+}
+
 const SEARCH_API_PATH = pathWithBase("/api/internal/search.json")
 
 export function useSearch({ categories, mediaTypes, languages }: Context) {
-  const fuse = useRef<Fuse<SearchItem>>(undefined)
+  const fuse = useRef<Fuse<EnrichedSearchItem>>(undefined)
   const [allItems, setAllItems] = useState<SearchItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [query, setQuery] = useState<Partial<SearchQuery>>({})

@@ -44,7 +44,13 @@ There are many ways to help LightNet grow:
    pnpm install
    ```
 
-4. **Start the dev server**:
+4. **Install Playwright browsers** if you plan to run E2E tests:
+
+   ```sh
+   pnpm playwright:install
+   ```
+
+5. **Start the dev server**:
 
    ```sh
    pnpm dev
@@ -131,10 +137,15 @@ pnpm test
 ### End-to-end (E2E) tests
 
 Located in [`packages/lightnet/__e2e__/`](./packages/lightnet/__e2e__/).
-Run with:
+Before your first run, install the Playwright browsers from the repo root:
 
 ```sh
-cd packages/lightnet
+pnpm playwright:install
+```
+
+Then run the tests from the repo root:
+
+```sh
 pnpm e2e
 ```
 
