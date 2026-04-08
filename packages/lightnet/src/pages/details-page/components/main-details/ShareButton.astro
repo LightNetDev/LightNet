@@ -17,7 +17,7 @@ const { t } = Astro.locals.i18n
   ><ForwardIcon />
   {t("ln.details.share")}</button
 >
-<Toast client:idle id="share-success" variant="success">
+<Toast id="share-success" variant="success">
   {t("ln.share.url-copied-to-clipboard")}
 </Toast>
 <script>
