@@ -1,5 +1,15 @@
 # @lightnet/sveltia-admin
 
+## 4.0.2
+
+### Patch Changes
+
+- [#374](https://github.com/LightNetDev/LightNet/pull/374) [`efcedcf`](https://github.com/LightNetDev/LightNet/commit/efcedcf6ef06e16e2b9151e14de8dd8337ff76da) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
+- [#374](https://github.com/LightNetDev/LightNet/pull/374) [`efcedcf`](https://github.com/LightNetDev/LightNet/commit/efcedcf6ef06e16e2b9151e14de8dd8337ff76da) Thanks [@smn-cds](https://github.com/smn-cds)! - Use ascii encoding for sveltia slugs
+
+- [#374](https://github.com/LightNetDev/LightNet/pull/374) [`efcedcf`](https://github.com/LightNetDev/LightNet/commit/efcedcf6ef06e16e2b9151e14de8dd8337ff76da) Thanks [@smn-cds](https://github.com/smn-cds)! - Disable reorder from languages admin.
+
 ## 4.0.1
 
 ### Patch Changes
