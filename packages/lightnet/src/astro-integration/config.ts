@@ -235,7 +235,7 @@ export const extendedConfigSchema = configSchema.transform((config, ctx) => {
 })
 
 export type Link = z.input<typeof linkSchema>
-export type Language = z.output<typeof languageSchema>
+export type Language = z.input<typeof languageSchema>
 
 export type LightnetConfig = z.input<typeof configSchema>
 export type ExtendedLightnetConfig = z.output<typeof extendedConfigSchema>
