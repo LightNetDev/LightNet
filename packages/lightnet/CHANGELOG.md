@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.0.5
+
+### Patch Changes
+
+- [#376](https://github.com/LightNetDev/LightNet/pull/376) [`f652369`](https://github.com/LightNetDev/LightNet/commit/f652369745ab9886f71dc1daefd8020b700eadca) Thanks [@smn-cds](https://github.com/smn-cds)! - Fix exported Language type.
+
 ## 4.0.4
 
 ### Patch Changes
