@@ -1,5 +1,13 @@
 # @lightnet/sveltia-admin
 
+## 4.0.3
+
+### Patch Changes
+
+- [#378](https://github.com/LightNetDev/LightNet/pull/378) [`bc3d294`](https://github.com/LightNetDev/LightNet/commit/bc3d2949baacb6c577770de18902ddbd04ede10f) Thanks [@smn-cds](https://github.com/smn-cds)! - Improve language admin ui label
+
+- [#378](https://github.com/LightNetDev/LightNet/pull/378) [`bc3d294`](https://github.com/LightNetDev/LightNet/commit/bc3d2949baacb6c577770de18902ddbd04ede10f) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 4.0.2
 
 ### Patch Changes
