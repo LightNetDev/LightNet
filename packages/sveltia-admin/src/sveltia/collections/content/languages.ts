@@ -60,7 +60,7 @@ const languagesCollection: CollectionFile = {
       fields: [
         {
           name: "code",
-          label: "Language Code",
+          label: "BCP 47 Language Code",
           hint: "Enter a valid IETF BCP 47 language tag (for example, en, en-US, ar). Use this [tool](https://r12a.github.io/app-subtags/) to find the right code.",
           pattern: [
             "^(?:(?:[A-Za-z]{2,3}(?:-[A-Za-z]{3}){0,3}|[A-Za-z]{4}|[A-Za-z]{5,8})(?:-[A-Za-z]{4})?(?:-(?:[A-Za-z]{2}|\\d{3}))?(?:-(?:[A-Za-z0-9]{5,8}|\\d[A-Za-z0-9]{3}))*(?:-[0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+)*(?:-x(?:-[A-Za-z0-9]{1,8})+)?|x(?:-[A-Za-z0-9]{1,8})+)$",
