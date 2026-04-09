@@ -212,13 +212,13 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: workspace:^4.0.2
+        specifier: workspace:^4.0.3
         version: link:../../..
       astro:
         specifier: ^6.1.5
         version: 6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:^4.0.5
+        specifier: workspace:^4.0.6
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.5
@@ -242,13 +242,13 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: workspace:^4.0.2
+        specifier: workspace:^4.0.3
         version: link:../../..
       astro:
         specifier: ^6.1.5
         version: 6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: workspace:^4.0.5
+        specifier: workspace:^4.0.6
         version: link:../../../../lightnet
       react:
         specifier: ^19.2.5
