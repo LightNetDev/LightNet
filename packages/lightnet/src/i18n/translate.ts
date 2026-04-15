@@ -69,7 +69,7 @@ export async function useTranslate(
   const translations = await i18nextTranslations.get()
   const availableTranslationKeys = new Set(await translationKeys.get())
 
-  const i18n = i18next.createInstance({ showSupportNotice: false })
+  const i18n = i18next.createInstance()
 
   await i18n.init({
     lng: config.defaultLocale,

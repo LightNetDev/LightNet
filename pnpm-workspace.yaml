@@ -1,3 +1,8 @@
+link-workspace-packages: true
+prefer-workspace-packages: true
+save-workspace-protocol: false
+blockExoticSubdeps: true
+minimumReleaseAge: 4320
 packages:
   - "packages/**/*"
   - "playground/**/*"

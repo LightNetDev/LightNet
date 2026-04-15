@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^5.0.3",
-    "@iconify-json/lucide": "^1.2.101",
+    "@iconify-json/lucide": "^1.2.102",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.19",
@@ -65,7 +65,7 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "fuse.js": "^7.3.0",
-    "i18next": "^25.10.10",
+    "i18next": "^26.0.4",
     "lucide-react": "^1.8.0",
     "marked": "^17.0.6",
     "postcss": "^8.5.9",
@@ -73,7 +73,7 @@
     "yaml": "^2.8.3"
   },
   "devDependencies": {
-    "@internal/e2e-test-utils": "workspace:^0.0.1",
+    "@internal/e2e-test-utils": "workspace:^",
     "@playwright/test": "^1.59.1",
     "@types/react": "^19.2.14",
     "astro": "^6.1.5",
