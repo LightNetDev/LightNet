@@ -3,7 +3,6 @@ prefer-workspace-packages: true
 save-workspace-protocol: false
 blockExoticSubdeps: true
 minimumReleaseAge: 4320
-trustPolicy: "no-downgrade"
 packages:
   - "packages/**/*"
   - "playground/**/*"
