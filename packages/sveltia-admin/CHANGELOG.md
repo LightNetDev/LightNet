@@ -1,5 +1,13 @@
 # @lightnet/sveltia-admin
 
+## 4.0.4
+
+### Patch Changes
+
+- [#380](https://github.com/LightNetDev/LightNet/pull/380) [`4efb5b5`](https://github.com/LightNetDev/LightNet/commit/4efb5b5bf4fccc1f6314911e1cfb395c0488ff98) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
+- [#380](https://github.com/LightNetDev/LightNet/pull/380) [`4efb5b5`](https://github.com/LightNetDev/LightNet/commit/4efb5b5bf4fccc1f6314911e1cfb395c0488ff98) Thanks [@smn-cds](https://github.com/smn-cds)! - Update pnpm settings to make supply chain attacks less likely
+
 ## 4.0.3
 
 ### Patch Changes
