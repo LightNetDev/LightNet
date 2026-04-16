@@ -1,5 +1,8 @@
-blockExoticSubdeps: true
-minimumReleaseAge: 4320
 packages:
   - "packages/**/*"
   - "playground/**/*"
+allowBuilds:
+  esbuild: true
+  sharp: true
+blockExoticSubdeps: true
+minimumReleaseAge: 4320

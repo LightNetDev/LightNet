@@ -46,12 +46,6 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.1"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
-  },
   "engines": {
     "node": ">=22"
   }
