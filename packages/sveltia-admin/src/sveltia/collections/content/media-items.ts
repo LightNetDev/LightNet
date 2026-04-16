@@ -60,14 +60,7 @@ export const mediaItemCollection: Collection = {
               label: "File",
               widget: "file",
               choose_url: false,
-              media_folder: projectPath("public/files"),
-              public_folder: "/files",
-              hint: `Maximum file size is ${sveltiaAdminConfig.maxFileSize} MB.`,
-              media_library: {
-                config: {
-                  max_file_size: sveltiaAdminConfig.maxFileSize * 1000000,
-                },
-              },
+              ...getFileStorage(),
             },
             inlineTranslation({
               name: "label",
@@ -161,4 +154,31 @@ export const mediaItemCollection: Collection = {
       ],
     },
   ],
+}
+
+function getFileStorage() {
+  const externalFileStorage = sveltiaAdminConfig.experimental?.fileStorage
+  if (!externalFileStorage) {
+    return {
+      media_folder: projectPath("public/files"),
+      public_folder: "/files",
+      hint: `Maximum file size is ${sveltiaAdminConfig.maxFileSize} MB.`,
+      media_library: {
+        config: {
+          max_file_size: sveltiaAdminConfig.maxFileSize * 1000000,
+        },
+      },
+    }
+  }
+
+  return {
+    media_libraries: {
+      cloudflare_r2: {
+        ...externalFileStorage,
+        access_key_id: externalFileStorage.accessKeyId,
+        account_id: externalFileStorage.accountId,
+        public_url: externalFileStorage.publicUrl,
+      },
+    },
+  }
 }

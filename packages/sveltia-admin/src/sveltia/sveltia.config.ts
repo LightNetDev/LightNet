@@ -1,4 +1,4 @@
-import type { CmsConfig } from "@sveltia/cms"
+import type { Backend, CmsConfig } from "@sveltia/cms"
 import { site } from "astro:config/server"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
@@ -11,10 +11,7 @@ export function getConfig(
   siteUrl = process.env.LIGHTNET_DEV_SITE_URL ?? site,
 ): CmsConfig {
   return {
-    backend: sveltiaAdminConfig.backend ?? {
-      name: "github",
-      repo: createLocalRepoPath(),
-    },
+    backend: getBackend(),
     media_folder: projectPath("src/assets"),
     public_folder: "/src/assets",
     app_title: "LightNet Admin",
@@ -56,6 +53,33 @@ export function getConfig(
     collections: [...contentCollections],
     singletons: [defineLanguagesCollection()].filter((c) => !!c),
   }
+}
+
+function getBackend(): Backend {
+  const { backend } = sveltiaAdminConfig
+
+  if (!backend) {
+    return {
+      name: "github",
+      repo: createLocalRepoPath(),
+    }
+  }
+
+  if (backend.name === "github") {
+    return {
+      ...backend,
+      base_url: backend.baseUrl,
+    }
+  }
+
+  if (backend.name === "gitlab") {
+    return {
+      ...backend,
+      app_id: backend.appId,
+      auth_type: backend.authType,
+    }
+  }
+  return backend
 }
 
 // Sveltia CMS uses repo as unique site identifier for IndexedDB

@@ -2,7 +2,7 @@ import lightnetSveltiaAdmin from "@lightnet/sveltia-admin"
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
 
-import languages from "./languages.json" assert { type: "json" }
+import languages from "./languages.json"
 
 export default defineConfig({
   devToolbar: {

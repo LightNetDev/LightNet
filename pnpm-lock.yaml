@@ -272,14 +272,14 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(yaml@2.8.3)
       '@lightnet/sveltia-admin':
-        specifier: ^4.0.3
-        version: 4.0.3(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(astro@6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3))(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@3.4.19(yaml@2.8.3))(typescript@5.9.3)
+        specifier: workspace:^
+        version: link:../../packages/sveltia-admin
       astro:
         specifier: ^6.1.5
         version: 6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
       lightnet:
-        specifier: ^4.0.6
-        version: 4.0.6(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(astro@6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3))(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@3.4.19(yaml@2.8.3))(typescript@5.9.3)
+        specifier: workspace:^
+        version: link:../../packages/lightnet
       react:
         specifier: ^19.2.5
         version: 19.2.5
@@ -935,12 +935,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lightnet/sveltia-admin@4.0.3':
-    resolution: {integrity: sha512-/0KBM95ksxKuFxEdSnxZKD4ZAkH+oAyXXNPuBHveOpXR5lDCyeT13CQkv1NK26qeccPsUKSNH42fMoGqEpF2TA==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      astro: ^6.0.0
-
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
 
@@ -1154,9 +1148,6 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
-
-  '@sveltia/cms@0.152.4':
-    resolution: {integrity: sha512-hv5UXDesxIKuONA1aqteQLNYzlcHqbgTjxjt/w6e+tdNGwdzelL+dsqTDL68dCq6235nGVJ6b3XRRZDVOPSTyA==}
 
   '@sveltia/cms@0.152.5':
     resolution: {integrity: sha512-+BPDQpQTsyHK1iHiSOt9BfD4PSCbIlxKXwU0HaGU+GbKZF39KptwRjn/DL0T0wCaoRxRGeXFv6XmmgEdLnMkAw==}
@@ -4134,30 +4125,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lightnet/sveltia-admin@4.0.3(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(astro@6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3))(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@3.4.19(yaml@2.8.3))(typescript@5.9.3)':
-    dependencies:
-      '@sveltia/cms': 0.152.4
-      astro: 6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3)
-      lightnet: 4.0.6(@types/node@24.12.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(astro@6.1.5(@types/node@24.12.0)(jiti@1.21.7)(rollup@4.60.1)(typescript@5.9.3)(yaml@2.8.3))(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(tailwindcss@3.4.19(yaml@2.8.3))(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@types/node'
-      - '@types/react'
-      - '@types/react-dom'
-      - jiti
-      - less
-      - lightningcss
-      - react
-      - react-dom
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - tailwindcss
-      - terser
-      - tsx
-      - typescript
-
   '@manypkg/find-root@1.1.0':
     dependencies:
       '@babel/runtime': 7.29.2
@@ -4320,8 +4287,6 @@ snapshots:
   '@shikijs/vscode-textmate@10.0.2': {}
 
   '@standard-schema/spec@1.1.0': {}
-
-  '@sveltia/cms@0.152.4': {}
 
   '@sveltia/cms@0.152.5': {}
 
