@@ -37,7 +37,7 @@
     "astro": "^6.0.0"
   },
   "dependencies": {
-    "@sveltia/cms": "0.152.5",
+    "@sveltia/cms": "0.154.0",
     "lightnet": "workspace:^"
   },
   "devDependencies": {

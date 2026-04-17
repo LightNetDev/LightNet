@@ -184,8 +184,8 @@ importers:
   packages/sveltia-admin:
     dependencies:
       '@sveltia/cms':
-        specifier: 0.152.5
-        version: 0.152.5
+        specifier: 0.154.0
+        version: 0.154.0
       lightnet:
         specifier: workspace:^
         version: link:../lightnet
@@ -1149,8 +1149,8 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@sveltia/cms@0.152.5':
-    resolution: {integrity: sha512-+BPDQpQTsyHK1iHiSOt9BfD4PSCbIlxKXwU0HaGU+GbKZF39KptwRjn/DL0T0wCaoRxRGeXFv6XmmgEdLnMkAw==}
+  '@sveltia/cms@0.154.0':
+    resolution: {integrity: sha512-Ij7pRFnvkU1TW/2fvrHlJ6E2WWMcNvFtiJA2V3kgWki1gXdATcBg2IxgwsyF6ZHq6YpBXPL0CUIJY7azbVd5iQ==}
 
   '@tailwindcss/typography@0.5.19':
     resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
@@ -4280,7 +4280,7 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@sveltia/cms@0.152.5': {}
+  '@sveltia/cms@0.154.0': {}
 
   '@tailwindcss/typography@0.5.19(tailwindcss@3.4.19(yaml@2.8.3))':
     dependencies:
