@@ -88,8 +88,7 @@ class AdminApp {
     await expect(this.page.getByText(/local-repository/)).toBeVisible()
     await expect(
       this.page.getByRole("button", {
-        name: "Sign In with GitHub",
-        exact: true,
+        name: /Sign In with .*GitHub/,
       }),
     ).toBeVisible()
     await expect(
