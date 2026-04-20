@@ -173,6 +173,7 @@ function getFileStorage() {
 
   return {
     media_libraries: {
+      default: false,
       cloudflare_r2: {
         ...externalFileStorage,
         access_key_id: externalFileStorage.accessKeyId,
