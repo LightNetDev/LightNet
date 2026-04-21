@@ -1,5 +1,13 @@
 # lightnet
 
+## 4.0.8
+
+### Patch Changes
+
+- [#382](https://github.com/LightNetDev/LightNet/pull/382) [`c6c8f31`](https://github.com/LightNetDev/LightNet/commit/c6c8f31adf464a842739f2b99d858aa0ba5d43e9) Thanks [@smn-cds](https://github.com/smn-cds)! - Update internal dependency marked to v18
+
+- [#382](https://github.com/LightNetDev/LightNet/pull/382) [`c6c8f31`](https://github.com/LightNetDev/LightNet/commit/c6c8f31adf464a842739f2b99d858aa0ba5d43e9) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 4.0.7
 
 ### Patch Changes
