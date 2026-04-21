@@ -1,6 +1,6 @@
 ![LightNet](https://github.com/LightNetDev/lightnet/blob/main/lightnet-banner.webp)
 
-Many ministries struggle to share media content effectively. LightNet makes it easy to **run your own digital media library**, so more people can find what they need and grow in faith.
+**Running digital media libraries for ministries** can be complex and time consuming. LightNet makes this easier for developers, so ministries can share media more effectively.
 
 Built as an integration for the [Astro framework](https://astro.build), LightNet creates fast, static sites that run anywhere.
 

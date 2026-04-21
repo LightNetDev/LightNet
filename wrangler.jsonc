@@ -1,0 +1,17 @@
+{
+  "name": "sk8-ministries",
+  "compatibility_date": "2026-03-31",
+  "workers_dev": true,
+  "preview_urls": true,
+  "send_metrics": false,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+  },
+  "routes": [
+    {
+      "pattern": "kuuluu.org",
+      "custom_domain": true,
+    },
+  ],
+}
