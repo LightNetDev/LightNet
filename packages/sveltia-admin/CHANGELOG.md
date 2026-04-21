@@ -1,5 +1,13 @@
 # @lightnet/sveltia-admin
 
+## 4.0.5
+
+### Patch Changes
+
+- [#382](https://github.com/LightNetDev/LightNet/pull/382) [`c6c8f31`](https://github.com/LightNetDev/LightNet/commit/c6c8f31adf464a842739f2b99d858aa0ba5d43e9) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
+- [#382](https://github.com/LightNetDev/LightNet/pull/382) [`c6c8f31`](https://github.com/LightNetDev/LightNet/commit/c6c8f31adf464a842739f2b99d858aa0ba5d43e9) Thanks [@smn-cds](https://github.com/smn-cds)! - Add experimental support for Cloudflare-R2 through sveltia admin
+
 ## 4.0.4
 
 ### Patch Changes

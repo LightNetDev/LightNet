@@ -3,7 +3,7 @@
   "description": "Admin UI for LightNet based on Sveltia CMS.",
   "type": "module",
   "license": "MIT",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "publishConfig": {
     "access": "public"
   },
