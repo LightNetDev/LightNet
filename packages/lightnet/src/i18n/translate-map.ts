@@ -1,6 +1,8 @@
 import { AstroError } from "astro/errors"
 import config from "virtual:lightnet/config"
 
+import { recordTranslation } from "./record-translation"
+
 /**
  * A map of translated values keyed by locale code.
  *
@@ -47,6 +49,9 @@ export type TranslateMapFn = (
  */
 export function useTranslateMap(currentLocale: string): TranslateMapFn {
   return (translationMap: TranslationMap, context: TranslationMapContext) => {
+    const key = context.path.join(".")
+    recordTranslation({ key, values: translationMap, type: "map" })
+
     const currentLocaleValue = translationMap[currentLocale]
     if (currentLocaleValue) {
       return currentLocaleValue
