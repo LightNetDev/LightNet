@@ -35,6 +35,7 @@ export default defineConfig({
             de: "Startseite",
           },
         },
+
         {
           href: "/media",
           label: {
@@ -66,6 +67,29 @@ export default defineConfig({
             en: "LightNet",
             ar: "LightNet",
             de: "LightNet",
+          },
+        },
+      ],
+      footerText: {
+        en: "© 2026 Sk8 Ministries",
+        de: "© 2026 Sk8 Ministries",
+        ar: "© 2026 Sk8 Ministries",
+      },
+      footerLinks: [
+        {
+          href: "/about",
+          label: {
+            en: "About",
+            de: "Über uns",
+            ar: "من نحن",
+          },
+        },
+        {
+          href: "/media",
+          label: {
+            en: "Media",
+            de: "Medien",
+            ar: "وسائط",
           },
         },
       ],
