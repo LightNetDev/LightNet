@@ -5,6 +5,8 @@ export const validateInlineTranslations = (
     title: Record<string, string>
     languages: { label: Record<string, string> }[]
     mainMenu?: { label: Record<string, string> }[]
+    footerText?: Record<string, string>
+    footerLinks?: { label: Record<string, string> }[]
     logo?: { alt?: Record<string, string> }
   },
   locales: string[],
@@ -48,4 +50,12 @@ export const validateInlineTranslations = (
     validateInlineTranslation(link.label, ["mainMenu", index, "label"])
   }
   validateInlineTranslation(config.logo?.alt, ["logo", "alt"])
+
+  // footerText Validate
+  validateInlineTranslation(config.footerText, ["footerText"])
+
+  // footerLinks label validation
+  for (const [index, link] of (config.footerLinks ?? []).entries()) {
+    validateInlineTranslation(link.label, ["footerLinks", index, "label"])
+  }
 }
