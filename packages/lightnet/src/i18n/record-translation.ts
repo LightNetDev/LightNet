@@ -2,9 +2,9 @@ import { createWriteStream, type WriteStream } from "node:fs"
 import { mkdir, unlink, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import process from "node:process"
-import config from "virtual:lightnet/config"
 
 import { root } from "astro:config/server"
+import config from "virtual:lightnet/config"
 
 type Translation = {
   type: "map" | "user" | "built-in"
@@ -43,7 +43,9 @@ const getTranslationStore = async () => {
   await mkdir(lightnetCachePath, { recursive: true })
   try {
     await unlink(translationStorePath)
-  } catch (err) {}
+  } catch {
+    // catch error if file has not been existing
+  }
 
   translationStore = createWriteStream(translationStorePath, {
     flags: "a",

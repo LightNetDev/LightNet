@@ -1,5 +1,5 @@
-import YAML from "yaml"
 import { z } from "astro/zod"
+import YAML from "yaml"
 
 const builtInTranslations = {
   ar: () => import("./translations/ar.yml?raw"),

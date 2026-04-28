@@ -3,8 +3,8 @@ import i18next, { type TOptions } from "i18next"
 import config from "virtual:lightnet/config"
 
 import { lazy } from "../utils/lazy"
-import { type LightNetTranslationKey, loadTranslations } from "./translations"
 import { recordTranslation } from "./record-translation"
+import { type LightNetTranslationKey, loadTranslations } from "./translations"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
 export type TranslationKey =
@@ -116,13 +116,13 @@ async function recordAllTranslations() {
 
   const collectValues = (key: string, locales: string[]) => {
     const values = {} as Record<string, string | undefined>
-    for (let locale of locales) {
+    for (const locale of locales) {
       values[locale] = translations[locale]?.translation[key]
     }
     return values
   }
 
-  for (let key of keys) {
+  for (const key of keys) {
     if (key.startsWith("ln.")) {
       recordTranslation({
         key,
