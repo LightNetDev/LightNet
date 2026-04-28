@@ -132,6 +132,10 @@ export const configSchema = z.object({
   /**
    * Link to manifest file within public/ folder
    */
+
+  footerText: inlineTranslationSchema.optional(),
+  footerLinks: z.array(linkSchema).optional(),
+
   manifest: z.string().transform(absolutePath).optional(),
   /**
    * Logo to be used for the header.
