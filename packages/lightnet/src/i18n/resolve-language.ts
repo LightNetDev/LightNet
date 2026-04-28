@@ -35,3 +35,12 @@ export const resolveTranslatedLanguage = (
     }),
   }
 }
+
+export async function getTranslatedLanguages(
+  currentLocale: string,
+  tMap: TranslateMapFn,
+) {
+  return config.languages
+    .map(({ code }) => resolveTranslatedLanguage(code, tMap))
+    .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
+}

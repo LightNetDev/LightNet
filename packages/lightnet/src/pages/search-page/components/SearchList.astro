@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content"
 
 import { getUsedCategories } from "../../../content/get-categories"
-import { getUsedLanguages } from "../../../content/get-languages"
+import { getContentLanguages } from "../../../content/get-languages"
 import { getMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchListReact from "./SearchList.tsx"
@@ -27,17 +27,17 @@ const mediaTypes = Object.fromEntries(
   ]),
 )
 
-const contentLanguagesList = await getUsedLanguages(currentLocale, tMap)
+const contentLanguages = await getContentLanguages(currentLocale, tMap)
 const languages = Object.fromEntries(
-  contentLanguagesList.map((language) => [
-    language.code,
-    { direction: language.direction, labelText: language.labelText },
+  contentLanguages.map(({ code, direction, labelText }) => [
+    code,
+    { direction, labelText },
   ]),
 )
 
 const mediaItemsTotal = (await getCollection("media")).length
 
-const showLanguage = contentLanguagesList.length > 1
+const showLanguage = contentLanguages.length > 1
 
 const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
   "ln.search.no-results",
