@@ -2,7 +2,7 @@
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
 
-import { getMediaTypes } from "../content/get-media-types"
+import { getTranslatedMediaTypes } from "../content/get-media-types"
 import { detailsPagePath } from "../utils/paths"
 import CarouselSection from "./CarouselSection.astro"
 import CoverImageDecorator from "./CoverImageDecorator"
@@ -34,14 +34,9 @@ const {
 const { currentLocale, tMap } = Astro.locals.i18n
 
 const types = Object.fromEntries(
-  (await getMediaTypes()).map((type) => [
+  (await getTranslatedMediaTypes(currentLocale, tMap)).map((type) => [
     type.id,
-    {
-      ...type.data,
-      labelText: tMap(type.data.label, {
-        path: ["media-types", type.id, "label"],
-      }),
-    },
+    type,
   ]),
 )
 

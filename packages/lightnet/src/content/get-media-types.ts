@@ -11,7 +11,7 @@ const typesById = lazy(async () =>
   Object.fromEntries((await loadTypes()).map((type) => [type.id, type])),
 )
 
-const contentTypes = lazy(
+const contentTypesLoader = lazy(
   async () => new Set((await getMediaItems()).map((item) => item.data.type.id)),
 )
 
@@ -26,12 +26,21 @@ export const getMediaType = async (id: string) => {
   return type
 }
 
-export const getUsedMediaTypes = async (
+export async function getUsedMediaTypes(
   currentLocale: string,
   tMap: TranslateMapFn,
-) => {
-  const byId = await typesById.get()
-  return Array.from(await contentTypes.get(), (typeId) => byId[typeId])
+) {
+  const contentTypes = await contentTypesLoader.get()
+  const mediaTypes = await getTranslatedMediaTypes(currentLocale, tMap)
+  return mediaTypes.filter(({ id }) => contentTypes.has(id))
+}
+
+export async function getTranslatedMediaTypes(
+  currentLocale: string,
+  tMap: TranslateMapFn,
+) {
+  const mediaTypes = Object.values(await typesById.get())
+  return mediaTypes
     .map(({ id, data }) => ({
       id,
       ...data,
