@@ -1,24 +1,10 @@
 import { z } from "astro/zod"
 
 import { isBcp47 } from "../i18n/bcp-47"
+export { inlineTranslationSchema } from "../i18n/inline-translation-schema"
+import { inlineTranslationSchema } from "../i18n/inline-translation-schema"
 import { validateInlineTranslations } from "./validators/validate-inline-translations"
 import { validateLanguages } from "./validators/validate-languages"
-
-/**
- * Translations by BCP-47 tags.
- * We can only do basic validation here because we cannot access locales
- * from the same config.
- *
- * @example
- * {
- *   de: "Hallo",
- *   en: "Hello"
- * }
- */
-export const inlineTranslationSchema = z.record(
-  z.string(),
-  z.string().nonempty(),
-)
 
 /**
  * Link Schema.

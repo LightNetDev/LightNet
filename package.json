@@ -13,7 +13,7 @@
     "prettier": "prettier . --write --cache --log-level warn",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "version": "pnpm changeset version && pnpm i --no-frozen-lockfile",
-    "translation-status": "pnpm --silent -F cli translation-status",
+    "translation-status": "pnpm --silent -F @internal/scripts translation-status",
     "playwright:install": "pnpm --filter=lightnet exec playwright install",
     "e2e": "pnpm --filter=lightnet e2e",
     "e2e:admin": "pnpm --filter=@lightnet/sveltia-admin e2e",

@@ -1,4 +1,4 @@
-# @lightnet/cli
+# @internal/scripts
 
 ## 3.0.0
 

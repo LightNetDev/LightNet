@@ -40,6 +40,14 @@ export const loadTranslations = async (bcp47: string) => ({
   ...(await loadUserTranslations(bcp47)),
 })
 
+export const loadBuiltInTranslationFile = async (bcp47: string) =>
+  loadBuiltInTranslations(builtInTranslations, bcp47)
+
+export const loadUserTranslationFile = async (bcp47: string) =>
+  loadUserTranslations(bcp47)
+
+export const getUserTranslationLocales = () => Object.keys(userTranslations)
+
 function hasTranslations(
   translationMap: Record<string, unknown>,
   bcp47: string,

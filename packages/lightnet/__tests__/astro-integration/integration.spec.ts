@@ -18,7 +18,7 @@ const requiredLightnetConfig = {
   ],
 }
 
-const runSetup = ({
+const runSetup = async ({
   lightnetConfig = {},
   astroSite,
 }: {
@@ -32,7 +32,7 @@ const runSetup = ({
   const setupHook = integration.hooks["astro:config:setup"]!
   const updateConfig = vi.fn()
 
-  setupHook({
+  await setupHook({
     injectRoute: vi.fn(),
     config: {
       integrations: [],
@@ -53,17 +53,17 @@ const runSetup = ({
   return { updateConfig }
 }
 
-const getThrownError = (run: () => void) => {
+const getThrownError = async (run: () => Promise<unknown>) => {
   try {
-    run()
+    await run()
   } catch (error) {
     return error as Error & { hint?: string }
   }
   throw new Error("Expected function to throw")
 }
 
-test("Should use lightnet.site and not inject Astro i18n config", () => {
-  const { updateConfig } = runSetup({
+test("Should use lightnet.site and not inject Astro i18n config", async () => {
+  const { updateConfig } = await runSetup({
     astroSite: "https://lightnet.community",
   })
 
@@ -80,8 +80,8 @@ test("Should use lightnet.site and not inject Astro i18n config", () => {
   expect(updateConfig.mock.calls[0][0]).not.toHaveProperty("i18n")
 })
 
-test("Should use Astro site when lightnet.site is not set", () => {
-  const { updateConfig } = runSetup({
+test("Should use Astro site when lightnet.site is not set", async () => {
+  const { updateConfig } = await runSetup({
     astroSite: "https://lightnet.community",
   })
 
@@ -97,8 +97,8 @@ test("Should use Astro site when lightnet.site is not set", () => {
   expect(updateConfig.mock.calls[0][0]).not.toHaveProperty("site")
 })
 
-test("Should fail schema validation when no site is set", () => {
-  const error = getThrownError(() => runSetup({}))
+test("Should fail schema validation when no site is set", async () => {
+  const error = await getThrownError(() => runSetup({}))
 
   expect(error).toMatchObject({
     message: "Invalid LightNet configuration",
@@ -106,8 +106,8 @@ test("Should fail schema validation when no site is set", () => {
   })
 })
 
-test("Should include path when inline translation misses default locale", () => {
-  const error = getThrownError(() =>
+test("Should include path when inline translation misses default locale", async () => {
+  const error = await getThrownError(() =>
     runSetup({
       lightnetConfig: {
         title: { de: "LightNet" },

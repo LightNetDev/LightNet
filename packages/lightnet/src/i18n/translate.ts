@@ -3,7 +3,6 @@ import i18next, { type TOptions } from "i18next"
 import config from "virtual:lightnet/config"
 
 import { lazy } from "../utils/lazy"
-import { recordTranslation } from "./record-translation"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
@@ -69,7 +68,6 @@ export async function useTranslate(
   const resolvedLocale = bcp47 ?? config.defaultLocale
   const translations = await i18nextTranslations.get()
   const availableTranslationKeys = new Set(await translationKeys.get())
-  recordAllTranslations()
 
   const i18n = i18next.createInstance()
 
@@ -100,41 +98,5 @@ export async function useTranslate(
       )
     }
     return value
-  }
-}
-
-async function recordAllTranslations() {
-  if (import.meta.env.DEV) {
-    // only record translations during build time
-    return
-  }
-
-  const { locales } = config
-  const localesIncludingEnglish = [...locales.filter((l) => l !== "en"), "en"]
-  const keys = await translationKeys.get()
-  const translations = await i18nextTranslations.get()
-
-  const collectValues = (key: string, locales: string[]) => {
-    const values = {} as Record<string, string | undefined>
-    for (const locale of locales) {
-      values[locale] = translations[locale]?.translation[key]
-    }
-    return values
-  }
-
-  for (const key of keys) {
-    if (key.startsWith("ln.")) {
-      recordTranslation({
-        key,
-        values: collectValues(key, localesIncludingEnglish),
-        type: "built-in",
-      })
-    } else {
-      recordTranslation({
-        key,
-        values: collectValues(key, locales),
-        type: "user",
-      })
-    }
   }
 }

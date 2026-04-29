@@ -1,0 +1,43 @@
+{
+  "name": "@lightnet/cli",
+  "description": "Command line tools for LightNet sites.",
+  "type": "module",
+  "license": "MIT",
+  "version": "4.0.8",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LightNetDev/lightnet",
+    "directory": "packages/lightnet-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/LightNetDev/lightnet/issues"
+  },
+  "homepage": "https://lightnet.community",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "bin": {
+    "lightnet-cli": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "commander": "^14.0.1",
+    "yaml": "^2.8.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

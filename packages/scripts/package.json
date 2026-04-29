@@ -1,27 +1,21 @@
 {
-  "name": "@lightnet/cli",
+  "name": "@internal/scripts",
   "type": "module",
   "license": "MIT",
-  "version": "3.0.0",
+  "version": "0.0.1",
   "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet",
-    "directory": "packages/cli"
+    "directory": "packages/scripts"
   },
   "scripts": {
-    "translation-status": "node ./index.mjs translation-status"
+    "translation-status": "node ./commands/translation-status.mjs"
   },
   "bugs": {
     "url": "https://github.com/LightNetDev/lightnet/issues"
   },
-  "bin": {
-    "lightnet": "index.mjs"
-  },
   "homepage": "https://lightnet.community",
-  "peerDependencies": {
-    "lightnet": "^4.0.0"
-  },
   "dependencies": {
     "yaml": "^2.8.3"
   },

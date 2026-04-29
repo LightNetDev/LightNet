@@ -2,6 +2,8 @@ import { AstroError } from "astro/errors"
 import config from "virtual:lightnet/config"
 
 import { recordTranslation } from "./record-translation"
+import { getTranslationCallsite } from "./translation-callsite"
+import { getTranslationProvenance } from "./translation-provenance"
 
 /**
  * A map of translated values keyed by locale code.
@@ -19,7 +21,7 @@ export type TranslationMap = Record<string, string | undefined>
  * errors can point to the exact field in config or content.
  */
 export type TranslationMapContext = {
-  path: (string | number)[]
+  path?: (string | number)[]
 }
 
 /**
@@ -49,8 +51,20 @@ export type TranslateMapFn = (
  */
 export function useTranslateMap(currentLocale: string): TranslateMapFn {
   return (translationMap: TranslationMap, context: TranslationMapContext) => {
-    const key = context.path.join(".")
-    recordTranslation({ key, values: translationMap, type: "map" })
+    const provenance = getTranslationProvenance(translationMap)
+    const fallbackPath = context.path?.map((segment) => String(segment))
+    const callsite = provenance?.callsite ?? getTranslationCallsite()
+    const objectPath = provenance?.objectPath ?? fallbackPath
+    const key = objectPath?.join(".") ?? callsite ?? "inline"
+
+    recordTranslation({
+      key,
+      values: translationMap,
+      type: "inline",
+      sourceFile: provenance?.sourceFile,
+      objectPath,
+      callsite,
+    })
 
     const currentLocaleValue = translationMap[currentLocale]
     if (currentLocaleValue) {
@@ -68,7 +82,7 @@ export function useTranslateMap(currentLocale: string): TranslateMapFn {
       : "none"
 
     throw new AstroError(
-      `Missing translation map value for "${context.path.join(".")}" in locales "${currentLocale}" and "${config.defaultLocale}"`,
+      `Missing translation map value for "${key}" in locales "${currentLocale}" and "${config.defaultLocale}"`,
       `Available locales: ${availableLocalesText}. Add a value for "${currentLocale}" or "${config.defaultLocale}" to this inline translation map.`,
     )
   }
