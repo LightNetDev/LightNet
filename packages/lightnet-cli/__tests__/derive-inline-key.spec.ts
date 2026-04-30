@@ -25,3 +25,14 @@ test("Should map astro config files to config namespace", () => {
     }),
   ).toBe("ln.inline.config.title")
 })
+
+test("Should derive content keys from fallback object paths", () => {
+  expect(
+    deriveInlineKey({
+      type: "inline",
+      key: "media-collections.learn-skateboarding.label",
+      objectPath: ["media-collections", "learn-skateboarding", "label"],
+      values: {},
+    }),
+  ).toBe("ln.inline.content.media-collections.learn-skateboarding.label")
+})

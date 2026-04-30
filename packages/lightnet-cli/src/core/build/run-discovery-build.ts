@@ -40,6 +40,16 @@ export const runDiscoveryBuild = async ({
       })
     }
 
+    child.on("error", (error) => {
+      reject(
+        new LightnetCliError(
+          output
+            ? `Astro build failed.\n\n${output}`
+            : `Astro build failed.\n\n${error.message}`,
+        ),
+      )
+    })
+
     child.on("exit", (code) => {
       if (code === 0) {
         resolvePromise()

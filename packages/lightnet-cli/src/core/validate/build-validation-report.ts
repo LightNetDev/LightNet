@@ -1,3 +1,4 @@
+import { mergeDiscoveryRecords } from "../discovery/merge-discovery-records.js"
 import type { DiscoveryMetadata, DiscoveryRecord } from "../types.js"
 
 export const buildValidationReport = ({
@@ -9,9 +10,10 @@ export const buildValidationReport = ({
   metadata: DiscoveryMetadata
   records: DiscoveryRecord[]
 }) => {
+  const mergedRecords = mergeDiscoveryRecords(records)
   const filteredRecords = includeBuiltIns
-    ? records
-    : records.filter((record) => record.type !== "built-in")
+    ? mergedRecords
+    : mergedRecords.filter((record) => record.type !== "built-in")
 
   const missingCounts = Object.fromEntries(
     metadata.locales.map((locale) => [
