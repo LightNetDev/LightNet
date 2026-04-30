@@ -4,8 +4,8 @@ import { getCollection } from "astro:content"
 import type { TranslateMapFn } from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchemaAsync } from "../utils/verify-schema"
-import { categoryEntrySchema } from "./content-schema"
 import { getMediaItems } from "./get-media-items"
+import { categoryEntrySchema } from "./schema/category"
 
 const labelPath = (id: string) => ["categories", id, "label"]
 

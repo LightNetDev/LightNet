@@ -1,10 +1,8 @@
-export {
-  createCategorySchema as categorySchema,
-  LIGHTNET_COLLECTIONS,
-  mediaCollectionSchema,
-  createMediaItemSchema as mediaItemSchema,
-  mediaTypeSchema,
-} from "../src/content/content-schema"
+export { LIGHTNET_COLLECTIONS } from "../src/content/content-schema"
+export { createCategorySchema as categorySchema } from "../src/content/schema/category"
+export { mediaCollectionSchema } from "../src/content/schema/media-collection"
+export { createMediaItemSchema as mediaItemSchema } from "../src/content/schema/media-item"
+export { mediaTypeSchema } from "../src/content/schema/media-type"
 
 import { type CollectionEntry, getCollection } from "astro:content"
 

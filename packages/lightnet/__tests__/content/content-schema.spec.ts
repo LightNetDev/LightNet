@@ -6,12 +6,12 @@ vi.mock("astro:content", () => ({
   reference: () => z.string(),
 }))
 
-const {
-  categorySchema,
-  inlineTranslationSchema,
-  mediaCollectionSchema,
-  mediaItemSchema,
-} = await import("../../src/content/content-schema")
+const { categorySchema } = await import("../../src/content/schema/category")
+const { inlineTranslationSchema } =
+  await import("../../src/content/schema/inline-translation")
+const { mediaCollectionSchema } =
+  await import("../../src/content/schema/media-collection")
+const { mediaItemSchema } = await import("../../src/content/schema/media-item")
 
 test("Should accept inline translation with only default locale", () => {
   const parsed = inlineTranslationSchema.safeParse({

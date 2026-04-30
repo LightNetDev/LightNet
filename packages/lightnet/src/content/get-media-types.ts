@@ -4,8 +4,8 @@ import { getCollection } from "astro:content"
 import type { TranslateMapFn } from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchema } from "../utils/verify-schema"
-import { mediaTypeEntrySchema } from "./content-schema"
 import { getMediaItems } from "./get-media-items"
+import { mediaTypeEntrySchema } from "./schema/media-type"
 
 const typesById = lazy(async () =>
   Object.fromEntries((await loadTypes()).map((type) => [type.id, type])),
