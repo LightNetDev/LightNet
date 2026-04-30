@@ -3,6 +3,11 @@ import react from "@astrojs/react"
 import type { AstroIntegration } from "astro"
 import { AstroError } from "astro/errors"
 
+import {
+  discoverBuildTranslations,
+  discoverConfigTranslations,
+} from "../i18n/discover-translations"
+import { initializeTranslationDiscovery } from "../i18n/record-translation"
 import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
 import tailwind from "./tailwind"
@@ -12,7 +17,7 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
   return {
     name: "lightnet",
     hooks: {
-      "astro:config:setup": ({
+      "astro:config:setup": async ({
         injectRoute,
         config: astroConfig,
         updateConfig,
@@ -32,6 +37,11 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           "Invalid LightNet configuration",
           "Fix these errors on the LightNet configuration:",
         )
+        await initializeTranslationDiscovery({
+          defaultLocale: config.defaultLocale,
+          locales: config.locales,
+        })
+        discoverConfigTranslations(config)
 
         injectRoute({
           pattern: "404",
@@ -77,6 +87,20 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },
         })
+      },
+      "astro:build:start": async () => {
+        const config = verifySchema(
+          extendedConfigSchema,
+          lightnetConfig,
+          "Invalid LightNet configuration",
+          "Fix these errors on the LightNet configuration:",
+        )
+
+        await initializeTranslationDiscovery({
+          defaultLocale: config.defaultLocale,
+          locales: config.locales,
+        })
+        await discoverBuildTranslations(config)
       },
     },
   }

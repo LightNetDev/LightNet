@@ -2,7 +2,7 @@
 import config from "virtual:lightnet/config"
 
 import { getUsedCategories } from "../../../content/get-categories"
-import { getUsedLanguages } from "../../../content/get-languages"
+import { getContentLanguages } from "../../../content/get-languages"
 import { getUsedMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchFilterReact from "./SearchFilter.tsx"
@@ -17,7 +17,7 @@ const mediaTypes = (await getUsedMediaTypes(currentLocale, tMap)).map(
   ({ id, labelText }) => ({ id, labelText }),
 )
 
-const languages = (await getUsedLanguages(currentLocale, tMap)).map(
+const languages = (await getContentLanguages(currentLocale, tMap)).map(
   ({ code: id, labelText }) => ({ id, labelText }),
 )
 

@@ -1,3 +1,4 @@
+import { z } from "astro/zod"
 import YAML from "yaml"
 
 const builtInTranslations = {
@@ -19,6 +20,8 @@ const builtInTranslations = {
 
 type BuiltInLanguage = keyof typeof builtInTranslations
 
+const translationFileSchema = z.record(z.string(), z.string())
+
 const userTranslations = Object.fromEntries(
   Object.entries(
     import.meta.glob(["/src/translations/*.(yml|yaml)"], {
@@ -37,6 +40,14 @@ export const loadTranslations = async (bcp47: string) => ({
   ...(await loadUserTranslations(bcp47)),
 })
 
+export const loadBuiltInTranslationFile = async (bcp47: string) =>
+  loadBuiltInTranslations(builtInTranslations, bcp47)
+
+export const loadUserTranslationFile = async (bcp47: string) =>
+  loadUserTranslations(bcp47)
+
+export const getUserTranslationLocales = () => Object.keys(userTranslations)
+
 function hasTranslations(
   translationMap: Record<string, unknown>,
   bcp47: string,
@@ -52,7 +63,7 @@ const loadBuiltInTranslations = async (
     return {}
   }
   const yml = (await translationMap[bcp47]()).default
-  return YAML.parse(yml)
+  return translationFileSchema.parse(YAML.parse(yml))
 }
 
 const loadUserTranslations = async (bcp47: string) => {
@@ -60,7 +71,7 @@ const loadUserTranslations = async (bcp47: string) => {
     return {}
   }
   const yml = (await userTranslations[bcp47]()) as string
-  return YAML.parse(yml)
+  return translationFileSchema.parse(YAML.parse(yml))
 }
 
 export type LightNetTranslationKey =

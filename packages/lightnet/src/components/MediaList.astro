@@ -3,7 +3,7 @@ import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
 import { ChevronRightIcon } from "lucide-react"
 
-import { getMediaTypes } from "../content/get-media-types"
+import { getTranslatedMediaTypes } from "../content/get-media-types"
 import { detailsPagePath } from "../utils/paths"
 import CoverImageDecorator from "./CoverImageDecorator"
 import Icon from "./Icon"
@@ -31,17 +31,17 @@ const items = Astro.props.items.filter((item) => !!item)
 const { direction, currentLocale, tMap } = Astro.locals.i18n
 
 const mediaTypes = Object.fromEntries(
-  (await getMediaTypes()).map((type) => [
-    type.id,
-    {
-      id: type.id,
-      labelText: tMap(type.data.label, {
-        path: ["media-types", type.id, "label"],
-      }),
-      icon: type.data.icon,
-      coverImageStyle: type.data.coverImageStyle,
-    },
-  ]),
+  (await getTranslatedMediaTypes(currentLocale, tMap)).map(
+    ({ id, labelText, icon, coverImageStyle }) => [
+      id,
+      {
+        id,
+        labelText,
+        icon,
+        coverImageStyle,
+      },
+    ],
+  ),
 )
 const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 ---

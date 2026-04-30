@@ -1,6 +1,8 @@
 import { z } from "astro/zod"
 import { expect, test, vi } from "vitest"
 
+import { getTranslationProvenance } from "../../src/i18n/translation-provenance"
+
 vi.mock("astro:content", () => ({
   defineCollection: (definition: unknown) => definition,
   reference: () => z.string(),
@@ -19,6 +21,11 @@ test("Should accept inline translation with only default locale", () => {
   })
 
   expect(parsed.success).toBe(true)
+  if (!parsed.success) {
+    return
+  }
+
+  expect(getTranslationProvenance(parsed.data)).toEqual({})
 })
 
 test("Should accept inline translation without a specific default locale", () => {

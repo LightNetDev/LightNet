@@ -13,13 +13,13 @@
     "prettier": "prettier . --write --cache --log-level warn",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "version": "pnpm changeset version && pnpm i --no-frozen-lockfile",
-    "translation-status": "pnpm --silent -F cli translation-status",
+    "translation-status": "pnpm --silent -F @internal/scripts translation-status",
     "playwright:install": "pnpm --filter=lightnet exec playwright install",
     "e2e": "pnpm --filter=lightnet e2e",
     "e2e:admin": "pnpm --filter=@lightnet/sveltia-admin e2e",
     "test": "pnpm -r --if-present test"
   },
-  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
+  "packageManager": "pnpm@10.33.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet"

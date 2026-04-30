@@ -7,28 +7,30 @@ import { verifySchemaAsync } from "../utils/verify-schema"
 import { categoryEntrySchema } from "./content-schema"
 import { getMediaItems } from "./get-media-items"
 
+const labelPath = (id: string) => ["categories", id, "label"]
+
 const categoriesById = lazy(async () =>
   Object.fromEntries(
     (await loadCategories()).map(({ id, data }) => [id, data]),
   ),
 )
 
-const contentCategories = lazy(async () => {
+const contentCategoryIds = lazy(async () => {
   const categories = await categoriesById.get()
-  return Object.fromEntries(
+  return new Set<string>(
     (await getMediaItems())
       .flatMap((item) => item.data.categories ?? [])
-      .map((c) => {
-        const category = categories[c.id]
+      .map(({ id }) => {
+        const category = categories[id]
         if (!category) {
           throw new AstroError(
             "Missing Category",
-            `A media item references a non-existent category: "${c.id}".\n` +
+            `A media item references a non-existent category: "${id}".\n` +
               `To fix this, create a category file at:\n` +
-              `src/content/categories/${c.id}.json`,
+              `src/content/categories/${id}.json`,
           )
         }
-        return [c.id, category]
+        return id
       }),
   )
 })
@@ -44,16 +46,11 @@ export async function getUsedCategories(
   currentLocale: string,
   tMap: TranslateMapFn,
 ) {
-  const categories = await contentCategories.get()
-  return [...Object.entries(categories)]
-    .map(([id, data]) => ({
-      id,
-      ...data,
-      labelText: tMap(data.label, {
-        path: ["categories", id, "label"],
-      }),
-    }))
-    .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
+  const usedIds = await contentCategoryIds.get()
+  // we intentionally translate all categories because we want
+  // to record translations also for unreferenced categories
+  const categories = await getCategories(currentLocale, tMap)
+  return categories.filter(({ id }) => usedIds.has(id))
 }
 
 /**
@@ -73,14 +70,12 @@ export async function getCategories(
     .map(([id, data]) => ({
       id,
       ...data,
-      labelText: tMap(data.label, {
-        path: ["categories", id, "label"],
-      }),
+      labelText: tMap(data.label, { path: labelPath(id) }),
     }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
 
-export async function getCategory(id: string) {
+export async function getCategory(id: string, tMap: TranslateMapFn) {
   const category = (await categoriesById.get())[id]
   if (!category) {
     throw new AstroError(
@@ -91,6 +86,7 @@ export async function getCategory(id: string) {
   return {
     id,
     ...category,
+    labelText: tMap(category.label, { path: labelPath(id) }),
   }
 }
 

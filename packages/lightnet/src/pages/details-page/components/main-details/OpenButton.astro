@@ -11,7 +11,7 @@ interface Props {
   className?: string
 }
 const { mediaId, openActionLabel, className } = Astro.props
-const { tMap } = Astro.locals.i18n
+const { tMap, t } = Astro.locals.i18n
 const item = await getMediaItem(mediaId)
 const content = createContentMetadata(item.data.content[0], tMap, {
   path: ["media-items", mediaId, "content", 0],
@@ -36,6 +36,6 @@ const content = createContentMetadata(item.data.content[0], tMap, {
             "openActionLabel",
           ],
         })
-      : Astro.locals.i18n.t("ln.details.download")
+      : t("ln.details.download")
   }
 </a>
