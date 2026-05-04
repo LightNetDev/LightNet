@@ -1,5 +1,5 @@
 ---
-"lightnet": patch
+"lightnet": minor
 ---
 
 Add `tConfigField` and `tContentField` to LightNet's i18n locals to distinguish
