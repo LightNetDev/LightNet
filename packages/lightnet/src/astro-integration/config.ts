@@ -117,7 +117,7 @@ export const configSchema = z.object({
   /**
    * Optional localized text to display in your site's footer.
    */
-  footerText: inlineTranslationSchema.optional(),
+  footerText: translationMapSchema.optional(),
   /**
    * Optional links to display in your site's footer.
    */
