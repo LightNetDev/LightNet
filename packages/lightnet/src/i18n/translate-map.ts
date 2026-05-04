@@ -85,14 +85,14 @@ export function useTranslateMap(currentLocale: string) {
     const key = getKey()
     recordTranslation({ key, values: translationMap, type: "map" })
 
-    const currentLocaleValue = translationMap[currentLocale]
-    if (currentLocaleValue) {
-      return currentLocaleValue
+    const currentLocaleTranslation = translationMap[currentLocale]
+    if (currentLocaleTranslation) {
+      return currentLocaleTranslation
     }
 
-    const defaultLocaleValue = translationMap[config.defaultLocale]
-    if (defaultLocaleValue) {
-      return defaultLocaleValue
+    const defaultLocaleTranslation = translationMap[config.defaultLocale]
+    if (defaultLocaleTranslation) {
+      return defaultLocaleTranslation
     }
 
     const availableLocales = Object.keys(translationMap).filter(
@@ -148,7 +148,7 @@ function getMapPath(
     if (!_data || typeof _data !== "object") {
       return
     }
-    if (equalsTranslationMap(translationMap, _data)) {
+    if (_data === translationMap) {
       return _path
     }
     for (const [key, value] of Object.entries(_data)) {
@@ -170,31 +170,6 @@ function getMapPath(
     value: resolvedPath,
   })
   return resolvedPath
-}
-
-function equalsTranslationMap(
-  translationMap: TranslationMap,
-  toCompare: unknown,
-) {
-  if (!toCompare || typeof toCompare !== "object" || Array.isArray(toCompare)) {
-    return false
-  }
-  const keysA = Object.keys(translationMap)
-  const keysB = Object.keys(toCompare)
-
-  if (keysA.length !== keysB.length) {
-    return false
-  }
-
-  for (const key of keysA) {
-    if (!hasOwnProperty(toCompare, key)) {
-      return false
-    }
-    if (translationMap[key] !== toCompare[key]) {
-      return false
-    }
-  }
-  return true
 }
 
 function hasOwnProperty<K extends PropertyKey>(
