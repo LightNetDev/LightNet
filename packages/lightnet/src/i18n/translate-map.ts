@@ -123,7 +123,7 @@ export function useTranslateMap(currentLocale: string) {
 
   const tConfigField: TranslateConfigFieldFn = (translationMap, _config) => {
     return tMap(translationMap, {
-      path: getMapPath(translationMap, config, ["config"]),
+      path: getMapPath(translationMap, _config, ["config"]),
     })
   }
 
