@@ -2,7 +2,8 @@ import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 
 import { imageSchema } from "../astro-image"
-import { inlineTranslationSchema } from "./inline-translation"
+import { translationMapSchema } from "../../i18n/translation-map-schema"
+import { attachTranslationMapMetadata } from "../../i18n/translation-map-metadata"
 
 /**
  * Category Schema
@@ -13,7 +14,7 @@ export const categorySchema = z.object({
    *
    * Label translated for the default locale. Other configured site locales are optional.
    */
-  label: inlineTranslationSchema,
+  label: translationMapSchema,
 
   /* Relative path to the thumbnail image of this category.
    *
@@ -33,6 +34,7 @@ export const createCategorySchema = ({ image }: SchemaContext) =>
 
 export const categoryEntrySchema = z.object({
   id: z.string(),
+  collection: z.literal("categories"),
   data: categorySchema,
 })
 

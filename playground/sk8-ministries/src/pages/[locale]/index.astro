@@ -25,6 +25,7 @@ const learnSkateboarding = await getEntry(
   "media-collections",
   "learn-skateboarding",
 )
+console.log("collection", learnSkateboarding)
 if (!learnSkateboarding) {
   throw new AstroError("Media Collection 'learn-skateboarding' not found")
 }
@@ -32,7 +33,7 @@ const learnSkateboardingItems = await getEntries(
   learnSkateboarding.data.mediaItems,
 )
 
-const { t, tMap, currentLocale } = Astro.locals.i18n
+const { t, tContentField, currentLocale } = Astro.locals.i18n
 ---
 
 <Page>
@@ -64,9 +65,7 @@ const { t, tMap, currentLocale } = Astro.locals.i18n
   />
 
   <MediaGallerySection
-    title={tMap(learnSkateboarding.data.label, {
-      path: ["media-collections", "learn-skateboarding", "label"],
-    })}
+    title={tContentField(learnSkateboarding.data.label, learnSkateboarding)}
     items={learnSkateboardingItems}
   />
 </Page>

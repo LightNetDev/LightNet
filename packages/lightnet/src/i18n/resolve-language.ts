@@ -2,7 +2,7 @@ import { AstroError } from "astro/errors"
 import i18next from "i18next"
 import config from "virtual:lightnet/config"
 
-import type { TranslateMapFn } from "./translate-map"
+import type { TranslateConfigFieldFn } from "./translate-map"
 
 const languages = Object.fromEntries(
   config.languages.map((language) => [language.code, language]),
@@ -25,22 +25,20 @@ export const resolveLanguage = (bcp47: string) => {
 
 export const resolveTranslatedLanguage = (
   bcp47: string,
-  tMap: TranslateMapFn,
+  tConfigField: TranslateConfigFieldFn,
 ) => {
   const language = resolveLanguage(bcp47)
   return {
     ...language,
-    labelText: tMap(language.label, {
-      path: ["languages", bcp47, "label"],
-    }),
+    labelText: tConfigField(language.label, config),
   }
 }
 
 export async function getTranslatedLanguages(
   currentLocale: string,
-  tMap: TranslateMapFn,
+  tConfigField: TranslateConfigFieldFn,
 ) {
   return config.languages
-    .map(({ code }) => resolveTranslatedLanguage(code, tMap))
+    .map(({ code }) => resolveTranslatedLanguage(code, tConfigField))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }

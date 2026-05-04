@@ -7,14 +7,14 @@ vi.mock("astro:content", () => ({
 }))
 
 const { categorySchema } = await import("../../src/content/schema/category")
-const { inlineTranslationSchema } =
-  await import("../../src/content/schema/inline-translation")
+const { translationMapSchema } =
+  await import("../../src/i18n/translation-map-schema")
 const { mediaCollectionSchema } =
   await import("../../src/content/schema/media-collection")
 const { mediaItemSchema } = await import("../../src/content/schema/media-item")
 
 test("Should accept inline translation with only default locale", () => {
-  const parsed = inlineTranslationSchema.safeParse({
+  const parsed = translationMapSchema.safeParse({
     en: "Hello",
   })
 
@@ -22,7 +22,7 @@ test("Should accept inline translation with only default locale", () => {
 })
 
 test("Should accept inline translation without a specific default locale", () => {
-  const parsed = inlineTranslationSchema.safeParse({
+  const parsed = translationMapSchema.safeParse({
     de: "Hallo",
   })
 
@@ -30,7 +30,7 @@ test("Should accept inline translation without a specific default locale", () =>
 })
 
 test("Should accept arbitrary locale keys in inline translation", () => {
-  const parsed = inlineTranslationSchema.safeParse({
+  const parsed = translationMapSchema.safeParse({
     en: "Hello",
     fr: "Bonjour",
   })
@@ -39,7 +39,7 @@ test("Should accept arbitrary locale keys in inline translation", () => {
 })
 
 test("Should reject empty inline translations", () => {
-  const parsed = inlineTranslationSchema.safeParse({})
+  const parsed = translationMapSchema.safeParse({})
 
   expect(parsed.success).toBe(false)
   if (parsed.success) {

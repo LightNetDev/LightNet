@@ -8,9 +8,7 @@ const tMapDe = useTranslateMap("de")
 
 test("Should create complete content metadata", () => {
   expect(
-    createContentMetadata({ url: "https://some.host/some.pDf" }, tMap, {
-      path: ["content", 0],
-    }),
+    createContentMetadata({ url: "https://some.host/some.pDf" }, tMap),
   ).toEqual({
     url: "https://some.host/some.pDf",
     canBeOpened: true,
@@ -122,11 +120,7 @@ test("Should create complete content metadata", () => {
   },
 ].forEach(({ url, expected, label }) => {
   test(`Should create content metadata for url '${url}' ${label !== undefined ? `and label '${label}'` : ""}`, () => {
-    expect(
-      createContentMetadata({ url, label }, tMap, {
-        path: ["content", 0],
-      }),
-    ).toMatchObject(expected)
+    expect(createContentMetadata({ url, label }, tMap)).toMatchObject(expected)
   })
 })
 
@@ -135,7 +129,6 @@ test("Should override name with input", () => {
     createContentMetadata(
       { url: "/path/to/a.file", label: { en: "My file" } },
       tMap,
-      { path: ["content", 0] },
     ),
   ).toMatchObject({ labelText: "My file" })
 })
@@ -147,7 +140,6 @@ test("Should resolve localized content labels by locale", () => {
       label: { en: "Read", de: "Lesen" },
     },
     tMapDe,
-    { path: ["content", 0] },
   )
   expect(result.labelText).toBe("Lesen")
 })

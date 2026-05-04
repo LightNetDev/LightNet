@@ -11,10 +11,12 @@ interface Props {
   className?: string
 }
 const { mediaId, openActionLabel, className } = Astro.props
-const { tMap, t } = Astro.locals.i18n
+const { tContentField, t } = Astro.locals.i18n
 const item = await getMediaItem(mediaId)
-const content = createContentMetadata(item.data.content[0], tMap, {
-  path: ["media-items", mediaId, "content", 0],
+const { url, label } = item.data.content[0]
+const content = createContentMetadata({
+  url,
+  labelText: label && tContentField(label, item),
 })
 ---
 
@@ -28,14 +30,7 @@ const content = createContentMetadata(item.data.content[0], tMap, {
   {content.isExternal && <ExternalLinkIcon className="shrink-0" />}
   {
     content.canBeOpened
-      ? tMap(openActionLabel, {
-          path: [
-            "media-types",
-            item.data.type.id,
-            "detailsPage",
-            "openActionLabel",
-          ],
-        })
+      ? tContentField(openActionLabel, item)
       : t("ln.details.download")
   }
 </a>

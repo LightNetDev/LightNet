@@ -34,6 +34,16 @@ type I18n = {
   tMap: import("./translate-map").TranslateMapFn
 
   /**
+   * todo
+   */
+  tConfigField: import("./translate-map").TranslateConfigFieldFn
+
+  /**
+   * todo
+   */
+  tContentField: import("./translate-map").TranslateContentFieldFn
+
+  /**
    *  The current locale resolved by LightNet from the URL pathname.
    *
    *  If no supported locale is present in the pathname,

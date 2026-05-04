@@ -1,6 +1,7 @@
 import { z } from "astro/zod"
 
-import { inlineTranslationSchema } from "./inline-translation"
+import { translationMapSchema } from "../../i18n/translation-map-schema"
+import { attachTranslationMapMetadata } from "../../i18n/translation-map-metadata"
 
 /**
  * Media Type Schema
@@ -11,7 +12,7 @@ export const mediaTypeSchema = z.object({
    *
    * Label translated for the default locale. Other configured site locales are optional.
    */
-  label: inlineTranslationSchema,
+  label: translationMapSchema,
   /**
    * Defines how the cover image for a media item of this type is rendered.
    *
@@ -41,7 +42,7 @@ export const mediaTypeSchema = z.object({
          *
          * Label translated for the default locale. Other configured site locales are optional.
          */
-        openActionLabel: inlineTranslationSchema.optional(),
+        openActionLabel: translationMapSchema.optional(),
       }),
       z.object({
         /**
@@ -83,6 +84,7 @@ export const mediaTypeSchema = z.object({
 
 export const mediaTypeEntrySchema = z.object({
   id: z.string(),
+  collection: z.literal("media-types"),
   data: mediaTypeSchema,
 })
 

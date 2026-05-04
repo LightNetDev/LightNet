@@ -3,22 +3,7 @@ import { z } from "astro/zod"
 import { isBcp47 } from "../i18n/bcp-47"
 import { validateInlineTranslations } from "./validators/validate-inline-translations"
 import { validateLanguages } from "./validators/validate-languages"
-
-/**
- * Translations by BCP-47 tags.
- * We can only do basic validation here because we cannot access locales
- * from the same config.
- *
- * @example
- * {
- *   de: "Hallo",
- *   en: "Hello"
- * }
- */
-export const inlineTranslationSchema = z.record(
-  z.string(),
-  z.string().nonempty(),
-)
+import { translationMapSchema } from "../i18n/translation-map-schema"
 
 /**
  * Link Schema.
@@ -35,7 +20,7 @@ const linkSchema = z.object({
    * Must define a value for the default site locale.
    * Other configured site locales are optional.
    */
-  label: inlineTranslationSchema,
+  label: translationMapSchema,
   /**
    * If this is set to true the currentLocale will be appended to
    * the href path. Eg. for href="/about"
@@ -61,7 +46,7 @@ const languageSchema = z
     /**
      * Display name for this language.
      */
-    label: inlineTranslationSchema,
+    label: translationMapSchema,
     /**
      * Whether this language should be exposed as a site UI language.
      */
@@ -116,7 +101,7 @@ export const configSchema = z.object({
   /**
    * Title of the web site.
    */
-  title: inlineTranslationSchema,
+  title: translationMapSchema,
   /**
    * Languages supported by this site.
    */
@@ -151,7 +136,7 @@ export const configSchema = z.object({
        * Must define a value for the default site locale.
        * Other configured site locales are optional.
        */
-      alt: inlineTranslationSchema.optional(),
+      alt: translationMapSchema.optional(),
       /**
        * Size in px to use for the logo on the header bar.
        * The size will be applied to the shorter side of your logo image.
@@ -226,7 +211,6 @@ export const extendedConfigSchema = configSchema.transform((config, ctx) => {
     ""
 
   validateInlineTranslations(config, locales, defaultLocale, ctx)
-
   return {
     ...config,
     locales,

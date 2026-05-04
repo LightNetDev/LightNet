@@ -1,7 +1,8 @@
 import { z } from "astro/zod"
 import { reference } from "astro:content"
 
-import { inlineTranslationSchema } from "./inline-translation"
+import { translationMapSchema } from "../../i18n/translation-map-schema"
+import { attachTranslationMapMetadata } from "../../i18n/translation-map-metadata"
 
 /**
  * Media Collection Schema
@@ -12,7 +13,7 @@ export const mediaCollectionSchema = z.object({
    *
    * Label translated for the default locale. Other configured site locales are optional.
    */
-  label: inlineTranslationSchema,
+  label: translationMapSchema,
   /**
    * Ordered list of media items included in this collection.
    * The array order defines how items are shown when querying by collection.
@@ -24,6 +25,7 @@ export const mediaCollectionSchema = z.object({
 
 export const mediaCollectionEntrySchema = z.object({
   id: z.string(),
+  collection: z.literal("media-types"),
   data: mediaCollectionSchema,
 })
 

@@ -1,10 +1,11 @@
-import { createWriteStream, type WriteStream } from "node:fs"
+import { createWriteStream } from "node:fs"
 import { mkdir, unlink, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import process from "node:process"
 
 import { root } from "astro:config/server"
 import config from "virtual:lightnet/config"
+import { lazy } from "../utils/lazy"
 
 type Translation = {
   type: "map" | "user" | "built-in"
@@ -21,7 +22,7 @@ const lightnetCachePath = resolve(
 
 const recordedTranslations = new Set<string>()
 
-let translationStore: WriteStream | undefined = undefined
+let translationStore = lazy(() => createTranslationStore())
 
 const writeLanguagesManifest = async () => {
   const manifestPath = resolve(lightnetCachePath, "languages.json")
@@ -33,11 +34,7 @@ const writeLanguagesManifest = async () => {
   await writeFile(manifestPath, JSON.stringify(manifest), "utf-8")
 }
 
-const getTranslationStore = async () => {
-  if (translationStore) {
-    return translationStore
-  }
-
+const createTranslationStore = async () => {
   const translationStorePath = resolve(lightnetCachePath, "translations.jsonl")
 
   await mkdir(lightnetCachePath, { recursive: true })
@@ -47,21 +44,21 @@ const getTranslationStore = async () => {
     // catch error if file has not been existing
   }
 
-  translationStore = createWriteStream(translationStorePath, {
+  const store = createWriteStream(translationStorePath, {
     flags: "a",
     encoding: "utf8",
   })
 
   await writeLanguagesManifest()
 
-  process.on("exit", () => translationStore?.end())
-  process.on("SIGINT", () => translationStore?.end())
-  return translationStore
+  process.on("exit", () => store?.end())
+  process.on("SIGINT", () => store?.end())
+  return store
 }
 
-export function recordTranslation(translation: Translation) {
-  if (import.meta.env.DEV) {
-    // do not record translations when running DEV server
+export async function recordTranslation(translation: Translation) {
+  if (!import.meta.env.PROD) {
+    // only record during build
     return
   }
 
@@ -71,9 +68,6 @@ export function recordTranslation(translation: Translation) {
   }
   recordedTranslations.add(key)
 
-  getTranslationStore()
-    .then((store) => {
-      store.write(JSON.stringify(translation) + "\n")
-    })
-    .catch((e) => console.error(e))
+  const store = await translationStore.get()
+  store.write(JSON.stringify(translation) + "\n")
 }

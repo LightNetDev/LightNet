@@ -1,7 +1,10 @@
 import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
-import type { TranslateMapFn } from "../i18n/translate-map"
+import type {
+  TranslateContentFieldFn,
+  TranslateMapFn,
+} from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchema } from "../utils/verify-schema"
 import { getMediaItems } from "./get-media-items"
@@ -28,25 +31,23 @@ export const getMediaType = async (id: string) => {
 
 export async function getUsedMediaTypes(
   currentLocale: string,
-  tMap: TranslateMapFn,
+  tContentField: TranslateContentFieldFn,
 ) {
   const contentTypes = await contentTypesLoader.get()
-  const mediaTypes = await getTranslatedMediaTypes(currentLocale, tMap)
+  const mediaTypes = await getTranslatedMediaTypes(currentLocale, tContentField)
   return mediaTypes.filter(({ id }) => contentTypes.has(id))
 }
 
 export async function getTranslatedMediaTypes(
   currentLocale: string,
-  tMap: TranslateMapFn,
+  tContentField: TranslateContentFieldFn,
 ) {
   const mediaTypes = Object.values(await typesById.get())
   return mediaTypes
-    .map(({ id, data }) => ({
-      id,
-      ...data,
-      labelText: tMap(data.label, {
-        path: ["media-types", id, "label"],
-      }),
+    .map((mediaType) => ({
+      id: mediaType.id,
+      ...mediaType.data,
+      labelText: tContentField(mediaType.data.label, mediaType),
     }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }

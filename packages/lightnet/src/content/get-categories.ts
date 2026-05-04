@@ -1,17 +1,15 @@
 import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
-import type { TranslateMapFn } from "../i18n/translate-map"
+import type { TranslateContentFieldFn } from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchemaAsync } from "../utils/verify-schema"
 import { getMediaItems } from "./get-media-items"
 import { categoryEntrySchema } from "./schema/category"
 
-const labelPath = (id: string) => ["categories", id, "label"]
-
 const categoriesById = lazy(async () =>
   Object.fromEntries(
-    (await loadCategories()).map(({ id, data }) => [id, data]),
+    (await loadCategories()).map((category) => [category.id, category]),
   ),
 )
 
@@ -44,12 +42,12 @@ const contentCategoryIds = lazy(async () => {
  */
 export async function getUsedCategories(
   currentLocale: string,
-  tMap: TranslateMapFn,
+  tContentField: TranslateContentFieldFn,
 ) {
   const usedIds = await contentCategoryIds.get()
   // we intentionally translate all categories because we want
   // to record translations also for unreferenced categories
-  const categories = await getCategories(currentLocale, tMap)
+  const categories = await getCategories(currentLocale, tContentField)
   return categories.filter(({ id }) => usedIds.has(id))
 }
 
@@ -63,19 +61,22 @@ export async function getUsedCategories(
  */
 export async function getCategories(
   currentLocale: string,
-  tMap: TranslateMapFn,
+  tContentField: TranslateContentFieldFn,
 ) {
   const categories = await categoriesById.get()
   return [...Object.entries(categories)]
-    .map(([id, data]) => ({
+    .map(([id, category]) => ({
       id,
-      ...data,
-      labelText: tMap(data.label, { path: labelPath(id) }),
+      ...category.data,
+      labelText: tContentField(category.data.label, category),
     }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }
 
-export async function getCategory(id: string, tMap: TranslateMapFn) {
+export async function getCategory(
+  id: string,
+  tContentField: TranslateContentFieldFn,
+) {
   const category = (await categoriesById.get())[id]
   if (!category) {
     throw new AstroError(
@@ -85,8 +86,8 @@ export async function getCategory(id: string, tMap: TranslateMapFn) {
   }
   return {
     id,
-    ...category,
-    labelText: tMap(category.label, { path: labelPath(id) }),
+    ...category.data,
+    labelText: tContentField(category.data.label, category),
   }
 }
 

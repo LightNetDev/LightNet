@@ -9,13 +9,14 @@ interface Props {
 }
 
 const { mediaId, className } = Astro.props
-const { tMap } = Astro.locals.i18n
+const { tContentField } = Astro.locals.i18n
 
 const item = await getMediaItem(mediaId)
 
-const content = item.data.content.map((contentItem, index) =>
-  createContentMetadata(contentItem, tMap, {
-    path: ["media-items", mediaId, "content", index],
+const content = item.data.content.map(({ url, label }) =>
+  createContentMetadata({
+    url,
+    labelText: label && tContentField(label, item),
   }),
 )
 ---

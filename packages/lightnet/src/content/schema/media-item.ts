@@ -3,7 +3,8 @@ import type { SchemaContext } from "astro:content"
 import { reference } from "astro:content"
 
 import { imageSchema } from "../astro-image"
-import { inlineTranslationSchema } from "./inline-translation"
+import { translationMapSchema } from "../../i18n/translation-map-schema"
+import { attachTranslationMapMetadata } from "../../i18n/translation-map-metadata"
 
 /**
  * Media Item Schema
@@ -109,7 +110,7 @@ export const mediaItemSchema = z.object({
          * Other configured site locales are optional.
          * If this is not set, the file name from URL will be used.
          */
-        label: inlineTranslationSchema.optional(),
+        label: translationMapSchema.optional(),
       }),
     )
     .min(1),
@@ -130,6 +131,7 @@ export const createMediaItemSchema = ({ image }: SchemaContext) =>
 
 export const mediaItemEntrySchema = z.object({
   id: z.string(),
+  collection: z.literal("media"),
   data: mediaItemSchema,
 })
 

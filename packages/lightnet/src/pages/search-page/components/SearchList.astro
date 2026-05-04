@@ -7,15 +7,18 @@ import { getTranslatedMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchListReact from "./SearchList.tsx"
 
-const { currentLocale, tMap } = Astro.locals.i18n
+const { currentLocale, tContentField, tConfigField } = Astro.locals.i18n
 
 const categories: Record<string, string> = {}
-for (const { id, labelText } of await getUsedCategories(currentLocale, tMap)) {
+for (const { id, labelText } of await getUsedCategories(
+  currentLocale,
+  tContentField,
+)) {
   categories[id] = labelText
 }
 
 const mediaTypes = Object.fromEntries(
-  (await getTranslatedMediaTypes(currentLocale, tMap)).map(
+  (await getTranslatedMediaTypes(currentLocale, tContentField)).map(
     ({ labelText, icon, coverImageStyle, id }) => [
       id,
       {
@@ -27,7 +30,7 @@ const mediaTypes = Object.fromEntries(
   ),
 )
 
-const contentLanguages = await getContentLanguages(currentLocale, tMap)
+const contentLanguages = await getContentLanguages(currentLocale, tConfigField)
 const languages = Object.fromEntries(
   contentLanguages.map(({ code, direction, labelText }) => [
     code,
