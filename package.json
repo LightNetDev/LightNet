@@ -29,22 +29,22 @@
   },
   "homepage": "https://lightnet.community",
   "devDependencies": {
-    "@astrojs/check": "^0.9.8",
+    "@astrojs/check": "^0.9.9",
     "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.31.0",
     "@eslint/js": "^10.0.1",
-    "astro": "^6.1.8",
-    "eslint": "^10.2.1",
+    "astro": "^6.2.1",
+    "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.5.0",
+    "globals": "^17.6.0",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.58.2"
+    "typescript-eslint": "^8.59.1"
   },
   "engines": {
     "node": ">=22"
