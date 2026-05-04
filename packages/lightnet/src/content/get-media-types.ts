@@ -1,10 +1,7 @@
 import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
-import type {
-  TranslateContentFieldFn,
-  TranslateMapFn,
-} from "../i18n/translate-map"
+import type { TranslateContentFieldFn } from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchema } from "../utils/verify-schema"
 import { getMediaItems } from "./get-media-items"

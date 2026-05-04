@@ -2,9 +2,8 @@ import { z } from "astro/zod"
 import type { SchemaContext } from "astro:content"
 import { reference } from "astro:content"
 
-import { imageSchema } from "../astro-image"
 import { translationMapSchema } from "../../i18n/translation-map-schema"
-import { attachTranslationMapMetadata } from "../../i18n/translation-map-metadata"
+import { imageSchema } from "../astro-image"
 
 /**
  * Media Item Schema

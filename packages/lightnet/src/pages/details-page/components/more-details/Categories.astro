@@ -10,10 +10,10 @@ interface Props {
 
 const item = await getMediaItem(Astro.props.mediaId)
 
-const { t, tMap, currentLocale } = Astro.locals.i18n
+const { t, tContentField, currentLocale } = Astro.locals.i18n
 
 const categories = await Promise.all(
-  item.data.categories?.map(({ id }) => getCategory(id, tMap)) ?? [],
+  item.data.categories?.map(({ id }) => getCategory(id, tContentField)) ?? [],
 )
 ---
 

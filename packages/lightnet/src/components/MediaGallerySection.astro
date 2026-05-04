@@ -31,10 +31,10 @@ const {
   ...sectionProps
 } = Astro.props
 
-const { currentLocale, tMap } = Astro.locals.i18n
+const { currentLocale, tContentField } = Astro.locals.i18n
 
 const types = Object.fromEntries(
-  (await getTranslatedMediaTypes(currentLocale, tMap)).map((type) => [
+  (await getTranslatedMediaTypes(currentLocale, tContentField)).map((type) => [
     type.id,
     type,
   ]),

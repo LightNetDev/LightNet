@@ -37,6 +37,7 @@ const mediaItem = ({
   categories?: string[]
 }): MediaItemEntry => ({
   id,
+  collection: "media",
   data: {
     commonId: id,
     title,
@@ -91,6 +92,7 @@ const mediaItems: MediaItemEntry[] = [
 const mediaCollections: MediaCollectionEntry[] = [
   {
     id: "featured",
+    collection: "media-collections",
     data: {
       label: { en: "Featured" },
       mediaItems: [
@@ -103,6 +105,7 @@ const mediaCollections: MediaCollectionEntry[] = [
   },
   {
     id: "german",
+    collection: "media-collections",
     data: {
       label: { en: "German" },
       mediaItems: [{ id: "c", collection: "media" }],

@@ -2,7 +2,6 @@ import { z } from "astro/zod"
 import { reference } from "astro:content"
 
 import { translationMapSchema } from "../../i18n/translation-map-schema"
-import { attachTranslationMapMetadata } from "../../i18n/translation-map-metadata"
 
 /**
  * Media Collection Schema
@@ -25,7 +24,7 @@ export const mediaCollectionSchema = z.object({
 
 export const mediaCollectionEntrySchema = z.object({
   id: z.string(),
-  collection: z.literal("media-types"),
+  collection: z.literal("media-collections"),
   data: mediaCollectionSchema,
 })
 

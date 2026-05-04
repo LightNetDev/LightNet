@@ -20,9 +20,9 @@ interface Props {
 }
 
 const { title, description, mainClass, locale } = Astro.props
-const { currentLocale: pathCurrentLocale, tMap } = Astro.locals.i18n
+const { currentLocale: pathCurrentLocale, tConfigField } = Astro.locals.i18n
 const currentLocale = locale ?? pathCurrentLocale
-const configTitle = tMap(config.title)
+const configTitle = tConfigField(config.title, config)
 const { direction } = resolveLanguage(currentLocale)
 ---
 

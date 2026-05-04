@@ -25,7 +25,6 @@ const learnSkateboarding = await getEntry(
   "media-collections",
   "learn-skateboarding",
 )
-console.log("collection", learnSkateboarding)
 if (!learnSkateboarding) {
   throw new AstroError("Media Collection 'learn-skateboarding' not found")
 }

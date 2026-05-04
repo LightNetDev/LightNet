@@ -1,9 +1,9 @@
 import { z } from "astro/zod"
 
 import { isBcp47 } from "../i18n/bcp-47"
+import { translationMapSchema } from "../i18n/translation-map-schema"
 import { validateInlineTranslations } from "./validators/validate-inline-translations"
 import { validateLanguages } from "./validators/validate-languages"
-import { translationMapSchema } from "../i18n/translation-map-schema"
 
 /**
  * Link Schema.

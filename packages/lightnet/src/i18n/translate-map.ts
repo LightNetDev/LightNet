@@ -1,12 +1,9 @@
 import { AstroError } from "astro/errors"
+import type { CollectionKey } from "astro:content"
 import config from "virtual:lightnet/config"
 
+import type { ExtendedLightnetConfig } from "../astro-integration/config"
 import { recordTranslation } from "./record-translation"
-import type { CollectionKey } from "astro:content"
-import type {
-  ExtendedLightnetConfig,
-  LightnetConfig,
-} from "../astro-integration/config"
 
 /**
  * A map of translated values keyed by locale code.
@@ -39,7 +36,10 @@ export type TranslateMapFn = (
 ) => string
 
 /**
- * Translate one field inside a content collection entry.
+ * Resolve an inline translation map that belongs to a content entry.
+ *
+ * The entry is only used to provide a stable fallback path when translation-map
+ * metadata is missing during the current refactor.
  */
 export type TranslateContentFieldFn = (
   translationMap: TranslationMap,
@@ -51,7 +51,10 @@ export type TranslateContentFieldFn = (
 ) => string
 
 /**
- * Translate one field of a LightNet config.
+ * Resolve an inline translation map that belongs to the LightNet config.
+ *
+ * The config object is only used to keep the API explicit and to provide a
+ * stable fallback path when translation-map metadata is missing.
  */
 export type TranslateConfigFieldFn = (
   translationMap: TranslationMap,
@@ -70,8 +73,16 @@ export type TranslateConfigFieldFn = (
  */
 export function useTranslateMap(currentLocale: string) {
   const tMap: TranslateMapFn = (translationMap, context) => {
-    const resolvedPath = context.path
-    const key = resolvedPath.join(".")
+    const getKey = () => {
+      const keyCacheSymbol = Symbol.for("ln.key-cache")
+      if (hasOwnProperty(translationMap, keyCacheSymbol)) {
+        return translationMap[keyCacheSymbol] as string
+      }
+      const value = context.path.join(".")
+      Object.defineProperty(translationMap, keyCacheSymbol, { value })
+      return value
+    }
+    const key = getKey()
     recordTranslation({ key, values: translationMap, type: "map" })
 
     const currentLocaleValue = translationMap[currentLocale]
@@ -101,15 +112,94 @@ export function useTranslateMap(currentLocale: string) {
     translationMap,
     contentEntry,
   ) => {
-    // todo append path to property
-    const path = ["content", contentEntry.collection, contentEntry.id]
-    return tMap(translationMap, { path })
+    return tMap(translationMap, {
+      path: getMapPath(translationMap, contentEntry.data, [
+        "content",
+        contentEntry.collection,
+        contentEntry.id,
+      ]),
+    })
   }
 
-  const tConfigField: TranslateConfigFieldFn = (translationMap, config) => {
-    // todo append path to property
-    return tMap(translationMap, { path: ["config"] })
+  const tConfigField: TranslateConfigFieldFn = (translationMap, _config) => {
+    return tMap(translationMap, {
+      path: getMapPath(translationMap, config, ["config"]),
+    })
   }
 
   return { tMap, tContentField, tConfigField }
+}
+
+function getMapPath(
+  translationMap: TranslationMap,
+  data: unknown,
+  path: string[],
+) {
+  const pathCacheSymbol = Symbol.for("ln.path-cache")
+
+  if (hasOwnProperty(translationMap, pathCacheSymbol)) {
+    return translationMap[pathCacheSymbol] as string[]
+  }
+
+  const findPath: (_data: unknown, _path: string[]) => string[] | undefined = (
+    _data,
+    _path,
+  ) => {
+    if (!_data || typeof _data !== "object") {
+      return
+    }
+    if (equalsTranslationMap(translationMap, _data)) {
+      return _path
+    }
+    for (const [key, value] of Object.entries(_data)) {
+      const p = findPath(value, [..._path, key])
+      if (p) {
+        return p as string[]
+      }
+    }
+  }
+
+  const resolvedPath = findPath(data, path)
+  if (!resolvedPath) {
+    throw new AstroError(
+      `Invalid map context provided ${path} for could not find path for object ${JSON.stringify(translationMap)}`,
+      `Provided object ${JSON.stringify(data)}`,
+    )
+  }
+  Object.defineProperty(translationMap, pathCacheSymbol, {
+    value: resolvedPath,
+  })
+  return resolvedPath
+}
+
+function equalsTranslationMap(
+  translationMap: TranslationMap,
+  toCompare: unknown,
+) {
+  if (!toCompare || typeof toCompare !== "object" || Array.isArray(toCompare)) {
+    return false
+  }
+  const keysA = Object.keys(translationMap)
+  const keysB = Object.keys(toCompare)
+
+  if (keysA.length !== keysB.length) {
+    return false
+  }
+
+  for (const key of keysA) {
+    if (!hasOwnProperty(toCompare, key)) {
+      return false
+    }
+    if (translationMap[key] !== toCompare[key]) {
+      return false
+    }
+  }
+  return true
+}
+
+function hasOwnProperty<K extends PropertyKey>(
+  obj: unknown,
+  key: K,
+): obj is Record<K, unknown> {
+  return !!obj && typeof obj === "object" && Object.hasOwn(obj, key)
 }

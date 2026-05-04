@@ -34,12 +34,24 @@ type I18n = {
   tMap: import("./translate-map").TranslateMapFn
 
   /**
-   * todo
+   * Resolve an inline translation map that belongs to LightNet config.
+   *
+   * Use this for translated values read from the resolved runtime config,
+   * such as the site title or configured language labels.
+   *
+   * @param translationMap Localized values keyed by locale code.
+   * @param config The resolved LightNet config object that owns the field.
    */
   tConfigField: import("./translate-map").TranslateConfigFieldFn
 
   /**
-   * todo
+   * Resolve an inline translation map that belongs to a content entry.
+   *
+   * Use this for translated values stored inside content collections,
+   * such as category labels, media type labels, or content item labels.
+   *
+   * @param translationMap Localized values keyed by locale code.
+   * @param contentEntry The content entry that owns the translated field.
    */
   tContentField: import("./translate-map").TranslateContentFieldFn
 

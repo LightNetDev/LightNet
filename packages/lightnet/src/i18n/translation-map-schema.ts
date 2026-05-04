@@ -1,5 +1,4 @@
 import { z } from "astro/zod"
-import { attachMarker } from "./translation-map-metadata"
 
 /**
  * Translations by BCP-47 tag
@@ -11,4 +10,8 @@ import { attachMarker } from "./translation-map-metadata"
  *    en: "Hello"
  * }
  */
-export const translationMapSchema = z.record(z.string(), z.string().nonempty())
+export const translationMapSchema = z
+  .record(z.string(), z.string().nonempty())
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "Inline translations must contain at least one entry",
+  })

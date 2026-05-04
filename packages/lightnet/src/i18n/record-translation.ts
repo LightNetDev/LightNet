@@ -5,6 +5,7 @@ import process from "node:process"
 
 import { root } from "astro:config/server"
 import config from "virtual:lightnet/config"
+
 import { lazy } from "../utils/lazy"
 
 type Translation = {
@@ -22,7 +23,7 @@ const lightnetCachePath = resolve(
 
 const recordedTranslations = new Set<string>()
 
-let translationStore = lazy(() => createTranslationStore())
+const translationStore = lazy(() => createTranslationStore())
 
 const writeLanguagesManifest = async () => {
   const manifestPath = resolve(lightnetCachePath, "languages.json")
