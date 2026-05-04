@@ -115,6 +115,15 @@ export const configSchema = z.object({
    */
   credits: z.boolean().default(false),
   /**
+   * Optional localized text to display in your site's footer.
+   */
+  footerText: inlineTranslationSchema.optional(),
+  /**
+   * Optional links to display in your site's footer.
+   */
+  footerLinks: z.array(linkSchema).optional(),
+
+  /**
    * Link to manifest file within public/ folder
    */
   manifest: z.string().transform(absolutePath).optional(),
