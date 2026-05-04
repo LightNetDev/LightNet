@@ -2,7 +2,6 @@ import { z } from "astro/zod"
 
 import { isBcp47 } from "../i18n/bcp-47"
 import { translationMapSchema } from "../i18n/translation-map-schema"
-import { validateInlineTranslations } from "./validators/validate-inline-translations"
 import { validateLanguages } from "./validators/validate-languages"
 
 /**
@@ -211,15 +210,13 @@ export const configSchema = z.object({
   experimental: z.object({}).optional(),
 })
 
-export const extendedConfigSchema = configSchema.transform((config, ctx) => {
+export const extendedConfigSchema = configSchema.transform((config) => {
   const locales = config.languages
     .filter((language) => language.isSiteLanguage)
     .map((language) => language.code)
   const defaultLocale =
     config.languages.find((language) => language.isDefaultSiteLanguage)?.code ??
     ""
-
-  validateInlineTranslations(config, locales, defaultLocale, ctx)
   return {
     ...config,
     locales,
