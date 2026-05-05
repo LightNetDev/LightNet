@@ -104,7 +104,7 @@ export async function useTranslate(
 }
 
 async function recordAllTranslations() {
-  if (import.meta.env.DEV) {
+  if (!import.meta.env.PROD) {
     // only record translations during build time
     return
   }
