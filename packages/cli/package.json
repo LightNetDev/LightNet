@@ -27,14 +27,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "pnpm run build",
-    "test": "vitest"
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "commander": "^14.0.3"
-  },
-  "devDependencies": {
-    "vitest": "^4.1.5"
   },
   "engines": {
     "node": ">=22"
