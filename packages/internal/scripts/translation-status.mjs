@@ -133,10 +133,3 @@ function hasPluralVariant(key, target) {
     .find((variant) => target.has(variant))
   return !!pluralVariant
 }
-
-function printTranslationStatusHelp() {
-  console.log(`Usage: lightnet translation-status
-
-Report missing and obsolete built-in translation keys in LightNet language files.
-`)
-}
