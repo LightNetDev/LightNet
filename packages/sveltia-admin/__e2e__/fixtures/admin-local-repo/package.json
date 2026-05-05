@@ -9,7 +9,7 @@
   "dependencies": {
     "@astrojs/react": "^5.0.4",
     "@lightnet/sveltia-admin": "workspace:^",
-    "astro": "^6.2.1",
+    "astro": "^6.2.2",
     "lightnet": "workspace:^",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

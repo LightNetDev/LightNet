@@ -21,8 +21,8 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.3.0(jiti@1.21.7))
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
       eslint:
         specifier: ^10.3.0
         version: 10.3.0(jiti@1.21.7)
@@ -64,7 +64,7 @@ importers:
         version: 14.0.3
     devDependencies:
       '@types/node':
-        specifier: ^25.0.0
+        specifier: ^25.6.0
         version: 25.6.0
       typescript:
         specifier: ^5.9.3
@@ -79,8 +79,8 @@ importers:
         specifier: ^1.59.1
         version: 1.59.1
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
 
   packages/internal/scripts:
     devDependencies:
@@ -161,8 +161,8 @@ importers:
         specifier: ^19.2.14
         version: 19.2.14
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -176,8 +176,8 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4(@types/node@25.6.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(jiti@1.21.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(yaml@2.8.4)
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
       lightnet:
         specifier: workspace:^
         version: link:../../..
@@ -210,8 +210,8 @@ importers:
         specifier: ^1.59.1
         version: 1.59.1
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
       lightnet:
         specifier: workspace:^
         version: link:../lightnet
@@ -231,8 +231,8 @@ importers:
         specifier: workspace:^
         version: link:../../..
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
       lightnet:
         specifier: workspace:^
         version: link:../../../../lightnet
@@ -261,8 +261,8 @@ importers:
         specifier: workspace:^
         version: link:../../..
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
       lightnet:
         specifier: workspace:^
         version: link:../../../../lightnet
@@ -291,8 +291,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/sveltia-admin
       astro:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4)
       lightnet:
         specifier: workspace:^
         version: link:../../packages/lightnet
@@ -1444,8 +1444,8 @@ packages:
     resolution: {integrity: sha512-+QDcgc7e+au6EZ0YjMmRRjNoQo5bDMlaR45aWDoFsuxQTCM9qmCHRoiKJPELgckJ8Wmr7vcfpa9eCDHBFh6G4w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  astro@6.2.1:
-    resolution: {integrity: sha512-3g1sYNly+QAkuO5ErNEQBYvsxorNDSCUNIeStBs+kcXGchvKQl1Q9EuDNOvSg010XLlHJFLVFZs9LV18Jjp4Hg==}
+  astro@6.2.2:
+    resolution: {integrity: sha512-zkne2lZU+iTZPBK8F4gbMfrw5f11bT4VXiBxcdFHcPvYyH+Hox7V1sZu97RDpvwmHi+wQ0efKv89KY5744a0jQ==}
     engines: {node: '>=22.12.0', npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -1886,8 +1886,8 @@ packages:
   fast-string-width@3.0.2:
     resolution: {integrity: sha512-gX8LrtNEI5hq8DVUfRQMbr5lpaS4nMIWV+7XEbXk2b8kiQIizgnlr12B4dA3ZEx3308ze0O4Q1R+cHts8kyUJg==}
 
-  fast-uri@3.1.0:
-    resolution: {integrity: sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==}
+  fast-uri@3.1.1:
+    resolution: {integrity: sha512-h2r7rcm6Ee/J8o0LD5djLuFVcfbZxhvho4vvsbeV0aMvXjUgqv4YpxpkEx0d68l6+IleVfLAdVEfhR7QNMkGHQ==}
 
   fast-wrap-ansi@0.2.0:
     resolution: {integrity: sha512-rLV8JHxTyhVmFYhBJuMujcrHqOT2cnO5Zxj37qROj23CP39GXubJRBUFF0z8KFK77Uc0SukZUf7JZhsVEQ6n8w==}
@@ -1973,6 +1973,10 @@ packages:
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
+
+  get-tsconfig@5.0.0-beta.4:
+    resolution: {integrity: sha512-7nF7C9fIPFEMHgEMEfgIlO9wDdZ8CyHw27rWciFZfHvHDReIiPhsYuzPRXsfvBCqFy1l8RRyyWV7QLM+ZhUJsQ==}
+    engines: {node: '>=20.20.0'}
 
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
@@ -2811,6 +2815,9 @@ packages:
     resolution: {integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==}
     engines: {node: '>=8'}
 
+  resolve-pkg-maps@1.0.0:
+    resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
+
   resolve@1.22.12:
     resolution: {integrity: sha512-TyeJ1zif53BPfHootBGwPRYT1RUt6oGWsaQr8UyZW/eAm9bKoijtvruSDEmZHm92CwS9nj7/fWttqPCgzep8CA==}
     engines: {node: '>= 0.4'}
@@ -3013,16 +3020,6 @@ packages:
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
-
-  tsconfck@3.1.6:
-    resolution: {integrity: sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-    peerDependencies:
-      typescript: ^5.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -3441,8 +3438,8 @@ packages:
     resolution: {integrity: sha512-4LCcse/U2MHZ63HAJVE+v71o7yOdIe4cZ70Wpf8D/IyjDKYQLV5GD46B+hSTjJsvV5PztjvHoU580EftxjDZFQ==}
     engines: {node: '>=12.20'}
 
-  zod@4.4.2:
-    resolution: {integrity: sha512-IynmDyxsEsb9RKzO3J9+4SxXnl2FTFSzNBaKKaMV6tsSk0rw9gYw9gs+JFCq/qk2LCZ78KDwyj+Z289TijSkUw==}
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -4608,7 +4605,7 @@ snapshots:
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.0
+      fast-uri: 3.1.1
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -4660,7 +4657,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  astro@6.2.1(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(typescript@5.9.3)(yaml@2.8.4):
+  astro@6.2.2(@types/node@25.6.0)(jiti@1.21.7)(rollup@4.60.2)(yaml@2.8.4):
     dependencies:
       '@astrojs/compiler': 4.0.0
       '@astrojs/internal-helpers': 0.9.0
@@ -4683,10 +4680,12 @@ snapshots:
       esbuild: 0.27.7
       flattie: 1.1.1
       fontace: 0.4.1
+      get-tsconfig: 5.0.0-beta.4
       github-slugger: 2.0.0
       html-escaper: 3.0.3
       http-cache-semantics: 4.2.0
       js-yaml: 4.1.1
+      jsonc-parser: 3.3.1
       magic-string: 0.30.21
       magicast: 0.5.2
       mrmime: 2.0.1
@@ -4705,7 +4704,6 @@ snapshots:
       tinyclip: 0.1.12
       tinyexec: 1.1.2
       tinyglobby: 0.2.16
-      tsconfck: 3.1.6(typescript@5.9.3)
       ultrahtml: 1.6.0
       unifont: 0.7.4
       unist-util-visit: 5.1.0
@@ -4715,7 +4713,7 @@ snapshots:
       vitefu: 1.1.3(vite@7.3.2(@types/node@25.6.0)(jiti@1.21.7)(yaml@2.8.4))
       xxhash-wasm: 1.1.0
       yargs-parser: 22.0.0
-      zod: 4.4.2
+      zod: 4.4.3
     optionalDependencies:
       sharp: 0.34.5
     transitivePeerDependencies:
@@ -4749,7 +4747,6 @@ snapshots:
       - supports-color
       - terser
       - tsx
-      - typescript
       - uploadthing
       - yaml
 
@@ -5179,7 +5176,7 @@ snapshots:
     dependencies:
       fast-string-truncated-width: 3.0.3
 
-  fast-uri@3.1.0: {}
+  fast-uri@3.1.1: {}
 
   fast-wrap-ansi@0.2.0:
     dependencies:
@@ -5255,6 +5252,10 @@ snapshots:
   gensync@1.0.0-beta.2: {}
 
   get-caller-file@2.0.5: {}
+
+  get-tsconfig@5.0.0-beta.4:
+    dependencies:
+      resolve-pkg-maps: 1.0.0
 
   github-slugger@2.0.0: {}
 
@@ -6211,6 +6212,8 @@ snapshots:
 
   resolve-from@5.0.0: {}
 
+  resolve-pkg-maps@1.0.0: {}
+
   resolve@1.22.12:
     dependencies:
       es-errors: 1.3.0
@@ -6484,10 +6487,6 @@ snapshots:
       typescript: 5.9.3
 
   ts-interface-checker@0.1.13: {}
-
-  tsconfck@3.1.6(typescript@5.9.3):
-    optionalDependencies:
-      typescript: 5.9.3
 
   tslib@2.8.1:
     optional: true
@@ -6835,6 +6834,6 @@ snapshots:
 
   yocto-queue@1.2.2: {}
 
-  zod@4.4.2: {}
+  zod@4.4.3: {}
 
   zwitch@2.0.4: {}

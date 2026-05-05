@@ -76,7 +76,7 @@
     "@internal/e2e-test-utils": "workspace:^",
     "@playwright/test": "^1.59.1",
     "@types/react": "^19.2.14",
-    "astro": "^6.2.1",
+    "astro": "^6.2.2",
     "typescript": "^5.9.3",
     "vitest": "^4.1.5"
   },

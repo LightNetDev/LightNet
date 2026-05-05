@@ -43,7 +43,7 @@
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^",
     "@playwright/test": "^1.59.1",
-    "astro": "^6.2.1",
+    "astro": "^6.2.2",
     "lightnet": "workspace:^",
     "typescript": "^5.9.3",
     "vitest": "^4.1.5"
