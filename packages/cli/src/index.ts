@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-import { Command } from "commander"
-import { checkTranslations } from "./check-translations.ts"
 import { exit } from "node:process"
 
+import { Command } from "commander"
+
 import pkg from "../package.json" with { type: "json" }
+import { checkTranslations } from "./check-translations.ts"
 const { version } = pkg
 
 const program = new Command()

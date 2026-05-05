@@ -1,6 +1,6 @@
+import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { cwd } from "node:process"
-import { readFile } from "node:fs/promises"
 
 type Translation = {
   type: "built-in" | "user" | "map"
@@ -35,7 +35,7 @@ async function readTranslations() {
       .split("\n")
       .filter((line) => line.trim())
       .map((line) => JSON.parse(line) as Translation)
-  } catch (e) {
+  } catch {
     console.error(
       "Can not read translations from last build, make sure to run `npm run build` before running this command.",
     )
@@ -50,7 +50,7 @@ async function readLanguages() {
       "utf-8",
     )
     return JSON.parse(languagesText) as Languages
-  } catch (e) {
+  } catch {
     console.error(
       "Can not read languages from last build, make sure to run `npm run build` before running this command.",
     )
