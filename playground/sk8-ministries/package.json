@@ -8,7 +8,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lightnet-cli": "node --experimental-strip-types ../../packages/cli/src/index.ts"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.4",
