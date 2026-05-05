@@ -21,14 +21,9 @@
   "homepage": "https://lightnet.community",
   "files": [
     "src",
-    "dist",
     "README.md",
     "CHANGELOG.md"
   ],
-  "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "pnpm run build"
-  },
   "dependencies": {
     "commander": "^14.0.3"
   },
