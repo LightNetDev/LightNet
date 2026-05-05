@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+// @ts-check
 
 import { exit } from "node:process"
 
 import { Command } from "commander"
 
 import pkg from "../package.json" with { type: "json" }
-import { checkTranslations } from "./check-translations.ts"
+import { checkTranslations } from "./check-translations.mjs"
 const { version } = pkg
 
 const program = new Command()

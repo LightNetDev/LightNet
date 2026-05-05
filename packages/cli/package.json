@@ -16,7 +16,7 @@
     "url": "https://github.com/LightNetDev/lightnet/issues"
   },
   "bin": {
-    "lightnet-cli": "./dist/index.js"
+    "lightnet": "./src/index.mjs"
   },
   "homepage": "https://lightnet.community",
   "files": [
@@ -34,8 +34,6 @@
     "commander": "^14.0.3"
   },
   "devDependencies": {
-    "@types/node": "^25.6.0",
-    "typescript": "^6.0.3",
     "vitest": "^4.1.5"
   },
   "engines": {

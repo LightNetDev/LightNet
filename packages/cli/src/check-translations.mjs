@@ -1,17 +1,8 @@
+// @ts-check
+
 import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { cwd } from "node:process"
-
-type Translation = {
-  type: "built-in" | "user" | "map"
-  key: string
-  values: Record<string, string | undefined>
-}
-
-type Languages = {
-  defaultLocale: string
-  locales: string[]
-}
 
 const lightnetCachePath = resolve(cwd(), "node_modules", ".cache", "lightnet")
 
@@ -25,6 +16,9 @@ export async function checkTranslations() {
   return true
 }
 
+/**
+ * @returns {Promise<Translation[]|undefined>}
+ */
 async function readTranslations() {
   try {
     const translationsText = await readFile(
@@ -34,7 +28,7 @@ async function readTranslations() {
     return translationsText
       .split("\n")
       .filter((line) => line.trim())
-      .map((line) => JSON.parse(line) as Translation)
+      .map((line) => JSON.parse(line))
   } catch {
     console.error(
       "Can not read translations from last build, make sure to run `npm run build` before running this command.",
@@ -43,13 +37,16 @@ async function readTranslations() {
   }
 }
 
+/**
+ * @returns {Promise<Languages|undefined>}
+ */
 async function readLanguages() {
   try {
     const languagesText = await readFile(
       resolve(lightnetCachePath, "languages.json"),
       "utf-8",
     )
-    return JSON.parse(languagesText) as Languages
+    return JSON.parse(languagesText)
   } catch {
     console.error(
       "Can not read languages from last build, make sure to run `npm run build` before running this command.",
