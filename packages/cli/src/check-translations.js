@@ -13,14 +13,12 @@ const translationSources = [
   {
     type: "lightnet",
     title: "LightNet built-in translations",
-    action:
-      "Add the missing locale entries in your /src/translations/*.yaml files.",
+    action: "Add the missing entries in your /src/translations/*.yaml files.",
   },
   {
     type: "user",
     title: "User translation files",
-    action:
-      "Add the missing locale entries in your /src/translations/*.yaml files.",
+    action: "Add the missing entries in your /src/translations/*.yaml files.",
   },
   {
     type: "map",
