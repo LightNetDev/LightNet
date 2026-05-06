@@ -1,5 +1,17 @@
 # @lightnet/sveltia-admin
 
+## 4.0.6
+
+### Patch Changes
+
+- [#387](https://github.com/LightNetDev/LightNet/pull/387) [`d7969dc`](https://github.com/LightNetDev/LightNet/commit/d7969dcaa65417316b129f50602d3473813f52fe) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
+- [#387](https://github.com/LightNetDev/LightNet/pull/387) [`d7969dc`](https://github.com/LightNetDev/LightNet/commit/d7969dcaa65417316b129f50602d3473813f52fe) Thanks [@smn-cds](https://github.com/smn-cds)! - Move `lightnet` from a direct dependency to a peer dependency for `@lightnet/sveltia-admin`.
+
+  Consumer sites should install `lightnet` directly alongside `@lightnet/sveltia-admin`.
+
+- [#387](https://github.com/LightNetDev/LightNet/pull/387) [`d7969dc`](https://github.com/LightNetDev/LightNet/commit/d7969dcaa65417316b129f50602d3473813f52fe) Thanks [@smn-cds](https://github.com/smn-cds)! - Use slugify filenames for R2 uploads
+
 ## 4.0.5
 
 ### Patch Changes
