@@ -2,7 +2,7 @@ import { expect, test } from "vitest"
 
 import { useTranslateMap } from "../../src/i18n/translate-map"
 
-const tMap = useTranslateMap("de")
+const { tMap } = useTranslateMap("de")
 
 test("Should resolve the localized value for the current locale", () => {
   expect(tMap({ en: "Hello", de: "Hallo" }, { path: ["title"] })).toBe("Hallo")

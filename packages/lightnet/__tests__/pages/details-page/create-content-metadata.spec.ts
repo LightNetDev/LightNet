@@ -3,15 +3,11 @@ import { expect, test } from "vitest"
 import { useTranslateMap } from "../../../src/i18n/translate-map"
 import { createContentMetadata } from "../../../src/pages/details-page/utils/create-content-metadata"
 
-const tMap = useTranslateMap("en")
-const tMapDe = useTranslateMap("de")
+const { tMap } = useTranslateMap("en")
+const { tMap: tMapDe } = useTranslateMap("de")
 
 test("Should create complete content metadata", () => {
-  expect(
-    createContentMetadata({ url: "https://some.host/some.pDf" }, tMap, {
-      path: ["content", 0],
-    }),
-  ).toEqual({
+  expect(createContentMetadata({ url: "https://some.host/some.pDf" })).toEqual({
     url: "https://some.host/some.pDf",
     canBeOpened: true,
     type: "text",
@@ -123,8 +119,9 @@ test("Should create complete content metadata", () => {
 ].forEach(({ url, expected, label }) => {
   test(`Should create content metadata for url '${url}' ${label !== undefined ? `and label '${label}'` : ""}`, () => {
     expect(
-      createContentMetadata({ url, label }, tMap, {
-        path: ["content", 0],
+      createContentMetadata({
+        url,
+        labelText: label && tMap(label, { path: ["content", 0, "label"] }),
       }),
     ).toMatchObject(expected)
   })
@@ -132,22 +129,20 @@ test("Should create complete content metadata", () => {
 
 test("Should override name with input", () => {
   expect(
-    createContentMetadata(
-      { url: "/path/to/a.file", label: { en: "My file" } },
-      tMap,
-      { path: ["content", 0] },
-    ),
+    createContentMetadata({
+      url: "/path/to/a.file",
+      labelText: tMap({ en: "My file" }, { path: ["content", 0, "label"] }),
+    }),
   ).toMatchObject({ labelText: "My file" })
 })
 
 test("Should resolve localized content labels by locale", () => {
-  const result = createContentMetadata(
-    {
-      url: "/files/book.pdf",
-      label: { en: "Read", de: "Lesen" },
-    },
-    tMapDe,
-    { path: ["content", 0] },
-  )
+  const result = createContentMetadata({
+    url: "/files/book.pdf",
+    labelText: tMapDe(
+      { en: "Read", de: "Lesen" },
+      { path: ["content", 0, "label"] },
+    ),
+  })
   expect(result.labelText).toBe("Lesen")
 })

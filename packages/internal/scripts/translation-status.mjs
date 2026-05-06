@@ -1,45 +1,38 @@
+#!/usr/bin/env node
+// @ts-check
+
 import fs from "node:fs/promises"
 import path from "node:path"
 
 import YAML from "yaml"
 
+const translationsDirectory = "./node_modules/lightnet/src/i18n/translations"
+const sourceFile = "en.yml"
+
+const translationFiles = (await fs.readdir(translationsDirectory)).filter(
+  (fileName) => fileName.endsWith(".yml"),
+)
+
+const sourceTranslations = await loadTranslationKeys(
+  translationsDirectory,
+  sourceFile,
+)
+
 /**
- * @param {string[]} argv
+ * @type {ComparisonResult[]}
  */
-export async function runTranslationStatusCommand(argv = []) {
-  if (argv.includes("--help") || argv.includes("-h")) {
-    printTranslationStatusHelp()
-    return
-  }
-
-  const translationsDirectory = "./node_modules/lightnet/src/i18n/translations"
-  const sourceFile = "en.yml"
-
-  const translationFiles = (await fs.readdir(translationsDirectory)).filter(
-    (fileName) => fileName.endsWith(".yml"),
+const results = []
+for (const translationFile of translationFiles) {
+  results.push(
+    await compareToSource(
+      translationsDirectory,
+      translationFile,
+      sourceTranslations,
+    ),
   )
-
-  const sourceTranslations = await loadTranslationKeys(
-    translationsDirectory,
-    sourceFile,
-  )
-
-  /**
-   * @type {ComparisonResult[]}
-   */
-  const results = []
-  for (const translationFile of translationFiles) {
-    results.push(
-      await compareToSource(
-        translationsDirectory,
-        translationFile,
-        sourceTranslations,
-      ),
-    )
-  }
-
-  console.log(generateReport(results))
 }
+
+console.log(generateReport(results))
 
 /**
  * @param {string} translationsDirectory
@@ -139,11 +132,4 @@ function hasPluralVariant(key, target) {
     .map((suffix) => keyWithoutSuffix + suffix)
     .find((variant) => target.has(variant))
   return !!pluralVariant
-}
-
-function printTranslationStatusHelp() {
-  console.log(`Usage: lightnet translation-status
-
-Report missing and obsolete built-in translation keys in LightNet language files.
-`)
 }

@@ -26,7 +26,7 @@ const items = (await getEntries(collection.data.mediaItems)).map((item) => ({
 if (items.length < 2) {
   return
 }
-const { t, tMap } = Astro.locals.i18n
+const { t, tContentField } = Astro.locals.i18n
 ---
 
 <section class="mx-auto mt-16 max-w-screen-md px-4 md:mt-20 md:px-8">
@@ -34,11 +34,7 @@ const { t, tMap } = Astro.locals.i18n
     {t("ln.details.part-of-collection")}
   </h2>
   <h3 class="mb-6 text-lg font-bold text-gray-700 sm:mb-8">
-    {
-      tMap(collection.data.label, {
-        path: ["media-collections", collectionId, "label"],
-      })
-    }
+    {tContentField(collection.data.label, collection)}
   </h3>
   <MediaList items={items} />
 </section>

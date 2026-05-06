@@ -14,12 +14,16 @@ const item = await getMediaItem(Astro.props.mediaId)
 const { mediaId } = Astro.props
 const translations = await getTranslations(mediaId)
 
-const { t, tMap, currentLocale } = Astro.locals.i18n
-const currentLanguage = resolveTranslatedLanguage(item.data.language, tMap)
+const { t, tConfigField, currentLocale } = Astro.locals.i18n
+const currentLanguage = resolveTranslatedLanguage(
+  item.data.language,
+  tConfigField,
+)
 const translationLanguages = await Promise.all(
   translations.map(async (translation) => ({
     ...translation,
-    labelText: resolveTranslatedLanguage(translation.language, tMap).labelText,
+    labelText: resolveTranslatedLanguage(translation.language, tConfigField)
+      .labelText,
   })),
 )
 ---

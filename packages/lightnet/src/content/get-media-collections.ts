@@ -2,7 +2,7 @@ import { getCollection } from "astro:content"
 
 import { lazy } from "../utils/lazy"
 import { verifySchemaAsync } from "../utils/verify-schema"
-import { mediaCollectionEntrySchema } from "./content-schema"
+import { mediaCollectionEntrySchema } from "./schema/media-collection"
 
 const collectionsByMediaItemIds = lazy(async () =>
   (await loadMediaCollections())

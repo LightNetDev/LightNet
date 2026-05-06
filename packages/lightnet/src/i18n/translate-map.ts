@@ -1,5 +1,9 @@
 import { AstroError } from "astro/errors"
+import type { CollectionKey } from "astro:content"
 import config from "virtual:lightnet/config"
+
+import type { ExtendedLightnetConfig } from "../astro-integration/config"
+import { recordTranslation } from "./record-translation"
 
 /**
  * A map of translated values keyed by locale code.
@@ -13,14 +17,6 @@ import config from "virtual:lightnet/config"
 export type TranslationMap = Record<string, string | undefined>
 
 /**
- * Describes where a translation map comes from so missing-value
- * errors can point to the exact field in config or content.
- */
-export type TranslationMapContext = {
-  path: (string | number)[]
-}
-
-/**
  * Resolve a translation map for the current locale, falling back
  * to configured default locale when needed.
  *
@@ -32,7 +28,37 @@ export type TranslationMapContext = {
  */
 export type TranslateMapFn = (
   translationMap: TranslationMap,
-  context: TranslationMapContext,
+  /**
+   * Describes where a translation map comes from so translation logs
+   * can point to the exact field in config or content.
+   */
+  context: { path: (string | number)[] },
+) => string
+
+/**
+ * Resolve an inline translation map that belongs to a content entry.
+ *
+ * The entry is only used to provide a stable fallback path when translation-map
+ * metadata is missing during the current refactor.
+ */
+export type TranslateContentFieldFn = (
+  translationMap: TranslationMap,
+  contentEntry: {
+    id: string
+    collection: CollectionKey
+    data: Record<PropertyKey, unknown>
+  },
+) => string
+
+/**
+ * Resolve an inline translation map that belongs to the LightNet config.
+ *
+ * The config object is only used to keep the API explicit and to provide a
+ * stable fallback path when translation-map metadata is missing.
+ */
+export type TranslateConfigFieldFn = (
+  translationMap: TranslationMap,
+  config: ExtendedLightnetConfig,
 ) => string
 
 /**
@@ -45,26 +71,110 @@ export type TranslateMapFn = (
  * @param currentLocale The locale that should be resolved first before
  * falling back to LightNet's configured default locale.
  */
-export function useTranslateMap(currentLocale: string): TranslateMapFn {
-  return (translationMap: TranslationMap, context: TranslationMapContext) => {
-    const currentLocaleValue = translationMap[currentLocale]
-    if (currentLocaleValue) {
-      return currentLocaleValue
+export function useTranslateMap(currentLocale: string) {
+  const tMap: TranslateMapFn = (translationMap, context) => {
+    const getKey = () => {
+      const keyCacheSymbol = Symbol.for("ln.key-cache")
+      if (hasOwnProperty(translationMap, keyCacheSymbol)) {
+        return translationMap[keyCacheSymbol] as string
+      }
+      const value = context.path.join(".")
+      Object.defineProperty(translationMap, keyCacheSymbol, { value })
+      return value
+    }
+    const key = getKey()
+    recordTranslation({ key, values: translationMap, type: "map" })
+
+    const currentLocaleTranslation = translationMap[currentLocale]
+    if (currentLocaleTranslation) {
+      return currentLocaleTranslation
     }
 
-    const defaultLocaleValue = translationMap[config.defaultLocale]
-    if (defaultLocaleValue) {
-      return defaultLocaleValue
+    const defaultLocaleTranslation = translationMap[config.defaultLocale]
+    if (defaultLocaleTranslation) {
+      return defaultLocaleTranslation
     }
 
-    const availableLocales = Object.keys(translationMap)
+    const availableLocales = Object.keys(translationMap).filter(
+      (key) => key !== "path",
+    )
     const availableLocalesText = availableLocales.length
       ? availableLocales.map((locale) => `"${locale}"`).join(", ")
       : "none"
 
     throw new AstroError(
-      `Missing translation map value for "${context.path.join(".")}" in locales "${currentLocale}" and "${config.defaultLocale}"`,
+      `Missing translation map value for "${key}" in locales "${currentLocale}" and "${config.defaultLocale}"`,
       `Available locales: ${availableLocalesText}. Add a value for "${currentLocale}" or "${config.defaultLocale}" to this inline translation map.`,
     )
   }
+
+  const tContentField: TranslateContentFieldFn = (
+    translationMap,
+    contentEntry,
+  ) => {
+    return tMap(translationMap, {
+      path: getMapPath(translationMap, contentEntry.data, [
+        "content",
+        contentEntry.collection,
+        contentEntry.id,
+      ]),
+    })
+  }
+
+  const tConfigField: TranslateConfigFieldFn = (translationMap, _config) => {
+    return tMap(translationMap, {
+      path: getMapPath(translationMap, _config, ["config"]),
+    })
+  }
+
+  return { tMap, tContentField, tConfigField }
+}
+
+function getMapPath(
+  translationMap: TranslationMap,
+  data: unknown,
+  path: string[],
+) {
+  const pathCacheSymbol = Symbol.for("ln.path-cache")
+
+  if (hasOwnProperty(translationMap, pathCacheSymbol)) {
+    return translationMap[pathCacheSymbol] as string[]
+  }
+
+  const findPath: (_data: unknown, _path: string[]) => string[] | undefined = (
+    _data,
+    _path,
+  ) => {
+    if (!_data || typeof _data !== "object") {
+      return
+    }
+    if (_data === translationMap) {
+      return _path
+    }
+    for (const [key, value] of Object.entries(_data)) {
+      const p = findPath(value, [..._path, key])
+      if (p) {
+        return p as string[]
+      }
+    }
+  }
+
+  const resolvedPath = findPath(data, path)
+  if (!resolvedPath) {
+    throw new AstroError(
+      `Invalid map context provided ${path} for could not find path for object ${JSON.stringify(translationMap)}`,
+      `Provided object ${JSON.stringify(data)}`,
+    )
+  }
+  Object.defineProperty(translationMap, pathCacheSymbol, {
+    value: resolvedPath,
+  })
+  return resolvedPath
+}
+
+function hasOwnProperty<K extends PropertyKey>(
+  obj: unknown,
+  key: K,
+): obj is Record<K, unknown> {
+  return !!obj && typeof obj === "object" && Object.hasOwn(obj, key)
 }

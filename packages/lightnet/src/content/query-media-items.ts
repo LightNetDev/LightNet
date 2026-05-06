@@ -1,4 +1,5 @@
-import type { MediaCollectionEntry, MediaItemEntry } from "./content-schema"
+import type { MediaCollectionEntry } from "./schema/media-collection"
+import type { MediaItemEntry } from "./schema/media-item"
 
 export type MediaItemQuery<TMediaItem extends MediaItemEntry> = {
   /**

@@ -1,29 +1,31 @@
 {
   "name": "@lightnet/cli",
+  "description": "CLI for managing LightNet projects",
   "type": "module",
   "license": "MIT",
-  "version": "3.0.0",
-  "private": true,
+  "version": "4.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet",
     "directory": "packages/cli"
   },
-  "scripts": {
-    "translation-status": "node ./index.mjs translation-status"
-  },
   "bugs": {
     "url": "https://github.com/LightNetDev/lightnet/issues"
   },
   "bin": {
-    "lightnet": "index.mjs"
+    "lightnet": "./src/index.js"
   },
   "homepage": "https://lightnet.community",
-  "peerDependencies": {
-    "lightnet": "^4.0.0"
-  },
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "dependencies": {
-    "yaml": "^2.8.3"
+    "commander": "^14.0.3"
   },
   "engines": {
     "node": ">=22"

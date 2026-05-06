@@ -1,10 +1,8 @@
 import { expect, test, vi } from "vitest"
 
-import type {
-  MediaCollectionEntry,
-  MediaItemEntry,
-} from "../../src/content/content-schema"
 import { queryMediaItems } from "../../src/content/query-media-items"
+import type { MediaCollectionEntry } from "../../src/content/schema/media-collection"
+import type { MediaItemEntry } from "../../src/content/schema/media-item"
 
 vi.mock("astro:content", async () => {
   const { z } = await import("astro/zod")
@@ -39,6 +37,7 @@ const mediaItem = ({
   categories?: string[]
 }): MediaItemEntry => ({
   id,
+  collection: "media",
   data: {
     commonId: id,
     title,
@@ -93,6 +92,7 @@ const mediaItems: MediaItemEntry[] = [
 const mediaCollections: MediaCollectionEntry[] = [
   {
     id: "featured",
+    collection: "media-collections",
     data: {
       label: { en: "Featured" },
       mediaItems: [
@@ -105,6 +105,7 @@ const mediaCollections: MediaCollectionEntry[] = [
   },
   {
     id: "german",
+    collection: "media-collections",
     data: {
       label: { en: "German" },
       mediaItems: [{ id: "c", collection: "media" }],
