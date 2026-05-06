@@ -20,11 +20,13 @@ export const onRequest: MiddlewareHandler = async ({ locals, url }, next) => {
       useTranslate(currentLocale),
       getTranslationKeys(),
     ])
-    const tMap = useTranslateMap(currentLocale)
+    const { tMap, tConfigField, tContentField } = useTranslateMap(currentLocale)
     const { direction } = resolveLanguage(currentLocale)
     locals.i18n = {
       t,
       tMap,
+      tConfigField,
+      tContentField,
       currentLocale,
       defaultLocale,
       direction,

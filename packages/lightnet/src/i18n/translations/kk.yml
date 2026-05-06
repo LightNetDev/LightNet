@@ -6,6 +6,8 @@ ln.categories: Барлық санаттар
 ln.language: Тіл
 ln.languages: Тілдер
 ln.type: Түрі
+ln.previous: Алдыңғы
+ln.next: Келесі
 ln.external-link: Сыртқы сілтеме
 ln.search.title: Іздеу
 ln.search.placeholder: Медиа іздеу
@@ -15,6 +17,7 @@ ln.search.all-categories: Барлық санаттар
 ln.search.no-results: Нәтижие жоқ
 ln.details.open: Ашу
 ln.details.share: Бөлісу
+ln.details.edit: Өңдеу
 ln.details.part-of-collection: Жинақ бөлімі
 ln.details.download: Жүктеу
 ln.share.url-copied-to-clipboard: Жүктеме көшірілді

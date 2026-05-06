@@ -1,5 +1,4 @@
 ---
-import type { TranslationMap } from "../../i18n/translate-map"
 import ContentSection from "./components/ContentSection.astro"
 import DescriptionSection from "./components/DescriptionSection.astro"
 import DetailsPage from "./components/DetailsPage.astro"
@@ -10,25 +9,13 @@ import MoreDetailsSection from "./components/MoreDetailsSection.astro"
 
 export type Props = {
   mediaId: string
-  openActionLabel?: TranslationMap
 }
-
-const defaultOpenActionLabel = Object.fromEntries(
-  Astro.locals.i18n.locales.map((locale) => [
-    locale,
-    Astro.locals.i18n.t("ln.details.open", { lng: locale }),
-  ]),
-)
-const { mediaId, openActionLabel = defaultOpenActionLabel } = Astro.props
+const { mediaId } = Astro.props
 ---
 
 <DetailsPage mediaId={mediaId}>
   <MainDetailsSection mediaId={mediaId}>
-    <OpenButton
-      className="mt-8"
-      mediaId={mediaId}
-      openActionLabel={openActionLabel}
-    />
+    <OpenButton className="mt-8" mediaId={mediaId} />
   </MainDetailsSection>
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} />

@@ -21,6 +21,7 @@ test("Should build a reverse index and ignore duplicate media items in a collect
   getCollectionMock.mockResolvedValue([
     {
       id: "series-a",
+      collection: "media-collections",
       data: {
         label: { en: "Series A" },
         mediaItems: [
@@ -32,6 +33,7 @@ test("Should build a reverse index and ignore duplicate media items in a collect
     },
     {
       id: "series-b",
+      collection: "media-collections",
       data: {
         label: { en: "Series B" },
         mediaItems: [{ id: "item-1", collection: "media" }],
@@ -53,6 +55,7 @@ test("Should return empty for unknown media ids and load collections once", asyn
   getCollectionMock.mockResolvedValue([
     {
       id: "series-a",
+      collection: "media-collections",
       data: {
         label: { en: "Series A" },
         mediaItems: [

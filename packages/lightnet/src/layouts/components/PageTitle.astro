@@ -14,18 +14,14 @@ function getWidth(logo: ImageMetadata) {
   return Math.floor(size * Math.max(1, logo.width / logo.height))
 }
 
-const { currentLocale, tMap } = Astro.locals.i18n
+const { currentLocale, tConfigField } = Astro.locals.i18n
 
 const logoAlt = (() => {
   if (config.logo?.alt) {
-    return tMap(config.logo.alt, {
-      path: ["config", "logo", "alt"],
-    })
+    return tConfigField(config.logo.alt, config)
   }
   if (config.logo?.replacesTitle) {
-    return tMap(config.title, {
-      path: ["config", "title"],
-    })
+    return tConfigField(config.title, config)
   }
   return ""
 })()
@@ -53,10 +49,5 @@ const logoAlt = (() => {
           loading="eager"
         />
       ))
-  }{
-    !config.logo?.replacesTitle &&
-      tMap(config.title, {
-        path: ["config", "title"],
-      })
-  }</a
+  }{!config.logo?.replacesTitle && tConfigField(config.title, config)}</a
 >

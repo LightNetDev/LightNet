@@ -2,20 +2,33 @@
 import { ExternalLinkIcon } from "lucide-react"
 
 import { getMediaItem } from "../../../../content/get-media-items"
-import type { TranslationMap } from "../../../../i18n/translate-map"
+import { getMediaType } from "../../../../content/get-media-types"
 import { createContentMetadata } from "../../utils/create-content-metadata"
 
 interface Props {
   mediaId: string
-  openActionLabel: TranslationMap
   className?: string
 }
-const { mediaId, openActionLabel, className } = Astro.props
-const { tMap } = Astro.locals.i18n
+const { mediaId, className } = Astro.props
+const { tContentField, t } = Astro.locals.i18n
 const item = await getMediaItem(mediaId)
-const content = createContentMetadata(item.data.content[0], tMap, {
-  path: ["media-items", mediaId, "content", 0],
+const { url, label } = item.data.content[0]
+const content = createContentMetadata({
+  url,
+  labelText: label && tContentField(label, item),
 })
+const mediaType = await getMediaType(item.data.type.id)
+
+const getOpenActionLabel = () => {
+  const defaultLabel = t("ln.details.open")
+  if (mediaType.data.detailsPage?.layout !== "default") {
+    return defaultLabel
+  }
+  if (!mediaType.data.detailsPage.openActionLabel) {
+    return defaultLabel
+  }
+  return tContentField(mediaType.data.detailsPage.openActionLabel, mediaType)
+}
 ---
 
 <a
@@ -26,16 +39,5 @@ const content = createContentMetadata(item.data.content[0], tMap, {
   class:list={[className]}
 >
   {content.isExternal && <ExternalLinkIcon className="shrink-0" />}
-  {
-    content.canBeOpened
-      ? tMap(openActionLabel, {
-          path: [
-            "media-types",
-            item.data.type.id,
-            "detailsPage",
-            "openActionLabel",
-          ],
-        })
-      : Astro.locals.i18n.t("ln.details.download")
-  }
+  {content.canBeOpened ? getOpenActionLabel() : t("ln.details.download")}
 </a>

@@ -9,28 +9,24 @@ import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
 const currentPath = Astro.url.pathname
-const { t, tMap, currentLocale } = Astro.locals.i18n
+const { t, tConfigField, currentLocale } = Astro.locals.i18n
 
-const items = (config.mainMenu ?? []).map(
-  ({ href, label, requiresLocale }, index) => {
-    const isExternal = isExternalUrl(href)
-    const path =
-      isExternal || !requiresLocale ? href : localizePath(currentLocale, href)
-    const isActive =
-      !isExternal &&
-      (currentPath === localizePath(currentLocale, href) ||
-        currentPath === localizePath(currentLocale, `${href}/`) ||
-        currentPath === href)
-    return {
-      path,
-      isExternal,
-      labelText: tMap(label, {
-        path: ["config", "mainMenu", index, "label"],
-      }),
-      isActive,
-    }
-  },
-)
+const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
+  const isExternal = isExternalUrl(href)
+  const path =
+    isExternal || !requiresLocale ? href : localizePath(currentLocale, href)
+  const isActive =
+    !isExternal &&
+    (currentPath === localizePath(currentLocale, href) ||
+      currentPath === localizePath(currentLocale, `${href}/`) ||
+      currentPath === href)
+  return {
+    path,
+    isExternal,
+    labelText: tConfigField(label, config),
+    isActive,
+  }
+})
 ---
 
 <nav class="-me-3 flex items-center">

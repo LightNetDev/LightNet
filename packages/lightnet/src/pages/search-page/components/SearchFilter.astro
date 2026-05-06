@@ -2,22 +2,22 @@
 import config from "virtual:lightnet/config"
 
 import { getUsedCategories } from "../../../content/get-categories"
-import { getUsedLanguages } from "../../../content/get-languages"
+import { getContentLanguages } from "../../../content/get-languages"
 import { getUsedMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchFilterReact from "./SearchFilter.tsx"
 
-const { currentLocale, tMap } = Astro.locals.i18n
+const { currentLocale, tConfigField, tContentField } = Astro.locals.i18n
 
-const categories = (await getUsedCategories(currentLocale, tMap)).map(
+const categories = (await getUsedCategories(currentLocale, tContentField)).map(
   ({ id, labelText }) => ({ id, labelText }),
 )
 
-const mediaTypes = (await getUsedMediaTypes(currentLocale, tMap)).map(
+const mediaTypes = (await getUsedMediaTypes(currentLocale, tContentField)).map(
   ({ id, labelText }) => ({ id, labelText }),
 )
 
-const languages = (await getUsedLanguages(currentLocale, tMap)).map(
+const languages = (await getContentLanguages(currentLocale, tConfigField)).map(
   ({ code: id, labelText }) => ({ id, labelText }),
 )
 

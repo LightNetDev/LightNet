@@ -14,7 +14,8 @@ This guide will help you get started and explains how to make your contributions
 5. [Testing](#testing)
 6. [Translations](#translations)
 7. [Understanding LightNet](#understanding-lightnet)
-8. [Thank you](#thank-you)
+8. [Understanding the Admin UI](#understanding-the-admin-ui)
+9. [Thank you](#thank-you)
 
 ## Ways to contribute
 
@@ -96,8 +97,7 @@ This is a **monorepo**, containing:
 3. Run checks:
 
    ```sh
-   pnpm format
-   pnpm lint --fix
+   pnpm fmt
    ```
 
 4. Add a [changeset](https://github.com/changesets/changesets/blob/main/docs/adding-a-changeset.md#i-am-in-a-multi-package-repository-a-mono-repo) if your change affects published packages:
@@ -147,6 +147,8 @@ Then run the tests from the repo root:
 
 ```sh
 pnpm e2e
+# Testing Admin UI
+pnpm e2e:admin
 ```
 
 > Use E2E tests sparingly—they are slower than unit tests, but great for testing real browser interactions.
@@ -167,18 +169,29 @@ LightNet’s UI supports multiple languages.
 
 ## Understanding LightNet
 
-LightNet’s core lives in the [packages/lightnet](packages/lightnet) workspace and is exposed as an Astro integration. The entry point `exports/index.ts` re‑exports the integration function and its configuration types. During `astro:config:setup`, the integration injects all built‑in routes (root, search, details, API endpoints), registers middleware, and augments the project’s Vite and i18n settings.
+LightNet’s core lives in [`packages/lightnet`](./packages/lightnet/). It is published as an Astro integration, so most behavior starts in [`packages/lightnet/src/astro-integration/integration.ts`](./packages/lightnet/src/astro-integration/integration.ts), where the integration wires itself into Astro.
 
-Content is modeled with Zod schemas under `src/content`. `LIGHTNET_COLLECTIONS` wires these schemas into Astro’s content collection system, allowing LightNet to query categories, media, media types, and collections in a consistent way. A middleware in `src/i18n/locals.ts` attaches translation helpers and locale metadata to Astro.locals, so any component can access locals.i18n without extra imports. For example, the `/api/search.json` endpoint reads all media entries via `getMediaItems()` and returns a pre‑sorted search index.
+At `astro:config:setup`, LightNet does most of its bootstrapping work. It injects built-in routes such as the homepage, search page, details page, and internal API endpoints; registers i18n middleware; and adds supporting integrations and Vite config. If you are changing how LightNet starts up, adds routes, or reads user config, this is usually the first place to inspect.
 
-Directory overview
+The other big piece is content. LightNet treats categories, media items, media types, and media collections as Astro content collections backed by Zod schemas. Those schemas and query helpers live in [`packages/lightnet/src/content/`](./packages/lightnet/src/content/). If you are changing what content is allowed, how entries are validated, or how media is queried, start there.
 
-- `src/astro-integration/` – integration setup, config schema, Vite plugin.
-- `src/content/` – Zod schemas and helpers for categories, media items, media types, and collections.
-- `src/pages/` – Astro pages and API handlers (RootRoute, SearchPageRoute, DetailsPageRoute, api/search.ts, api/versions.ts).
-- `src/components/` & `src/layouts/` – reusable UI blocks.
-- `src/i18n/` – translation files and locale utilities.
-- `__tests__/` & `__e2e__/` – Vitest and Playwright test suites.
+Localization is built into the request lifecycle. [`packages/lightnet/src/i18n/locals.ts`](./packages/lightnet/src/i18n/locals.ts) attaches translation helpers and locale metadata to `Astro.locals.i18n`, which lets Astro components and pages call `Astro.locals.i18n.t(...)` without extra setup. If a UI change introduces new text, add translation keys in [`packages/lightnet/src/i18n/translations/en.yml`](./packages/lightnet/src/i18n/translations/en.yml) and wire them through the existing i18n utilities.
+
+If you are not sure where to start, use this rule of thumb:
+
+- UI and page behavior: [`packages/lightnet/src/components/`](./packages/lightnet/src/components/), [`packages/lightnet/src/layouts/`](./packages/lightnet/src/layouts/), and [`packages/lightnet/src/pages/`](./packages/lightnet/src/pages/)
+- Content schemas and queries: [`packages/lightnet/src/content/`](./packages/lightnet/src/content/)
+- Localization: [`packages/lightnet/src/i18n/`](./packages/lightnet/src/i18n/)
+- Integration and config wiring: [`packages/lightnet/src/astro-integration/`](./packages/lightnet/src/astro-integration/)
+- Tests: [`packages/lightnet/__tests__/`](./packages/lightnet/__tests__/) and [`packages/lightnet/__e2e__/`](./packages/lightnet/__e2e__/)
+
+## Understanding the Admin UI
+
+LightNet’s admin UI lives in [`packages/sveltia-admin`](./packages/sveltia-admin) and is published as `@lightnet/sveltia-admin`. Like the main package, it is an Astro integration. The main entry point is [`packages/sveltia-admin/src/astro-integration/integration.ts`](./packages/sveltia-admin/src/astro-integration/integration.ts), which injects the admin route and the generated `config.json` endpoint used by Sveltia CMS.
+
+Most admin behavior is driven by configuration rather than page components. The Sveltia collection definitions live in [`packages/sveltia-admin/src/sveltia/collections/content/`](./packages/sveltia-admin/src/sveltia/collections/content/), where LightNet’s categories, media items, media types, collections, and languages are mapped into editable CMS collections. If you are changing which fields appear in the admin UI or how content is represented there, start in that folder.
+
+For contributor workflows, keep tests close to the behavior you change. Unit coverage lives in [`packages/sveltia-admin/__tests__/`](./packages/sveltia-admin/__tests__/), and browser coverage lives in [`packages/sveltia-admin/__e2e__/`](./packages/sveltia-admin/__e2e__/). The admin E2E suite uses the existing LightNet-backed fixtures, so prefer extending those fixtures instead of creating a separate repro app.
 
 ## Thank you ❤️
 

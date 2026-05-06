@@ -30,11 +30,12 @@ const item = await getMediaItem(mediaId)
 if (item.data.content.length < minimumItems) {
   return
 }
-const { t, tMap, direction } = Astro.locals.i18n
+const { t, tContentField, direction } = Astro.locals.i18n
 
-const content = item.data.content.map((contentItem, index) =>
-  createContentMetadata(contentItem, tMap, {
-    path: ["media-items", mediaId, "content", index],
+const content = item.data.content.map(({ url, label }) =>
+  createContentMetadata({
+    url,
+    labelText: label && tContentField(label, item),
   }),
 )
 const typeIcons: Record<UrlType, LucideIcon> = {

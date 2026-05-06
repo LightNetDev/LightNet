@@ -105,21 +105,3 @@ test("Should fail schema validation when no site is set", () => {
     hint: expect.stringContaining("Set `site` in your Astro config"),
   })
 })
-
-test("Should include path when inline translation misses default locale", () => {
-  const error = getThrownError(() =>
-    runSetup({
-      lightnetConfig: {
-        title: { de: "LightNet" },
-      },
-      astroSite: "https://lightnet.community",
-    }),
-  )
-
-  expect(error).toMatchObject({
-    message: "Invalid LightNet configuration",
-    hint: expect.stringContaining(
-      'title.en: Missing translation for default locale "en"',
-    ),
-  })
-})

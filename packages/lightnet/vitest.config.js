@@ -3,6 +3,14 @@ import { defineConfig } from "vitest/config"
 import { vitePluginLightnetConfig } from "./src/astro-integration/vite-plugin-lightnet-config"
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "astro:config/server": new URL(
+        "./__tests__/mocks/astro-config-server.ts",
+        import.meta.url,
+      ).pathname,
+    },
+  },
   test: {
     include: ["__tests__/**/*.spec.ts"],
   },

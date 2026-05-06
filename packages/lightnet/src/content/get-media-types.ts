@@ -1,17 +1,17 @@
 import { AstroError } from "astro/errors"
 import { getCollection } from "astro:content"
 
-import type { TranslateMapFn } from "../i18n/translate-map"
+import type { TranslateContentFieldFn } from "../i18n/translate-map"
 import { lazy } from "../utils/lazy"
 import { verifySchema } from "../utils/verify-schema"
-import { mediaTypeEntrySchema } from "./content-schema"
 import { getMediaItems } from "./get-media-items"
+import { mediaTypeEntrySchema } from "./schema/media-type"
 
 const typesById = lazy(async () =>
   Object.fromEntries((await loadTypes()).map((type) => [type.id, type])),
 )
 
-const contentTypes = lazy(
+const contentTypesLoader = lazy(
   async () => new Set((await getMediaItems()).map((item) => item.data.type.id)),
 )
 
@@ -26,18 +26,25 @@ export const getMediaType = async (id: string) => {
   return type
 }
 
-export const getUsedMediaTypes = async (
+export async function getUsedMediaTypes(
   currentLocale: string,
-  tMap: TranslateMapFn,
-) => {
-  const byId = await typesById.get()
-  return Array.from(await contentTypes.get(), (typeId) => byId[typeId])
-    .map(({ id, data }) => ({
-      id,
-      ...data,
-      labelText: tMap(data.label, {
-        path: ["media-types", id, "label"],
-      }),
+  tContentField: TranslateContentFieldFn,
+) {
+  const contentTypes = await contentTypesLoader.get()
+  const mediaTypes = await getTranslatedMediaTypes(currentLocale, tContentField)
+  return mediaTypes.filter(({ id }) => contentTypes.has(id))
+}
+
+export async function getTranslatedMediaTypes(
+  currentLocale: string,
+  tContentField: TranslateContentFieldFn,
+) {
+  const mediaTypes = Object.values(await typesById.get())
+  return mediaTypes
+    .map((mediaType) => ({
+      id: mediaType.id,
+      ...mediaType.data,
+      labelText: tContentField(mediaType.data.label, mediaType),
     }))
     .sort((a, b) => a.labelText.localeCompare(b.labelText, currentLocale))
 }

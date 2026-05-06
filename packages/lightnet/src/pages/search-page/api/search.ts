@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro"
 import { getImage } from "astro:assets"
 
-import type { MediaItemEntry } from "../../../content/content-schema"
 import { getMediaItems } from "../../../content/get-media-items"
+import type { MediaItemEntry } from "../../../content/schema/media-item"
 import { markdownToText } from "../../../utils/markdown"
 import type { SearchItem } from "./search-response"
 

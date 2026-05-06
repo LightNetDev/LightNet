@@ -22,9 +22,11 @@ export function getConfig(
       stock_assets: {
         providers: [],
       },
+      all: {
+        slugify_filename: true,
+      },
       default: {
         config: {
-          slugify_filename: true,
           max_file_size: sveltiaAdminConfig.maxFileSize * 1024 * 1024,
           transformations: {
             raster_image: {

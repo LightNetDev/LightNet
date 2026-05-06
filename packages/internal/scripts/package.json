@@ -1,0 +1,16 @@
+{
+  "name": "@internal/scripts",
+  "type": "module",
+  "version": "4.0.0",
+  "private": true,
+  "scripts": {
+    "translation-status": "node ./translation-status.mjs"
+  },
+  "devDependencies": {
+    "yaml": "^2.8.4",
+    "lightnet": "workspace:^"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

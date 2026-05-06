@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter=sk8* dev",
+    "dev:cli": "pnpm --filter=sk8* lightnet",
     "build": "pnpm typecheck && pnpm --filter=sk8* build",
     "typecheck": "pnpm --filter='@playground/*' astro sync && astro check",
     "preview": "pnpm --filter=sk8* preview",
@@ -13,13 +14,13 @@
     "prettier": "prettier . --write --cache --log-level warn",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "version": "pnpm changeset version && pnpm i --no-frozen-lockfile",
-    "translation-status": "pnpm --silent -F cli translation-status",
+    "translation-status": "pnpm --silent --filter=@internal/scripts translation-status",
     "playwright:install": "pnpm --filter=lightnet exec playwright install",
     "e2e": "pnpm --filter=lightnet e2e",
     "e2e:admin": "pnpm --filter=@lightnet/sveltia-admin e2e",
     "test": "pnpm -r --if-present test"
   },
-  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
+  "packageManager": "pnpm@10.33.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet"
@@ -29,22 +30,22 @@
   },
   "homepage": "https://lightnet.community",
   "devDependencies": {
-    "@astrojs/check": "^0.9.8",
+    "@astrojs/check": "^0.9.9",
     "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.31.0",
     "@eslint/js": "^10.0.1",
-    "astro": "^6.1.8",
-    "eslint": "^10.2.1",
+    "astro": "^6.2.2",
+    "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.5.0",
+    "globals": "^17.6.0",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.58.2"
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.2"
   },
   "engines": {
     "node": ">=22"

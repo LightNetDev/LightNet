@@ -1,0 +1,74 @@
+import { createWriteStream } from "node:fs"
+import { mkdir, unlink, writeFile } from "node:fs/promises"
+import { resolve } from "node:path"
+import process from "node:process"
+
+import { root } from "astro:config/server"
+import config from "virtual:lightnet/config"
+
+import { lazy } from "../utils/lazy"
+
+type Translation = {
+  type: "map" | "user" | "lightnet"
+  key: string
+  values: Record<string, string | undefined>
+}
+
+const lightnetCachePath = resolve(
+  root.pathname,
+  "node_modules",
+  ".cache",
+  "lightnet",
+)
+
+const recordedTranslations = new Set<string>()
+
+const translationStore = lazy(() => createTranslationStore())
+
+const writeLanguagesManifest = async () => {
+  const manifestPath = resolve(lightnetCachePath, "languages.json")
+  const { defaultLocale, locales } = config
+  const manifest = {
+    defaultLocale,
+    locales,
+  }
+  await writeFile(manifestPath, JSON.stringify(manifest), "utf-8")
+}
+
+const createTranslationStore = async () => {
+  const translationStorePath = resolve(lightnetCachePath, "translations.jsonl")
+
+  await mkdir(lightnetCachePath, { recursive: true })
+  try {
+    await unlink(translationStorePath)
+  } catch {
+    // catch error if file has not been existing
+  }
+
+  const store = createWriteStream(translationStorePath, {
+    flags: "a",
+    encoding: "utf8",
+  })
+
+  await writeLanguagesManifest()
+
+  process.on("exit", () => store?.end())
+  process.on("SIGINT", () => store?.end())
+  return store
+}
+
+export async function recordTranslation(translation: Translation) {
+  if (!import.meta.env.PROD) {
+    // only record during build
+    return
+  }
+
+  const key = translation.type + translation.key
+  if (recordedTranslations.has(key)) {
+    return
+  }
+  recordedTranslations.add(key)
+
+  const store = await translationStore.get()
+  store.write(JSON.stringify(translation) + "\n")
+}
