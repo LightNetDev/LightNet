@@ -68,7 +68,7 @@
     "i18next": "^26.0.8",
     "lucide-react": "^1.14.0",
     "marked": "^18.0.3",
-    "postcss": "^8.5.13",
+    "postcss": "^8.5.14",
     "postcss-load-config": "^6.0.1",
     "yaml": "^2.8.4"
   },
