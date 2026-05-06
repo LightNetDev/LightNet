@@ -4,7 +4,31 @@ import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { cwd } from "node:process"
 
+import chalk from "chalk"
+
 const lightnetCachePath = resolve(cwd(), "node_modules", ".cache", "lightnet")
+
+/** @type {{type:Translation["type"], title:string, action:string}[]} */
+const translationSources = [
+  {
+    type: "lightnet",
+    title: "LightNet built-in translations",
+    action:
+      "Add the missing locale entries in your /src/translations/*.yaml files.",
+  },
+  {
+    type: "user",
+    title: "User translation files",
+    action:
+      "Add the missing locale entries in your /src/translations/*.yaml files.",
+  },
+  {
+    type: "map",
+    title: "Inline translation maps",
+    action:
+      "Update the inline translation map to include values for every configured site language.",
+  },
+]
 
 export async function checkTranslations() {
   const translations = await readTranslations()
@@ -28,36 +52,54 @@ export async function checkTranslations() {
     (translation) => translation.type,
   )
 
-  console.log("Translations are missing inside last build")
-
-  printMissingTranslations("LightNet built-in translations", grouped.lightnet)
-  printMissingTranslations(
-    "User defined translation files from /src/translations/*.yaml",
-    grouped.user,
+  console.log(chalk.red.bold("Translation check failed"))
+  console.log(
+    `Checked ${chalk.bold(translations.length)} ${pluralize("translation", translations.length)} across ` +
+      `${formatLocales(languages)}.`,
   )
-  printMissingTranslations("Inline translation maps", grouped.map)
 
-  console.log("translation count", translations.length, languages)
+  for (const source of translationSources) {
+    printMissingTranslations(source, grouped[source.type])
+  }
+
+  console.log("\n\n")
   return false
 }
 
 /**
  *
- * @param {string} title
+ * @param {{title:string, action:string}} source
  * @param {(Translation & {missingLocales:string[]})[]|undefined} translations
  */
-function printMissingTranslations(title, translations) {
+function printMissingTranslations(source, translations) {
   if (!translations || translations.length === 0) {
     return
   }
+
   console.log()
-  console.log(title)
+  console.log(chalk.yellow.bold(source.title))
+  console.log(
+    chalk.dim(
+      `${translations.length} ${pluralize("key", translations.length)} need attention.`,
+    ),
+  )
+
   translations
-    .toSorted((t1, t2) => t1.key.localeCompare(t2.key))
-    .forEach(({ key, missingLocales }) =>
-      console.log(`- ${key}: ${missingLocales.join(", ")}`),
+    .toSorted(
+      (t1, t2) =>
+        t2.missingLocales.length - t1.missingLocales.length ||
+        t1.key.localeCompare(t2.key),
     )
-  console.log()
+    .forEach(({ key, missingLocales }) => {
+      console.log(`- ${key}`)
+      console.log(
+        `  ${chalk.dim("Missing locales:")} ${missingLocales
+          .map((locale) => chalk.red(locale))
+          .join(chalk.dim(", "))}`,
+      )
+    })
+
+  console.log(`${chalk.cyan("Action:")} ${source.action}`)
 }
 
 /**
@@ -84,8 +126,9 @@ async function readTranslations() {
       .filter((line) => line.trim())
       .map((line) => JSON.parse(line))
   } catch {
+    console.error(chalk.red.bold("No translation build cache found."))
     console.error(
-      "Can not read translations from last build, make sure to run `npm run build` before running this command.",
+      `${chalk.cyan("Action:")} Run ${chalk.bold("npm run build")} and try ${chalk.bold("lightnet check-translations")} again.`,
     )
     return undefined
   }
@@ -103,8 +146,32 @@ async function readLanguages() {
     return JSON.parse(languagesText)
   } catch {
     console.error(
-      "Can not read languages from last build, make sure to run `npm run build` before running this command.",
+      chalk.red.bold("No language manifest found from the last build."),
+    )
+    console.error(
+      `${chalk.cyan("Action:")} Run ${chalk.bold("npm run build")} and try ${chalk.bold("lightnet check-translations")} again.`,
     )
     return undefined
   }
+}
+
+/**
+ * @param {Languages} languages
+ */
+function formatLocales(languages) {
+  return languages.locales
+    .map((locale) =>
+      locale === languages.defaultLocale
+        ? `${chalk.bold(locale)} ${chalk.dim("(default)")}`
+        : locale,
+    )
+    .join(chalk.dim(", "))
+}
+
+/**
+ * @param {string} word
+ * @param {number} count
+ */
+function pluralize(word, count) {
+  return count === 1 ? word : `${word}s`
 }
