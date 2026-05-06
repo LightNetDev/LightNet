@@ -5,18 +5,16 @@ import { localizePath } from "../../utils/paths"
 import { isExternalUrl } from "../../utils/urls"
 import LightNetLogo from "./LightNetLogo.svg"
 
-const { t, tMap, currentLocale } = Astro.locals.i18n
+const { t, tConfigField, currentLocale } = Astro.locals.i18n
 
 // Resolve optional footer text for the current locale.
 const footerText = config.footerText
-  ? tMap(config.footerText, {
-      path: ["config", "footerText"],
-    })
+  ? tConfigField(config.footerText, config)
   : undefined
 
 // Prepare footer links using the same locale rules as the main menu.
 const footerLinks = (config.footerLinks ?? []).map(
-  ({ href, label, requiresLocale }, index) => {
+  ({ href, label, requiresLocale }) => {
     const isExternal = isExternalUrl(href)
 
     return {
@@ -24,9 +22,7 @@ const footerLinks = (config.footerLinks ?? []).map(
         isExternal || !requiresLocale
           ? href
           : localizePath(currentLocale, href),
-      label: tMap(label, {
-        path: ["config", "footerLinks", index, "label"],
-      }),
+      label: tConfigField(label, config),
       isExternal,
     }
   },
