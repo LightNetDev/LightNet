@@ -12,8 +12,62 @@ export async function checkTranslations() {
   if (!translations || !languages || translations.length === 0) {
     return false
   }
+  const incompleteTranslations = translations
+    .map((translation) => ({
+      ...translation,
+      missingLocales: getMissingLocales(translation, languages),
+    }))
+    .filter((translation) => translation.missingLocales.length > 0)
+
+  if (incompleteTranslations.length === 0) {
+    return true
+  }
+
+  const grouped = Object.groupBy(
+    incompleteTranslations,
+    (translation) => translation.type,
+  )
+
+  console.log("Translations are missing inside last build")
+
+  printMissingTranslations("LightNet built-in translations", grouped.lightnet)
+  printMissingTranslations(
+    "User defined translation files from /src/translations/*.yaml",
+    grouped.user,
+  )
+  printMissingTranslations("Inline translation maps", grouped.map)
+
   console.log("translation count", translations.length, languages)
-  return true
+  return false
+}
+
+/**
+ *
+ * @param {string} title
+ * @param {(Translation & {missingLocales:string[]})[]|undefined} translations
+ */
+function printMissingTranslations(title, translations) {
+  if (!translations || translations.length === 0) {
+    return
+  }
+  console.log()
+  console.log(title)
+  translations
+    .toSorted((t1, t2) => t1.key.localeCompare(t2.key))
+    .forEach(({ key, missingLocales }) =>
+      console.log(`- ${key}: ${missingLocales.join(", ")}`),
+    )
+  console.log()
+}
+
+/**
+ *
+ * @param {Translation} translation
+ * @param {Languages} languages
+ * @returns {string[]}
+ */
+function getMissingLocales(translation, languages) {
+  return languages.locales.filter((locale) => !translation.values[locale])
 }
 
 /**

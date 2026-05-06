@@ -127,7 +127,7 @@ async function recordAllTranslations() {
       recordTranslation({
         key,
         values: collectValues(key, localesIncludingEnglish),
-        type: "built-in",
+        type: "lightnet",
       })
     } else {
       recordTranslation({

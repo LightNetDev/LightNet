@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter=sk8* dev",
+    "dev:cli": "pnpm --filter=sk8* lightnet",
     "build": "pnpm typecheck && pnpm --filter=sk8* build",
     "typecheck": "pnpm --filter='@playground/*' astro sync && astro check",
     "preview": "pnpm --filter=sk8* preview",

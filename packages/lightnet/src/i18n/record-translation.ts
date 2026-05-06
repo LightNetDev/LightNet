@@ -9,7 +9,7 @@ import config from "virtual:lightnet/config"
 import { lazy } from "../utils/lazy"
 
 type Translation = {
-  type: "map" | "user" | "built-in"
+  type: "map" | "user" | "lightnet"
   key: string
   values: Record<string, string | undefined>
 }

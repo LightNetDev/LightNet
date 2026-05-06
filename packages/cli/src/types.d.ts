@@ -1,5 +1,5 @@
 type Translation = {
-  type: "built-in" | "user" | "map"
+  type: "lightnet" | "user" | "map"
   key: string
   values: Record<string, string | undefined>
 }
