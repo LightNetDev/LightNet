@@ -1,5 +1,22 @@
 # lightnet
 
+## 4.1.0
+
+### Minor Changes
+
+- [#386](https://github.com/LightNetDev/LightNet/pull/386) [`3297d11`](https://github.com/LightNetDev/LightNet/commit/3297d11b8ae2d5d569291f72048f06ce0a99b556) Thanks [@vilgax-the-villain-with-99bugs](https://github.com/vilgax-the-villain-with-99bugs)! - Added customizable footer text and links.
+
+- [#387](https://github.com/LightNetDev/LightNet/pull/387) [`d7969dc`](https://github.com/LightNetDev/LightNet/commit/d7969dcaa65417316b129f50602d3473813f52fe) Thanks [@smn-cds](https://github.com/smn-cds)! - Add `tConfigField` and `tContentField` to LightNet's i18n locals to distinguish
+  between inline translation maps from config fields and content fields.
+
+  These helpers resolve inline translation maps for the current locale while
+  preserving the existing `tMap` helper for cases where the field context is
+  provided manually.
+
+### Patch Changes
+
+- [#387](https://github.com/LightNetDev/LightNet/pull/387) [`d7969dc`](https://github.com/LightNetDev/LightNet/commit/d7969dcaa65417316b129f50602d3473813f52fe) Thanks [@smn-cds](https://github.com/smn-cds)! - Update dependencies
+
 ## 4.0.8
 
 ### Patch Changes
