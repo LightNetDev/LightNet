@@ -6,7 +6,7 @@ import { exit } from "node:process"
 import { Command } from "commander"
 
 import pkg from "../package.json" with { type: "json" }
-import { checkTranslations } from "./check-translations.mjs"
+import { checkTranslations } from "./check-translations.js"
 const { version } = pkg
 
 const program = new Command()

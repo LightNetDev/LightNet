@@ -16,7 +16,7 @@
     "url": "https://github.com/LightNetDev/lightnet/issues"
   },
   "bin": {
-    "lightnet": "./src/index.mjs"
+    "lightnet": "./src/index.js"
   },
   "homepage": "https://lightnet.community",
   "files": [
