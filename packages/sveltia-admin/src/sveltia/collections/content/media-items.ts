@@ -163,11 +163,6 @@ function getFileStorage() {
       media_folder: projectPath("public/files"),
       public_folder: "/files",
       hint: `Maximum file size is ${sveltiaAdminConfig.maxFileSize} MB.`,
-      media_library: {
-        config: {
-          max_file_size: sveltiaAdminConfig.maxFileSize * 1000000,
-        },
-      },
     }
   }
 
