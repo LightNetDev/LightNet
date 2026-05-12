@@ -11,36 +11,36 @@ export type UrlType =
 
 const KNOWN_EXTENSIONS: Record<
   string,
-  { type: UrlType; canBeOpened?: boolean } | undefined
+  { type: UrlType; isDownload?: boolean } | undefined
 > = {
-  htm: { type: "link", canBeOpened: true },
-  html: { type: "link", canBeOpened: true },
-  php: { type: "link", canBeOpened: true },
-  json: { type: "source", canBeOpened: true },
-  xml: { type: "source", canBeOpened: true },
-  md: { type: "source", canBeOpened: true },
-  svg: { type: "image", canBeOpened: true },
-  jpg: { type: "image", canBeOpened: true },
-  jpeg: { type: "image", canBeOpened: true },
-  png: { type: "image", canBeOpened: true },
-  gif: { type: "image", canBeOpened: true },
-  ico: { type: "image", canBeOpened: true },
-  webp: { type: "image", canBeOpened: true },
-  mp3: { type: "audio", canBeOpened: true },
-  wav: { type: "audio", canBeOpened: true },
-  aac: { type: "audio", canBeOpened: true },
-  ogg: { type: "audio", canBeOpened: true },
-  mp4: { type: "video", canBeOpened: true },
-  webm: { type: "video", canBeOpened: true },
-  ogv: { type: "video", canBeOpened: true },
-  pdf: { type: "text", canBeOpened: true },
-  txt: { type: "text", canBeOpened: true },
-  epub: { type: "text" },
-  zip: { type: "package" },
-  ppt: { type: "text" },
-  pptx: { type: "text" },
-  doc: { type: "text" },
-  docx: { type: "text" },
+  htm: { type: "link" },
+  html: { type: "link" },
+  php: { type: "link" },
+  json: { type: "source" },
+  xml: { type: "source" },
+  md: { type: "source" },
+  svg: { type: "image" },
+  jpg: { type: "image" },
+  jpeg: { type: "image" },
+  png: { type: "image" },
+  gif: { type: "image" },
+  ico: { type: "image" },
+  webp: { type: "image" },
+  mp3: { type: "audio" },
+  wav: { type: "audio" },
+  aac: { type: "audio" },
+  ogg: { type: "audio" },
+  mp4: { type: "video" },
+  webm: { type: "video" },
+  ogv: { type: "video" },
+  pdf: { type: "text" },
+  txt: { type: "text" },
+  epub: { type: "text", isDownload: true },
+  zip: { type: "package", isDownload: true },
+  ppt: { type: "text", isDownload: true },
+  pptx: { type: "text", isDownload: true },
+  doc: { type: "text", isDownload: true },
+  docx: { type: "text", isDownload: true },
 } as const
 
 export function createContentMetadata({
@@ -66,15 +66,14 @@ export function createContentMetadata({
 
   const labelText = customLabel ?? fileName ?? linkName
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
-  const canBeOpened =
-    !hasExtension || !!KNOWN_EXTENSIONS[extension]?.canBeOpened
+  const isDownload = KNOWN_EXTENSIONS[extension]?.isDownload
 
   return {
     url,
     extension,
     isExternal,
     labelText,
-    canBeOpened,
+    isDownload,
     type,
     target: isExternal ? "_blank" : "_self",
   } as const

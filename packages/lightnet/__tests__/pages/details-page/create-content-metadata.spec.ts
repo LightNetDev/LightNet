@@ -9,7 +9,7 @@ const { tMap: tMapDe } = useTranslateMap("de")
 test("Should create complete content metadata", () => {
   expect(createContentMetadata({ url: "https://some.host/some.pDf" })).toEqual({
     url: "https://some.host/some.pDf",
-    canBeOpened: true,
+    isDownload: undefined,
     type: "text",
     target: "_blank",
     labelText: "some",
@@ -21,84 +21,84 @@ test("Should create complete content metadata", () => {
   {
     url: "https://youtube.com/watch?v=k2exixc",
     expected: {
-      canBeOpened: true,
       target: "_blank",
       labelText: "youtube.com",
       isExternal: true,
       extension: "",
       type: "link",
+      isDownload: undefined,
     },
   },
   {
     url: "https://wikipedia.org",
     expected: {
-      canBeOpened: true,
       target: "_blank",
       labelText: "wikipedia.org",
       isExternal: true,
       extension: "",
       type: "link",
+      isDownload: undefined,
     },
   },
   {
     url: "https://some.host/some.pDf",
     expected: {
-      canBeOpened: true,
       type: "text",
       target: "_blank",
       labelText: "some",
       isExternal: true,
       extension: "pdf",
+      isDownload: undefined,
     },
   },
   {
     url: "https://some.host/some.unknown",
     expected: {
       type: "link",
-      canBeOpened: false,
       target: "_blank",
       labelText: "some",
       isExternal: true,
       extension: "unknown",
+      isDownload: undefined,
     },
   },
   {
     url: "/files/my.pdf",
     expected: {
-      canBeOpened: true,
       type: "text",
       target: "_self",
       labelText: "my",
       isExternal: false,
       extension: "pdf",
+      isDownload: undefined,
     },
   },
   {
     url: "/paths/my-id",
     expected: {
-      canBeOpened: true,
       target: "_self",
       labelText: "my-id",
       isExternal: false,
       extension: "",
       type: "link",
+      isDownload: undefined,
     },
   },
   {
     url: "/files/my.unknown",
     expected: {
-      canBeOpened: false,
       target: "_self",
       labelText: "my",
       isExternal: false,
       type: "link",
       extension: "unknown",
+      isDownload: undefined,
     },
   },
   {
     url: "/some.zip",
     expected: {
-      canBeOpened: false,
+      isDownload: true,
       target: "_self",
       labelText: "some",
       isExternal: false,
@@ -114,6 +114,7 @@ test("Should create complete content metadata", () => {
       isExternal: false,
       extension: "zip",
       type: "package",
+      isDownload: true,
     },
   },
 ].forEach(({ url, expected, label }) => {

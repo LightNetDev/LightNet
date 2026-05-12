@@ -39,5 +39,5 @@ const getOpenActionLabel = () => {
   class:list={[className]}
 >
   {content.isExternal && <ExternalLinkIcon className="shrink-0" />}
-  {content.canBeOpened ? getOpenActionLabel() : t("ln.details.download")}
+  {content.isDownload ? t("ln.details.download") : getOpenActionLabel()}
 </a>

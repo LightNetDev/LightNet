@@ -55,7 +55,7 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 >
   {
     content.map(
-      ({ extension, labelText, type, canBeOpened, url, target }, index) => {
+      ({ extension, labelText, type, isDownload, url, target }, index) => {
         const TypeIcon = typeIcons[type]
 
         return (
@@ -75,17 +75,17 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
               <div class="me-4 ms-2 shrink-0 font-bold uppercase text-gray-600 sm:me-8">
                 {extension}
               </div>
-              {canBeOpened ? (
+              {isDownload ? (
+                <>
+                  <DownloadIcon className="shrink-0 text-gray-600 group-hover:text-gray-800" />
+                  <span class="sr-only">{t("ln.details.download")}</span>
+                </>
+              ) : (
                 <>
                   <ChevronRightIcon
                     className={`shrink-0 text-gray-600 group-hover:text-gray-800 ${iconDirectionClass}`}
                   />
                   <span class="sr-only">{t("ln.details.open")}</span>
-                </>
-              ) : (
-                <>
-                  <DownloadIcon className="shrink-0 text-gray-600 group-hover:text-gray-800" />
-                  <span class="sr-only">{t("ln.details.download")}</span>
                 </>
               )}
             </a>
