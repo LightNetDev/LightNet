@@ -25,16 +25,6 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "pnpm"
       - run: pnpm ci
+      - run: pnpm typecheck
       - run: pnpm eslint . --report-unused-disable-directives --max-warnings 0
       - run: pnpm prettier . --check
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-      - run: pnpm ci
-      - run: pnpm typecheck
