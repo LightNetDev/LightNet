@@ -1,5 +1,17 @@
 # lightnet
 
+## 4.1.1
+
+### Patch Changes
+
+- [#391](https://github.com/LightNetDev/LightNet/pull/391) [`384e125`](https://github.com/LightNetDev/LightNet/commit/384e1259e3b0d18f7f93e2c83ec2e40952bbe5fd) - Support protocol-less external URLs such as `example.com`
+
+- [#391](https://github.com/LightNetDev/LightNet/pull/391) [`384e125`](https://github.com/LightNetDev/LightNet/commit/384e1259e3b0d18f7f93e2c83ec2e40952bbe5fd) - Flip external link icon and share icon on rtl locales.
+
+- [#391](https://github.com/LightNetDev/LightNet/pull/391) [`384e125`](https://github.com/LightNetDev/LightNet/commit/384e1259e3b0d18f7f93e2c83ec2e40952bbe5fd) - Details page default to "Open" if they do not know a file extension
+
+- [#391](https://github.com/LightNetDev/LightNet/pull/391) [`384e125`](https://github.com/LightNetDev/LightNet/commit/384e1259e3b0d18f7f93e2c83ec2e40952bbe5fd) - Update dependencies
+
 ## 4.1.0
 
 ### Minor Changes
