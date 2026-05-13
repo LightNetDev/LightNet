@@ -2,104 +2,106 @@
 # This is only "visible" to a screen-reader.
 #
 # English: Open main menu
-# Used on: https://sk8-ministries.pages.dev/en (not visible)
+# Used on: https://kuuluu.org/en (not visible)
 ln.header.open-main-menu: Open main menu
 
 # Accessibility label for the language menu.
 # This is only "visible" to a screen-reader.
 #
 # English: Select language
-# Used on: https://sk8-ministries.pages.dev/en (not visible)
+# Used on: https://kuuluu.org/en (not visible)
 ln.header.select-language: Select language
 
 # Display name for the home page.
 #
 # English: Home
-# Used on: https://sk8-ministries.pages.dev/en (first item in the main menu)
+# Used on: https://kuuluu.org/en (first item in the main menu)
 ln.home.title: Home
 
 # Label for a single media item category.
 #
 # English: Category
-# Used on: https://sk8-ministries.pages.dev/en/media
+# Used on: https://kuuluu.org/en/media
 ln.category: Category
 
 # Label for multiple media item categories.
 #
 # English: Categories
-# Used on: https://sk8-ministries.pages.dev/en/media/how-to-360-flip--en/
+# Used on: https://kuuluu.org/en/media/how-to-360-flip--en/
 ln.categories: Categories
 
 # Label for a single language.
 #
 # English: Language
-# Used on: https://sk8-ministries.pages.dev/en/media
+# Used on: https://kuuluu.org/en/media
 ln.language: Language
 
 # Label for multiple languages.
 #
 # English: Languages
-# Used on: https://sk8-ministries.pages.dev/en/media/how-to-kickflip--en/
+# Used on: https://kuuluu.org/en/media/how-to-kickflip--en/
 ln.languages: Languages
 
 # Label for a single media type.
 #
 # English: Type
-# Used on: https://sk8-ministries.pages.dev/en/media
+# Used on: https://kuuluu.org/en/media
 ln.type: Type
 
 # Accessibility label for buttons to show the previous items.
 # This is used on the carousel arrow button.
 #
 # English: Previous
+# Used on: https://kuuluu.org/en (not visible)
 ln.previous: Previous
 
 # Accessibility label for buttons to show the next items.
 # This is used on the carousel arrow button.
 #
 # English: Next
+# Used on: https://kuuluu.org/en (not visible)
 ln.next: Next
 
 # Hint for an external link.
 #
 # English: External link - opens in a new tab
-# Used on: https://sk8-ministries.pages.dev/en/media/ollie-with-integrity--en/
+# Used on: https://kuuluu.org/en/media/ollie-with-integrity--en/
 ln.external-link: External link - opens in a new tab
 
 # Title for the search page.
 #
 # English: Search
-# Used on: https://sk8-ministries.pages.dev/en/media/ (not visible)
+# Used on: https://kuuluu.org/en/media/ (not visible)
 ln.search.title: Search
 
 # Placeholder text for the search input to search for media items.
 # English: Search media
 #
-# Used on: https://sk8-ministries.pages.dev/en/media/
+# Used on: https://kuuluu.org/en/media/
 ln.search.placeholder: Search media
 
 # Filter option to display content in all languages.
 #
 # English: All languages
-# Used on: https://sk8-ministries.pages.dev/en/media/
+# Used on: https://kuuluu.org/en/media/
 ln.search.all-languages: All languages
 
 # Filter option to display all media types.
 #
 # English: All types
-# Used on: https://sk8-ministries.pages.dev/en/media/
+# Used on: https://kuuluu.org/en/media/
 ln.search.all-types: All types
 
 # Filter option to display all media item categories.
 #
 # English: All categories
-# Used on: https://sk8-ministries.pages.dev/en/media/
+# Used on: https://kuuluu.org/en/media/
 ln.search.all-categories: All categories
 
 # Message displayed when no search results are found.
 #
 # English: No results
-# Used on: https://sk8-ministries.pages.dev/en/media/?language=de&type=book
+# Used on: https://kuuluu.org/en/media/?language=de&type=book
 ln.search.no-results: No results
 
 # Button label to open a media item's main content.
@@ -110,7 +112,7 @@ ln.details.open: Open
 # Button label to share a media item.
 #
 # English: Share
-# Used on: https://sk8-ministries.pages.dev/en/media/ollie-with-integrity--en/
+# Used on: https://kuuluu.org/en/media/ollie-with-integrity--en/
 ln.details.share: Share
 
 # Button label to start editing an item
@@ -121,32 +123,33 @@ ln.details.edit: Edit
 # Label for indicating that the media item belongs to a collection.
 #
 # English: Part of collection
-# Used on: https://sk8-ministries.pages.dev/en/media/ollie-with-integrity--en/
+# Used on: https://kuuluu.org/en/media/ollie-with-integrity--en/
 ln.details.part-of-collection: Part of collection
 
 # Button label for downloading a media item.
 #
 # English: Download
-# Used on: https://sk8-ministries.pages.dev/en/media/ride-the-ramp-of-faith--en/
+# Used on: https://kuuluu.org/en/media/ride-the-ramp-of-faith--en/
 ln.details.download: Download
 
 # Notification message indicating that the link has been copied to the clipboard.
 #
 # English: Link copied to clipboard
-# Used on: https://sk8-ministries.pages.dev/en/media/ride-the-ramp-of-faith--en/ (Firefox)
+# Used on: https://kuuluu.org/en/media/ride-the-ramp-of-faith--en/ (Firefox)
 ln.share.url-copied-to-clipboard: Link copied to clipboard
 
 # Title for the 404-error page. This page is displayed when a path does not exist.
 #
 # English: Page not found
-# Used on: https://sk8-ministries.pages.dev/unexisting-path
+# Used on: https://kuuluu.org/unexisting-path
 ln.404.page-not-found: Page not found
 
 # Button label on the 404-error page for returning to the home page.
 #
 # English: Go to Home page
-# Used on: https://sk8-ministries.pages.dev/unexisting-path
+# Used on: https://kuuluu.org/unexisting-path
 ln.404.go-to-the-home-page: Go to Home page
 
 # Footer text to give credits to LightNet
+# Used on: https://kuuluu.org/en
 ln.footer.powered-by-lightnet: Powered by LightNet

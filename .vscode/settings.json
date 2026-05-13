@@ -7,7 +7,14 @@
   "prettier.documentSelectors": ["**/*.astro"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.tabSize": 2,
-  "cSpell.words": ["astro", "astrojs", "Embla", "tailwindcss"],
+  "cSpell.words": [
+    "astro",
+    "astrojs",
+    "Embla",
+    "noopener",
+    "noreferrer",
+    "tailwindcss"
+  ],
   "eslint.validate": [
     "javascript",
     "javascriptreact",
