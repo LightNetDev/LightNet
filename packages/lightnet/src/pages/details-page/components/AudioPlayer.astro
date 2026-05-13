@@ -1,6 +1,8 @@
 ---
 import { ExternalLinkIcon } from "lucide-react"
 
+import { getLinkAttributes } from "../../../utils/link-attributes"
+
 type Props = {
   src: string
   className?: string
@@ -20,9 +22,7 @@ const isMp3 = audioExtension.endsWith(".mp3")
     <a
       class="group flex w-full items-center gap-4 rounded-2xl border border-gray-200 bg-white px-4 py-4 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/70"
       class:list={[className]}
-      href={src}
-      target="_blank"
-      rel="noreferrer noopener"
+      {...getLinkAttributes(src)}
       aria-label={t("ln.external-link")}
     >
       <span class="flex h-12 w-12 items-center justify-center rounded-full border border-gray-700 text-gray-700 shadow-sm transition group-hover:scale-105">

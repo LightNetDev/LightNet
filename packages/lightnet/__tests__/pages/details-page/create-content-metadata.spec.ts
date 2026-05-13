@@ -11,7 +11,6 @@ test("Should create complete content metadata", () => {
     url: "https://some.host/some.pDf",
     isDownload: undefined,
     type: "text",
-    target: "_blank",
     labelText: "some",
     isExternal: true,
     extension: "pdf",
@@ -21,7 +20,6 @@ test("Should create complete content metadata", () => {
   {
     url: "https://youtube.com/watch?v=k2exixc",
     expected: {
-      target: "_blank",
       labelText: "youtube.com",
       isExternal: true,
       extension: "",
@@ -32,7 +30,6 @@ test("Should create complete content metadata", () => {
   {
     url: "https://wikipedia.org",
     expected: {
-      target: "_blank",
       labelText: "wikipedia.org",
       isExternal: true,
       extension: "",
@@ -44,7 +41,6 @@ test("Should create complete content metadata", () => {
     url: "https://some.host/some.pDf",
     expected: {
       type: "text",
-      target: "_blank",
       labelText: "some",
       isExternal: true,
       extension: "pdf",
@@ -55,7 +51,6 @@ test("Should create complete content metadata", () => {
     url: "https://some.host/some.unknown",
     expected: {
       type: "link",
-      target: "_blank",
       labelText: "some",
       isExternal: true,
       extension: "unknown",
@@ -66,7 +61,6 @@ test("Should create complete content metadata", () => {
     url: "/files/my.pdf",
     expected: {
       type: "text",
-      target: "_self",
       labelText: "my",
       isExternal: false,
       extension: "pdf",
@@ -76,7 +70,6 @@ test("Should create complete content metadata", () => {
   {
     url: "/paths/my-id",
     expected: {
-      target: "_self",
       labelText: "my-id",
       isExternal: false,
       extension: "",
@@ -87,7 +80,6 @@ test("Should create complete content metadata", () => {
   {
     url: "/files/my.unknown",
     expected: {
-      target: "_self",
       labelText: "my",
       isExternal: false,
       type: "link",
@@ -99,7 +91,6 @@ test("Should create complete content metadata", () => {
     url: "/some.zip",
     expected: {
       isDownload: true,
-      target: "_self",
       labelText: "some",
       isExternal: false,
       extension: "zip",

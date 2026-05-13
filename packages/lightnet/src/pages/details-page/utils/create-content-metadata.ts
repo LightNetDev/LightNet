@@ -1,4 +1,4 @@
-import { isExternalUrl } from "../../../utils/urls"
+import { isExternalUrl } from "../../../utils/is-external-url"
 
 export type UrlType =
   | "link"
@@ -75,6 +75,5 @@ export function createContentMetadata({
     labelText,
     isDownload,
     type,
-    target: isExternal ? "_blank" : "_self",
   } as const
 }

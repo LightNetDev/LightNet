@@ -1,18 +1,18 @@
 ---
+import { getLinkAttributes } from "../../utils/link-attributes"
+
 interface Props {
   href: string
   active: boolean
   hreflang?: string
-  target?: "_blank" | "_self"
 }
-const { href, hreflang, active, target } = Astro.props
+const { href, hreflang, active } = Astro.props
 ---
 
 <li>
   <a
-    href={href}
+    {...getLinkAttributes(href)}
     hreflang={hreflang}
-    target={target}
     class="flex items-center gap-2 px-6 py-3 decoration-gray-800"
     class:list={[active ? "font-bold" : "hover:underline"]}
   >

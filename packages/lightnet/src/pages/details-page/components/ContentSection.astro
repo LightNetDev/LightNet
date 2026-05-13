@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 
 import { getMediaItem } from "../../../content/get-media-items"
+import { getLinkAttributes } from "../../../utils/link-attributes"
 import {
   createContentMetadata,
   type UrlType,
@@ -54,47 +55,44 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
   class="mx-auto mt-16 max-w-screen-md overflow-hidden bg-gray-200 md:mt-20 md:rounded-xl"
 >
   {
-    content.map(
-      ({ extension, labelText, type, isDownload, url, target }, index) => {
-        const TypeIcon = typeIcons[type]
+    content.map(({ extension, labelText, type, isDownload, url }, index) => {
+      const TypeIcon = typeIcons[type]
 
-        return (
-          <li class="group -mt-px px-4 transition-colors ease-in-out hover:bg-gray-300 md:px-8">
-            <a
-              href={url}
-              target={target}
-              class="flex items-center justify-between py-8"
-            >
-              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200">
-                <TypeIcon size="1.2rem" />
-              </span>
+      return (
+        <li class="group -mt-px px-4 transition-colors ease-in-out hover:bg-gray-300 md:px-8">
+          <a
+            {...getLinkAttributes(url)}
+            class="flex items-center justify-between py-8"
+          >
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200">
+              <TypeIcon size="1.2rem" />
+            </span>
 
-              <div class="ms-4 line-clamp-1 shrink grow overflow-hidden sm:ms-8">
-                {labelText}
-              </div>
-              <div class="me-4 ms-2 shrink-0 font-bold uppercase text-gray-600 sm:me-8">
-                {extension}
-              </div>
-              {isDownload ? (
-                <>
-                  <DownloadIcon className="shrink-0 text-gray-600 group-hover:text-gray-800" />
-                  <span class="sr-only">{t("ln.details.download")}</span>
-                </>
-              ) : (
-                <>
-                  <ChevronRightIcon
-                    className={`shrink-0 text-gray-600 group-hover:text-gray-800 ${iconDirectionClass}`}
-                  />
-                  <span class="sr-only">{t("ln.details.open")}</span>
-                </>
-              )}
-            </a>
-            {index !== content.length - 1 && (
-              <div class="h-px w-full bg-gray-300" />
+            <div class="ms-4 line-clamp-1 shrink grow overflow-hidden sm:ms-8">
+              {labelText}
+            </div>
+            <div class="me-4 ms-2 shrink-0 font-bold uppercase text-gray-600 sm:me-8">
+              {extension}
+            </div>
+            {isDownload ? (
+              <>
+                <DownloadIcon className="shrink-0 text-gray-600 group-hover:text-gray-800" />
+                <span class="sr-only">{t("ln.details.download")}</span>
+              </>
+            ) : (
+              <>
+                <ChevronRightIcon
+                  className={`shrink-0 text-gray-600 group-hover:text-gray-800 ${iconDirectionClass}`}
+                />
+                <span class="sr-only">{t("ln.details.open")}</span>
+              </>
             )}
-          </li>
-        )
-      },
-    )
+          </a>
+          {index !== content.length - 1 && (
+            <div class="h-px w-full bg-gray-300" />
+          )}
+        </li>
+      )
+    })
   }
 </ol>

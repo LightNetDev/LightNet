@@ -2,8 +2,8 @@
 import { ExternalLinkIcon, MenuIcon, SearchIcon } from "lucide-react"
 import config from "virtual:lightnet/config"
 
+import { isExternalUrl } from "../../utils/is-external-url"
 import { localizePath, searchPagePath } from "../../utils/paths"
-import { isExternalUrl } from "../../utils/urls"
 import LanguagePicker from "./LanguagePicker.astro"
 import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
@@ -13,18 +13,15 @@ const { t, tConfigField, currentLocale } = Astro.locals.i18n
 
 const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
   const isExternal = isExternalUrl(href)
-  const path =
-    isExternal || !requiresLocale ? href : localizePath(currentLocale, href)
   const isActive =
-    !isExternal &&
-    (currentPath === localizePath(currentLocale, href) ||
-      currentPath === localizePath(currentLocale, `${href}/`) ||
-      currentPath === href)
+    currentPath === localizePath(currentLocale, href) ||
+    currentPath === localizePath(currentLocale, `${href}/`) ||
+    currentPath === href
   return {
-    path,
-    isExternal,
+    href: requiresLocale ? localizePath(currentLocale, href) : href,
     labelText: tConfigField(label, config),
     isActive,
+    isExternal,
   }
 })
 ---
@@ -49,12 +46,8 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
     !!items.length && (
       <Menu label="ln.header.open-main-menu">
         <MenuIcon slot="icon" />
-        {items.map(({ labelText, path, isActive, isExternal }) => (
-          <MenuItem
-            href={path}
-            active={isActive}
-            target={isExternal ? "_blank" : "_self"}
-          >
+        {items.map(({ labelText, href, isActive, isExternal }) => (
+          <MenuItem href={href} active={isActive}>
             {labelText}
             {isExternal && (
               <ExternalLinkIcon size="1.2rem" className="shrink-0" />

@@ -4,6 +4,8 @@ import { getImage } from "astro:assets"
 import { Image } from "astro:assets"
 import { ExternalLinkIcon } from "lucide-react"
 
+import { getLinkAttributes } from "../utils/link-attributes"
+
 interface Props {
   /**
    * Url of the video. This can be YouTube, vimeo, or a mp4 file.
@@ -116,9 +118,7 @@ async function parseUrl(
     ) : (
       <a
         class="group relative flex h-full w-full items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-        href={href ?? url}
-        target="_blank"
-        rel="noreferrer noopener"
+        {...getLinkAttributes(href ?? url)}
       >
         {imageMetadata ? (
           <Image
