@@ -27,7 +27,7 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm ci
       - uses: actions/cache@v4
         id: playwright-cache
         with:
