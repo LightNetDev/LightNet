@@ -27,7 +27,7 @@ export function getConfig(
       },
       default: {
         config: {
-          max_file_size: sveltiaAdminConfig.maxFileSize * 1024 * 1024,
+          max_file_size: sveltiaAdminConfig.maxFileSize * 1_000_000,
           transformations: {
             raster_image: {
               format: "webp",

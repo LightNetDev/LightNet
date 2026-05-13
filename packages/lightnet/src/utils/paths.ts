@@ -1,3 +1,5 @@
+import { isAbsoluteUrl } from "./urls"
+
 /**
  * Prefix a site-internal path with Astro's configured base path.
  *
@@ -91,6 +93,10 @@ export function searchPagePath(
  * @returns resolved path. Eg. '/en/about' for input "en" and "/about"
  */
 export function localizePath(locale: string | undefined, path: string) {
+  if (isAbsoluteUrl(path)) {
+    return path
+  }
+
   return pathWithBase(
     `${locale ? `/${locale}` : ""}/${path.replace(/^\//, "")}`,
   )

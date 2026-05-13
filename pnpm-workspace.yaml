@@ -1,8 +1,7 @@
 packages:
   - "packages/**/*"
   - "playground/**/*"
+minimumReleaseAgeStrict: true
 allowBuilds:
   esbuild: true
   sharp: true
-blockExoticSubdeps: true
-minimumReleaseAge: 1440

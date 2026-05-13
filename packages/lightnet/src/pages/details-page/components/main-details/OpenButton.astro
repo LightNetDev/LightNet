@@ -3,6 +3,7 @@ import { ExternalLinkIcon } from "lucide-react"
 
 import { getMediaItem } from "../../../../content/get-media-items"
 import { getMediaType } from "../../../../content/get-media-types"
+import { getLinkAttributes } from "../../../../utils/link-attributes"
 import { createContentMetadata } from "../../utils/create-content-metadata"
 
 interface Props {
@@ -33,11 +34,14 @@ const getOpenActionLabel = () => {
 
 <a
   class="flex min-w-52 items-center justify-center gap-2 rounded-2xl bg-gray-800 px-6 py-3 font-bold text-gray-100 shadow-sm hover:bg-gray-950 hover:text-gray-300"
-  href={content.url}
-  target={content.target}
+  {...getLinkAttributes(content.url)}
   hreflang={item.data.language}
   class:list={[className]}
 >
-  {content.isExternal && <ExternalLinkIcon className="shrink-0" />}
-  {content.canBeOpened ? getOpenActionLabel() : t("ln.details.download")}
+  {
+    content.isExternal && (
+      <ExternalLinkIcon className="shrink-0 rtl:scale-x-[-1]" />
+    )
+  }
+  {content.isDownload ? t("ln.details.download") : getOpenActionLabel()}
 </a>

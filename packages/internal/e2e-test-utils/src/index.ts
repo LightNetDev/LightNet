@@ -27,7 +27,7 @@ const getAvailablePort = () =>
         return
       }
 
-      probe.close((error) => {
+      probe.close((error?: NodeJS.ErrnoException | null) => {
         if (error) {
           reject(error)
           return

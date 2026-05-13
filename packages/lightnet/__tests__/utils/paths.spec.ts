@@ -114,3 +114,9 @@ test("Should normalize slashes between base and path", async () => {
   expect(pathWithBase("/en/about")).toBe("/docs/en/about")
   expect(pathWithBase("en/about")).toBe("/docs/en/about")
 })
+
+test("Should not localize absolute urls", async () => {
+  const { localizePath } = await import("../../src/utils/paths")
+
+  expect(localizePath("en", "https://foo.bar")).toEqual("https://foo.bar")
+})

@@ -1,3 +1,4 @@
+import type { Dirent } from "node:fs"
 import { existsSync } from "node:fs"
 import { readdir, readFile } from "node:fs/promises"
 import { basename, dirname, posix, relative, resolve } from "node:path"
@@ -51,7 +52,7 @@ const shouldSeedRelativePath = (fixtureRelativePath: string) =>
 const collectFixtureFiles = async (rootDir: string): Promise<string[]> => {
   const entries = await readdir(rootDir, { withFileTypes: true })
   const files = await Promise.all(
-    entries.map(async (entry) => {
+    entries.map(async (entry: Dirent) => {
       const entryPath = resolve(rootDir, entry.name)
 
       if (entry.isDirectory()) {
