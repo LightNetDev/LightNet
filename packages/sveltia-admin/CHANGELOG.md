@@ -1,5 +1,13 @@
 # @lightnet/sveltia-admin
 
+## 4.0.7
+
+### Patch Changes
+
+- [#391](https://github.com/LightNetDev/LightNet/pull/391) [`384e125`](https://github.com/LightNetDev/LightNet/commit/384e1259e3b0d18f7f93e2c83ec2e40952bbe5fd) - Fix max file size calculation
+
+- [#391](https://github.com/LightNetDev/LightNet/pull/391) [`384e125`](https://github.com/LightNetDev/LightNet/commit/384e1259e3b0d18f7f93e2c83ec2e40952bbe5fd) - Update dependencies
+
 ## 4.0.6
 
 ### Patch Changes
