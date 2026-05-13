@@ -14,7 +14,7 @@ const { t } = Astro.locals.i18n
   class="flex cursor-pointer items-center gap-2 font-bold text-gray-700 underline"
   class:list={[Astro.props.className]}
   id="share-btn"
-  ><ForwardIcon />
+  ><ForwardIcon className="rtl:scale-x-[-1]" />
   {t("ln.details.share")}</button
 >
 <Toast id="share-success" variant="success">

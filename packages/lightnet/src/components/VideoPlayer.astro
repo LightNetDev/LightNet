@@ -24,7 +24,7 @@ interface Props {
 const { url, title, image: imageMetadata } = Astro.props
 
 const { host, id, image, href } = await parseUrl(url, imageMetadata)
-const { t } = Astro.locals.i18n
+const { t, direction } = Astro.locals.i18n
 
 async function parseUrl(
   urlToParse: string,
@@ -145,7 +145,7 @@ async function parseUrl(
           </span>
         </div>
         <div class="absolute bottom-0 end-0 start-0 z-20 flex items-center gap-2 rounded bg-black/70 px-4 py-4 text-sm font-medium text-white backdrop-blur md:text-sm">
-          <ExternalLinkIcon className="shrink-0" />
+          <ExternalLinkIcon className="shrink-0 rtl:scale-x-[-1]" />
           {t("ln.external-link")}
         </div>
       </a>

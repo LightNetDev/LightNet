@@ -50,7 +50,10 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
           <MenuItem href={href} active={isActive}>
             {labelText}
             {isExternal && (
-              <ExternalLinkIcon size="1.2rem" className="shrink-0" />
+              <ExternalLinkIcon
+                size="1.2rem"
+                className="shrink-0 rtl:scale-x-[-1]"
+              />
             )}
           </MenuItem>
         ))}
