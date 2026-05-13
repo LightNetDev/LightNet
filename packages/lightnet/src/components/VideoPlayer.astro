@@ -24,7 +24,7 @@ interface Props {
 const { url, title, image: imageMetadata } = Astro.props
 
 const { host, id, image, href } = await parseUrl(url, imageMetadata)
-const { t, direction } = Astro.locals.i18n
+const { t } = Astro.locals.i18n
 
 async function parseUrl(
   urlToParse: string,
