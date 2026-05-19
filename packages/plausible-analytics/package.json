@@ -34,7 +34,7 @@
     "@plausible-analytics/tracker": "^0.4.5"
   },
   "devDependencies": {
-    "astro": "^6.3.1",
+    "astro": "^6.3.3",
     "typescript": "^6.0.3"
   },
   "engines": {
