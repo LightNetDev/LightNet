@@ -1,5 +1,11 @@
 # @lightnet/plausible-analytics
 
+## 4.0.2
+
+### Patch Changes
+
+- [#396](https://github.com/LightNetDev/LightNet/pull/396) [`8e4cd83`](https://github.com/LightNetDev/LightNet/commit/8e4cd836593f58b6ee0e332411a0c986fbf59222) - Fix plausible dependency resolution by reexporting it.
+
 ## 4.0.1
 
 ### Patch Changes
