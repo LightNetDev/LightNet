@@ -53,7 +53,7 @@ Supported options:
 
 This integration respects LightNet's page-level tracking attribute.
 
-By default, LightNet's `Page` layout renders `data-should-track` on the root
+By default, LightNet's `Page` layout renders `data-ln-should-track` on the root
 `html` element, and Plausible is initialized only when that attribute is
 present.
 

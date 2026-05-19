@@ -54,7 +54,7 @@ export default function lightnetPlausibleAnalytics(
         injectScript(
           "page",
           `import { init } from '@plausible-analytics/tracker';
-           if (document.documentElement.hasAttribute('data-should-track')) { init(${JSON.stringify(plausibleConfig)}); }`,
+           if (document.documentElement.hasAttribute('data-ln-should-track')) { init(${JSON.stringify(plausibleConfig)}); }`,
         )
       },
     },

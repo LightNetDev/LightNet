@@ -13,7 +13,7 @@ test("Should add analytics attribute to html by default", async ({
 }) => {
   await lightnet()
   await expect(page.locator("html")).toHaveAttribute(
-    "data-should-track",
+    "data-ln-should-track",
     "true",
   )
 })
@@ -24,7 +24,7 @@ test("Should allow disabling analytics attribute on page", async ({
 }) => {
   const ln = await lightnet()
   await page.goto(ln.resolveURL("/en/analytics-disabled"))
-  await expect(page.locator("html")).not.toHaveAttribute("data-should-track")
+  await expect(page.locator("html")).not.toHaveAttribute("data-ln-should-track")
 })
 
 test("Should have header title that navigates to home page", async ({
