@@ -12,10 +12,10 @@
     "lightnet": "lightnet"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.4",
+    "@astrojs/react": "^5.0.5",
     "@lightnet/cli": "workspace:^",
     "@lightnet/sveltia-admin": "workspace:^",
-    "astro": "^6.3.1",
+    "astro": "^6.3.3",
     "lightnet": "workspace:^",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
