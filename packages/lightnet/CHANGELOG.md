@@ -1,5 +1,21 @@
 # lightnet
 
+## 4.2.0
+
+### Minor Changes
+
+- [#394](https://github.com/LightNetDev/LightNet/pull/394) [`d8a1a2d`](https://github.com/LightNetDev/LightNet/commit/d8a1a2d9049b0fe0d37402f9e2435480fcaa0e15) - LightNet now adds a `data-should-track` attribute to the root `html` element
+  for `Page` and `MarkdownPage` layouts by default. Analytics integrations can
+  use this attribute to decide whether a page should be tracked.
+
+  You can opt out for an individual page by passing `disableShouldTrack` to
+  `Page` or `MarkdownPage`. This change does not add analytics on its own; it
+  only exposes a per-page signal for integrations such as `@lightnet/plausible`.
+
+### Patch Changes
+
+- [#394](https://github.com/LightNetDev/LightNet/pull/394) [`d8a1a2d`](https://github.com/LightNetDev/LightNet/commit/d8a1a2d9049b0fe0d37402f9e2435480fcaa0e15) - Update dependencies
+
 ## 4.1.1
 
 ### Patch Changes
