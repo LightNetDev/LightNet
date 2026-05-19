@@ -7,8 +7,8 @@
     "translation-status": "node ./translation-status.mjs"
   },
   "devDependencies": {
-    "yaml": "^2.8.4",
-    "lightnet": "workspace:^"
+    "lightnet": "workspace:^",
+    "yaml": "^2.9.0"
   },
   "engines": {
     "node": ">=22"
