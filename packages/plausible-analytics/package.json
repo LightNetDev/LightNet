@@ -25,7 +25,8 @@
     "CHANGELOG.md"
   ],
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./tracker": "./src/tracker.ts"
   },
   "peerDependencies": {
     "astro": "^6.0.0"
