@@ -1,0 +1,43 @@
+{
+  "name": "@lightnet/plausible-analytics",
+  "description": "Inject plausible analytics script into LightNet pages",
+  "type": "module",
+  "license": "MIT",
+  "version": "4.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LightNetDev/lightnet",
+    "directory": "packages/plausible-analytics"
+  },
+  "bugs": {
+    "url": "https://github.com/LightNetDev/lightnet/issues"
+  },
+  "homepage": "https://lightnet.community",
+  "keywords": [
+    "astro-integration"
+  ],
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "astro": "^6.0.0"
+  },
+  "dependencies": {
+    "@plausible-analytics/tracker": "^0.4.5"
+  },
+  "devDependencies": {
+    "astro": "^6.3.1",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

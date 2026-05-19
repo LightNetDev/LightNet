@@ -12,14 +12,35 @@ import Footer from "./components/Footer.astro"
 import Header from "./components/Header.astro"
 import ViewTransition from "./components/ViewTransition.astro"
 
-interface Props {
+export interface Props {
+  /**
+   * Title of the page to be shown in browser tab.
+   */
   title?: string
+  /**
+   * Meta description for the page.
+   */
   description?: string
+  /**
+   * Css classes to apply to main element.
+   */
   mainClass?: string
+  /**
+   * Locale to override current locale from path.
+   */
   locale?: string
+  /**
+   * Disables the `should-track` attribute on the root `html` element for
+   * pages that should be excluded from analytics tracking.
+   *
+   * The `should-track`` attribute does not enable tracking on its own; it is intended to be picked up by
+   * analytics providers that choose to respect it. e.g. @lightnet/plausible-analytics
+   */
+  disableShouldTrack?: boolean
 }
 
-const { title, description, mainClass, locale } = Astro.props
+const { title, description, mainClass, locale, disableShouldTrack } =
+  Astro.props
 const { currentLocale: pathCurrentLocale, tConfigField } = Astro.locals.i18n
 const currentLocale = locale ?? pathCurrentLocale
 const configTitle = tConfigField(config.title, config)
@@ -27,7 +48,11 @@ const { direction } = resolveLanguage(currentLocale)
 ---
 
 <!doctype html>
-<html lang={currentLocale} dir={direction}>
+<html
+  lang={currentLocale}
+  dir={direction}
+  data-should-track={disableShouldTrack ? undefined : true}
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
