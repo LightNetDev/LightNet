@@ -42,48 +42,77 @@ if (!shouldRenderFooter) {
 ---
 
 <footer class="w-full border-t border-gray-200 bg-white">
+  {
+    /* Add more vertical space on smaller screens and only switch to side-by-side on desktop. */
+  }
   <div
-    class="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-between gap-4 px-4 py-6 md:flex-row md:px-8"
+    class="mx-auto flex w-full max-w-screen-xl flex-col items-start justify-between gap-6 px-4 py-6 md:px-8 lg:flex-row lg:items-center"
   >
+    {
+      /* Keep footer text and links left-aligned on mobile/tablet, then flatten into one row on desktop. */
+    }
     <div
-      class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-700 md:justify-start"
+      class="flex w-full flex-col items-start gap-3 text-sm text-gray-800 lg:flex-row lg:flex-wrap lg:items-center lg:gap-2"
     >
-      {footerText && <span>{footerText}</span>}
+      {/* Footer text keeps the same gray tone as footer links. */}
+      {footerText && <span class="text-gray-800">{footerText}</span>}
 
       {
-        footerLinks.map((link, index) => (
-          <Fragment>
-            {(footerText || index > 0) && <span class="text-gray-400">·</span>}
-            <a
-              href={link.href}
-              target={link.isExternal ? "_blank" : undefined}
-              rel={link.isExternal ? "noopener noreferrer" : undefined}
-              class="underline-offset-4 hover:underline"
-            >
-              {link.label}
-            </a>
-          </Fragment>
-        ))
+        footerLinks.length > 0 && (
+          <>
+            {/* On mobile/tablet links stay on their own row; on desktop contents lets them merge inline again. */}
+            <div class="flex w-full flex-wrap items-center gap-x-2 gap-y-1 lg:contents lg:w-auto">
+              {footerLinks.map((link, index) => (
+                <Fragment>
+                  {/* Hide the leading separator on smaller screens, and also hide it for the first desktop link when no text exists. */}
+                  <span
+                    class:list={[
+                      "text-gray-400",
+                      {
+                        hidden: !footerText && index === 0,
+                        "hidden lg:inline": true,
+                      },
+                    ]}
+                  >
+                    ·
+                  </span>
+                  <a
+                    href={link.href}
+                    target={link.isExternal ? "_blank" : undefined}
+                    rel={link.isExternal ? "noopener noreferrer" : undefined}
+                    class="text-gray-800 underline-offset-4 hover:underline"
+                  >
+                    {link.label}
+                  </a>
+                </Fragment>
+              ))}
+            </div>
+          </>
+        )
       }
     </div>
 
     {
       config.credits && (
-        <div class="flex items-center text-sm">
-          <a
-            class="flex items-center gap-2 text-gray-800 underline-offset-4 hover:underline"
-            href="https://lightnet.community"
-            target="_blank"
-          >
-            <img
-              src={LightNetLogo.src}
-              alt=""
-              class="h-5 w-auto"
-              loading="lazy"
-            />
-            <span>{t("ln.footer.powered-by-lightnet")}</span>
-          </a>
-        </div>
+        <>
+          {/* Keep the LightNet credits on a separate left-aligned row on smaller screens, then move them right on desktop. */}
+          <div class="flex w-full items-center text-sm lg:w-auto lg:justify-end">
+            {/* Prevent the Powered by LightNet label from wrapping so left-side items wrap first if space gets tight. */}
+            <a
+              class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
+              href="https://lightnet.community"
+              target="_blank"
+            >
+              <img
+                src={LightNetLogo.src}
+                alt=""
+                class="h-5 w-auto"
+                loading="lazy"
+              />
+              <span>{t("ln.footer.powered-by-lightnet")}</span>
+            </a>
+          </div>
+        </>
       )
     }
   </div>
