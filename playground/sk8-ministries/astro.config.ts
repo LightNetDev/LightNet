@@ -79,7 +79,7 @@ export default defineConfig({
         {
           href: "/about",
           label: {
-            en: "About",
+            en: "Privacy",
             de: "Über uns",
             ar: "من نحن",
           },

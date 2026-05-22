@@ -12,17 +12,6 @@ const footerText = config.footerText
   ? tConfigField(config.footerText, config)
   : undefined
 
-type FooterTextItem = {
-  label: string
-  type: "text"
-}
-
-type FooterLinkItem = {
-  href: string
-  label: string
-  type: "link"
-}
-
 // Prepare footer links using the same locale rules as the main menu.
 const footerLinks = (config.footerLinks ?? []).map(
   ({ href, label, requiresLocale }) => {
@@ -40,69 +29,90 @@ const shouldRenderFooter =
 if (!shouldRenderFooter) {
   return
 }
-
-const footerItems: Array<FooterTextItem | FooterLinkItem> = [
-  ...(footerText ? [{ type: "text" as const, label: footerText }] : []),
-  ...footerLinks.map((link): FooterLinkItem => ({ type: "link", ...link })),
-]
 ---
 
 <footer class="w-full border-t border-gray-200 bg-white">
-  <div
-    class="mx-auto flex w-full max-w-screen-xl flex-col items-start justify-between gap-6 px-4 py-6 md:px-8 lg:flex-row lg:items-center"
-  >
+  <div class="mx-auto w-full max-w-screen-xl px-4 md:px-8">
+    {
+      /* Add more vertical space on smaller screens and only switch to side-by-side on desktop. */
+    }
     <div
-      class="flex w-full flex-col items-start gap-3 text-sm text-gray-800 lg:flex-1 lg:flex-row lg:flex-wrap lg:items-center lg:gap-2"
+      class="flex flex-col items-start justify-between gap-6 py-6 lg:flex-row lg:items-center"
     >
       {
-        footerItems.length > 0 && (
-          <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 lg:w-auto">
-            {footerItems.map((item, index) => (
-              <span class="inline-flex items-center gap-1.5">
-                <span class="text-gray-800">
-                  {item.type === "text" ? (
-                    item.label
-                  ) : (
-                    <a
-                      {...getLinkAttributes(item.href)}
-                      class="underline-offset-4 hover:underline"
-                    >
-                      {item.label}
-                    </a>
-                  )}
+        /* Keep footer text and links left-aligned on mobile/tablet, then flatten into one row on desktop. */
+      }
+      <div
+        class="flex w-full flex-col items-start gap-3 text-sm text-gray-800 lg:min-w-0 lg:flex-1 lg:flex-row lg:flex-wrap lg:items-center lg:gap-2"
+      >
+        {/* Footer text keeps the same gray tone as footer links. */}
+        {
+          footerText && (
+            <span class="inline-flex items-center text-gray-800">
+              <span>{footerText}</span>
+              {footerLinks.length > 0 && (
+                <span
+                  class="px-2 text-[0.8em] leading-none text-gray-400"
+                  aria-hidden="true"
+                >
+                  &middot;
                 </span>
-                {index < footerItems.length - 1 && (
-                  <span
-                    class="text-[0.8em] leading-none text-gray-400"
-                    aria-hidden="true"
-                  >
-                    &middot;
+              )}
+            </span>
+          )
+        }
+
+        {
+          footerLinks.length > 0 && (
+            <>
+              {/* Keep links on their own row on smaller screens and switch to inline flow on desktop so wrapped lines never start with a dot. */}
+              <div class="flex w-full flex-wrap items-center gap-x-2 gap-y-1 lg:block lg:w-auto">
+                {footerLinks.map((link, index) => (
+                  <span class="inline-flex items-center">
+                    <a
+                      {...getLinkAttributes(link.href)}
+                      class="text-gray-800 underline-offset-4 hover:underline"
+                    >
+                      {link.label}
+                    </a>
+                    {index < footerLinks.length - 1 && (
+                      <span
+                        class="px-2 text-[0.8em] leading-none text-gray-400"
+                        aria-hidden="true"
+                      >
+                        &middot;
+                      </span>
+                    )}
                   </span>
-                )}
-              </span>
-            ))}
-          </div>
+                ))}
+              </div>
+            </>
+          )
+        }
+      </div>
+
+      {
+        config.credits && (
+          <>
+            {/* Keep the LightNet credits on a separate left-aligned row on smaller screens, then move them right on desktop. */}
+            <div class="flex w-full items-center text-sm lg:w-auto lg:flex-none lg:justify-end">
+              {/* Prevent the Powered by LightNet label from wrapping so left-side items wrap first if space gets tight. */}
+              <a
+                class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
+                {...getLinkAttributes("https://lightnet.community")}
+              >
+                <img
+                  src={LightNetLogo.src}
+                  alt=""
+                  class="h-5 w-auto"
+                  loading="lazy"
+                />
+                <span>{t("ln.footer.powered-by-lightnet")}</span>
+              </a>
+            </div>
+          </>
         )
       }
     </div>
-
-    {
-      config.credits && (
-        <div class="flex w-full items-center text-sm lg:w-auto lg:justify-end">
-          <a
-            class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
-            {...getLinkAttributes("https://lightnet.community")}
-          >
-            <img
-              src={LightNetLogo.src}
-              alt=""
-              class="h-5 w-auto"
-              loading="lazy"
-            />
-            <span>{t("ln.footer.powered-by-lightnet")}</span>
-          </a>
-        </div>
-      )
-    }
   </div>
 </footer>
