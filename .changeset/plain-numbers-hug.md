@@ -1,5 +1,5 @@
 ---
-"lightnet": patch
+"lightnet": minor
 ---
 
-Adjusted footer link separator and wrapping behavior to use the updated CSS-only footer layout.
+Added customizable footer text and links, and adjusted footer link separator and wrapping behavior to use the updated CSS-only footer layout.
