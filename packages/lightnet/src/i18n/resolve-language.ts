@@ -30,8 +30,33 @@ export const resolveTranslatedLanguage = (
   const language = resolveLanguage(bcp47)
   return {
     ...language,
-    labelText: tConfigField(language.label, config),
+    labelText: formatLanguageLabel(tConfigField(language.label, config), bcp47),
   }
+}
+
+export function formatLanguageLabel(labelText: string, bcp47: string) {
+  try {
+    const region = new Intl.Locale(bcp47).region
+    if (region) {
+      return `${labelText} (${region.toUpperCase()})`
+    }
+  } catch {
+    // Ignore invalid locale parsing here and fall back to the default label.
+  }
+
+  const defaultRegions: Record<string, string> = {
+    ar: "SA",
+    de: "DE",
+    en: "US",
+  }
+  const language = bcp47.split("-")[0].toLowerCase()
+  const defaultRegion = defaultRegions[language]
+
+  if (defaultRegion) {
+    return `${labelText} (${defaultRegion})`
+  }
+
+  return labelText
 }
 
 export async function getTranslatedLanguages(

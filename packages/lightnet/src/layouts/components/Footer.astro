@@ -1,11 +1,13 @@
 ---
+import { GlobeIcon } from "lucide-react"
 import config from "virtual:lightnet/config"
 
+import { getLanguageLinks } from "../../i18n/get-language-links"
 import { getLinkAttributes } from "../../utils/link-attributes"
 import { localizePath } from "../../utils/paths"
 import LightNetLogo from "./LightNetLogo.svg"
 
-const { t, tConfigField, currentLocale } = Astro.locals.i18n
+const { t, tConfigField, currentLocale, locales } = Astro.locals.i18n
 
 // Resolve optional footer text for the current locale.
 const footerText = config.footerText
@@ -22,9 +24,22 @@ const footerLinks = (config.footerLinks ?? []).map(
   },
 )
 
+const { links: languageLinks } = getLanguageLinks({
+  currentLocale,
+  locales,
+  pathname: Astro.url.pathname,
+  tConfigField,
+})
+
+// Only show the selector when the site actually has multiple languages.
+const shouldShowLanguageSelector = languageLinks.length > 1
+
 // Hide the footer entirely when there is nothing to show.
 const shouldRenderFooter =
-  config.credits || !!footerText || footerLinks.length > 0
+  config.credits ||
+  !!footerText ||
+  footerLinks.length > 0 ||
+  shouldShowLanguageSelector
 
 if (!shouldRenderFooter) {
   return
@@ -33,50 +48,87 @@ if (!shouldRenderFooter) {
 
 <footer class="w-full border-t border-gray-200 bg-white">
   <div class="mx-auto w-full max-w-screen-xl px-4 md:px-8">
-    <div
-      class="flex flex-col items-start justify-between gap-6 py-6 lg:flex-row lg:items-center"
-    >
+    <div class="flex flex-col gap-6 py-6">
       <div
-        class="flex w-full flex-col items-start gap-3 text-sm text-gray-800 lg:min-w-0 lg:flex-1 lg:flex-row lg:flex-wrap lg:items-center lg:gap-2"
+        class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
       >
-        {
-          footerText && (
-            <span class="inline-flex items-center text-gray-800">
-              <span>{footerText}</span>
-            </span>
-          )
-        }
+        {/* Footer text and footer links stay together on the left. */}
+        <div
+          class="order-last flex w-full flex-col items-start gap-3 text-sm text-gray-800 lg:order-first lg:min-w-0 lg:flex-1 lg:flex-row lg:flex-wrap lg:items-center lg:gap-2"
+        >
+          {
+            // Resolve footer text for the current locale, if configured.
+            footerText && (
+              <span class="inline-flex items-center text-gray-800">
+                <span>{footerText}</span>
+              </span>
+            )
+          }
 
-        {
-          footerLinks.length > 0 && (
-            <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 lg:w-auto">
-              {footerText && (
-                <span
-                  class="hidden w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400 lg:inline-flex"
-                  aria-hidden="true"
-                >
-                  &middot;
-                </span>
-              )}
-              {footerLinks.map((link, index) => (
-                <span class="inline-flex items-center gap-1.5">
+          {
+            // Render any configured footer links next to the footer text.
+            footerLinks.length > 0 && (
+              <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 lg:w-auto">
+                {/* Insert a separator only when footer text exists. */}
+                {footerText && (
                   <span
-                    class:list={[
-                      "w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400",
-                      index === 0 ? "hidden" : "inline-flex",
-                    ]}
+                    class="hidden w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400 lg:inline-flex"
                     aria-hidden="true"
                   >
                     &middot;
                   </span>
-                  <a
-                    {...getLinkAttributes(link.href)}
-                    class="text-gray-800 underline-offset-4 hover:underline"
-                  >
-                    {link.label}
-                  </a>
-                </span>
-              ))}
+                )}
+                {/* Keep the links in the configured order and underline on hover. */}
+                {footerLinks.map((link, index) => (
+                  <span class="inline-flex items-center gap-1.5">
+                    <span
+                      class:list={[
+                        "w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400",
+                        index === 0 ? "hidden" : "inline-flex",
+                      ]}
+                      aria-hidden="true"
+                    >
+                      &middot;
+                    </span>
+                    <a
+                      {...getLinkAttributes(link.href)}
+                      class="text-gray-800 underline-offset-4 hover:underline"
+                    >
+                      {link.label}
+                    </a>
+                  </span>
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        {
+          shouldShowLanguageSelector && (
+            // The native select stays left on mobile and moves right on desktop.
+            <div class="order-first flex w-full justify-start lg:order-last lg:ml-auto lg:w-auto">
+              {/* Globe icon plus the current language label. */}
+              <label class="inline-flex items-center gap-2 bg-white py-2 text-sm text-gray-800">
+                <GlobeIcon
+                  className="h-4 w-4 shrink-0 text-gray-500"
+                  aria-hidden="true"
+                />
+                {/* Screen-reader label for the language selector control. */}
+                <span class="sr-only">{t("ln.header.select-language")}</span>
+                {/* Native dropdown: selecting a value will navigate to that locale. */}
+                <select
+                  class="min-w-0 cursor-pointer appearance-none border-0 bg-transparent p-0 pr-0 text-sm font-medium text-gray-800 outline-none focus:ring-0"
+                  aria-label={t("ln.header.select-language")}
+                  data-footer-language-select
+                >
+                  {/* Build one option per site language. */}
+                  {languageLinks.map(({ href, label, locale, active }) => (
+                    <option value={href} selected={active} lang={locale}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
           )
         }
@@ -84,7 +136,8 @@ if (!shouldRenderFooter) {
 
       {
         config.credits && (
-          <div class="flex w-full items-center text-sm lg:w-auto lg:flex-none lg:justify-end">
+          // Keep the "Powered by LightNet" line centered at the bottom.
+          <div class="flex justify-center text-sm">
             <a
               class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
               {...getLinkAttributes("https://lightnet.community")}
@@ -103,3 +156,19 @@ if (!shouldRenderFooter) {
     </div>
   </div>
 </footer>
+
+<script>
+  // Read the footer select once and attach a navigation handler.
+  const footerLanguageSelect = document.querySelector<HTMLSelectElement>(
+    "[data-footer-language-select]",
+  )
+
+  // Move to the selected locale while preserving the current page path.
+  footerLanguageSelect?.addEventListener("change", () => {
+    if (!footerLanguageSelect.value) {
+      return
+    }
+
+    window.location.assign(footerLanguageSelect.value)
+  })
+</script>
