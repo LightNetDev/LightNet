@@ -15,9 +15,9 @@ ln.header.select-language: Select language
 # Accessibility label for the footer language menu.
 # This is only "visible" to a screen-reader.
 #
-# English: Select footer language
+# English: Footer locale switcher
 # Used on: https://kuuluu.org/en (not visible)
-ln.footer.select-language: Select footer language
+ln.footer.select-language: Footer locale switcher
 
 # Display name for the home page.
 #
