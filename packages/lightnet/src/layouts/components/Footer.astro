@@ -33,26 +33,15 @@ if (!shouldRenderFooter) {
 
 <footer class="w-full border-t border-gray-200 bg-white">
   <div class="mx-auto w-full max-w-screen-xl px-4 md:px-8">
-    {
-      /* Add more vertical space on smaller screens and only switch to side-by-side on desktop. */
-    }
     <div
       class="flex flex-col items-start justify-between gap-6 py-6 lg:flex-row lg:items-center"
     >
-      {
-        /* Keep footer text and links left-aligned on mobile/tablet, then flatten into one row on desktop. */
-      }
       <div
         class="flex w-full flex-col items-start gap-3 text-sm text-gray-800 lg:min-w-0 lg:flex-1 lg:flex-row lg:flex-wrap lg:items-center lg:gap-2"
-        data-footer-content
       >
-        {/* Footer text keeps the same gray tone as footer links. */}
         {
           footerText && (
-            <span
-              class="inline-flex items-center text-gray-800"
-              data-footer-link-group
-            >
+            <span class="inline-flex items-center text-gray-800">
               <span>{footerText}</span>
             </span>
           )
@@ -60,145 +49,57 @@ if (!shouldRenderFooter) {
 
         {
           footerLinks.length > 0 && (
-            <>
-              {/* Keep links on their own row on smaller screens and switch to inline flow on desktop so wrapped lines never start with a dot. */}
-              <div
-                class="flex w-full flex-wrap items-center gap-x-2 gap-y-1 lg:block lg:w-auto"
-                data-footer-links
-              >
-                {footerLinks.map((link) => (
+            <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 lg:w-auto">
+              {footerText && (
+                <span
+                  class="hidden w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400 lg:inline-flex"
+                  aria-hidden="true"
+                >
+                  &middot;
+                </span>
+              )}
+              {footerLinks.map((link, index) => (
+                <span class="inline-flex items-center gap-1.5">
                   <span
-                    class="inline-flex items-center gap-1.5"
-                    data-footer-link-group
+                    class:list={[
+                      "w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400",
+                      index === 0 ? "hidden" : "inline-flex",
+                    ]}
+                    aria-hidden="true"
                   >
-                    <span
-                      class="inline-flex w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400"
-                      data-footer-separator
-                      aria-hidden="true"
-                    >
-                      &middot;
-                    </span>
-                    <a
-                      {...getLinkAttributes(link.href)}
-                      class="text-gray-800 underline-offset-4 hover:underline"
-                    >
-                      {link.label}
-                    </a>
+                    &middot;
                   </span>
-                ))}
-              </div>
-            </>
+                  <a
+                    {...getLinkAttributes(link.href)}
+                    class="text-gray-800 underline-offset-4 hover:underline"
+                  >
+                    {link.label}
+                  </a>
+                </span>
+              ))}
+            </div>
           )
         }
       </div>
 
       {
         config.credits && (
-          <>
-            {/* Keep the LightNet credits on a separate left-aligned row on smaller screens, then move them right on desktop. */}
-            <div class="flex w-full items-center text-sm lg:w-auto lg:flex-none lg:justify-end">
-              {/* Prevent the Powered by LightNet label from wrapping so left-side items wrap first if space gets tight. */}
-              <a
-                class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
-                {...getLinkAttributes("https://lightnet.community")}
-              >
-                <img
-                  src={LightNetLogo.src}
-                  alt=""
-                  class="h-5 w-auto"
-                  loading="lazy"
-                />
-                <span>{t("ln.footer.powered-by-lightnet")}</span>
-              </a>
-            </div>
-          </>
+          <div class="flex w-full items-center text-sm lg:w-auto lg:flex-none lg:justify-end">
+            <a
+              class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
+              {...getLinkAttributes("https://lightnet.community")}
+            >
+              <img
+                src={LightNetLogo.src}
+                alt=""
+                class="h-5 w-auto"
+                loading="lazy"
+              />
+              <span>{t("ln.footer.powered-by-lightnet")}</span>
+            </a>
+          </div>
         )
       }
     </div>
   </div>
 </footer>
-
-<script>
-  const footerWindow = window as Window & {
-    __lightnetFooterSeparatorController?: {
-      resizeObserver: ResizeObserver | null
-      cleanup: (() => void) | null
-    }
-  }
-
-  const footerSeparatorController =
-    footerWindow.__lightnetFooterSeparatorController ?? {
-      resizeObserver: null,
-      cleanup: null,
-    }
-
-  footerSeparatorController.cleanup?.()
-
-  const updateFooterSeparators = () => {
-    const groups = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-footer-link-group]"),
-    )
-
-    for (let index = 0; index < groups.length; index += 1) {
-      const currentGroup = groups[index]
-      const separator = currentGroup.querySelector<HTMLElement>(
-        "[data-footer-separator]",
-      )
-      const previousGroup = groups[index - 1]
-
-      if (!separator) {
-        continue
-      }
-
-      separator.classList.add("hidden")
-
-      if (!previousGroup) {
-        continue
-      }
-
-      const currentTop = Math.round(currentGroup.getBoundingClientRect().top)
-      const previousTop = Math.round(previousGroup.getBoundingClientRect().top)
-
-      if (Math.abs(currentTop - previousTop) <= 1) {
-        separator.classList.remove("hidden")
-      }
-    }
-  }
-
-  const footerLinks = document.querySelector<HTMLElement>("[data-footer-links]")
-  const footerContent = document.querySelector<HTMLElement>(
-    "[data-footer-content]",
-  )
-
-  footerSeparatorController.resizeObserver?.disconnect()
-
-  const handleFooterResize = () => {
-    requestAnimationFrame(() => {
-      updateFooterSeparators()
-    })
-  }
-
-  const resizeObserver = new ResizeObserver(handleFooterResize)
-
-  if (footerLinks) {
-    resizeObserver.observe(footerLinks)
-  }
-
-  if (footerContent && footerContent !== footerLinks) {
-    resizeObserver.observe(footerContent)
-  }
-
-  window.addEventListener("resize", handleFooterResize)
-  window.addEventListener("load", handleFooterResize)
-
-  footerSeparatorController.resizeObserver = resizeObserver
-  footerSeparatorController.cleanup = () => {
-    window.removeEventListener("resize", handleFooterResize)
-    window.removeEventListener("load", handleFooterResize)
-    resizeObserver.disconnect()
-  }
-
-  footerWindow.__lightnetFooterSeparatorController = footerSeparatorController
-
-  updateFooterSeparators()
-</script>
