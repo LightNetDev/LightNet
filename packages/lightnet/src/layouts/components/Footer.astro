@@ -59,7 +59,7 @@ const footerItems: Array<FooterTextItem | FooterLinkItem> = [
           footerItems.length > 0 && (
             <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:w-auto">
               {footerItems.map((item, index) => (
-                <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span class="inline-flex items-center gap-1.5">
                   <span class="text-gray-800">
                     {item.type === "text" ? (
                       item.label
