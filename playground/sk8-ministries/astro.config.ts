@@ -92,6 +92,38 @@ export default defineConfig({
             ar: "وسائط",
           },
         },
+        {
+          href: "/media",
+          label: {
+            en: "Media",
+            de: "Medien",
+            ar: "وسائط",
+          },
+        },
+        {
+          href: "/media",
+          label: {
+            en: "Media",
+            de: "Medien",
+            ar: "وسائط",
+          },
+        },
+        {
+          href: "/media",
+          label: {
+            en: "Media",
+            de: "Medien",
+            ar: "وسائط",
+          },
+        },
+        {
+          href: "/media",
+          label: {
+            en: "Media",
+            de: "Medien",
+            ar: "وسائط",
+          },
+        },
       ],
     }),
     lightnetSveltiaAdmin({
