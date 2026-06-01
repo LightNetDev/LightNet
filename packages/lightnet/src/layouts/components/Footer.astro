@@ -136,8 +136,8 @@ if (!shouldRenderFooter) {
 
       {
         config.credits && (
-          // Keep the "Powered by LightNet" line centered at the bottom.
-          <div class="flex justify-center text-sm">
+          // Keep the "Powered by LightNet" line left on mobile and centered on wider screens.
+          <div class="flex w-full justify-start text-sm sm:justify-center">
             <a
               class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
               {...getLinkAttributes("https://lightnet.community")}

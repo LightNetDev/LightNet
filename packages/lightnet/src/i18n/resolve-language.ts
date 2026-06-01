@@ -34,28 +34,7 @@ export const resolveTranslatedLanguage = (
   }
 }
 
-export function formatLanguageLabel(labelText: string, bcp47: string) {
-  try {
-    const region = new Intl.Locale(bcp47).region
-    if (region) {
-      return `${labelText} (${region.toUpperCase()})`
-    }
-  } catch {
-    // Ignore invalid locale parsing here and fall back to the default label.
-  }
-
-  const defaultRegions: Record<string, string> = {
-    ar: "SA",
-    de: "DE",
-    en: "US",
-  }
-  const language = bcp47.split("-")[0].toLowerCase()
-  const defaultRegion = defaultRegions[language]
-
-  if (defaultRegion) {
-    return `${labelText} (${defaultRegion})`
-  }
-
+export function formatLanguageLabel(labelText: string, _bcp47: string) {
   return labelText
 }
 
