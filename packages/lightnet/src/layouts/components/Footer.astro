@@ -50,11 +50,11 @@ if (!shouldRenderFooter) {
   <div class="mx-auto w-full max-w-screen-xl px-4 md:px-8">
     <div class="flex flex-col gap-6 py-6">
       <div
-        class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+        class="flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between"
       >
         {/* Footer text and footer links stay together on the left. */}
         <div
-          class="order-last flex w-full flex-col items-start gap-3 text-sm text-gray-800 lg:order-first lg:min-w-0 lg:flex-1 lg:flex-row lg:flex-wrap lg:items-center lg:gap-2"
+          class="order-last flex w-full flex-col items-start gap-3 text-sm text-gray-800 md:order-first md:min-w-0 md:flex-1 md:flex-row md:flex-wrap md:items-center md:gap-2"
         >
           {
             // Resolve footer text for the current locale, if configured.
@@ -68,11 +68,11 @@ if (!shouldRenderFooter) {
           {
             // Render any configured footer links next to the footer text.
             footerLinks.length > 0 && (
-              <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 lg:w-auto">
+              <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 md:w-auto">
                 {/* Insert a separator only when footer text exists. */}
                 {footerText && (
                   <span
-                    class="hidden w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400 lg:inline-flex"
+                    class="hidden w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400 md:inline-flex"
                     aria-hidden="true"
                   >
                     &middot;
@@ -106,7 +106,7 @@ if (!shouldRenderFooter) {
         {
           shouldShowLanguageSelector && (
             // The native select stays left on mobile and moves right on desktop.
-            <div class="order-first flex w-full justify-start lg:order-last lg:ml-auto lg:w-auto">
+            <div class="order-first flex w-full justify-start md:order-last md:ml-auto md:w-auto">
               {/* Globe icon plus the current language label. */}
               <label class="inline-flex items-center gap-2 bg-white py-2 text-sm text-gray-800">
                 <GlobeIcon
@@ -137,7 +137,7 @@ if (!shouldRenderFooter) {
       {
         config.credits && (
           // Keep the "Powered by LightNet" line left on mobile and centered on wider screens.
-          <div class="flex w-full justify-start text-sm sm:justify-center">
+          <div class="flex w-full justify-start text-sm md:justify-center">
             <a
               class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
               {...getLinkAttributes("https://lightnet.community")}
