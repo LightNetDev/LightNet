@@ -15,7 +15,7 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "version": "pnpm changeset version && pnpm i --no-frozen-lockfile",
     "translation-status": "pnpm --silent --filter=@internal/scripts translation-status",
-    "playwright:install": "pnpm --filter=lightnet exec playwright install",
+    "playwright:install": "pnpm --filter=lightnet exec playwright install chromium",
     "e2e": "pnpm --filter=lightnet e2e",
     "e2e:admin": "pnpm --filter=@lightnet/sveltia-admin e2e",
     "test": "pnpm -r --if-present test"
