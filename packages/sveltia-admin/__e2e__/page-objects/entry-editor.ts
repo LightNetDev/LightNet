@@ -149,16 +149,65 @@ class TypedObjectField extends ListField {
 }
 
 class FileField extends EditorField {
-  async uploadFile(filePath: string) {
+  async uploadFile(
+    filePath: string,
+    { duplicateAction = "keep" }: { duplicateAction?: "keep" | "replace" } = {},
+  ) {
     await this.locator.scrollIntoViewIfNeeded()
     await this.locator
       .locator('input[type="file"]')
       .first()
       .setInputFiles(filePath)
+    await this.resolveDuplicateUpload(duplicateAction)
+    await this.confirmPendingUpload()
   }
 
   async expectUploadShellVisible() {
     await expect(this.locator.getByText(/Drop a file here or/)).toBeVisible()
+  }
+
+  private async resolveDuplicateUpload(action: "keep" | "replace") {
+    const dialog = this.page
+      .locator('dialog[aria-label="File Name Conflict Resolution"][open]')
+      .first()
+
+    try {
+      await expect(dialog).toBeVisible({ timeout: 1_000 })
+    } catch {
+      return
+    }
+
+    const actionButton = dialog.getByRole("button", {
+      name: action === "replace" ? "Replace" : "Keep Both",
+      exact: true,
+    })
+
+    await expect(actionButton).toBeVisible()
+    await actionButton.evaluate((button: HTMLButtonElement) => {
+      button.click()
+    })
+    await expect(dialog).toBeHidden()
+  }
+
+  private async confirmPendingUpload() {
+    const dialog = this.page
+      .locator('dialog[aria-label="Upload New Assets"][open]')
+      .first()
+
+    try {
+      await expect(dialog).toBeVisible({ timeout: 1_000 })
+    } catch {
+      return
+    }
+
+    const uploadButton = dialog.getByRole("button", {
+      name: "Upload",
+      exact: true,
+    })
+
+    await expect(uploadButton).toBeVisible()
+    await uploadButton.click()
+    await expect(dialog).not.toHaveAttribute("open", "")
   }
 
   private browseButton() {

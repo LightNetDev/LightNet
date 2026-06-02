@@ -2,6 +2,7 @@ import type { AstroFixturePage } from "@internal/e2e-test-utils"
 import { expect } from "@playwright/test"
 
 import {
+  readTestRepositoryBase64File,
   readTestRepositoryTextFile,
   seedTestRepository,
   type TestRepoSeedFile,
@@ -64,6 +65,10 @@ class AdminApp {
 
   readTestRepositoryTextFile(path: string) {
     return readTestRepositoryTextFile(this.page, path)
+  }
+
+  readTestRepositoryBase64File(path: string) {
+    return readTestRepositoryBase64File(this.page, path)
   }
 
   openCollection(label: CollectionLabel) {
