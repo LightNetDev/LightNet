@@ -68,7 +68,7 @@ test("Should switch languages", async ({ page, lightnet }) => {
   await expect(page).toHaveURL(ln.resolveURL("/de/"))
   await expect(page.getByRole("heading")).toHaveText("Alle Artikel")
 
-  await page.getByLabel("Sprache auswählen").click()
+  await page.getByRole("button", { name: "Sprache auswählen" }).click()
   await page.getByRole("link", { name: "English" }).click()
   await expect(page).toHaveURL(ln.resolveURL("/en/"))
 })
@@ -117,7 +117,7 @@ test("Should verify DE Detail media page url and title", async ({
   // await page.goBack()
 
   await expect(page.getByRole("button", { name: "Teilen" })).toBeVisible()
-  await expect(page.getByText("Sprache")).toBeVisible()
+  await expect(page.getByText("Sprache", { exact: true })).toBeVisible()
   await expect(page.getByText("Kategorie")).toBeVisible()
 })
 
