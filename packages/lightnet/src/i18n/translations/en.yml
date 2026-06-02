@@ -12,6 +12,13 @@ ln.header.open-main-menu: Open main menu
 # Used on: https://kuuluu.org/en (not visible)
 ln.header.select-language: Select language
 
+# Accessibility label for the footer language menu.
+# This is only "visible" to a screen-reader.
+#
+# English: Select language
+# Used on: https://kuuluu.org/en (not visible)
+ln.footer.select-language: Select language
+
 # Display name for the home page.
 #
 # English: Home
