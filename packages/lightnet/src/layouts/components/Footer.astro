@@ -98,15 +98,6 @@ const footerItems: Array<FooterTextItem | FooterLinkItem> = [
           {
             footerItems.length > 0 && (
               <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:w-auto">
-                {footerText && (
-                  <span
-                    class="hidden w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400 sm:inline-flex"
-                    aria-hidden="true"
-                  >
-                    &middot;
-                  </span>
-                )}
-
                 {footerItems.map((item, index) => (
                   <span class="inline-flex items-center gap-1.5">
                     <span
