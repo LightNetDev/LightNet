@@ -1,19 +1,18 @@
 ---
 import { GlobeIcon } from "lucide-react"
 
-import { getLanguageLinks } from "../../i18n/get-language-links"
+import { getLanguageSelectionMenuItems } from "./get-language-selection-menu-items"
 import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
-const { locales, currentLocale, tConfigField } = Astro.locals.i18n
+const { currentLocale, tConfigField } = Astro.locals.i18n
 
 const {
   currentPath,
   hasLocale,
   links: translations,
-} = getLanguageLinks({
+} = getLanguageSelectionMenuItems({
   currentLocale,
-  locales,
   pathname: Astro.url.pathname,
   tConfigField,
 })
@@ -23,7 +22,7 @@ const disabled = !hasLocale && currentPath !== "/"
 
 {
   translations.length > 1 && (
-    <Menu disabled={disabled} label="ln.header.select-language">
+    <Menu disabled={disabled} label="ln.select-language">
       <GlobeIcon slot="icon" />
       {translations.map(({ label, locale, active, href }) => (
         <MenuItem href={href} hreflang={locale} active={active}>

@@ -1,6 +1,8 @@
-import { localizePath, pathWithoutBase } from "../utils/paths"
-import { resolveTranslatedLanguage } from "./resolve-language"
-import type { TranslateConfigFieldFn } from "./translate-map"
+import config from "virtual:lightnet/config"
+
+import { resolveLanguage } from "../../i18n/resolve-language"
+import type { TranslateConfigFieldFn } from "../../i18n/translate-map"
+import { localizePath, pathWithoutBase } from "../../utils/paths"
 
 export type LanguageLink = {
   active: boolean
@@ -9,14 +11,12 @@ export type LanguageLink = {
   locale: string
 }
 
-export function getLanguageLinks({
+export function getLanguageSelectionMenuItems({
   currentLocale,
-  locales,
   pathname,
   tConfigField,
 }: {
   currentLocale: string
-  locales: string[]
   pathname: string
   tConfigField: TranslateConfigFieldFn
 }) {
@@ -27,10 +27,10 @@ export function getLanguageLinks({
       currentPath === `/${currentLocale}`),
   )
 
-  const links = locales
+  const links = config.locales
     .map((locale) => ({
       locale,
-      label: resolveTranslatedLanguage(locale, tConfigField).labelText,
+      label: tConfigField(resolveLanguage(locale).label, config),
       active: locale === currentLocale,
       href: localizePath(
         locale,

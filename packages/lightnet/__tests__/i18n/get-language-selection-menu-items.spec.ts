@@ -1,8 +1,11 @@
 import { afterEach, expect, test, vi } from "vitest"
 
 vi.mock("../../src/i18n/resolve-language", () => ({
-  resolveTranslatedLanguage: (locale: string) => ({
-    labelText: locale === "de" ? "Deutsch" : "English",
+  resolveLanguage: (locale: string) => ({
+    label:
+      locale === "de"
+        ? { en: "German", de: "Deutsch" }
+        : { en: "English", de: "Englisch" },
   }),
 }))
 
@@ -14,13 +17,14 @@ afterEach(() => {
 test("Should build localized links from a localized pathname", async () => {
   vi.stubEnv("BASE_URL", "/docs/")
 
-  const { getLanguageLinks } = await import("../../src/i18n/get-language-links")
+  const { getLanguageSelectionMenuItems } =
+    await import("../../src/layouts/components/get-language-selection-menu-items")
 
-  const result = getLanguageLinks({
+  const result = getLanguageSelectionMenuItems({
     currentLocale: "de",
-    locales: ["en", "de"],
     pathname: "/docs/de/media/how-to",
-    tConfigField: vi.fn() as never,
+    tConfigField: ((translationMap: Record<string, string>) =>
+      translationMap.de ?? translationMap.en) as never,
   })
 
   expect(result.currentPath).toBe("/de/media/how-to")
@@ -34,7 +38,7 @@ test("Should build localized links from a localized pathname", async () => {
     },
     {
       locale: "en",
-      label: "English",
+      label: "Englisch",
       active: false,
       href: "/docs/en/media/how-to",
     },
@@ -44,13 +48,14 @@ test("Should build localized links from a localized pathname", async () => {
 test("Should build localized links from an unlocalized pathname", async () => {
   vi.stubEnv("BASE_URL", "/docs/")
 
-  const { getLanguageLinks } = await import("../../src/i18n/get-language-links")
+  const { getLanguageSelectionMenuItems } =
+    await import("../../src/layouts/components/get-language-selection-menu-items")
 
-  const result = getLanguageLinks({
+  const result = getLanguageSelectionMenuItems({
     currentLocale: "de",
-    locales: ["en", "de"],
     pathname: "/docs/media/how-to",
-    tConfigField: vi.fn() as never,
+    tConfigField: ((translationMap: Record<string, string>) =>
+      translationMap.de ?? translationMap.en) as never,
   })
 
   expect(result.currentPath).toBe("/media/how-to")
@@ -64,7 +69,7 @@ test("Should build localized links from an unlocalized pathname", async () => {
     },
     {
       locale: "en",
-      label: "English",
+      label: "Englisch",
       active: false,
       href: "/docs/en/media/how-to",
     },
