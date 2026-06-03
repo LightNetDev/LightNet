@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto"
+import { readFile } from "node:fs/promises"
 
 import { resolveFixturePath } from "@internal/e2e-test-utils"
 import { expect } from "@playwright/test"
@@ -11,11 +12,25 @@ const imagePath = resolveFixturePath(
   import.meta.url,
   "./fixtures/admin-test-repo/src/content/media/images/cover.jpg",
 )
+const nonConflictingImagePath = resolveFixturePath(
+  import.meta.url,
+  "./fixtures/admin-test-repo/src/assets/logo.png",
+)
+const replacementFilePath = resolveFixturePath(
+  import.meta.url,
+  "./fixtures/uploads/example.pdf",
+)
+const existingFilePath = resolveFixturePath(
+  import.meta.url,
+  "./fixtures/admin-test-repo/public/files/example.pdf",
+)
 
 const mediaItemAssetName = "cover.jpg"
 const categoryAssetName = "cover.jpg"
 
 const uniqueSlug = (prefix: string) => `${prefix}-${randomUUID().slice(0, 8)}`
+const readBase64 = async (path: string) =>
+  (await readFile(path)).toString("base64")
 
 const seedMediaItem = async (
   app: AdminApp,
@@ -46,6 +61,46 @@ const seedMediaItem = async (
     mediaItems,
     summary: `${title} (${slug})`,
   }
+}
+
+const seedMediaItemWithUploadedFile = async (
+  app: AdminApp,
+  {
+    duplicateAction,
+    slug,
+    title,
+  }: {
+    duplicateAction: "keep" | "replace"
+    slug: string
+    title: string
+  },
+) => {
+  const mediaItems = await app.openCollection("Media Items")
+  const editor = await mediaItems.createEntry()
+
+  await editor.getStringFieldByLabel("Slug").fill(slug)
+  await editor.getStringFieldByLabel("Title").fill(title)
+  await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
+  await editor.getRelationFieldByLabel("Language").selectOption("English (en)")
+  await editor
+    .getFileFieldByKeyPath("image")
+    .uploadFile(nonConflictingImagePath)
+  await editor.getListFieldByKeyPath("content").addItem("File Upload")
+  await editor
+    .getFileFieldByKeyPath("content.0.url")
+    .uploadFile(replacementFilePath, { duplicateAction })
+  await editor.getStringFieldByKeyPath("dateCreated").fill("2024-05-20")
+  await editor.save()
+
+  const savedEntryPath = resolveFixturePath(
+    import.meta.url,
+    `./fixtures/admin-test-repo/src/content/media/${slug}.json`,
+  )
+  const saved = JSON.parse(
+    await app.readTestRepositoryTextFile(toTestRepositoryPath(savedEntryPath)),
+  ) as { content: Array<{ url: string }> }
+
+  return { mediaItems, saved }
 }
 
 test.describe("Sveltia admin fixed regressions", () => {
@@ -194,5 +249,58 @@ test.describe("Sveltia admin fixed regressions", () => {
 
     expect(saved.content[0]).not.toHaveProperty("label")
     await mediaItems.expectEntryVisible(summary)
+  })
+
+  test("replaces duplicated upload files when requested", async ({ admin }) => {
+    const app = await admin("test-repo")
+    await app.enterTestRepository()
+
+    const existingFileRepoPath = toTestRepositoryPath(existingFilePath)
+    const originalFile =
+      await app.readTestRepositoryBase64File(existingFileRepoPath)
+    const replacementFile = await readBase64(replacementFilePath)
+
+    expect(originalFile).not.toBe(replacementFile)
+
+    const { saved } = await seedMediaItemWithUploadedFile(app, {
+      duplicateAction: "replace",
+      slug: uniqueSlug("replace-file"),
+      title: "Replace File",
+    })
+
+    await expect
+      .poll(() => app.readTestRepositoryBase64File(existingFileRepoPath))
+      .toBe(replacementFile)
+    expect(saved.content[0].url).toBe("/files/example.pdf")
+  })
+
+  test("keeps both duplicated upload files when requested", async ({
+    admin,
+  }) => {
+    const app = await admin("test-repo")
+    await app.enterTestRepository()
+
+    const existingFileRepoPath = toTestRepositoryPath(existingFilePath)
+    const renamedFileRepoPath = existingFileRepoPath.replace(
+      /example\.pdf$/,
+      "example-1.pdf",
+    )
+    const originalFile =
+      await app.readTestRepositoryBase64File(existingFileRepoPath)
+    const replacementFile = await readBase64(replacementFilePath)
+
+    const { saved } = await seedMediaItemWithUploadedFile(app, {
+      duplicateAction: "keep",
+      slug: uniqueSlug("keep-file"),
+      title: "Keep File",
+    })
+
+    await expect
+      .poll(() => app.readTestRepositoryBase64File(existingFileRepoPath))
+      .toBe(originalFile)
+    await expect
+      .poll(() => app.readTestRepositoryBase64File(renamedFileRepoPath))
+      .toBe(replacementFile)
+    expect(saved.content[0].url).toBe("/files/example-1.pdf")
   })
 })

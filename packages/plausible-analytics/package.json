@@ -3,7 +3,7 @@
   "description": "Inject plausible analytics script into LightNet pages",
   "type": "module",
   "license": "MIT",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "publishConfig": {
     "access": "public"
   },
@@ -35,7 +35,7 @@
     "@plausible-analytics/tracker": "^0.4.5"
   },
   "devDependencies": {
-    "astro": "^6.3.3",
+    "astro": "^6.4.2",
     "typescript": "^6.0.3"
   },
   "engines": {

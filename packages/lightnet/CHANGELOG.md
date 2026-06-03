@@ -1,5 +1,13 @@
 # lightnet
 
+## 4.2.1
+
+### Patch Changes
+
+- [#401](https://github.com/LightNetDev/LightNet/pull/401) [`b3db519`](https://github.com/LightNetDev/LightNet/commit/b3db519e7c0492b66f6aa26875cb91fe841fcdd5) - Adjusted footer link separator and wrapping behavior to use the updated CSS-only footer layout.
+
+- [#404](https://github.com/LightNetDev/LightNet/pull/404) [`5acab49`](https://github.com/LightNetDev/LightNet/commit/5acab49ca79078edbba3868b9b7bce249b2fca8a) - Update dependencies.
+
 ## 4.2.0
 
 ### Minor Changes
