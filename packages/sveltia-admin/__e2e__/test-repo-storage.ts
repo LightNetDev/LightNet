@@ -222,8 +222,53 @@ const readTestRepositoryTextFile = async (
     },
   )
 
+const readTestRepositoryBase64File = async (
+  page: {
+    evaluate: <Arg, Result>(
+      pageFunction: (arg: Arg) => Promise<Result>,
+      arg: Arg,
+    ) => Promise<Result>
+  },
+  path: string,
+) =>
+  page.evaluate(
+    async ({ path, rootDirName }: { path: string; rootDirName: string }) => {
+      const rootHandle = await navigator.storage.getDirectory()
+      const repoHandle = await rootHandle.getDirectoryHandle(rootDirName)
+      const segments = path.split("/").filter(Boolean)
+      const fileName = segments.pop()
+
+      if (!fileName) {
+        throw new Error(`Invalid test repository path: ${path}`)
+      }
+
+      let directoryHandle = repoHandle
+
+      for (const segment of segments) {
+        directoryHandle = await directoryHandle.getDirectoryHandle(segment)
+      }
+
+      const fileHandle = await directoryHandle.getFileHandle(fileName)
+      const file = await fileHandle.getFile()
+      const buffer = await file.arrayBuffer()
+      const bytes = new Uint8Array(buffer)
+      let binary = ""
+
+      for (const byte of bytes) {
+        binary += String.fromCharCode(byte)
+      }
+
+      return btoa(binary)
+    },
+    {
+      path,
+      rootDirName: TEST_REPO_ROOT_DIR_NAME,
+    },
+  )
+
 export {
   buildTestRepoSeedManifest,
+  readTestRepositoryBase64File,
   readTestRepositoryTextFile,
   seedTestRepository,
   TEST_REPO_ROOT_DIR_NAME,
