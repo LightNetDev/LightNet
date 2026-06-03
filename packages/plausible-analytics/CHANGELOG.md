@@ -1,5 +1,11 @@
 # @lightnet/plausible-analytics
 
+## 4.0.3
+
+### Patch Changes
+
+- [#404](https://github.com/LightNetDev/LightNet/pull/404) [`5acab49`](https://github.com/LightNetDev/LightNet/commit/5acab49ca79078edbba3868b9b7bce249b2fca8a) - Update dependencies.
+
 ## 4.0.2
 
 ### Patch Changes

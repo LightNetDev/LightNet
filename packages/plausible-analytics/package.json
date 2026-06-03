@@ -3,7 +3,7 @@
   "description": "Inject plausible analytics script into LightNet pages",
   "type": "module",
   "license": "MIT",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "publishConfig": {
     "access": "public"
   },
