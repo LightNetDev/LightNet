@@ -1,6 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest"
 
-vi.mock("../../src/i18n/resolve-language", () => ({
+vi.mock("../../../src/i18n/resolve-language", () => ({
   resolveLanguage: (locale: string) => ({
     label:
       locale === "de"
@@ -18,7 +18,7 @@ test("Should build localized links from a localized pathname", async () => {
   vi.stubEnv("BASE_URL", "/docs/")
 
   const { getLanguageSelectionMenuItems } =
-    await import("../../src/layouts/components/get-language-selection-menu-items")
+    await import("../../../src/layouts/components/get-language-selection-menu-items")
 
   const result = getLanguageSelectionMenuItems({
     currentLocale: "de",
@@ -49,7 +49,7 @@ test("Should build localized links from an unlocalized pathname", async () => {
   vi.stubEnv("BASE_URL", "/docs/")
 
   const { getLanguageSelectionMenuItems } =
-    await import("../../src/layouts/components/get-language-selection-menu-items")
+    await import("../../../src/layouts/components/get-language-selection-menu-items")
 
   const result = getLanguageSelectionMenuItems({
     currentLocale: "de",
