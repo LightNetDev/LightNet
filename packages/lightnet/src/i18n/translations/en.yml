@@ -10,7 +10,7 @@ ln.header.open-main-menu: Open main menu
 #
 # English: Select language
 # Used on: https://kuuluu.org/en (not visible)
-ln.header.select-language: Select language
+ln.select-language: Select language
 
 # Display name for the home page.
 #

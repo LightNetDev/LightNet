@@ -1,8 +1,10 @@
 ---
+import { GlobeIcon } from "lucide-react"
 import config from "virtual:lightnet/config"
 
 import { getLinkAttributes } from "../../utils/link-attributes"
 import { localizePath } from "../../utils/paths"
+import { getLanguageSelectionMenuItems } from "./get-language-selection-menu-items"
 import LightNetLogo from "./LightNetLogo.svg"
 
 const { t, tConfigField, currentLocale } = Astro.locals.i18n
@@ -11,17 +13,6 @@ const { t, tConfigField, currentLocale } = Astro.locals.i18n
 const footerText = config.footerText
   ? tConfigField(config.footerText, config)
   : undefined
-
-type FooterTextItem = {
-  label: string
-  type: "text"
-}
-
-type FooterLinkItem = {
-  href: string
-  label: string
-  type: "link"
-}
 
 // Prepare footer links using the same locale rules as the main menu.
 const footerLinks = (config.footerLinks ?? []).map(
@@ -33,78 +24,125 @@ const footerLinks = (config.footerLinks ?? []).map(
   },
 )
 
+const { links: languageMenuItems } = getLanguageSelectionMenuItems({
+  currentLocale,
+  pathname: Astro.url.pathname,
+  tConfigField,
+})
+
+const shouldShowLanguageSelector = languageMenuItems.length > 1
+
 // Hide the footer entirely when there is nothing to show.
 const shouldRenderFooter =
-  config.credits || !!footerText || footerLinks.length > 0
+  config.credits ||
+  !!footerText ||
+  footerLinks.length > 0 ||
+  shouldShowLanguageSelector
 
 if (!shouldRenderFooter) {
   return
 }
 
-const footerItems: Array<FooterTextItem | FooterLinkItem> = [
+const footerItems = [
   ...(footerText ? [{ type: "text" as const, label: footerText }] : []),
-  ...footerLinks.map((link): FooterLinkItem => ({ type: "link", ...link })),
+  ...footerLinks.map((link) => ({ type: "link" as const, ...link })),
 ]
 ---
 
 <footer class="w-full border-t border-gray-200 bg-white">
   <div class="mx-auto w-full max-w-screen-xl px-4 md:px-8">
-    <div
-      class="flex flex-col items-start justify-between gap-6 py-6 sm:flex-row sm:items-start"
-    >
+    <div class="flex flex-col gap-4 py-6">
+      {
+        shouldShowLanguageSelector && (
+          <div class="flex w-full justify-start">
+            <label class="inline-flex items-center gap-2 bg-white py-2 text-sm text-gray-800">
+              <GlobeIcon
+                className="h-4 w-4 shrink-0 text-gray-500"
+                aria-hidden="true"
+              />
+              <span class="sr-only">{t("ln.select-language")}</span>
+              <select
+                class="min-w-0 cursor-pointer appearance-none border-0 bg-transparent p-0 pr-0 text-sm font-medium text-gray-800 outline-none focus:ring-0"
+                aria-label={t("ln.select-language")}
+                data-footer-language-select
+              >
+                {languageMenuItems.map(({ href, label, locale, active }) => (
+                  <option value={href} selected={active} lang={locale}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        )
+      }
+
       <div
-        class="flex w-full flex-col items-start gap-3 text-sm text-gray-800 sm:min-w-0 sm:flex-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2"
+        class="flex w-full flex-col gap-4 text-sm text-gray-800 md:flex-row md:items-center md:justify-between md:gap-6"
       >
         {
           footerItems.length > 0 && (
-            <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 sm:w-auto">
+            <div class="flex w-full flex-row flex-wrap items-center gap-x-2 gap-y-1 md:w-auto">
               {footerItems.map((item, index) => (
                 <span class="inline-flex items-center gap-1.5">
-                  <span class="text-gray-800">
-                    {item.type === "text" ? (
-                      item.label
-                    ) : (
-                      <a
-                        {...getLinkAttributes(item.href)}
-                        class="underline-offset-4 hover:underline"
-                      >
-                        {item.label}
-                      </a>
-                    )}
+                  <span
+                    class:list={[
+                      "w-3 shrink-0 justify-center text-center text-[0.8em] leading-none text-gray-400",
+                      index === 0 ? "hidden" : "inline-flex",
+                    ]}
+                    aria-hidden="true"
+                  >
+                    &middot;
                   </span>
-                  {index < footerItems.length - 1 && (
-                    <span
-                      class="text-[0.8em] leading-none text-gray-400"
-                      aria-hidden="true"
+                  {item.type === "text" ? (
+                    <span class="text-gray-800">{item.label}</span>
+                  ) : (
+                    <a
+                      {...getLinkAttributes(item.href)}
+                      class="text-gray-800 underline-offset-4 hover:underline"
                     >
-                      &middot;
-                    </span>
+                      {item.label}
+                    </a>
                   )}
                 </span>
               ))}
             </div>
           )
         }
-      </div>
 
-      {
-        config.credits && (
-          <div class="flex w-full items-center text-sm sm:w-auto sm:flex-none sm:justify-end">
-            <a
-              class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
-              {...getLinkAttributes("https://lightnet.community")}
-            >
-              <img
-                src={LightNetLogo.src}
-                alt=""
-                class="h-5 w-auto"
-                loading="lazy"
-              />
-              <span>{t("ln.footer.powered-by-lightnet")}</span>
-            </a>
-          </div>
-        )
-      }
+        {
+          config.credits && (
+            <div class="flex w-full items-center justify-start md:w-auto md:justify-end">
+              <a
+                class="flex items-center gap-2 whitespace-nowrap text-gray-800 underline-offset-4 hover:underline"
+                {...getLinkAttributes("https://lightnet.community")}
+              >
+                <img
+                  src={LightNetLogo.src}
+                  alt=""
+                  class="h-5 w-auto"
+                  loading="lazy"
+                />
+                <span>{t("ln.footer.powered-by-lightnet")}</span>
+              </a>
+            </div>
+          )
+        }
+      </div>
     </div>
   </div>
 </footer>
+
+<script>
+  const footerLanguageSelect = document.querySelector<HTMLSelectElement>(
+    "[data-footer-language-select]",
+  )
+
+  footerLanguageSelect?.addEventListener("change", () => {
+    if (!footerLanguageSelect.value) {
+      return
+    }
+
+    window.location.assign(footerLanguageSelect.value)
+  })
+</script>

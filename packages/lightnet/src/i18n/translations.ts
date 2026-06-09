@@ -82,7 +82,7 @@ export type LightNetTranslationKey =
   | "ln.details.part-of-collection"
   | "ln.details.download"
   | "ln.header.open-main-menu"
-  | "ln.header.select-language"
+  | "ln.select-language"
   | "ln.home.title"
   | "ln.search.all-categories"
   | "ln.search.all-languages"

@@ -63,12 +63,18 @@ test("Should navigate to search page from main menu", async ({
 test("Should switch languages", async ({ page, lightnet }) => {
   const ln = await lightnet()
 
-  await page.getByLabel("Select language").click()
+  await page
+    .getByRole("banner")
+    .getByRole("button", { name: "Select language" })
+    .click()
   await page.getByRole("link", { name: "Deutsch" }).click()
   await expect(page).toHaveURL(ln.resolveURL("/de/"))
   await expect(page.getByRole("heading")).toHaveText("Alle Artikel")
 
-  await page.getByLabel("Sprache auswählen").click()
+  await page
+    .getByRole("banner")
+    .getByRole("button", { name: "Sprache auswählen" })
+    .click()
   await page.getByRole("link", { name: "English" }).click()
   await expect(page).toHaveURL(ln.resolveURL("/en/"))
 })
@@ -102,7 +108,10 @@ test("Should verify DE Detail media page url and title", async ({
 }) => {
   const ln = await lightnet()
 
-  await page.getByLabel("Select language").click()
+  await page
+    .getByRole("banner")
+    .getByRole("button", { name: "Select language" })
+    .click()
   await page.getByRole("link", { name: "Deutsch" }).click()
   await page.getByRole("link", { name: "Faithful Freestyle" }).click()
   await expect(page).toHaveURL(
@@ -117,7 +126,7 @@ test("Should verify DE Detail media page url and title", async ({
   // await page.goBack()
 
   await expect(page.getByRole("button", { name: "Teilen" })).toBeVisible()
-  await expect(page.getByText("Sprache")).toBeVisible()
+  await expect(page.getByText("Sprache", { exact: true })).toBeVisible()
   await expect(page.getByText("Kategorie")).toBeVisible()
 })
 
@@ -134,7 +143,10 @@ test("Should show `Powered by LightNet` in footer", async ({
   await expect(footerLink).toHaveText("Powered by LightNet")
   await expect(footerLink).toHaveAttribute("href", "https://lightnet.community")
 
-  await page.getByLabel("Select language").click()
+  await page
+    .getByRole("banner")
+    .getByRole("button", { name: "Select language" })
+    .click()
   await page.getByRole("link", { name: "Deutsch" }).click()
 
   await expect(
