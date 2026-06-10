@@ -1,5 +1,19 @@
 # lightnet
 
+## 4.3.0
+
+### Minor Changes
+
+- [#405](https://github.com/LightNetDev/LightNet/pull/405) [`522ffae`](https://github.com/LightNetDev/LightNet/commit/522ffaed830b9e68f5479567ee326c5439ea0f27) - Add a footer language selector with shared locale-path logic and a footer-specific accessible label.
+
+- [#408](https://github.com/LightNetDev/LightNet/pull/408) [`d0aaa12`](https://github.com/LightNetDev/LightNet/commit/d0aaa12477bec601bcd10d46290f287dc2174b60) - Support a `{{year}}` placeholder in localized footer text.
+
+### Patch Changes
+
+- [#407](https://github.com/LightNetDev/LightNet/pull/407) [`e5fa59b`](https://github.com/LightNetDev/LightNet/commit/e5fa59bbfce0aca158db08c91201fc8e03ecbaeb) - Update dependencies
+
+- [#405](https://github.com/LightNetDev/LightNet/pull/405) [`522ffae`](https://github.com/LightNetDev/LightNet/commit/522ffaed830b9e68f5479567ee326c5439ea0f27) - Rename the shared language selection translation key to `ln.select-language` and update all locale files, comments, and call sites. This changes the public translation key used by downstream custom translations.
+
 ## 4.2.1
 
 ### Patch Changes
