@@ -2,9 +2,9 @@
 import { ExternalLinkIcon, MenuIcon, SearchIcon } from "lucide-react"
 import config from "virtual:lightnet/config"
 
-import { isExternalUrl } from "../../utils/is-external-url"
-import { localizePath, searchPagePath } from "../../utils/paths"
-import LanguagePicker from "./LanguagePicker.astro"
+import { isExternalUrl } from "../../../utils/is-external-url"
+import { localizePath, searchPagePath } from "../../../utils/paths"
+import LanguageSelectionMenu from "./LanguageSelectionMenu.astro"
 import Menu from "./Menu.astro"
 import MenuItem from "./MenuItem.astro"
 
@@ -40,7 +40,7 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
     )
   }
 
-  <LanguagePicker />
+  <LanguageSelectionMenu />
 
   {
     !!items.length && (

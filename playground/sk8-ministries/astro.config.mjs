@@ -18,12 +18,11 @@ export default defineConfig({
         ar: "خدمات التزلج على الألواح",
       },
       logo: { src: "./src/assets/logo.png" },
-      disallowSearchIndexing: false,
+      disallowSearchIndexing: true,
       favicon: [
         { href: "favicon.ico", sizes: "32x32" },
         { href: "favicon.svg" },
       ],
-      credits: true,
       searchPage: {
         filterByLocale: true,
       },
@@ -72,6 +71,7 @@ export default defineConfig({
           },
         },
       ],
+      credits: true,
       footerText: {
         en: "© {{year}} Sk8 Ministries",
         de: "© {{year}} Sk8 Ministries",
