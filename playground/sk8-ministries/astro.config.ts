@@ -71,9 +71,9 @@ export default defineConfig({
         },
       ],
       footerText: {
-        en: "© 2026 Sk8 Ministries",
-        de: "© 2026 Sk8 Ministries",
-        ar: "© 2026 Sk8 Ministries",
+        en: "© {{year}} Sk8 Ministries",
+        de: "© {{year}} Sk8 Ministries",
+        ar: "© {{year}} Sk8 Ministries",
       },
       footerLinks: [
         {
