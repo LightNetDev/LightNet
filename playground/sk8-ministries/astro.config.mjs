@@ -1,3 +1,4 @@
+// @ts-check
 import lightnetSveltiaAdmin from "@lightnet/sveltia-admin"
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
@@ -17,6 +18,7 @@ export default defineConfig({
         ar: "خدمات التزلج على الألواح",
       },
       logo: { src: "./src/assets/logo.png" },
+      disallowSearchIndexing: false,
       favicon: [
         { href: "favicon.ico", sizes: "32x32" },
         { href: "favicon.svg" },

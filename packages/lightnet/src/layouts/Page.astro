@@ -37,10 +37,26 @@ export interface Props {
    * analytics providers that choose to respect it. e.g. @lightnet/plausible-analytics
    */
   disableShouldTrack?: boolean
+  /**
+   * Disallow search indexing for this page from search tools like google.
+   * This tells them to not index content on this page.
+   *
+   * There is also a global setting to disable search indexing for all pages.
+   * The page specific setting will take precedence.
+   *
+   * default: false
+   */
+  disallowSearchIndexing?: boolean
 }
 
-const { title, description, mainClass, locale, disableShouldTrack } =
-  Astro.props
+const {
+  title,
+  description,
+  mainClass,
+  locale,
+  disableShouldTrack,
+  disallowSearchIndexing,
+} = Astro.props
 const { currentLocale: pathCurrentLocale, tConfigField } = Astro.locals.i18n
 const currentLocale = locale ?? pathCurrentLocale
 const configTitle = tConfigField(config.title, config)
@@ -56,6 +72,11 @@ const { direction } = resolveLanguage(currentLocale)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {
+      (disallowSearchIndexing ?? config.disallowSearchIndexing) && (
+        <meta name="robots" content="noindex" />
+      )
+    }
     {CustomHead && <CustomHead />}
     <title>{title ? `${title} | ${configTitle}` : configTitle}</title>
     {description && <meta name="description" content={description} />}
