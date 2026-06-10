@@ -4,6 +4,7 @@ import config from "virtual:lightnet/config"
 
 import { getLinkAttributes } from "../../utils/link-attributes"
 import { localizePath } from "../../utils/paths"
+import { formatFooterText } from "./format-footer-text"
 import { getLanguageSelectionMenuItems } from "./get-language-selection-menu-items"
 import LightNetLogo from "./LightNetLogo.svg"
 
@@ -11,7 +12,7 @@ const { t, tConfigField, currentLocale } = Astro.locals.i18n
 
 // Resolve optional footer text for the current locale.
 const footerText = config.footerText
-  ? tConfigField(config.footerText, config)
+  ? formatFooterText(tConfigField(config.footerText, config))
   : undefined
 
 // Prepare footer links using the same locale rules as the main menu.

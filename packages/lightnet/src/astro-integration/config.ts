@@ -115,6 +115,10 @@ export const configSchema = z.object({
   credits: z.boolean().default(false),
   /**
    * Optional localized text to display in your site's footer.
+   *
+   * Use `{{year}}` to render the current calendar year.
+   *
+   * @example { en: "Copyright {{year}} LightNet" }
    */
   footerText: translationMapSchema.optional(),
   /**
