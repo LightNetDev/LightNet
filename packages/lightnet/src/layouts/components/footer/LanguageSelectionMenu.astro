@@ -1,0 +1,44 @@
+---
+import { GlobeIcon } from "lucide-react"
+
+import { getLanguageSelectionMenuItems } from "../get-language-selection-menu-items"
+
+const { t, tConfigField, currentLocale } = Astro.locals.i18n
+
+const { links: languageMenuItems } = getLanguageSelectionMenuItems({
+  currentLocale,
+  pathname: Astro.url.pathname,
+  tConfigField,
+})
+---
+
+<label class="inline-flex items-center gap-2 py-2 font-medium">
+  <GlobeIcon className="h-5 w-5 shrink-0 text-gray-600" aria-hidden="true" />
+  <span class="sr-only">{t("ln.select-language")}</span>
+  <select
+    class="min-w-0 cursor-pointer appearance-none border-0 bg-transparent p-0 pr-0 outline-none focus:ring-0"
+    aria-label={t("ln.select-language")}
+    data-footer-language-select
+  >
+    {
+      languageMenuItems.map(({ href, label, locale, active }) => (
+        <option value={href} selected={active} lang={locale}>
+          {label}
+        </option>
+      ))
+    }
+  </select>
+</label>
+<script>
+  const footerLanguageSelect = document.querySelector<HTMLSelectElement>(
+    "[data-footer-language-select]",
+  )
+
+  footerLanguageSelect?.addEventListener("change", () => {
+    if (!footerLanguageSelect.value) {
+      return
+    }
+
+    window.location.assign(footerLanguageSelect.value)
+  })
+</script>

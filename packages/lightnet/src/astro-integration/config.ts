@@ -110,22 +110,10 @@ export const configSchema = z.object({
    */
   favicon: faviconSchema.array().optional(),
   /**
-   * Enable displaying a “Powered by LightNet” link in your site’s footer.
+   * If set too true, this sets robots meta tag to no index to tell search engines like google to
+   * not add any page of this media library to their search results.
    */
-  credits: z.boolean().default(false),
-  /**
-   * Optional localized text to display in your site's footer.
-   *
-   * Use `{{year}}` to render the current calendar year.
-   *
-   * @example { en: "Copyright {{year}} LightNet" }
-   */
-  footerText: translationMapSchema.optional(),
-  /**
-   * Optional links to display in your site's footer.
-   */
-  footerLinks: z.array(linkSchema).optional(),
-
+  disallowSearchIndexing: z.boolean().optional(),
   /**
    * Link to manifest file within public/ folder
    */
@@ -186,6 +174,22 @@ export const configSchema = z.object({
    * @example "./src/components/MyHeadTag.astro"
    */
   headComponent: z.string().optional(),
+  /**
+   * Enable displaying a “Powered by LightNet” link in your site’s footer.
+   */
+  credits: z.boolean().default(false),
+  /**
+   * Optional localized text to display in your site's footer.
+   *
+   * Use `{{year}}` to render the current calendar year.
+   *
+   * @example { en: "Copyright {{year}} LightNet" }
+   */
+  footerText: translationMapSchema.optional(),
+  /**
+   * Optional links to display in your site's footer.
+   */
+  footerLinks: z.array(linkSchema).optional(),
   /**
    * Path to an Astro component to be added at the bottom of all pages.
    *

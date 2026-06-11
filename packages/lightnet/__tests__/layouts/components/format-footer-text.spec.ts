@@ -1,6 +1,6 @@
 import { expect, test } from "vitest"
 
-import { formatFooterText } from "../../../src/layouts/components/format-footer-text"
+import { formatFooterText } from "../../../src/layouts/components/footer/format-footer-text"
 
 test("Should replace year placeholder with current year", () => {
   expect(formatFooterText("Copyright {{year}} LightNet", 2026)).toBe(

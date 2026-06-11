@@ -1,0 +1,88 @@
+---
+import config from "virtual:lightnet/config"
+
+import { getLinkAttributes } from "../../../utils/link-attributes"
+import { localizePath } from "../../../utils/paths"
+import Credits from "./Credits.astro"
+import { formatFooterText } from "./format-footer-text"
+import LanguageSelectionMenu from "./LanguageSelectionMenu.astro"
+
+const { tConfigField, currentLocale } = Astro.locals.i18n
+
+// Resolve optional footer text for the current locale.
+const footerText = config.footerText
+  ? formatFooterText(tConfigField(config.footerText, config))
+  : undefined
+
+// Prepare footer links using the same locale rules as the main menu.
+const footerLinks = (config.footerLinks ?? []).map(
+  ({ href, label, requiresLocale }) => {
+    return {
+      href: requiresLocale ? localizePath(currentLocale, href) : href,
+      label: tConfigField(label, config),
+    }
+  },
+)
+
+const shouldShowLanguageSelectionMenu = config.locales.length > 1
+
+// Hide the footer entirely when there is nothing to show.
+const shouldRenderFooter =
+  config.credits ||
+  !!footerText ||
+  footerLinks.length > 0 ||
+  shouldShowLanguageSelectionMenu
+
+if (!shouldRenderFooter) {
+  return
+}
+
+const footerItems = [
+  ...(footerText ? [{ type: "text" as const, label: footerText }] : []),
+  ...footerLinks.map((link) => ({ type: "link" as const, ...link })),
+]
+---
+
+<footer class="w-full border-t border-gray-200 bg-white text-sm text-gray-800">
+  <div
+    class="mx-auto flex w-full max-w-screen-xl px-4 py-4 md:px-8 md:py-6"
+    class:list={footerItems.length === 0
+      ? "flex-col justify-between gap-4 sm:flex-row sm:items-center"
+      : "flex-col gap-2"}
+  >
+    {shouldShowLanguageSelectionMenu && <LanguageSelectionMenu />}
+    {
+      (footerItems.length > 0 || config.credits) && (
+        <div class="flex shrink flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          {footerItems.length > 0 && (
+            <div class="flex w-full min-w-0 flex-1 shrink flex-wrap">
+              {footerItems.map((item, index) => (
+                <span class="inline-flex">
+                  {item.type === "text" ? (
+                    <span>{item.label}</span>
+                  ) : (
+                    <a
+                      {...getLinkAttributes(item.href)}
+                      class="underline-offset-4 hover:underline"
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                  {index !== footerItems.length - 1 && (
+                    <span
+                      class="shrink-0 px-2 text-gray-400"
+                      aria-hidden="true"
+                    >
+                      &middot;
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
+          )}
+          {config.credits && <Credits />}
+        </div>
+      )
+    }
+  </div>
+</footer>
