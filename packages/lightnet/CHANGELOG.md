@@ -1,5 +1,15 @@
 # lightnet
 
+## 4.4.0
+
+### Minor Changes
+
+- [#409](https://github.com/LightNetDev/LightNet/pull/409) [`6d214f6`](https://github.com/LightNetDev/LightNet/commit/6d214f6b620dc00b8860da50006778649e977d59) - Add ` disallowSearchIndexing` settings to exclude entire site or pages from search engines.
+
+### Patch Changes
+
+- [#409](https://github.com/LightNetDev/LightNet/pull/409) [`6d214f6`](https://github.com/LightNetDev/LightNet/commit/6d214f6b620dc00b8860da50006778649e977d59) - Improved footer layout
+
 ## 4.3.0
 
 ### Minor Changes
