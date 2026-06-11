@@ -12,13 +12,11 @@ const { links: languageMenuItems } = getLanguageSelectionMenuItems({
 })
 ---
 
-<label
-  class="inline-flex items-center gap-2 bg-white py-2 text-sm text-gray-800"
->
+<label class="inline-flex items-center gap-2 py-2 font-medium">
   <GlobeIcon className="h-5 w-5 shrink-0 text-gray-600" aria-hidden="true" />
   <span class="sr-only">{t("ln.select-language")}</span>
   <select
-    class="min-w-0 cursor-pointer appearance-none border-0 bg-transparent p-0 pr-0 text-sm font-medium text-gray-800 outline-none focus:ring-0"
+    class="min-w-0 cursor-pointer appearance-none border-0 bg-transparent p-0 pr-0 outline-none focus:ring-0"
     aria-label={t("ln.select-language")}
     data-footer-language-select
   >
