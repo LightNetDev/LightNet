@@ -1,7 +1,6 @@
 packages:
   - "packages/**/*"
   - "playground/**/*"
-minimumReleaseAge: 4320
 allowBuilds:
   esbuild: true
   sharp: true
