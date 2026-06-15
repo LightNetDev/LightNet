@@ -59,7 +59,7 @@
     "@iconify-json/lucide": "^1.2.111",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/typography": "^0.5.20",
     "@tanstack/react-virtual": "^3.14.2",
     "autoprefixer": "^10.5.0",
     "embla-carousel": "^8.6.0",
@@ -76,7 +76,7 @@
     "@internal/e2e-test-utils": "workspace:^",
     "@playwright/test": "^1.60.0",
     "@types/react": "^19.2.17",
-    "astro": "^6.4.4",
+    "astro": "^6.4.6",
     "typescript": "^6.0.3",
     "vitest": "^4.1.8"
   },
