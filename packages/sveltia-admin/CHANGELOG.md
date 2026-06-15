@@ -1,5 +1,11 @@
 # @lightnet/sveltia-admin
 
+## 4.0.12
+
+### Patch Changes
+
+- [#413](https://github.com/LightNetDev/LightNet/pull/413) [`3bdac34`](https://github.com/LightNetDev/LightNet/commit/3bdac343f7a0d18c63e5fb25c306b4eb2a3af9be) - Update dependencies after setting pnpm minReleaseAge to one day.
+
 ## 4.0.11
 
 ### Patch Changes
