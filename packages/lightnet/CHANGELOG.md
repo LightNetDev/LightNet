@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.4.1
+
+### Patch Changes
+
+- [#411](https://github.com/LightNetDev/LightNet/pull/411) [`d604857`](https://github.com/LightNetDev/LightNet/commit/d604857b64c48d769604d4e9027205ef9c39c51f) - Update dependencies
+
 ## 4.4.0
 
 ### Minor Changes
