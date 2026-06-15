@@ -15,7 +15,7 @@
     "@astrojs/react": "^5.0.7",
     "@lightnet/cli": "workspace:^",
     "@lightnet/sveltia-admin": "workspace:^",
-    "astro": "^6.4.4",
+    "astro": "^6.4.6",
     "lightnet": "workspace:^",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
