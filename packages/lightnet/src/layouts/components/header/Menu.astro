@@ -21,7 +21,7 @@ const { label, disabled } = Astro.props
     data-menu-panel
     aria-hidden="true"
     inert
-    class="pointer-events-none absolute end-3 top-full mt-px flex w-48 origin-top scale-y-90 flex-col overflow-hidden rounded-b-md bg-white py-3 opacity-0 shadow-lg transition-all duration-100 ease-out"
+    class="pointer-events-none absolute end-3 top-full mt-px flex w-48 origin-top scale-y-90 flex-col overflow-hidden rounded-b-md bg-white py-3 opacity-0 shadow-lg transition-all duration-100 ease-out motion-reduce:transform-none motion-reduce:transition-none"
   >
     <slot />
   </ul>
@@ -30,6 +30,7 @@ const { label, disabled } = Astro.props
   class Menu extends HTMLElement {
     menuPanel = this.querySelector<HTMLElement>("[data-menu-panel]")!
     isMenuOpened = false
+    reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
     handleOutsideClick = (event: MouseEvent) => {
       if (!this.isMenuOpened) {
         return
@@ -55,7 +56,9 @@ const { label, disabled } = Astro.props
       }
       this.menuPanel.style.opacity = "1"
       this.menuPanel.style.pointerEvents = "auto"
-      this.menuPanel.style.transform = "scaleY(1)"
+      this.menuPanel.style.transform = this.reducedMotionQuery.matches
+        ? ""
+        : "scaleY(1)"
 
       this.menuPanel.setAttribute("aria-hidden", "false")
       this.menuPanel.removeAttribute("inert")
@@ -69,7 +72,9 @@ const { label, disabled } = Astro.props
       }
       this.menuPanel.style.opacity = "0"
       this.menuPanel.style.pointerEvents = "none"
-      this.menuPanel.style.transform = "scaleY(0.9)"
+      this.menuPanel.style.transform = this.reducedMotionQuery.matches
+        ? ""
+        : "scaleY(0.9)"
 
       this.menuPanel.setAttribute("aria-hidden", "true")
       this.menuPanel.setAttribute("inert", "")

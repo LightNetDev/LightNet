@@ -18,6 +18,9 @@ export default defineConfig({
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+    contextOptions: {
+      reducedMotion: "reduce",
+    },
     viewport: { width: 1280, height: 800 }, // Set default viewport
   },
 

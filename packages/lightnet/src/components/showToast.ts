@@ -3,6 +3,7 @@ const TIMEOUT_DATA_KEY = "toastHideTimeoutId"
 const DEFAULT_HIDDEN_TRANSFORM = "translateY(1.5rem)"
 const DEFAULT_VISIBLE_TRANSFORM = "translateY(0)"
 const DEFAULT_OVERSHOOT_TRANSFORM = "translateY(-0.25rem)"
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)"
 
 type ShowToastOptions = {
   duration?: number
@@ -17,6 +18,7 @@ export function showToast(
   options: ShowToastOptions = {},
 ) {
   const duration = options.duration ?? DEFAULT_DURATION_MS
+  const prefersReducedMotion = window.matchMedia(REDUCED_MOTION_QUERY).matches
   const existingTimeoutId = element.dataset[TIMEOUT_DATA_KEY]
   const hiddenTransform =
     element.dataset.toastHiddenTransform ?? DEFAULT_HIDDEN_TRANSFORM
@@ -31,20 +33,29 @@ export function showToast(
 
   element.style.display = "flex"
   element.style.opacity = "100%"
-  element.style.transform = overshootTransform
+  element.style.transitionDuration = prefersReducedMotion ? "0s" : ""
+  element.style.transform = prefersReducedMotion
+    ? visibleTransform
+    : overshootTransform
   element.dataset.toastVisible = "true"
 
   const settleIntoPlace = () => {
     element.style.transform = visibleTransform
   }
 
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(settleIntoPlace)
-  })
+  if (prefersReducedMotion) {
+    settleIntoPlace()
+  } else {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(settleIntoPlace)
+    })
+  }
 
   const timeoutId = window.setTimeout(() => {
     element.style.opacity = "0%"
-    element.style.transform = hiddenTransform
+    element.style.transform = prefersReducedMotion
+      ? visibleTransform
+      : hiddenTransform
     element.dataset.toastVisible = "false"
     element.style.display = "hidden"
     delete element.dataset[TIMEOUT_DATA_KEY]
