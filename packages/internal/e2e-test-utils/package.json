@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.61.0",
-    "astro": "^6.4.7"
+    "astro": "^6.4.8"
   },
   "engines": {
     "node": ">=22"
