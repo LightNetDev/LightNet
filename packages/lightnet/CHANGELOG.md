@@ -1,5 +1,15 @@
 # lightnet
 
+## 4.5.0
+
+### Minor Changes
+
+- [#417](https://github.com/LightNetDev/LightNet/pull/417) [`ce1eaa9`](https://github.com/LightNetDev/LightNet/commit/ce1eaa9acf8dc50b6cd413be3553c53068b4d234) - Add disableOverlay property to Hero Section.
+
+### Patch Changes
+
+- [#417](https://github.com/LightNetDev/LightNet/pull/417) [`ce1eaa9`](https://github.com/LightNetDev/LightNet/commit/ce1eaa9acf8dc50b6cd413be3553c53068b4d234) - Update dependencies
+
 ## 4.4.3
 
 ### Patch Changes
