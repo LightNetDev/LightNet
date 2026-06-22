@@ -20,7 +20,7 @@
     "e2e:admin": "pnpm --filter=@lightnet/sveltia-admin e2e",
     "test": "pnpm -r --if-present test"
   },
-  "packageManager": "pnpm@11.7.0",
+  "packageManager": "pnpm@11.8.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet"
@@ -35,7 +35,7 @@
     "@changesets/cli": "^2.31.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.13.2",
-    "astro": "^6.4.7",
+    "astro": "^6.4.8",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",

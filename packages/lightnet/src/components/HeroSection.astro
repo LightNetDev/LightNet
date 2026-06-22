@@ -14,6 +14,7 @@ interface Props {
   subtitleClass?: string
   className?: string
   showSearch?: boolean
+  disableOverlay?: boolean
 }
 const {
   image,
@@ -25,6 +26,7 @@ const {
   subtitleClass,
   className,
   showSearch = false,
+  disableOverlay = false,
 } = Astro.props
 
 const titleSizes = {
@@ -52,8 +54,11 @@ const subtitleSizes = {
       alt=""
     />
     <div
-      class="absolute top-0 flex h-full w-full flex-col items-center justify-center bg-gradient-radial from-black/30 to-black/40 p-4 text-center text-gray-50"
-      class:list={[className]}
+      class="absolute top-0 flex h-full w-full flex-col items-center justify-center p-4 text-center text-gray-50"
+      class:list={[
+        className,
+        !disableOverlay && "bg-gradient-radial from-black/30 to-black/40",
+      ]}
     >
       {
         title && (
