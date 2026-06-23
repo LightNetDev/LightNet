@@ -8,7 +8,7 @@ export const mediaTypeCollection: Collection = {
   name: "media-types",
   label: "Media Types",
   description:
-    "Define different content formats. Examples: books, videos, audio. [Read documentation](https://docs.lightnet.community/content/media-types/)",
+    "Use media types to organize media items by format. Examples: books, videos, audio. [Read documentation](https://docs.lightnet.community/content/media-types/)",
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
   format: "json",

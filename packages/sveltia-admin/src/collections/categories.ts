@@ -8,7 +8,7 @@ export const categoriesCollection: Collection = {
   name: "categories",
   label: "Categories",
   description:
-    "Organize and filter media items by topic. Examples: discipleship, youth, prayer. [Read documentation](https://docs.lightnet.community/content/categories/)",
+    "Use categories to group related media items by topic. Examples: discipleship, youth, prayer. [Read documentation](https://docs.lightnet.community/content/categories/)",
   label_singular: "Category",
   folder: projectPath("src/content/categories"),
   create: true,
@@ -25,7 +25,7 @@ export const categoriesCollection: Collection = {
       widget: "image",
       media_folder: "./images",
       accept: "image/png, image/jpeg, image/webp",
-      hint: "When you upload an image, it is automatically resized (up to 2048 pixels) and saved in a web-friendly format.",
+      hint: "A square image works best. LightNet resizes uploaded images and may change their file format.",
     },
   ],
 }

@@ -10,7 +10,7 @@ export const mediaItemCollection: Collection = {
   name: "media",
   label: "Media Items",
   description:
-    "Add content entries to the media library. Examples: a book PDF, a YouTube link. [Read documentation](https://docs.lightnet.community/content/media-items/)",
+    "Use media items to add resources people can open or download. Examples: a book PDF, a YouTube link. [Read documentation](https://docs.lightnet.community/content/media-items/)",
   label_singular: "Media Item",
   folder: projectPath("src/content/media"),
   create: true,
@@ -41,13 +41,13 @@ export const mediaItemCollection: Collection = {
       choose_url: false,
       media_folder: "./images",
       accept: "image/png, image/jpeg, image/webp",
-      hint: "When you upload an image, it is automatically resized (up to 2048 pixels) and saved in a web-friendly format.",
+      hint: "LightNet resizes uploaded images and may change their file format.",
     },
     {
       name: "content",
       label: "Content",
       widget: "list",
-      hint: "Add files or weblinks. First item in the list is the main content.",
+      hint: "Add files or links. The first one is the main item.",
       min: 1,
       summary: "{{types.url}}",
       types: [
@@ -64,8 +64,8 @@ export const mediaItemCollection: Collection = {
             },
             inlineTranslation({
               name: "label",
-              label: "Label",
-              hint: "Optional. Defaults to the file name, for example 'bible' from 'bible.pdf'.",
+              label: "Visible Name",
+              hint: "Optional. Use this to set a clearer name than the file name.",
               required: false,
               collapsed: "auto",
             }),
@@ -85,9 +85,9 @@ export const mediaItemCollection: Collection = {
             },
             inlineTranslation({
               name: "label",
-              label: "Label",
+              label: "Visible Name",
               required: false,
-              hint: "Optional. Defaults to the file name or link domain, for example 'youtube.com'.",
+              hint: "Optional. Use this to set a clearer name than the website name.",
               collapsed: "auto",
             }),
           ],
@@ -96,13 +96,13 @@ export const mediaItemCollection: Collection = {
     },
     {
       name: "dateCreated",
-      label: "Date Created",
+      label: "Created On",
       widget: "datetime",
       time_format: false,
       required: true,
       default: "{{now}}",
       picker_utc: true,
-      hint: "The date this item was added to this media library.",
+      hint: "When this item was added.",
     },
     {
       name: "authors",
@@ -117,10 +117,10 @@ export const mediaItemCollection: Collection = {
     },
     {
       name: "commonId",
-      label: "Common ID",
+      label: "Translation Group (Common ID)",
       widget: "string",
       required: false,
-      hint: "Optional: Use a shared Common ID to link translated versions of a media item.",
+      hint: "Optional. Use the same value on matching items in different languages.",
     },
     {
       name: "categories",

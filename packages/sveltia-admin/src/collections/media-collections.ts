@@ -8,7 +8,7 @@ export const mediaCollectionCollection: Collection = {
   name: "media-collections",
   label: "Media Collections",
   description:
-    "Group related media items in a specific order. Examples: a course, a series, a study path. [Read documentation](https://docs.lightnet.community/content/media-collections/)",
+    "Use media collections to group related media items in order. Examples: a course, a series, a study path. [Read documentation](https://docs.lightnet.community/content/media-collections/)",
   label_singular: "Media Collection",
   create: true,
   folder: projectPath("src/content/media-collections"),
@@ -19,13 +19,14 @@ export const mediaCollectionCollection: Collection = {
     inlineTranslation({
       name: "label",
       label: "Name",
+      hint: "This is the name people will see for this collection.",
     }),
     {
       name: "mediaItems",
       label: "Media Items",
       label_singular: "Media Item",
       widget: "list",
-      hint: "The list order defines the item order in this collection.",
+      hint: "Add the items you want in this collection. The order here is the order people will see.",
       summary: "{{fields.mediaItem}}",
       collapsed: true,
       field: {
