@@ -11,7 +11,7 @@ import {
 import { verifySchema } from "./verify-schema"
 
 export default function lightnetSveltiaAdmin(
-  config: SveltiaAdminConfig,
+  config: SveltiaAdminConfig = {},
 ): AstroIntegration {
   return {
     name: "@lightnet/sveltia-admin",
