@@ -1,5 +1,11 @@
 # @lightnet/sveltia-admin
 
+## 4.0.15
+
+### Patch Changes
+
+- [#419](https://github.com/LightNetDev/LightNet/pull/419) [`fd6d5ee`](https://github.com/LightNetDev/LightNet/commit/fd6d5ee064fb98a969efddf8c183dfc26433e515) - Accept no config object for sveltia admin integration.
+
 ## 4.0.14
 
 ### Patch Changes
