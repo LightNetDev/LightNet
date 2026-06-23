@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro"
 
-import { getConfig } from "./sveltia.config"
+import { createConfig } from "./sveltia.config"
 
 export const GET: APIRoute = () => {
-  return new Response(JSON.stringify(getConfig()))
+  return new Response(JSON.stringify(createConfig()))
 }

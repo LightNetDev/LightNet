@@ -114,9 +114,9 @@ describe("getConfig", () => {
       },
     }))
 
-    const { getConfig } = await import("../../src/sveltia.config")
+    const { createConfig } = await import("../../src/sveltia.config")
 
-    return getConfig()
+    return createConfig()
   }
 
   test("Should transform gitlab backend camelCase fields to snake_case", async () => {

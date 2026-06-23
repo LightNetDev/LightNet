@@ -10,7 +10,7 @@ import { mediaItemCollection } from "./collections/media-items"
 import { mediaTypeCollection } from "./collections/media-types"
 import { projectPath } from "./utils/paths"
 
-export function getConfig(
+export function createConfig(
   siteUrl = process.env.LIGHTNET_DEV_SITE_URL ?? site,
 ): CmsConfig {
   return {
@@ -107,4 +107,4 @@ function createLocalRepoPath() {
   )
 }
 
-export const config = getConfig()
+export const config = createConfig()
