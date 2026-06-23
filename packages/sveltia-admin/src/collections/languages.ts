@@ -2,8 +2,8 @@ import type { CollectionFile } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { inlineTranslation } from "../../utils/inline-translation"
-import { projectPath } from "../../utils/path"
+import { projectPath } from "../utils/paths"
+import { inlineTranslation } from "./fields/inline-translation"
 
 export const languagesSelect = () => {
   if (sveltiaAdminConfig.experimental?.useLanguagesCollection) {

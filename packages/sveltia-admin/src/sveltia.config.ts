@@ -2,10 +2,13 @@ import type { Backend, CmsConfig } from "@sveltia/cms"
 import { site } from "astro:config/server"
 import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import lightnetLogo from "../assets/lightnet-logo.svg?url"
-import { contentCollections } from "./collections/content"
-import { defineLanguagesCollection } from "./collections/content/languages"
-import { projectPath } from "./utils/path"
+import lightnetLogo from "./assets/lightnet-logo.svg?url"
+import { categoriesCollection } from "./collections/categories"
+import { defineLanguagesCollection } from "./collections/languages"
+import { mediaCollectionCollection } from "./collections/media-collections"
+import { mediaItemCollection } from "./collections/media-items"
+import { mediaTypeCollection } from "./collections/media-types"
+import { projectPath } from "./utils/paths"
 
 export function getConfig(
   siteUrl = process.env.LIGHTNET_DEV_SITE_URL ?? site,
@@ -52,7 +55,13 @@ export function getConfig(
       encoding: "ascii",
       maxlength: 60,
     },
-    collections: [...contentCollections],
+    collections: [
+      mediaItemCollection,
+      { divider: true },
+      categoriesCollection,
+      mediaCollectionCollection,
+      mediaTypeCollection,
+    ],
     singletons: [defineLanguagesCollection()].filter((c) => !!c),
   }
 }

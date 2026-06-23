@@ -1,4 +1,4 @@
-import { pathWithBase } from "../utils/paths"
+import { pathWithBase } from "../utils/path-with-base"
 
 const parseCachedUser = () => {
   try {

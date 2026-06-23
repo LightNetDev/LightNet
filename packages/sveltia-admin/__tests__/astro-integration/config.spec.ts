@@ -114,7 +114,7 @@ describe("getConfig", () => {
       },
     }))
 
-    const { getConfig } = await import("../../src/sveltia/sveltia.config")
+    const { getConfig } = await import("../../src/sveltia.config")
 
     return getConfig()
   }

@@ -1,8 +1,8 @@
 import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
 
-import { inlineTranslation } from "../../utils/inline-translation"
-import { projectPath } from "../../utils/path"
+import { projectPath } from "../utils/paths"
+import { inlineTranslation } from "./fields/inline-translation"
 
 export const mediaTypeCollection: Collection = {
   name: "media-types",
