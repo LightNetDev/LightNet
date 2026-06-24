@@ -1,8 +1,9 @@
 import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
-import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { projectPath } from "../utils/paths"
+import { isDefined } from "../utils/is-defined"
 import { inlineTranslation } from "./fields/inline-translation"
 import { languagesSelect } from "./languages"
 
@@ -62,14 +63,15 @@ export const mediaItemCollection: Collection = {
               choose_url: false,
               ...getFileStorage(),
             },
-            inlineTranslation({
-              name: "label",
-              label: "Visible Name",
-              hint: "Optional. Use this to set a clearer name than the file name.",
-              required: false,
-              collapsed: "auto",
-            }),
-          ],
+            adminConfig.experimental?.useContentLabelField &&
+              inlineTranslation({
+                name: "label",
+                label: "Visible Name",
+                hint: "Optional. Use this to set a clearer name than the file name.",
+                required: false,
+                collapsed: "auto",
+              }),
+          ].filter(isDefined),
         },
         {
           name: "link",
@@ -83,14 +85,15 @@ export const mediaItemCollection: Collection = {
               type: "url",
               pattern: ["^https?://", "Link must start with http(s)://"],
             },
-            inlineTranslation({
-              name: "label",
-              label: "Visible Name",
-              required: false,
-              hint: "Optional. Use this to set a clearer name than the website name.",
-              collapsed: "auto",
-            }),
-          ],
+            adminConfig.experimental?.useContentLabelField &&
+              inlineTranslation({
+                name: "label",
+                label: "Visible Name",
+                required: false,
+                hint: "Optional. Use this to set a clearer name than the website name.",
+                collapsed: "auto",
+              }),
+          ].filter(isDefined),
         },
       ],
     },
@@ -115,7 +118,7 @@ export const mediaItemCollection: Collection = {
       summary: "{{fields.name}}",
       field: { label: "Name", name: "name", widget: "string" },
     },
-    {
+    adminConfig.experimental?.useCommonIdField && {
       name: "commonId",
       label: "Translation Group (Common ID)",
       widget: "string",
@@ -139,7 +142,6 @@ export const mediaItemCollection: Collection = {
       required: false,
       editor_components: [],
       buttons: [
-        "heading-one",
         "heading-two",
         "heading-three",
         "heading-four",
@@ -153,16 +155,16 @@ export const mediaItemCollection: Collection = {
         "link",
       ],
     },
-  ],
+  ].filter(isDefined),
 }
 
 function getFileStorage() {
-  const externalFileStorage = sveltiaAdminConfig.experimental?.fileStorage
+  const externalFileStorage = adminConfig.experimental?.fileStorage
   if (!externalFileStorage) {
     return {
       media_folder: projectPath("public/files"),
       public_folder: "/files",
-      hint: `Maximum file size is ${sveltiaAdminConfig.maxFileSize} MB.`,
+      hint: `Maximum file size is ${adminConfig.maxFileSize} MB.`,
     }
   }
 

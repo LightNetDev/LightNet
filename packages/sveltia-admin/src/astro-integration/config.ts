@@ -114,6 +114,18 @@ export const adminConfigSchema = z.object({
        */
       useLanguagesCollection: z.boolean().default(false),
       /**
+       * Enable editing content[].label through the media item editor.
+       *
+       * @default true
+       */
+      useContentLabelField: z.boolean().default(true),
+      /**
+       * Enable editing commonId through the media item editor.
+       *
+       * @default true
+       */
+      useCommonIdField: z.boolean().default(true),
+      /**
        * Use Cloudflare r2 for content uploads.
        */
       fileStorage: r2Storage.optional(),

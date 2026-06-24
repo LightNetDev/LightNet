@@ -1,6 +1,6 @@
 import type { Backend, CmsConfig } from "@sveltia/cms"
 import { site } from "astro:config/server"
-import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import lightnetLogo from "./assets/lightnet-logo.svg?url"
 import { categoriesCollection } from "./collections/categories"
@@ -9,6 +9,7 @@ import { mediaCollectionCollection } from "./collections/media-collections"
 import { mediaItemCollection } from "./collections/media-items"
 import { mediaTypeCollection } from "./collections/media-types"
 import { projectPath } from "./utils/paths"
+import { isDefined } from "./utils/is-defined"
 
 export function createConfig(
   siteUrl = process.env.LIGHTNET_DEV_SITE_URL ?? site,
@@ -30,7 +31,7 @@ export function createConfig(
       },
       default: {
         config: {
-          max_file_size: sveltiaAdminConfig.maxFileSize * 1_000_000,
+          max_file_size: adminConfig.maxFileSize * 1_000_000,
           transformations: {
             raster_image: {
               format: "webp",
@@ -62,12 +63,12 @@ export function createConfig(
       mediaCollectionCollection,
       mediaTypeCollection,
     ],
-    singletons: [defineLanguagesCollection()].filter((c) => !!c),
+    singletons: [defineLanguagesCollection()].filter(isDefined),
   }
 }
 
 function getBackend(): Backend {
-  const { backend } = sveltiaAdminConfig
+  const { backend } = adminConfig
 
   if (!backend) {
     return {
@@ -106,5 +107,3 @@ function createLocalRepoPath() {
       .replaceAll(".", "-") + "/local-repository"
   )
 }
-
-export const config = createConfig()
