@@ -24,7 +24,7 @@ export const categoriesCollection: Collection = {
       choose_url: false,
       widget: "image",
       media_folder: "./images",
-      accept: "image/png, image/jpeg, image/webp",
+      accept: "image/png, image/jpeg, image/webp, image/gif",
       hint: "A square image works best. LightNet resizes uploaded images and may change their file format.",
     },
   ],

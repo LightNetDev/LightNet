@@ -41,7 +41,7 @@ export const mediaItemCollection: Collection = {
       widget: "image",
       choose_url: false,
       media_folder: "./images",
-      accept: "image/png, image/jpeg, image/webp",
+      accept: "image/png, image/jpeg, image/webp, image/gif",
       hint: "LightNet resizes uploaded images and may change their file format.",
     },
     {
@@ -165,6 +165,14 @@ function getFileStorage() {
       media_folder: projectPath("public/files"),
       public_folder: "/files",
       hint: `Maximum file size is ${adminConfig.maxFileSize} MB.`,
+      media_libraries: {
+        default: {
+          config: {
+            max_file_size: adminConfig.maxFileSize * 1_000_000,
+            transformations: {},
+          },
+        },
+      },
     }
   }
 

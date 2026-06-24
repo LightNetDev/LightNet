@@ -33,12 +33,9 @@ export function createConfig(
         config: {
           max_file_size: adminConfig.maxFileSize * 1_000_000,
           transformations: {
-            raster_image: {
-              format: "webp",
-              quality: 85,
-              width: 2048,
-              height: 2048,
-            },
+            jpeg: optimizedImage,
+            png: optimizedImage,
+            webp: optimizedImage,
             svg: {
               optimize: true,
             },
@@ -66,6 +63,13 @@ export function createConfig(
     singletons: [defineLanguagesCollection()].filter(isDefined),
   }
 }
+
+const optimizedImage = {
+  format: "webp",
+  quality: 85,
+  width: 1024,
+  height: 1024,
+} as const
 
 function getBackend(): Backend {
   const { backend } = adminConfig
