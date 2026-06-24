@@ -2,8 +2,8 @@ import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
 import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { projectPath } from "../utils/paths"
 import { isDefined } from "../utils/is-defined"
+import { projectPath } from "../utils/paths"
 import { inlineTranslation } from "./fields/inline-translation"
 import { languagesSelect } from "./languages"
 
@@ -105,7 +105,7 @@ export const mediaItemCollection: Collection = {
       required: true,
       default: "{{now}}",
       picker_utc: true,
-      hint: "When this item was added.",
+      hint: "When this item was added to this media library.",
     },
     {
       name: "authors",

@@ -25,6 +25,10 @@ vi.mock("virtual:lightnet/sveltiaAdminConfig", () => ({
   default: {
     maxFileSize: 25,
     siteRootInRepo: "",
+    experimental: {
+      useContentLabelField: true,
+      useCommonIdField: true,
+    },
   },
 }))
 

@@ -8,8 +8,8 @@ import { defineLanguagesCollection } from "./collections/languages"
 import { mediaCollectionCollection } from "./collections/media-collections"
 import { mediaItemCollection } from "./collections/media-items"
 import { mediaTypeCollection } from "./collections/media-types"
-import { projectPath } from "./utils/paths"
 import { isDefined } from "./utils/is-defined"
+import { projectPath } from "./utils/paths"
 
 export function createConfig(
   siteUrl = process.env.LIGHTNET_DEV_SITE_URL ?? site,
