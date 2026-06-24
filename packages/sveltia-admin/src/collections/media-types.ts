@@ -12,9 +12,15 @@ export const mediaTypeCollection: Collection = {
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
   format: "json",
-  slug: "{{fields._slug}}",
+  identifier_field: "englishName",
   summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
   fields: [
+    {
+      name: "englishName",
+      label: "English Name",
+      required: false,
+      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+    },
     inlineTranslation({ name: "label", label: "Name" }),
     {
       name: "icon",

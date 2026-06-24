@@ -16,6 +16,12 @@ export const mediaCollectionCollection: Collection = {
   slug: "{{fields._slug}}",
   summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
   fields: [
+    {
+      name: "englishName",
+      label: "English Name",
+      required: false,
+      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+    },
     inlineTranslation({
       name: "label",
       label: "Name",

@@ -13,9 +13,15 @@ export const categoriesCollection: Collection = {
   folder: projectPath("src/content/categories"),
   create: true,
   format: "json",
-  slug: "{{fields._slug}}",
+  identifier_field: "englishName",
   summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
   fields: [
+    {
+      name: "englishName",
+      label: "English Name",
+      required: false,
+      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+    },
     inlineTranslation({ name: "label", label: "Name" }),
     {
       name: "image",

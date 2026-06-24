@@ -17,7 +17,7 @@ export const mediaItemCollection: Collection = {
   create: true,
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",
-  slug: "{{fields._slug}}",
+  identifier_field: "englishTitle",
   sortable_fields: ["slug", "dateCreated", "language"],
   summary: "{{title}} ({{slug}})",
   view_groups: [
@@ -25,6 +25,12 @@ export const mediaItemCollection: Collection = {
     { label: "Type", field: "type", pattern: ".*" },
   ],
   fields: [
+    {
+      name: "englishTitle",
+      label: "English Title",
+      required: false,
+      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+    },
     { name: "title", label: "Title", widget: "string" },
     {
       name: "type",
