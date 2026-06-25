@@ -6,10 +6,15 @@ import { projectPath } from "../utils/paths"
 import { inlineTranslation } from "./fields/inline-translation"
 
 export const languagesSelect = () => {
+  const commonProperties = {
+    name: "language",
+    label: "Content Language",
+    hint: "Choose the content language for this item. It should match the content you add.",
+  }
+
   if (adminConfig.experimental?.useLanguagesCollection) {
     return {
-      name: "language",
-      label: "Language",
+      ...commonProperties,
       widget: "relation",
       collection: "_singletons",
       file: "languages",
@@ -20,8 +25,7 @@ export const languagesSelect = () => {
     }
   } else {
     return {
-      name: "language",
-      label: "Language",
+      ...commonProperties,
       widget: "select",
       options: config.languages.map(({ code, label }) => {
         return {

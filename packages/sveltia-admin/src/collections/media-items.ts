@@ -29,18 +29,24 @@ export const mediaItemCollection: Collection = {
       name: "englishTitle",
       label: "English Title",
       required: false,
-      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
     },
-    { name: "title", label: "Title", widget: "string" },
     {
       name: "type",
-      label: "Type",
+      label: "Media Type",
       widget: "relation",
+      hint: "Choose the kind of media this content represents.",
       collection: "media-types",
       value_field: "{{slug}}",
       display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
     },
     languagesSelect(),
+    {
+      name: "title",
+      label: "Title",
+      widget: "string",
+      hint: "Enter the title in the content language.",
+    },
     {
       name: "image",
       label: "Image",
@@ -48,13 +54,13 @@ export const mediaItemCollection: Collection = {
       choose_url: false,
       media_folder: "./images",
       accept: "image/png, image/jpeg, image/webp, image/gif",
-      hint: "LightNet resizes uploaded images and may change their file format.",
+      hint: "Upload a cover image for this item. LightNet may resize it and change the file format.",
     },
     {
       name: "content",
       label: "Content",
       widget: "list",
-      hint: "Add files or links. The first one is the main item.",
+      hint: "Add one or more files or links. The first item becomes the main resource people will open or download.",
       min: 1,
       summary: "{{types.url}}",
       types: [
@@ -73,7 +79,7 @@ export const mediaItemCollection: Collection = {
               inlineTranslation({
                 name: "label",
                 label: "Visible Name",
-                hint: "Optional. Use this to set a clearer name than the file name.",
+                hint: "Optional. Add a clearer label if you do not want to show the file name.",
                 required: false,
                 collapsed: "auto",
               }),
@@ -96,7 +102,7 @@ export const mediaItemCollection: Collection = {
                 name: "label",
                 label: "Visible Name",
                 required: false,
-                hint: "Optional. Use this to set a clearer name than the website name.",
+                hint: "Optional. Add a clearer label if you do not want to show the website name.",
                 collapsed: "auto",
               }),
           ].filter(isDefined),
@@ -111,7 +117,7 @@ export const mediaItemCollection: Collection = {
       required: true,
       default: "{{now}}",
       picker_utc: true,
-      hint: "When this item was added to this media library.",
+      hint: "Choose when this item was added to the media library.",
     },
     {
       name: "authors",
@@ -122,6 +128,7 @@ export const mediaItemCollection: Collection = {
       default: [],
       widget: "list",
       summary: "{{fields.name}}",
+      hint: "Add the author names in the content language.",
       field: { label: "Name", name: "name", widget: "string" },
     },
     adminConfig.experimental?.useCommonIdField && {
@@ -129,7 +136,7 @@ export const mediaItemCollection: Collection = {
       label: "Translation Group (Common ID)",
       widget: "string",
       required: false,
-      hint: "Optional. Use the same value on matching items in different languages.",
+      hint: "Optional. Use the same value for matching items in different languages so LightNet can treat them as translations of each other.",
     },
     {
       name: "categories",
@@ -145,6 +152,7 @@ export const mediaItemCollection: Collection = {
       name: "description",
       label: "Description",
       widget: "markdown",
+      hint: "Write a short description in the content language.",
       required: false,
       editor_components: [],
       buttons: [
@@ -170,7 +178,7 @@ function getFileStorage() {
     return {
       media_folder: projectPath("public/files"),
       public_folder: "/files",
-      hint: `Maximum file size is ${adminConfig.maxFileSize} MB.`,
+      hint: `Upload a file up to ${adminConfig.maxFileSize} MB.`,
       media_libraries: {
         default: {
           config: {

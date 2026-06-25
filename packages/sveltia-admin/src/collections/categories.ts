@@ -20,7 +20,7 @@ export const categoriesCollection: Collection = {
       name: "englishName",
       label: "English Name",
       required: false,
-      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
     },
     inlineTranslation({ name: "label", label: "Name" }),
     {
@@ -31,7 +31,7 @@ export const categoriesCollection: Collection = {
       widget: "image",
       media_folder: "./images",
       accept: "image/png, image/jpeg, image/webp, image/gif",
-      hint: "A square image works best. LightNet resizes uploaded images and may change their file format.",
+      hint: "Upload an image for this category. A square image works best. LightNet may resize it and change the file format.",
     },
   ],
 }

@@ -20,19 +20,19 @@ export const mediaCollectionCollection: Collection = {
       name: "englishName",
       label: "English Name",
       required: false,
-      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
     },
     inlineTranslation({
       name: "label",
       label: "Name",
-      hint: "This is the name people will see for this collection.",
+      hint: "Enter the name people should see for this collection.",
     }),
     {
       name: "mediaItems",
       label: "Media Items",
       label_singular: "Media Item",
       widget: "list",
-      hint: "Add the items you want in this collection. The order here is the order people will see.",
+      hint: "Add the media items in the order people should see them.",
       summary: "{{fields.mediaItem}}",
       collapsed: true,
       field: {

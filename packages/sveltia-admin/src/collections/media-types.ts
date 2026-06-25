@@ -19,7 +19,7 @@ export const mediaTypeCollection: Collection = {
       name: "englishName",
       label: "English Name",
       required: false,
-      hint: "Used only to create the entry ID. If empty, a random ID is generated.",
+      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
     },
     inlineTranslation({ name: "label", label: "Name" }),
     {
@@ -30,7 +30,7 @@ export const mediaTypeCollection: Collection = {
         "Icon name must start with mdi-- or lucide--",
       ],
       widget: "string",
-      hint: "Browse Lucide icons at https://lucide.dev/icons/ and enter the icon name with the 'lucide--' prefix, for example 'lucide--book-open'.",
+      hint: "Enter an Lucide icon name such as 'lucide--book-open'. Browse Lucide icons at https://lucide.dev/icons/.",
     },
     {
       name: "coverImageStyle",
