@@ -38,11 +38,11 @@
     "lightnet": "^4.0.0"
   },
   "dependencies": {
-    "@sveltia/cms": "0.167.3"
+    "@sveltia/cms": "0.167.5"
   },
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^",
-    "@playwright/test": "^1.61.0",
+    "@playwright/test": "^1.61.1",
     "astro": "^6.4.8",
     "lightnet": "workspace:^",
     "typescript": "^6.0.3",
