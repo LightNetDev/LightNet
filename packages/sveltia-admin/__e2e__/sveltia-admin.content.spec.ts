@@ -27,7 +27,7 @@ const seedCategory = async (app: AdminApp) => {
   const categories = await app.openCollection("Categories")
   const editor = await categories.createEntry()
 
-  await editor.getStringFieldByLabel("Slug").fill(slug)
+  await editor.getStringFieldByLabel("English Name").fill(slug)
   await editor.getStringFieldByKeyPath("label.en").fill("Discipleship")
   await editor.save()
 
@@ -42,7 +42,7 @@ const seedMediaType = async (app: AdminApp) => {
   const mediaTypes = await app.openCollection("Media Types")
   const editor = await mediaTypes.createEntry()
 
-  await editor.getStringFieldByLabel("Slug").fill(slug)
+  await editor.getStringFieldByLabel("English Name").fill(slug)
   await editor.getStringFieldByKeyPath("label.en").fill("Book")
   await editor.getStringFieldByKeyPath("icon").fill("lucide--book-open")
   await editor.getFieldByKeyPath("coverImageStyle").expectVisible()
@@ -80,12 +80,14 @@ const createMediaEntry = async (
   const mediaItems = await app.openCollection("Media Items")
   const editor = await mediaItems.createEntry()
 
-  await editor.getStringFieldByLabel("Slug").fill(slug)
+  await editor.getStringFieldByLabel("English Title").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
   await editor
-    .getRelationFieldByLabel("Type")
+    .getRelationFieldByLabel("Media Type")
     .selectOption(`Book (${mediaTypeSlug})`)
-  await editor.getRelationFieldByLabel("Language").selectOption("English (en)")
+  await editor
+    .getRelationFieldByLabel("Content Language")
+    .selectOption("English (en)")
   await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
   await editor.getListFieldByKeyPath("content").addItem("Link")
   await editor
@@ -121,7 +123,7 @@ test.describe("Sveltia admin content flows", () => {
     const categories = await app.openCollection("Categories")
     const editor = await categories.createEntry()
 
-    await editor.getStringFieldByLabel("Slug").fill(slug)
+    await editor.getStringFieldByLabel("English Name").fill(slug)
     await editor.getStringFieldByKeyPath("label.en").fill("Discipleship")
     await editor.save()
 

@@ -77,6 +77,10 @@ class StringField extends EditorField {
   async clear() {
     await this.fill("")
   }
+
+  async expectValue(value: string) {
+    await expect(this.editableControl()).toHaveValue(value)
+  }
 }
 
 class RelationField extends EditorField {

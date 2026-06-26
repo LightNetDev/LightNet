@@ -47,10 +47,12 @@ const seedMediaItem = async (
   const mediaItems = await app.openCollection("Media Items")
   const editor = await mediaItems.createEntry()
 
-  await editor.getStringFieldByLabel("Slug").fill(slug)
+  await editor.getStringFieldByLabel("English Title").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
-  await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
-  await editor.getRelationFieldByLabel("Language").selectOption("English (en)")
+  await editor.getRelationFieldByLabel("Media Type").selectOption("Book (book)")
+  await editor
+    .getRelationFieldByLabel("Content Language")
+    .selectOption("English (en)")
   await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
   await editor.getListFieldByKeyPath("content").addItem("Link")
   await editor.getStringFieldByKeyPath("content.0.url").fill(contentUrl)
@@ -78,10 +80,12 @@ const seedMediaItemWithUploadedFile = async (
   const mediaItems = await app.openCollection("Media Items")
   const editor = await mediaItems.createEntry()
 
-  await editor.getStringFieldByLabel("Slug").fill(slug)
+  await editor.getStringFieldByLabel("English Title").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
-  await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
-  await editor.getRelationFieldByLabel("Language").selectOption("English (en)")
+  await editor.getRelationFieldByLabel("Media Type").selectOption("Book (book)")
+  await editor
+    .getRelationFieldByLabel("Content Language")
+    .selectOption("English (en)")
   await editor
     .getFileFieldByKeyPath("image")
     .uploadFile(nonConflictingImagePath)
@@ -104,7 +108,7 @@ const seedMediaItemWithUploadedFile = async (
 }
 
 test.describe("Sveltia admin fixed regressions", () => {
-  test("#704 hides the generated slug field when reopening existing media items", async ({
+  test("#704 keeps the ID generation field value when reopening existing media items", async ({
     admin,
   }) => {
     const app = await admin("test-repo")
@@ -114,12 +118,14 @@ test.describe("Sveltia admin fixed regressions", () => {
     const mediaItems = await app.openCollection("Media Items")
     const editor = await mediaItems.createEntry()
 
-    await editor.getFieldByLabel("Slug").expectVisible()
-    await editor.getStringFieldByLabel("Slug").fill(slug)
+    await editor.getFieldByLabel("English Title").expectVisible()
+    await editor.getStringFieldByLabel("English Title").fill(slug)
     await editor.getStringFieldByLabel("Title").fill("Regression Media")
-    await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
     await editor
-      .getRelationFieldByLabel("Language")
+      .getRelationFieldByLabel("Media Type")
+      .selectOption("Book (book)")
+    await editor
+      .getRelationFieldByLabel("Content Language")
       .selectOption("English (en)")
     await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
     await editor.getListFieldByKeyPath("content").addItem("Link")
@@ -133,7 +139,8 @@ test.describe("Sveltia admin fixed regressions", () => {
     await mediaItems.expectEntryVisible(summary)
 
     const reopened = await mediaItems.openEditor(summary)
-    await reopened.getFieldByLabel("Slug").expectHidden()
+    await reopened.getFieldByLabel("English Title").expectVisible()
+    await reopened.getStringFieldByLabel("English Title").expectValue(slug)
     await reopened.save()
   })
 
@@ -222,11 +229,13 @@ test.describe("Sveltia admin fixed regressions", () => {
     const mediaItems = await app.openCollection("Media Items")
     const editor = await mediaItems.createEntry()
 
-    await editor.getStringFieldByLabel("Slug").fill(slug)
+    await editor.getStringFieldByLabel("English Title").fill(slug)
     await editor.getStringFieldByLabel("Title").fill("Omit Empty")
-    await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
     await editor
-      .getRelationFieldByLabel("Language")
+      .getRelationFieldByLabel("Media Type")
+      .selectOption("Book (book)")
+    await editor
+      .getRelationFieldByLabel("Content Language")
       .selectOption("English (en)")
     await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
     await editor.getListFieldByKeyPath("content").addItem("Link")
