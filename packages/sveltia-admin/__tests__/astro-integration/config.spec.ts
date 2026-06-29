@@ -7,10 +7,35 @@ describe("adminConfigSchema", () => {
     const config = adminConfigSchema.parse({})
 
     expect(config).toEqual({
+      experimental: {
+        useLanguagesCollection: false,
+        useCategoriesCollection: true,
+        useMediaCollectionsCollection: true,
+        useMediaTypesCollection: true,
+        useContentLabelField: true,
+        useDateCreatedField: true,
+        useCommonIdField: true,
+        useCategoriesField: true,
+      },
       path: "admin",
       maxFileSize: 25,
       siteRootInRepo: "",
     })
+  })
+
+  test("Should keep use* field defaults aligned with experimental object defaults", () => {
+    const topLevelDefaults = adminConfigSchema.parse({})
+    const nestedExperimentalDefaults = adminConfigSchema.parse({
+      experimental: {},
+    })
+
+    const useFieldDefaults = Object.fromEntries(
+      Object.entries(nestedExperimentalDefaults.experimental).filter(([key]) =>
+        key.startsWith("use"),
+      ),
+    )
+
+    expect(useFieldDefaults).toEqual(topLevelDefaults.experimental)
   })
 
   test("Should keep gitlab backend fields in schema shape", () => {
