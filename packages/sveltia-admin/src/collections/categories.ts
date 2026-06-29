@@ -1,5 +1,6 @@
 import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { projectPath } from "../utils/paths"
 import { inlineTranslation } from "./fields/inline-translation"
@@ -12,6 +13,9 @@ export const categoriesCollection: Collection = {
   label_singular: "Category",
   folder: projectPath("src/content/categories"),
   create: true,
+  hide:
+    adminConfig.experimental &&
+    !adminConfig.experimental.useCategoriesCollection,
   format: "json",
   identifier_field: "englishName",
   summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,

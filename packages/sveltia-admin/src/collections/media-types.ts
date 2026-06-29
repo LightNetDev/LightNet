@@ -1,5 +1,6 @@
 import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { projectPath } from "../utils/paths"
 import { inlineTranslation } from "./fields/inline-translation"
@@ -12,6 +13,9 @@ export const mediaTypeCollection: Collection = {
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
   format: "json",
+  hide:
+    adminConfig.experimental &&
+    !adminConfig.experimental?.useMediaTypesCollection,
   identifier_field: "englishName",
   summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
   fields: [

@@ -1,5 +1,6 @@
 import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { projectPath } from "../utils/paths"
 import { inlineTranslation } from "./fields/inline-translation"
@@ -11,6 +12,9 @@ export const mediaCollectionCollection: Collection = {
     "Use media collections to group related media items in order. Examples: a course, a series, a study path. [Read documentation](https://docs.lightnet.community/content/media-collections/)",
   label_singular: "Media Collection",
   create: true,
+  hide:
+    adminConfig.experimental &&
+    !adminConfig.experimental.useMediaCollectionsCollection,
   folder: projectPath("src/content/media-collections"),
   format: "json",
   slug: "{{fields._slug}}",

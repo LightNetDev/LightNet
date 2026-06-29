@@ -114,6 +114,24 @@ export const adminConfigSchema = z.object({
        */
       useLanguagesCollection: z.boolean().default(false),
       /**
+       * Enable `categories` editing.
+       *
+       * @default true
+       */
+      useCategoriesCollection: z.boolean().default(true),
+      /**
+       * Enable `media-collections` editing.
+       *
+       * @default true
+       */
+      useMediaCollectionsCollection: z.boolean().default(true),
+      /**
+       * Enable `media-types` editing.
+       *
+       * @default true
+       */
+      useMediaTypesCollection: z.boolean().default(true),
+      /**
        * Enable editing content[].label through the media item editor.
        *
        * @default true
