@@ -75,7 +75,7 @@ export const mediaItemCollection: Collection = {
               choose_url: false,
               ...getFileStorage(),
             },
-            adminConfig.experimental?.useContentLabelField &&
+            adminConfig.experimental.useContentLabelField &&
               inlineTranslation({
                 name: "label",
                 label: "Visible Name",
@@ -97,7 +97,7 @@ export const mediaItemCollection: Collection = {
               type: "url",
               pattern: ["^https?://", "Link must start with http(s)://"],
             },
-            adminConfig.experimental?.useContentLabelField &&
+            adminConfig.experimental.useContentLabelField &&
               inlineTranslation({
                 name: "label",
                 label: "Visible Name",
@@ -109,7 +109,7 @@ export const mediaItemCollection: Collection = {
         },
       ],
     },
-    adminConfig.experimental?.useDateCreatedField
+    adminConfig.experimental.useDateCreatedField
       ? {
           name: "dateCreated",
           label: "Created On",
@@ -137,14 +137,14 @@ export const mediaItemCollection: Collection = {
       hint: "Add the author names in the content language.",
       field: { label: "Name", name: "name", widget: "string" },
     },
-    adminConfig.experimental?.useCommonIdField && {
+    adminConfig.experimental.useCommonIdField && {
       name: "commonId",
       label: "Translation Group (Common ID)",
       widget: "string",
       required: false,
       hint: "Optional. Use the same value for matching items in different languages so LightNet can treat them as translations of each other.",
     },
-    {
+    adminConfig.experimental.useCategoriesField && {
       name: "categories",
       label: "Categories",
       required: false,
@@ -179,7 +179,7 @@ export const mediaItemCollection: Collection = {
 }
 
 function getFileStorage() {
-  const externalFileStorage = adminConfig.experimental?.fileStorage
+  const externalFileStorage = adminConfig.experimental.fileStorage
   if (!externalFileStorage) {
     return {
       media_folder: projectPath("public/files"),

@@ -13,9 +13,7 @@ export const mediaTypeCollection: Collection = {
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
   format: "json",
-  hide:
-    adminConfig.experimental &&
-    !adminConfig.experimental?.useMediaTypesCollection,
+  hide: !adminConfig.experimental.useMediaTypesCollection,
   identifier_field: "englishName",
   summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
   fields: [

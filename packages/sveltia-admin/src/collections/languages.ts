@@ -12,7 +12,7 @@ export const languagesSelect = () => {
     hint: "Choose the content language for this item. It should match the content you add.",
   }
 
-  if (adminConfig.experimental?.useLanguagesCollection) {
+  if (adminConfig.experimental.useLanguagesCollection) {
     return {
       ...commonProperties,
       widget: "relation",
@@ -38,7 +38,7 @@ export const languagesSelect = () => {
 }
 
 export const defineLanguagesCollection = () => {
-  if (!adminConfig.experimental?.useLanguagesCollection) {
+  if (!adminConfig.experimental.useLanguagesCollection) {
     return
   }
   return languagesCollection

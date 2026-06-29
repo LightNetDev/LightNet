@@ -8,8 +8,7 @@ import { type LightNetTranslationKey, loadTranslations } from "./translations"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
 export type TranslationKey =
-  | LightNetTranslationKey
-  | (string & NonNullable<unknown>)
+  LightNetTranslationKey | (string & NonNullable<unknown>)
 
 export type TranslateFn = (input: TranslationKey, options?: TOptions) => string
 

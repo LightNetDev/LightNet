@@ -14,10 +14,7 @@ export const CATEGORY = "category"
 export const UPDATE_QUERY_EVENT = "ln:update-search-query"
 
 export type SearchQueryParam =
-  | typeof SEARCH
-  | typeof LANGUAGE
-  | typeof TYPE
-  | typeof CATEGORY
+  typeof SEARCH | typeof LANGUAGE | typeof TYPE | typeof CATEGORY
 
 /**
  * Read the current value of the given search query parameter

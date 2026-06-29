@@ -150,11 +150,26 @@ export const adminConfigSchema = z.object({
        */
       useCommonIdField: z.boolean().default(true),
       /**
+       * Enable editing categories in the media item editor.
+       *
+       * @default true
+       */
+      useCategoriesField: z.boolean().default(true),
+      /**
        * Use Cloudflare r2 for content uploads.
        */
       fileStorage: r2Storage.optional(),
     })
-    .optional(),
+    .default({
+      useLanguagesCollection: false,
+      useCategoriesCollection: true,
+      useCategoriesField: true,
+      useCommonIdField: true,
+      useContentLabelField: true,
+      useDateCreatedField: true,
+      useMediaCollectionsCollection: true,
+      useMediaTypesCollection: true,
+    }),
 })
 
 export type SveltiaAdminConfig = z.input<typeof adminConfigSchema>

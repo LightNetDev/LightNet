@@ -1,13 +1,7 @@
 import { isExternalUrl } from "../../../utils/is-external-url"
 
 export type UrlType =
-  | "link"
-  | "source"
-  | "image"
-  | "audio"
-  | "video"
-  | "text"
-  | "package"
+  "link" | "source" | "image" | "audio" | "video" | "text" | "package"
 
 const KNOWN_EXTENSIONS: Record<
   string,
