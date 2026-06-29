@@ -120,6 +120,12 @@ export const adminConfigSchema = z.object({
        */
       useContentLabelField: z.boolean().default(true),
       /**
+       * Enable editing dateCreated through the media item editor.
+       *
+       * @default true
+       */
+      useDateCreatedField: z.boolean().default(true),
+      /**
        * Enable editing commonId through the media item editor.
        *
        * @default true

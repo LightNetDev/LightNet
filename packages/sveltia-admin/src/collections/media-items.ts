@@ -109,16 +109,22 @@ export const mediaItemCollection: Collection = {
         },
       ],
     },
-    {
-      name: "dateCreated",
-      label: "Created On",
-      widget: "datetime",
-      time_format: false,
-      required: true,
-      default: "{{now}}",
-      picker_utc: true,
-      hint: "Choose when this item was added to the media library.",
-    },
+    adminConfig.experimental?.useDateCreatedField
+      ? {
+          name: "dateCreated",
+          label: "Created On",
+          widget: "datetime",
+          time_format: false,
+          required: true,
+          default: "{{now}}",
+          picker_utc: true,
+          hint: "Choose when this item was added to the media library.",
+        }
+      : {
+          name: "dateCreated",
+          widget: "hidden",
+          default: "{{datetime | date('YYYY-MM-DD')}}",
+        },
     {
       name: "authors",
       label: "Authors",
