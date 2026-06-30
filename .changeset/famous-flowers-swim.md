@@ -2,4 +2,4 @@
 "@lightnet/sveltia-admin": minor
 ---
 
-Generate new entry slugs from english name / title.
+Automatically generate new entry slugs from entry name or title.

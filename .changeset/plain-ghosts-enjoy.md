@@ -2,4 +2,4 @@
 "@lightnet/sveltia-admin": minor
 ---
 
-Support hidding dateCreated field in media items editor.
+Support hiding dateCreated field in media items editor.
