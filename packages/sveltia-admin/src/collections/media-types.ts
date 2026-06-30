@@ -14,7 +14,9 @@ export const mediaTypeCollection: Collection = {
   folder: projectPath("src/content/media-types"),
   format: "json",
   hide: !adminConfig.experimental.useMediaTypesCollection,
-  identifier_field: `label.${config.defaultLocale}`,
+  slug: adminConfig.experimental.useSlugField
+    ? "{{fields._slug}}"
+    : `{{label.${config.defaultLocale}}}`,
   summary: `{{label.${config.defaultLocale}}}`,
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),

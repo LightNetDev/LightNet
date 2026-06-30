@@ -16,6 +16,8 @@ describe("adminConfigSchema", () => {
         useDateCreatedField: true,
         useCommonIdField: true,
         useCategoriesField: true,
+        useSlugField: true,
+        useAuthorsField: true,
       },
       path: "admin",
       maxFileSize: 25,

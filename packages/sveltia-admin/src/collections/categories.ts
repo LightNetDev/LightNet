@@ -15,7 +15,10 @@ export const categoriesCollection: Collection = {
   create: true,
   hide: !adminConfig.experimental.useCategoriesCollection,
   format: "json",
-  identifier_field: `label.${config.defaultLocale}`,
+  slug: adminConfig.experimental.useSlugField
+    ? "{{fields._slug}}"
+    : `{{label.${config.defaultLocale}}}`,
+  summary: `{{label.${config.defaultLocale}}}`,
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {

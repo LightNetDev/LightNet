@@ -156,6 +156,12 @@ export const adminConfigSchema = z.object({
        */
       useCategoriesField: z.boolean().default(true),
       /**
+       * Enable slug field editor for new collection entries.
+       *
+       * @default true
+       */
+      useSlugField: z.boolean().default(true),
+      /**
        * Enable editing authors in the media item editor.
        */
       useAuthorsField: z.boolean().default(true),
@@ -174,6 +180,7 @@ export const adminConfigSchema = z.object({
       useMediaCollectionsCollection: true,
       useMediaTypesCollection: true,
       useAuthorsField: true,
+      useSlugField: true,
     }),
 })
 
