@@ -15,15 +15,8 @@ export const categoriesCollection: Collection = {
   create: true,
   hide: !adminConfig.experimental.useCategoriesCollection,
   format: "json",
-  identifier_field: "englishName",
-  summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
+  identifier_field: `label.${config.defaultLocale}`,
   fields: [
-    {
-      name: "englishName",
-      label: "English Name",
-      required: false,
-      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
-    },
     inlineTranslation({ name: "label", label: "Name" }),
     {
       name: "image",

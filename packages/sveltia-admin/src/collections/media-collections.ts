@@ -15,15 +15,8 @@ export const mediaCollectionCollection: Collection = {
   hide: !adminConfig.experimental.useMediaCollectionsCollection,
   folder: projectPath("src/content/media-collections"),
   format: "json",
-  slug: "{{fields._slug}}",
-  summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
+  identifier_field: `label.${config.defaultLocale}`,
   fields: [
-    {
-      name: "englishName",
-      label: "English Name",
-      required: false,
-      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
-    },
     inlineTranslation({
       name: "label",
       label: "Name",
@@ -42,7 +35,6 @@ export const mediaCollectionCollection: Collection = {
         label: "Media Item",
         widget: "relation",
         collection: "media",
-        value_field: "{{slug}}",
         display_fields: ["{{title}} ({{slug}})"],
         search_fields: ["{{title}}", "{{slug}}"],
         dropdown_threshold: 1,

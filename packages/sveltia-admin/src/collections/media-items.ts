@@ -17,19 +17,18 @@ export const mediaItemCollection: Collection = {
   create: true,
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",
-  identifier_field: "englishTitle",
-  sortable_fields: ["slug", "dateCreated", "language"],
-  summary: "{{title}} ({{slug}})",
+  sortable_fields: ["title", "dateCreated", "language"],
+  slug: "{{title}}-{{language}}",
   view_groups: [
     { label: "Language", field: "language", pattern: ".*" },
     { label: "Type", field: "type", pattern: ".*" },
   ],
   fields: [
     {
-      name: "englishTitle",
-      label: "English Title",
-      required: false,
-      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
+      name: "title",
+      label: "Title",
+      widget: "string",
+      hint: "Enter the title in the content language.",
     },
     {
       name: "type",
@@ -37,16 +36,8 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       hint: "Choose the kind of media this content represents.",
       collection: "media-types",
-      value_field: "{{slug}}",
-      display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
     },
     languagesSelect(),
-    {
-      name: "title",
-      label: "Title",
-      widget: "string",
-      hint: "Enter the title in the content language.",
-    },
     {
       name: "image",
       label: "Image",
@@ -151,8 +142,6 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       multiple: true,
       collection: "categories",
-      display_fields: ["{{slug}}"],
-      search_fields: ["{{slug}}"],
     },
     {
       name: "description",

@@ -14,15 +14,9 @@ export const mediaTypeCollection: Collection = {
   folder: projectPath("src/content/media-types"),
   format: "json",
   hide: !adminConfig.experimental.useMediaTypesCollection,
-  identifier_field: "englishName",
-  summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
+  identifier_field: `label.${config.defaultLocale}`,
+  summary: `{{label.${config.defaultLocale}}}`,
   fields: [
-    {
-      name: "englishName",
-      label: "English Name",
-      required: false,
-      hint: "Used only for new items to generate the entry ID. If empty, a random ID is generated.",
-    },
     inlineTranslation({ name: "label", label: "Name" }),
     {
       name: "icon",
