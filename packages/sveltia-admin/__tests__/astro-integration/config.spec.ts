@@ -16,7 +16,7 @@ describe("adminConfigSchema", () => {
         useDateCreatedField: true,
         useCommonIdField: true,
         useCategoriesField: true,
-        useSlugField: true,
+        useSlugField: false,
         useAuthorsField: true,
       },
       path: "admin",

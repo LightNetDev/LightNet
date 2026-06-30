@@ -12,4 +12,4 @@ Add experimental options to hide admin UI collections and fields:
 - `experimental.useCommonIdField` (default: `true`): Enable editing `commonId` in the media item editor.
 - `experimental.useCategoriesField` (default: `true`): Enable editing categories in the media item editor.
 - `experimental.useAuthorsField` (default: `true`): Enable editing authors in the media item editor.
-- `experimental.useSlugField` (default: `true`): Enable slug field editor for new collection entries.
+- `experimental.useSlugField` (default: `false`): Enable slug field editor for new collection entries.
