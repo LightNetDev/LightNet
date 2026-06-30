@@ -156,6 +156,10 @@ export const adminConfigSchema = z.object({
        */
       useCategoriesField: z.boolean().default(true),
       /**
+       * Enable editing authors in the media item editor.
+       */
+      useAuthorsField: z.boolean().default(true),
+      /**
        * Use Cloudflare r2 for content uploads.
        */
       fileStorage: r2Storage.optional(),
@@ -169,6 +173,7 @@ export const adminConfigSchema = z.object({
       useDateCreatedField: true,
       useMediaCollectionsCollection: true,
       useMediaTypesCollection: true,
+      useAuthorsField: true,
     }),
 })
 

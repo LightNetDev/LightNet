@@ -116,7 +116,7 @@ export const mediaItemCollection: Collection = {
           widget: "hidden",
           default: "{{datetime | date('YYYY-MM-DD')}}",
         },
-    {
+    adminConfig.experimental.useAuthorsField && {
       name: "authors",
       label: "Authors",
       label_singular: "Author",
