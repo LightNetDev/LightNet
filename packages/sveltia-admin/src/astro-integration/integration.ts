@@ -1,5 +1,3 @@
-import { fileURLToPath } from "node:url"
-
 import type { AstroIntegration, ViteUserConfig } from "astro"
 import { AstroError } from "astro/errors"
 
@@ -56,14 +54,7 @@ export default function lightnetSveltiaAdmin(
 }
 
 const CONFIG = "virtual:lightnet/sveltiaAdminConfig"
-const MEDIA_ITEM_EDIT_BUTTON_CONTROLLER =
-  "virtual:lightnet/components/media-item-edit-button-controller"
-const MEDIA_ITEM_EDIT_BUTTON_CONTROLLER_PATH = JSON.stringify(
-  fileURLToPath(
-    new URL("./media-item-edit-button-controller.ts", import.meta.url),
-  ),
-)
-const VIRTUAL_MODULES = [CONFIG, MEDIA_ITEM_EDIT_BUTTON_CONTROLLER] as const
+const VIRTUAL_MODULES = [CONFIG] as const
 
 function vitePluginSveltiaAdminConfig(
   userConfig: ExtendedSveltiaAdminConfig,
@@ -80,10 +71,6 @@ function vitePluginSveltiaAdminConfig(
       switch (module) {
         case CONFIG:
           return `export default ${JSON.stringify(userConfig)};`
-        case MEDIA_ITEM_EDIT_BUTTON_CONTROLLER:
-          return userConfig.path === "admin"
-            ? `export { default } from ${MEDIA_ITEM_EDIT_BUTTON_CONTROLLER_PATH};`
-            : "export default undefined;"
       }
     },
   }

@@ -9,8 +9,6 @@ const CONFIG = "virtual:lightnet/config"
 const LOGO = "virtual:lightnet/logo"
 const CUSTOM_HEAD = "virtual:lightnet/components/CustomHead"
 const CUSTOM_FOOTER = "virtual:lightnet/components/CustomFooter"
-const MEDIA_ITEM_EDIT_BUTTON_CONTROLLER =
-  "virtual:lightnet/components/media-item-edit-button-controller"
 
 const TRANSLATION_RUNTIME_MODULES = [
   fileURLToPath(new URL("../i18n/translations.ts", import.meta.url)),
@@ -18,13 +16,7 @@ const TRANSLATION_RUNTIME_MODULES = [
   fileURLToPath(new URL("../i18n/locals.ts", import.meta.url)),
 ]
 
-const VIRTUAL_MODULES = [
-  CONFIG,
-  LOGO,
-  CUSTOM_HEAD,
-  CUSTOM_FOOTER,
-  MEDIA_ITEM_EDIT_BUTTON_CONTROLLER,
-] as const
+const VIRTUAL_MODULES = [CONFIG, LOGO, CUSTOM_HEAD, CUSTOM_FOOTER] as const
 
 export function vitePluginLightnetConfig(
   config: ExtendedLightnetConfig,
@@ -72,8 +64,6 @@ export function vitePluginLightnetConfig(
           return config.footerComponent
             ? `export { default } from ${resolveFilePath(config.footerComponent)};`
             : "export default undefined;"
-        case MEDIA_ITEM_EDIT_BUTTON_CONTROLLER:
-          return "export default undefined;"
       }
     },
   }

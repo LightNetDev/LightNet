@@ -20,6 +20,15 @@ import { pathWithBase } from "./utils/path-with-base"
     <script>
       import { init } from "@sveltia/cms"
       init({})
+      window.localStorage.setItem(
+        "ln.adminPaths",
+        JSON.stringify({
+          rootPath: window.location.pathname,
+          mediaItemPath:
+            window.location.pathname +
+            "#/collections/media/entries/{{mediaId}}",
+        }),
+      )
     </script>
   </body>
 </html>

@@ -1,5 +1,10 @@
 ---
-import { ExternalLinkIcon, MenuIcon, SearchIcon } from "lucide-react"
+import {
+  ExternalLinkIcon,
+  MenuIcon,
+  SearchIcon,
+  SquarePenIcon,
+} from "lucide-react"
 import config from "virtual:lightnet/config"
 
 import { isExternalUrl } from "../../../utils/is-external-url"
@@ -27,6 +32,14 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
 ---
 
 <nav class="-me-3 flex items-center">
+  <a
+    class="hidden p-3 text-gray-600 hover:text-primary"
+    aria-label={t("ln.details.edit")}
+    href="#"
+    id="header-admin-btn"
+  >
+    <SquarePenIcon />
+  </a>
   {
     !config.searchPage?.hideHeaderSearchIcon && (
       <a
@@ -61,3 +74,22 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
     )
   }
 </nav>
+<script>
+  const initAdminButton = () => {
+    const adminPath = localStorage.getItem("ln.adminPaths")
+    if (!adminPath) {
+      return
+    }
+    const rootPath = JSON.parse(adminPath).rootPath as string | undefined
+    const btn: HTMLAnchorElement | null =
+      document.querySelector("#header-admin-btn")
+
+    if (!rootPath || !btn) {
+      return
+    }
+    btn.href = rootPath
+    btn.classList.remove("hidden")
+    btn.classList.add("flex")
+  }
+  initAdminButton()
+</script>

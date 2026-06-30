@@ -1,10 +1,5 @@
 ---
 import { SquarePenIcon } from "lucide-react"
-import mediaItemEditButtonController from "virtual:lightnet/components/media-item-edit-button-controller"
-
-if (!mediaItemEditButtonController) {
-  return
-}
 
 interface Props {
   mediaId: string
@@ -22,19 +17,23 @@ const { mediaId } = Astro.props
   {Astro.locals.i18n.t("ln.details.edit")}</a
 >
 <script>
-  import mediaItemEditButtonController from "virtual:lightnet/components/media-item-edit-button-controller"
+  const initEditButton = () => {
+    const adminPath = localStorage.getItem("ln.adminPaths")
+    if (!adminPath) {
+      return
+    }
+    const mediaItemPath = JSON.parse(adminPath).mediaItemPath as
+      string | undefined
+    const btn: HTMLAnchorElement | null = document.querySelector("#edit-btn")
 
-  const btn: HTMLAnchorElement | null = document.querySelector("#edit-btn")
-  const mediaId = btn?.dataset.mediaId
+    if (!mediaItemPath || !btn) {
+      return
+    }
 
-  if (
-    mediaItemEditButtonController &&
-    btn &&
-    mediaId &&
-    mediaItemEditButtonController.shouldShow()
-  ) {
-    btn.href = mediaItemEditButtonController.createHref(mediaId)
+    const mediaId = btn.dataset.mediaId ?? ""
+    btn.href = mediaItemPath.replace("{{mediaId}}", mediaId)
     btn.classList.remove("hidden")
     btn.classList.add("flex")
   }
+  initEditButton()
 </script>
