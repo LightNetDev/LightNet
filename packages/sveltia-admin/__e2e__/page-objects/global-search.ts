@@ -78,7 +78,9 @@ class GlobalSearch {
       return
     }
 
-    await result.dblclick()
+    const refreshedResult = this.result(summary)
+    await expect(refreshedResult).toBeVisible()
+    await refreshedResult.dblclick()
   }
 
   async clear() {

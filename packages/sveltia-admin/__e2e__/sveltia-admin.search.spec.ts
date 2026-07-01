@@ -2,8 +2,8 @@ import { expect } from "@playwright/test"
 
 import { test } from "./admin-fixture"
 
-const faithfulSummary = "Faithful Freestyle (faithful-freestyle--en)"
-const skateSoundsSummary = "Skate Sounds (skate-sounds--en)"
+const faithfulSummary = "Faithful Freestyle"
+const skateSoundsSummary = "Skate Sounds"
 
 test.describe("Sveltia admin global search", () => {
   test("finds seeded items from global search", async ({ admin }) => {
