@@ -9,15 +9,15 @@ describe("adminConfigSchema", () => {
     expect(config).toEqual({
       experimental: {
         useLanguagesCollection: false,
-        useCategoriesCollection: true,
-        useMediaCollectionsCollection: true,
-        useMediaTypesCollection: true,
-        useContentLabelField: true,
-        useDateCreatedField: true,
-        useCommonIdField: true,
-        useCategoriesField: true,
-        useSlugField: false,
-        useAuthorsField: true,
+        hideCategoriesCollection: false,
+        hideMediaCollectionsCollection: false,
+        hideMediaTypesCollection: false,
+        hideAuthorsField: false,
+        hideCategoriesField: false,
+        showContentLabelField: true,
+        showDateCreatedField: true,
+        showCommonIdField: true,
+        showSlugField: true,
       },
       path: "admin",
       maxFileSize: 25,
@@ -25,19 +25,15 @@ describe("adminConfigSchema", () => {
     })
   })
 
-  test("Should keep use* field defaults aligned with experimental object defaults", () => {
+  test("Should keep nested experimental defaults aligned with top-level defaults", () => {
     const topLevelDefaults = adminConfigSchema.parse({})
     const nestedExperimentalDefaults = adminConfigSchema.parse({
       experimental: {},
     })
 
-    const useFieldDefaults = Object.fromEntries(
-      Object.entries(nestedExperimentalDefaults.experimental).filter(([key]) =>
-        key.startsWith("use"),
-      ),
+    expect(nestedExperimentalDefaults.experimental).toEqual(
+      topLevelDefaults.experimental,
     )
-
-    expect(useFieldDefaults).toEqual(topLevelDefaults.experimental)
   })
 
   test("Should keep gitlab backend fields in schema shape", () => {
