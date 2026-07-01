@@ -4,6 +4,21 @@ import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { cwd } from "node:process"
 
+/**
+ * @typedef {{
+ * type: "lightnet" | "user" | "map"
+ * key: string
+ * values: Record<string, string | undefined>
+ * }} Translation
+ */
+
+/**
+ * @typedef {{
+ *  defaultLocale: string
+ *  locales: string[]
+ * }} Languages
+ */
+
 const lightnetCachePath = resolve(cwd(), "node_modules", ".cache", "lightnet")
 
 /** @type {{type:Translation["type"], title:string, action:string}[]} */

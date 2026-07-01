@@ -1,11 +1,11 @@
 # LightNet CLI
 
-Command-line tools for working with LightNet sites. The CLI currently focuses on translation validation, with more commands planned over time.
+Command-line tools for working with LightNet sites. The CLI currently includes translation validation and file consistency checks.
 
 ## Install
 
 ```bash
-npm install --save-dev @lightnet/cli
+pnpm add --D @lightnet/cli
 ```
 
 ## LightNet CLI reference
