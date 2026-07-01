@@ -1,5 +1,45 @@
 # @lightnet/sveltia-admin
 
+## 4.1.0
+
+### Minor Changes
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Automatically generate new entry slugs from entry name or title.
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Improve edit button handling
+
+  - header icon menu will now show admin button
+  - details page will show edit button for all admin ui paths
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Support gif uploads through admin ui.
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Add experimental options to hide/show admin UI collections and fields:
+
+  Hiding:
+
+  - `experimental.hideCategoriesCollection` (default: `false`): Hide `categories` collection.
+  - `experimental.hideMediaTypesCollection` (default: `false`): Hide `media-types` collection.
+  - `experimental.hideMediaCollectionsCollection` (default: `false`): Hide `media-collections` collection.
+  - `experimental.hideAuthorsField` (default: `false`): Hide authors field in the media item editor.
+  - `experimental.hideCategoriesField` (default: `false`): Hide categories field in the media item editor.
+
+  Showing:
+
+  - `experimental.showContentLabelField` (default: `true`): Show `content[].label` field in the media item editor.
+  - `experimental.showDateCreatedField` (default: `true`): Show `dateCreated` field in the media item editor.
+  - `experimental.showCommonIdField` (default: `true`): Show `commonId` field in the media item editor.
+  - `experimental.showSlugField` (default: `true`): Show `slug` field editor for new collection entries.
+
+### Patch Changes
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Update dependencies.
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Reduce max image dimension to 1024px for sveltia image uploads.
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Disable image transforms for content file uploads.
+
+- [#421](https://github.com/LightNetDev/LightNet/pull/421) [`9935fa9`](https://github.com/LightNetDev/LightNet/commit/9935fa94b22a4f70d09ac7118ee9abc1c63bfad3) - Improve hints and descriptions in Sveltia based Admin UI.
+
 ## 4.0.15
 
 ### Patch Changes
