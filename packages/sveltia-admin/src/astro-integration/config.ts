@@ -114,73 +114,77 @@ export const adminConfigSchema = z.object({
        */
       useLanguagesCollection: z.boolean().default(false),
       /**
-       * Enable `categories` editing.
-       *
-       * @default true
-       */
-      useCategoriesCollection: z.boolean().default(true),
-      /**
-       * Enable `media-collections` editing.
-       *
-       * @default true
-       */
-      useMediaCollectionsCollection: z.boolean().default(true),
-      /**
-       * Enable `media-types` editing.
-       *
-       * @default true
-       */
-      useMediaTypesCollection: z.boolean().default(true),
-      /**
-       * Enable editing content[].label through the media item editor.
-       *
-       * @default true
-       */
-      useContentLabelField: z.boolean().default(true),
-      /**
-       * Enable editing dateCreated through the media item editor.
-       *
-       * @default true
-       */
-      useDateCreatedField: z.boolean().default(true),
-      /**
-       * Enable editing commonId through the media item editor.
-       *
-       * @default true
-       */
-      useCommonIdField: z.boolean().default(true),
-      /**
-       * Enable editing categories in the media item editor.
-       *
-       * @default true
-       */
-      useCategoriesField: z.boolean().default(true),
-      /**
-       * Enable slug field editor for new collection entries.
+       * Hide `categories` collection.
        *
        * @default false
        */
-      useSlugField: z.boolean().default(false),
+      hideCategoriesCollection: z.boolean().default(false),
       /**
-       * Enable editing authors in the media item editor.
+       * Hide `media-collections` collection.
+       *
+       * @default false
        */
-      useAuthorsField: z.boolean().default(true),
+      hideMediaCollectionsCollection: z.boolean().default(false),
+      /**
+       * Hide `media-types` collection.
+       *
+       * @default false
+       */
+      hideMediaTypesCollection: z.boolean().default(false),
+      /**
+       * Hide `authors` field in the media item editor.
+       *
+       * @default false
+       */
+      hideAuthorsField: z.boolean().default(false),
+      /**
+       * Hide `categories` field in the media item editor.
+       *
+       * @default false
+       */
+      hideCategoriesField: z.boolean().default(false),
+      /**
+       * Show `content[].label` field in the media item editor.
+       *
+       * @default true
+       */
+      showContentLabelField: z.boolean().default(true),
+      /**
+       * Show `dateCreated` field in the media item editor.
+       *
+       * @default true
+       */
+      showDateCreatedField: z.boolean().default(true),
+      /**
+       * Show `commonI`d field in the media item editor.
+       *
+       * @default true
+       */
+      showCommonIdField: z.boolean().default(true),
+      /**
+       * Show `slug` field editor for new collection entries.
+       *
+       * @default true
+       */
+      showSlugField: z.boolean().default(true),
       /**
        * Use Cloudflare r2 for content uploads.
        */
       fileStorage: r2Storage.optional(),
     })
+    // we need to provide defaults because we cannot short circuit flags that default to `true`.
+    // experimental object can be made optional when we move flags out or change all defaults to `false`.
     .default({
       useLanguagesCollection: false,
-      useCategoriesCollection: true,
-      useCategoriesField: true,
-      useCommonIdField: true,
-      useContentLabelField: true,
-      useDateCreatedField: true,
-      useMediaCollectionsCollection: true,
-      useMediaTypesCollection: true,
-      useAuthorsField: true,
-      useSlugField: false,
+      hideCategoriesCollection: false,
+      hideMediaCollectionsCollection: false,
+      hideMediaTypesCollection: false,
+      hideAuthorsField: false,
+      hideCategoriesField: false,
+      showCommonIdField: true,
+      showContentLabelField: true,
+      showDateCreatedField: true,
+      showSlugField: true,
     }),
 })
 

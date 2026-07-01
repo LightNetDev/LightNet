@@ -2,14 +2,19 @@
 "@lightnet/sveltia-admin": minor
 ---
 
-Add experimental options to hide admin UI collections and fields:
+Add experimental options to hide/show admin UI collections and fields:
 
-- `experimental.useCategoriesCollection` (default: `true`): Enable editing `categories`.
-- `experimental.useMediaCollectionsCollection` (default: `true`): Enable editing `media-collections`.
-- `experimental.useMediaTypesCollection` (default: `true`): Enable editing `media-types`.
-- `experimental.useContentLabelField` (default: `true`): Enable editing `content[].label` in the media item editor.
-- `experimental.useDateCreatedField` (default: `true`): Enable editing `dateCreated` in the media item editor.
-- `experimental.useCommonIdField` (default: `true`): Enable editing `commonId` in the media item editor.
-- `experimental.useCategoriesField` (default: `true`): Enable editing categories in the media item editor.
-- `experimental.useAuthorsField` (default: `true`): Enable editing authors in the media item editor.
-- `experimental.useSlugField` (default: `false`): Enable slug field editor for new collection entries.
+Hiding:
+
+- `experimental.hideCategoriesCollection` (default: `false`): Hide `categories` collection.
+- `experimental.hideMediaTypesCollection` (default: `false`): Hide `media-types` collection.
+- `experimental.hideMediaCollectionsCollection` (default: `false`): Hide `media-collections` collection.
+- `experimental.hideAuthorsField` (default: `false`): Hide authors field in the media item editor.
+- `experimental.hideCategoriesField` (default: `false`): Hide categories field in the media item editor.
+
+Showing:
+
+- `experimental.showContentLabelField` (default: `true`): Show `content[].label` field in the media item editor.
+- `experimental.showDateCreatedField` (default: `true`): Show `dateCreated` field in the media item editor.
+- `experimental.showCommonIdField` (default: `true`): Show `commonId` field in the media item editor.
+- `experimental.showSlugField` (default: `true`): Show `slug` field editor for new collection entries.

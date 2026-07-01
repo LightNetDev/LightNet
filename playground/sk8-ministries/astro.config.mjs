@@ -100,8 +100,8 @@ export default defineConfig({
       siteRootInRepo: "/playground/sk8-ministries",
       experimental: {
         useLanguagesCollection: true,
-        useContentLabelField: false,
-        useCommonIdField: false,
+        showContentLabelField: false,
+        showCommonIdField: false,
       },
     }),
   ],

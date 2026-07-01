@@ -18,7 +18,7 @@ export const mediaItemCollection: Collection = {
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",
   sortable_fields: ["title", "dateCreated", "language"],
-  slug: adminConfig.experimental.useSlugField
+  slug: adminConfig.experimental.showSlugField
     ? "{{fields._slug}}"
     : "{{title}}-{{language}}",
   view_groups: [
@@ -68,7 +68,7 @@ export const mediaItemCollection: Collection = {
               choose_url: false,
               ...getFileStorage(),
             },
-            adminConfig.experimental.useContentLabelField &&
+            adminConfig.experimental.showContentLabelField &&
               inlineTranslation({
                 name: "label",
                 label: "Visible Name",
@@ -90,7 +90,7 @@ export const mediaItemCollection: Collection = {
               type: "url",
               pattern: ["^https?://", "Link must start with http(s)://"],
             },
-            adminConfig.experimental.useContentLabelField &&
+            adminConfig.experimental.showContentLabelField &&
               inlineTranslation({
                 name: "label",
                 label: "Visible Name",
@@ -102,7 +102,7 @@ export const mediaItemCollection: Collection = {
         },
       ],
     },
-    adminConfig.experimental.useDateCreatedField
+    adminConfig.experimental.showDateCreatedField
       ? {
           name: "dateCreated",
           label: "Created On",
@@ -118,7 +118,7 @@ export const mediaItemCollection: Collection = {
           widget: "hidden",
           default: "{{datetime | date('YYYY-MM-DD')}}",
         },
-    adminConfig.experimental.useAuthorsField && {
+    !adminConfig.experimental.hideAuthorsField && {
       name: "authors",
       label: "Authors",
       label_singular: "Author",
@@ -130,14 +130,14 @@ export const mediaItemCollection: Collection = {
       hint: "Add the author names in the content language.",
       field: { label: "Name", name: "name", widget: "string" },
     },
-    adminConfig.experimental.useCommonIdField && {
+    adminConfig.experimental.showCommonIdField && {
       name: "commonId",
       label: "Translation Group (Common ID)",
       widget: "string",
       required: false,
       hint: "Optional. Use the same value for matching items in different languages so LightNet can treat them as translations of each other.",
     },
-    adminConfig.experimental.useCategoriesField && {
+    !adminConfig.experimental.hideCategoriesField && {
       name: "categories",
       label: "Categories",
       required: false,

@@ -13,9 +13,9 @@ export const categoriesCollection: Collection = {
   label_singular: "Category",
   folder: projectPath("src/content/categories"),
   create: true,
-  hide: !adminConfig.experimental.useCategoriesCollection,
+  hide: adminConfig.experimental.hideCategoriesCollection,
   format: "json",
-  slug: adminConfig.experimental.useSlugField
+  slug: adminConfig.experimental.showSlugField
     ? "{{fields._slug}}"
     : `{{label.${config.defaultLocale}}}`,
   summary: `{{label.${config.defaultLocale}}}`,

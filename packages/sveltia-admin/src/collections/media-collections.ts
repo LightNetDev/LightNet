@@ -12,10 +12,10 @@ export const mediaCollectionCollection: Collection = {
     "Use media collections to group related media items in order. Examples: a course, a series, a study path. [Read documentation](https://docs.lightnet.community/content/media-collections/)",
   label_singular: "Media Collection",
   create: true,
-  hide: !adminConfig.experimental.useMediaCollectionsCollection,
+  hide: adminConfig.experimental.hideMediaCollectionsCollection,
   folder: projectPath("src/content/media-collections"),
   format: "json",
-  slug: adminConfig.experimental.useSlugField
+  slug: adminConfig.experimental.showSlugField
     ? "{{fields._slug}}"
     : `{{label.${config.defaultLocale}}}`,
   summary: `{{label.${config.defaultLocale}}}`,
