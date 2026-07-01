@@ -38,6 +38,7 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       hint: "Choose the kind of media this content represents.",
       collection: "media-types",
+      display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
     },
     languagesSelect(),
     {
@@ -144,6 +145,7 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       multiple: true,
       collection: "categories",
+      display_fields: [`{{label.${config.defaultLocale}}}`],
     },
     {
       name: "description",

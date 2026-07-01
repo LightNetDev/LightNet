@@ -35,7 +35,7 @@ const seedCategory = async (app: AdminApp) => {
   const summary = label
   await categories.expectEntryVisible(summary)
 
-  return { categories, slug, summary }
+  return { categories, optionLabel: label, slug, summary }
 }
 
 const seedMediaType = async (app: AdminApp) => {
@@ -62,7 +62,12 @@ const seedMediaType = async (app: AdminApp) => {
   const summary = label
   await mediaTypes.expectEntryVisible(summary)
 
-  return { mediaTypes, slug, summary }
+  return {
+    mediaTypes,
+    optionLabel: `${label} (${slug})`,
+    slug,
+    summary,
+  }
 }
 
 const createMediaEntry = async (
@@ -70,11 +75,11 @@ const createMediaEntry = async (
   {
     slug,
     title,
-    categorySlug,
-    mediaTypeSlug,
+    categoryOptionLabel,
+    mediaTypeOptionLabel,
   }: {
-    categorySlug?: string
-    mediaTypeSlug: string
+    categoryOptionLabel?: string
+    mediaTypeOptionLabel: string
     slug: string
     title: string
   },
@@ -84,7 +89,9 @@ const createMediaEntry = async (
 
   await editor.getStringFieldByLabel("Slug").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
-  await editor.getRelationFieldByLabel("Media Type").selectOption(mediaTypeSlug)
+  await editor
+    .getRelationFieldByLabel("Media Type")
+    .selectOption(mediaTypeOptionLabel)
   await editor
     .getRelationFieldByLabel("Content Language")
     .selectOption("English (en)")
@@ -96,10 +103,10 @@ const createMediaEntry = async (
   await editor.getStringFieldByKeyPath("dateCreated").fill("2024-05-20")
   await editor.getStringFieldByKeyPath("commonId").fill(`common-${slug}`)
 
-  if (categorySlug) {
+  if (categoryOptionLabel) {
     await editor
       .getRelationFieldByKeyPath("categories")
-      .selectOption(categorySlug)
+      .selectOption(categoryOptionLabel)
   }
 
   await editor.save()
@@ -162,12 +169,12 @@ test.describe("Sveltia admin content flows", () => {
     await app.enterTestRepository()
 
     await seedLanguages(app)
-    const { slug: categorySlug } = await seedCategory(app)
+    const { optionLabel: categoryOptionLabel } = await seedCategory(app)
 
     const slug = uniqueSlug("media")
     const { mediaItems, summary } = await createMediaEntry(app, {
-      categorySlug,
-      mediaTypeSlug: "book",
+      categoryOptionLabel,
+      mediaTypeOptionLabel: "Book (book)",
       slug,
       title: "Library Item",
     })
@@ -215,13 +222,13 @@ test.describe("Sveltia admin content flows", () => {
 
     const firstSlug = uniqueSlug("first")
     const first = await createMediaEntry(app, {
-      mediaTypeSlug: "book",
+      mediaTypeOptionLabel: "Book (book)",
       slug: firstSlug,
       title: "First Lesson",
     })
     const secondSlug = uniqueSlug("second")
     const second = await createMediaEntry(app, {
-      mediaTypeSlug: "book",
+      mediaTypeOptionLabel: "Book (book)",
       slug: secondSlug,
       title: "Second Lesson",
     })
