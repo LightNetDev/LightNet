@@ -49,8 +49,10 @@ const seedMediaItem = async (
 
   await editor.getStringFieldByLabel("Slug").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
-  await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
-  await editor.getRelationFieldByLabel("Language").selectOption("English (en)")
+  await editor.getRelationFieldByLabel("Media Type").selectOption("Book (book)")
+  await editor
+    .getRelationFieldByLabel("Content Language")
+    .selectOption("English (en)")
   await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
   await editor.getListFieldByKeyPath("content").addItem("Link")
   await editor.getStringFieldByKeyPath("content.0.url").fill(contentUrl)
@@ -59,7 +61,8 @@ const seedMediaItem = async (
 
   return {
     mediaItems,
-    summary: `${title} (${slug})`,
+    summary: title,
+    relationSummary: `${title} (${slug})`,
   }
 }
 
@@ -80,8 +83,10 @@ const seedMediaItemWithUploadedFile = async (
 
   await editor.getStringFieldByLabel("Slug").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
-  await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
-  await editor.getRelationFieldByLabel("Language").selectOption("English (en)")
+  await editor.getRelationFieldByLabel("Media Type").selectOption("Book (book)")
+  await editor
+    .getRelationFieldByLabel("Content Language")
+    .selectOption("English (en)")
   await editor
     .getFileFieldByKeyPath("image")
     .uploadFile(nonConflictingImagePath)
@@ -104,7 +109,7 @@ const seedMediaItemWithUploadedFile = async (
 }
 
 test.describe("Sveltia admin fixed regressions", () => {
-  test("#704 hides the generated slug field when reopening existing media items", async ({
+  test("#704 keeps the ID generation field value when reopening existing media items", async ({
     admin,
   }) => {
     const app = await admin("test-repo")
@@ -117,9 +122,11 @@ test.describe("Sveltia admin fixed regressions", () => {
     await editor.getFieldByLabel("Slug").expectVisible()
     await editor.getStringFieldByLabel("Slug").fill(slug)
     await editor.getStringFieldByLabel("Title").fill("Regression Media")
-    await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
     await editor
-      .getRelationFieldByLabel("Language")
+      .getRelationFieldByLabel("Media Type")
+      .selectOption("Book (book)")
+    await editor
+      .getRelationFieldByLabel("Content Language")
       .selectOption("English (en)")
     await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
     await editor.getListFieldByKeyPath("content").addItem("Link")
@@ -129,12 +136,24 @@ test.describe("Sveltia admin fixed regressions", () => {
     await editor.getStringFieldByKeyPath("dateCreated").fill("2024-05-20")
     await editor.save()
 
-    const summary = `Regression Media (${slug})`
+    const savedEntryPath = resolveFixturePath(
+      import.meta.url,
+      `./fixtures/admin-test-repo/src/content/media/${slug}.json`,
+    )
+    const summary = "Regression Media"
     await mediaItems.expectEntryVisible(summary)
 
     const reopened = await mediaItems.openEditor(summary)
-    await reopened.getFieldByLabel("Slug").expectHidden()
+    await reopened.getFieldByLabel("Title").expectVisible()
     await reopened.save()
+
+    const saved = JSON.parse(
+      await app.readTestRepositoryTextFile(
+        toTestRepositoryPath(savedEntryPath),
+      ),
+    ) as { title: string }
+
+    expect(saved.title).toBe("Regression Media")
   })
 
   test("#690 restores deleted media collection list items through field revert", async ({
@@ -161,22 +180,22 @@ test.describe("Sveltia admin fixed regressions", () => {
     await editor.getListFieldByKeyPath("mediaItems").addItem()
     await editor
       .getComboboxFieldByLabel("Media Item", 0)
-      .selectOption(first.summary)
+      .selectOption(first.relationSummary)
     await editor.getListFieldByKeyPath("mediaItems").addItem()
     await editor
       .getComboboxFieldByLabel("Media Item", 1)
-      .selectOption(second.summary)
+      .selectOption(second.relationSummary)
     await editor.save()
 
-    const summary = `Revert Collection (${collectionSlug})`
+    const summary = "Revert Collection"
     const reopened = await mediaCollections.openEditor(summary)
 
     await reopened
       .getListFieldByKeyPath("mediaItems")
-      .removeItemByText(second.summary)
-    await reopened.expectTextNotVisible(second.summary)
+      .removeItemByText(second.relationSummary)
+    await reopened.expectTextNotVisible(second.relationSummary)
     await reopened.getFieldByKeyPath("mediaItems").revertChanges()
-    await reopened.expectTextVisible(second.summary)
+    await reopened.expectTextVisible(second.relationSummary)
   })
 
   test("#689 shows existing sibling media assets in the image field browser", async ({
@@ -218,15 +237,17 @@ test.describe("Sveltia admin fixed regressions", () => {
     await app.enterTestRepository()
 
     const slug = uniqueSlug("omit-empty")
-    const summary = `Omit Empty (${slug})`
+    const summary = "Omit Empty"
     const mediaItems = await app.openCollection("Media Items")
     const editor = await mediaItems.createEntry()
 
     await editor.getStringFieldByLabel("Slug").fill(slug)
     await editor.getStringFieldByLabel("Title").fill("Omit Empty")
-    await editor.getRelationFieldByLabel("Type").selectOption("Book (book)")
     await editor
-      .getRelationFieldByLabel("Language")
+      .getRelationFieldByLabel("Media Type")
+      .selectOption("Book (book)")
+    await editor
+      .getRelationFieldByLabel("Content Language")
       .selectOption("English (en)")
     await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
     await editor.getListFieldByKeyPath("content").addItem("Link")

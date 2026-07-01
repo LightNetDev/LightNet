@@ -1,7 +1,7 @@
 ---
 import config from "virtual:lightnet/sveltiaAdminConfig"
 
-import { pathWithBase } from "./utils/paths"
+import { pathWithBase } from "./utils/path-with-base"
 ---
 
 <!doctype html>
@@ -20,6 +20,15 @@ import { pathWithBase } from "./utils/paths"
     <script>
       import { init } from "@sveltia/cms"
       init({})
+      window.localStorage.setItem(
+        "ln.adminPaths",
+        JSON.stringify({
+          rootPath: window.location.pathname,
+          mediaItemPath:
+            window.location.pathname +
+            "#/collections/media/entries/{{mediaId}}",
+        }),
+      )
     </script>
   </body>
 </html>

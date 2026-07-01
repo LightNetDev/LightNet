@@ -1,19 +1,23 @@
 import type { Collection } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { inlineTranslation } from "../../utils/inline-translation"
-import { projectPath } from "../../utils/path"
+import { projectPath } from "../utils/paths"
+import { inlineTranslation } from "./fields/inline-translation"
 
 export const mediaTypeCollection: Collection = {
   name: "media-types",
   label: "Media Types",
   description:
-    "Define different content formats. Examples: books, videos, audio. [Read documentation](https://docs.lightnet.community/content/media-types/)",
+    "Use media types to organize media items by format. Examples: books, videos, audio. [Read documentation](https://docs.lightnet.community/content/media-types/)",
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
   format: "json",
-  slug: "{{fields._slug}}",
-  summary: `{{label.${config.defaultLocale}}}  ({{slug}})`,
+  hide: adminConfig.experimental.hideMediaTypesCollection,
+  slug: adminConfig.experimental.showSlugField
+    ? "{{fields._slug}}"
+    : `{{label.${config.defaultLocale}}}`,
+  summary: `{{label.${config.defaultLocale}}}`,
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {
@@ -24,7 +28,7 @@ export const mediaTypeCollection: Collection = {
         "Icon name must start with mdi-- or lucide--",
       ],
       widget: "string",
-      hint: "Browse Lucide icons at https://lucide.dev/icons/ and enter the icon name with the 'lucide--' prefix, for example 'lucide--book-open'.",
+      hint: "Enter an Lucide icon name such as 'lucide--book-open'. Browse Lucide icons at https://lucide.dev/icons/.",
     },
     {
       name: "coverImageStyle",

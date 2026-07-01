@@ -1,15 +1,20 @@
 import type { CollectionFile } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
-import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { inlineTranslation } from "../../utils/inline-translation"
-import { projectPath } from "../../utils/path"
+import { projectPath } from "../utils/paths"
+import { inlineTranslation } from "./fields/inline-translation"
 
 export const languagesSelect = () => {
-  if (sveltiaAdminConfig.experimental?.useLanguagesCollection) {
+  const commonProperties = {
+    name: "language",
+    label: "Content Language",
+    hint: "Choose the content language for this item. It should match the content you add.",
+  }
+
+  if (adminConfig.experimental.useLanguagesCollection) {
     return {
-      name: "language",
-      label: "Language",
+      ...commonProperties,
       widget: "relation",
       collection: "_singletons",
       file: "languages",
@@ -20,8 +25,7 @@ export const languagesSelect = () => {
     }
   } else {
     return {
-      name: "language",
-      label: "Language",
+      ...commonProperties,
       widget: "select",
       options: config.languages.map(({ code, label }) => {
         return {
@@ -34,7 +38,7 @@ export const languagesSelect = () => {
 }
 
 export const defineLanguagesCollection = () => {
-  if (!sveltiaAdminConfig.experimental?.useLanguagesCollection) {
+  if (!adminConfig.experimental.useLanguagesCollection) {
     return
   }
   return languagesCollection

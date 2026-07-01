@@ -25,11 +25,15 @@ vi.mock("virtual:lightnet/sveltiaAdminConfig", () => ({
   default: {
     maxFileSize: 25,
     siteRootInRepo: "",
+    experimental: {
+      showContentLabelField: true,
+      showCommonIdField: true,
+    },
   },
 }))
 
-import { mediaItemCollection } from "../../src/sveltia/collections/content/media-items"
-import { inlineTranslation } from "../../src/sveltia/utils/inline-translation"
+import { inlineTranslation } from "../../src/collections/fields/inline-translation"
+import { mediaItemCollection } from "../../src/collections/media-items"
 
 test("Should require only default locale in inline translation fields", () => {
   const field = inlineTranslation({ name: "label" }) as {

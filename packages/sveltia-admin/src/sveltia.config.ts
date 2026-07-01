@@ -1,13 +1,17 @@
 import type { Backend, CmsConfig } from "@sveltia/cms"
 import { site } from "astro:config/server"
-import sveltiaAdminConfig from "virtual:lightnet/sveltiaAdminConfig"
+import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import lightnetLogo from "../assets/lightnet-logo.svg?url"
-import { contentCollections } from "./collections/content"
-import { defineLanguagesCollection } from "./collections/content/languages"
-import { projectPath } from "./utils/path"
+import lightnetLogo from "./assets/lightnet-logo.svg?url"
+import { categoriesCollection } from "./collections/categories"
+import { defineLanguagesCollection } from "./collections/languages"
+import { mediaCollectionCollection } from "./collections/media-collections"
+import { mediaItemCollection } from "./collections/media-items"
+import { mediaTypeCollection } from "./collections/media-types"
+import { isDefined } from "./utils/is-defined"
+import { projectPath } from "./utils/paths"
 
-export function getConfig(
+export function createConfig(
   siteUrl = process.env.LIGHTNET_DEV_SITE_URL ?? site,
 ): CmsConfig {
   return {
@@ -27,14 +31,11 @@ export function getConfig(
       },
       default: {
         config: {
-          max_file_size: sveltiaAdminConfig.maxFileSize * 1_000_000,
+          max_file_size: adminConfig.maxFileSize * 1_000_000,
           transformations: {
-            raster_image: {
-              format: "webp",
-              quality: 85,
-              width: 2048,
-              height: 2048,
-            },
+            jpeg: optimizedImage,
+            png: optimizedImage,
+            webp: optimizedImage,
             svg: {
               optimize: true,
             },
@@ -52,13 +53,26 @@ export function getConfig(
       encoding: "ascii",
       maxlength: 60,
     },
-    collections: [...contentCollections],
-    singletons: [defineLanguagesCollection()].filter((c) => !!c),
+    collections: [
+      mediaItemCollection,
+      { divider: true },
+      categoriesCollection,
+      mediaCollectionCollection,
+      mediaTypeCollection,
+    ],
+    singletons: [defineLanguagesCollection()].filter(isDefined),
   }
 }
 
+const optimizedImage = {
+  format: "webp",
+  quality: 85,
+  width: 1024,
+  height: 1024,
+} as const
+
 function getBackend(): Backend {
-  const { backend } = sveltiaAdminConfig
+  const { backend } = adminConfig
 
   if (!backend) {
     return {
@@ -97,5 +111,3 @@ function createLocalRepoPath() {
       .replaceAll(".", "-") + "/local-repository"
   )
 }
-
-export const config = getConfig()

@@ -7,10 +7,33 @@ describe("adminConfigSchema", () => {
     const config = adminConfigSchema.parse({})
 
     expect(config).toEqual({
+      experimental: {
+        useLanguagesCollection: false,
+        hideCategoriesCollection: false,
+        hideMediaCollectionsCollection: false,
+        hideMediaTypesCollection: false,
+        hideAuthorsField: false,
+        hideCategoriesField: false,
+        showContentLabelField: true,
+        showDateCreatedField: true,
+        showCommonIdField: true,
+        showSlugField: true,
+      },
       path: "admin",
       maxFileSize: 25,
       siteRootInRepo: "",
     })
+  })
+
+  test("Should keep nested experimental defaults aligned with top-level defaults", () => {
+    const topLevelDefaults = adminConfigSchema.parse({})
+    const nestedExperimentalDefaults = adminConfigSchema.parse({
+      experimental: {},
+    })
+
+    expect(nestedExperimentalDefaults.experimental).toEqual(
+      topLevelDefaults.experimental,
+    )
   })
 
   test("Should keep gitlab backend fields in schema shape", () => {
@@ -114,9 +137,9 @@ describe("getConfig", () => {
       },
     }))
 
-    const { getConfig } = await import("../../src/sveltia/sveltia.config")
+    const { createConfig } = await import("../../src/sveltia.config")
 
-    return getConfig()
+    return createConfig()
   }
 
   test("Should transform gitlab backend camelCase fields to snake_case", async () => {

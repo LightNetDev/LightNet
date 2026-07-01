@@ -24,26 +24,28 @@ const seedLanguages = async (app: AdminApp) => {
 
 const seedCategory = async (app: AdminApp) => {
   const slug = uniqueSlug("discipleship")
+  const label = `Discipleship ${slug}`
   const categories = await app.openCollection("Categories")
   const editor = await categories.createEntry()
 
   await editor.getStringFieldByLabel("Slug").fill(slug)
-  await editor.getStringFieldByKeyPath("label.en").fill("Discipleship")
+  await editor.getStringFieldByKeyPath("label.en").fill(label)
   await editor.save()
 
-  const summary = `Discipleship (${slug})`
+  const summary = label
   await categories.expectEntryVisible(summary)
 
-  return { categories, slug, summary }
+  return { categories, optionLabel: label, slug, summary }
 }
 
 const seedMediaType = async (app: AdminApp) => {
   const slug = uniqueSlug("book")
+  const label = `Book ${slug}`
   const mediaTypes = await app.openCollection("Media Types")
   const editor = await mediaTypes.createEntry()
 
   await editor.getStringFieldByLabel("Slug").fill(slug)
-  await editor.getStringFieldByKeyPath("label.en").fill("Book")
+  await editor.getStringFieldByKeyPath("label.en").fill(label)
   await editor.getStringFieldByKeyPath("icon").fill("lucide--book-open")
   await editor.getFieldByKeyPath("coverImageStyle").expectVisible()
   await editor
@@ -57,10 +59,15 @@ const seedMediaType = async (app: AdminApp) => {
     .fill("src/components/CustomBook.astro")
   await editor.save()
 
-  const summary = `Book (${slug})`
+  const summary = label
   await mediaTypes.expectEntryVisible(summary)
 
-  return { mediaTypes, slug, summary }
+  return {
+    mediaTypes,
+    optionLabel: `${label} (${slug})`,
+    slug,
+    summary,
+  }
 }
 
 const createMediaEntry = async (
@@ -68,11 +75,11 @@ const createMediaEntry = async (
   {
     slug,
     title,
-    categorySlug,
-    mediaTypeSlug,
+    categoryOptionLabel,
+    mediaTypeOptionLabel,
   }: {
-    categorySlug?: string
-    mediaTypeSlug: string
+    categoryOptionLabel?: string
+    mediaTypeOptionLabel: string
     slug: string
     title: string
   },
@@ -83,9 +90,11 @@ const createMediaEntry = async (
   await editor.getStringFieldByLabel("Slug").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
   await editor
-    .getRelationFieldByLabel("Type")
-    .selectOption(`Book (${mediaTypeSlug})`)
-  await editor.getRelationFieldByLabel("Language").selectOption("English (en)")
+    .getRelationFieldByLabel("Media Type")
+    .selectOption(mediaTypeOptionLabel)
+  await editor
+    .getRelationFieldByLabel("Content Language")
+    .selectOption("English (en)")
   await editor.getFileFieldByKeyPath("image").uploadFile(imagePath)
   await editor.getListFieldByKeyPath("content").addItem("Link")
   await editor
@@ -94,18 +103,18 @@ const createMediaEntry = async (
   await editor.getStringFieldByKeyPath("dateCreated").fill("2024-05-20")
   await editor.getStringFieldByKeyPath("commonId").fill(`common-${slug}`)
 
-  if (categorySlug) {
+  if (categoryOptionLabel) {
     await editor
       .getRelationFieldByKeyPath("categories")
-      .selectOption(categorySlug)
+      .selectOption(categoryOptionLabel)
   }
 
   await editor.save()
 
-  const summary = `${title} (${slug})`
+  const summary = title
   await mediaItems.expectEntryVisible(summary)
 
-  return { mediaItems, summary }
+  return { mediaItems, relationSummary: `${title} (${slug})`, summary }
 }
 
 test.describe("Sveltia admin content flows", () => {
@@ -120,12 +129,13 @@ test.describe("Sveltia admin content flows", () => {
     const slug = uniqueSlug("discipleship")
     const categories = await app.openCollection("Categories")
     const editor = await categories.createEntry()
+    const label = `Discipleship ${slug}`
 
     await editor.getStringFieldByLabel("Slug").fill(slug)
-    await editor.getStringFieldByKeyPath("label.en").fill("Discipleship")
+    await editor.getStringFieldByKeyPath("label.en").fill(label)
     await editor.save()
 
-    let summary = `Discipleship (${slug})`
+    let summary = label
     await categories.expectEntryVisible(summary)
 
     const reopened = await categories.openEditor(summary)
@@ -134,7 +144,7 @@ test.describe("Sveltia admin content flows", () => {
       .fill("Discipleship Updated")
     await reopened.save()
 
-    summary = `Discipleship Updated (${slug})`
+    summary = "Discipleship Updated"
     await categories.expectEntryVisible(summary)
 
     const reopenedAgain = await categories.openEditor(summary)
@@ -159,13 +169,12 @@ test.describe("Sveltia admin content flows", () => {
     await app.enterTestRepository()
 
     await seedLanguages(app)
-    const { slug: categorySlug } = await seedCategory(app)
-    const { slug: mediaTypeSlug } = await seedMediaType(app)
+    const { optionLabel: categoryOptionLabel } = await seedCategory(app)
 
     const slug = uniqueSlug("media")
     const { mediaItems, summary } = await createMediaEntry(app, {
-      categorySlug,
-      mediaTypeSlug,
+      categoryOptionLabel,
+      mediaTypeOptionLabel: "Book (book)",
       slug,
       title: "Library Item",
     })
@@ -174,7 +183,7 @@ test.describe("Sveltia admin content flows", () => {
     await reopened.getStringFieldByLabel("Title").fill("Library Item Updated")
     await reopened.save()
 
-    const updatedSummary = `Library Item Updated (${slug})`
+    const updatedSummary = "Library Item Updated"
     await mediaItems.expectEntryVisible(updatedSummary)
 
     await mediaItems.deleteSelectedEntry(updatedSummary)
@@ -210,17 +219,16 @@ test.describe("Sveltia admin content flows", () => {
 
     await seedLanguages(app)
     await seedCategory(app)
-    const { slug: mediaTypeSlug } = await seedMediaType(app)
 
     const firstSlug = uniqueSlug("first")
     const first = await createMediaEntry(app, {
-      mediaTypeSlug,
+      mediaTypeOptionLabel: "Book (book)",
       slug: firstSlug,
       title: "First Lesson",
     })
     const secondSlug = uniqueSlug("second")
     const second = await createMediaEntry(app, {
-      mediaTypeSlug,
+      mediaTypeOptionLabel: "Book (book)",
       slug: secondSlug,
       title: "Second Lesson",
     })
@@ -234,23 +242,23 @@ test.describe("Sveltia admin content flows", () => {
     await editor.getListFieldByKeyPath("mediaItems").addItem()
     await editor
       .getComboboxFieldByLabel("Media Item", 0)
-      .selectOption(first.summary)
+      .selectOption(first.relationSummary)
     await editor.getListFieldByKeyPath("mediaItems").addItem()
     await editor
       .getComboboxFieldByLabel("Media Item", 1)
-      .selectOption(second.summary)
+      .selectOption(second.relationSummary)
     await editor.save()
 
-    const summary = `Starter Course (${collectionSlug})`
+    const summary = "Starter Course"
     await mediaCollections.expectEntryVisible(summary)
 
     const reopened = await mediaCollections.openEditor(summary)
     const mediaItemsField = reopened.getListFieldByKeyPath("mediaItems")
     const firstPosition = await mediaItemsField.getItemTextYPosition(
-      first.summary,
+      first.relationSummary,
     )
     const secondPosition = await mediaItemsField.getItemTextYPosition(
-      second.summary,
+      second.relationSummary,
     )
     expect(firstPosition).toBeLessThan(secondPosition)
   })

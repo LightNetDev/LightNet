@@ -114,11 +114,78 @@ export const adminConfigSchema = z.object({
        */
       useLanguagesCollection: z.boolean().default(false),
       /**
+       * Hide `categories` collection.
+       *
+       * @default false
+       */
+      hideCategoriesCollection: z.boolean().default(false),
+      /**
+       * Hide `media-collections` collection.
+       *
+       * @default false
+       */
+      hideMediaCollectionsCollection: z.boolean().default(false),
+      /**
+       * Hide `media-types` collection.
+       *
+       * @default false
+       */
+      hideMediaTypesCollection: z.boolean().default(false),
+      /**
+       * Hide `authors` field in the media item editor.
+       *
+       * @default false
+       */
+      hideAuthorsField: z.boolean().default(false),
+      /**
+       * Hide `categories` field in the media item editor.
+       *
+       * @default false
+       */
+      hideCategoriesField: z.boolean().default(false),
+      /**
+       * Show `content[].label` field in the media item editor.
+       *
+       * @default true
+       */
+      showContentLabelField: z.boolean().default(true),
+      /**
+       * Show `dateCreated` field in the media item editor.
+       *
+       * @default true
+       */
+      showDateCreatedField: z.boolean().default(true),
+      /**
+       * Show `commonI`d field in the media item editor.
+       *
+       * @default true
+       */
+      showCommonIdField: z.boolean().default(true),
+      /**
+       * Show `slug` field editor for new collection entries.
+       *
+       * @default true
+       */
+      showSlugField: z.boolean().default(true),
+      /**
        * Use Cloudflare r2 for content uploads.
        */
       fileStorage: r2Storage.optional(),
     })
-    .optional(),
+    // we need to provide defaults because we cannot short circuit flags that default to `true`.
+    // experimental object can be made optional when we move flags out or change all defaults to `false`.
+    .default({
+      useLanguagesCollection: false,
+      hideCategoriesCollection: false,
+      hideMediaCollectionsCollection: false,
+      hideMediaTypesCollection: false,
+      hideAuthorsField: false,
+      hideCategoriesField: false,
+      showCommonIdField: true,
+      showContentLabelField: true,
+      showDateCreatedField: true,
+      showSlugField: true,
+    }),
 })
 
 export type SveltiaAdminConfig = z.input<typeof adminConfigSchema>

@@ -70,7 +70,17 @@ class GlobalSearch {
   }
 
   async openResult(summary: string) {
-    await this.result(summary).click()
+    const result = this.result(summary)
+
+    await result.click()
+
+    if (await this.page.getByRole("button", { name: "Save" }).count()) {
+      return
+    }
+
+    const refreshedResult = this.result(summary)
+    await expect(refreshedResult).toBeVisible()
+    await refreshedResult.dblclick()
   }
 
   async clear() {
