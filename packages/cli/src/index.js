@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 // @ts-check
 
-import { exit } from "node:process"
-
 import { Command } from "commander"
 
 import pkg from "../package.json" with { type: "json" }
+import { checkFiles } from "./check-files.js"
 import { checkTranslations } from "./check-translations.js"
+import { CliError } from "./support/cli-error.js"
 const { version } = pkg
 
 const program = new Command()
+let commandExitCode = 0
 
 program
   .name("lightnet-cli")
@@ -21,7 +22,37 @@ program
   .description("check if last build has been missing any translations")
   .action(async () => {
     const checkSuccessful = await checkTranslations()
-    exit(checkSuccessful ? 0 : 1)
+    commandExitCode = checkSuccessful ? 0 : 1
+  })
+
+program
+  .command("check-files")
+  .description(
+    "check for missing and orphaned content files and thumbnails in a LightNet site",
+  )
+  .option("--fix", "remove orphaned files")
+  .option("--yes", "skip deletion confirmation when used with --fix")
+  .option(
+    "--r2",
+    "validate remote content files in Cloudflare R2 instead of public/files",
+  )
+  .option(
+    "--scope <values>",
+    "comma-separated scopes: content-files,thumbnails",
+  )
+  .action(async (options) => {
+    try {
+      const checkSuccessful = await checkFiles(options)
+      commandExitCode = checkSuccessful ? 0 : 1
+    } catch (error) {
+      if (error instanceof CliError) {
+        console.error(error.message)
+        commandExitCode = 1
+        return
+      }
+      throw error
+    }
   })
 
 await program.parseAsync()
+process.exitCode = commandExitCode
