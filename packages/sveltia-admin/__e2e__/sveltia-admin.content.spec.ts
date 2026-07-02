@@ -174,7 +174,7 @@ test.describe("Sveltia admin content flows", () => {
     const slug = uniqueSlug("media")
     const { mediaItems, summary } = await createMediaEntry(app, {
       categoryOptionLabel,
-      mediaTypeOptionLabel: "Book (book)",
+      mediaTypeOptionLabel: "Book",
       slug,
       title: "Library Item",
     })
@@ -222,13 +222,13 @@ test.describe("Sveltia admin content flows", () => {
 
     const firstSlug = uniqueSlug("first")
     const first = await createMediaEntry(app, {
-      mediaTypeOptionLabel: "Book (book)",
+      mediaTypeOptionLabel: "Book",
       slug: firstSlug,
       title: "First Lesson",
     })
     const secondSlug = uniqueSlug("second")
     const second = await createMediaEntry(app, {
-      mediaTypeOptionLabel: "Book (book)",
+      mediaTypeOptionLabel: "Book",
       slug: secondSlug,
       title: "Second Lesson",
     })

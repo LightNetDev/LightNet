@@ -49,7 +49,7 @@ const seedMediaItem = async (
 
   await editor.getStringFieldByLabel("Slug").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
-  await editor.getRelationFieldByLabel("Media Type").selectOption("Book (book)")
+  await editor.getRelationFieldByLabel("Media Type").selectOption("Book")
   await editor
     .getRelationFieldByLabel("Content Language")
     .selectOption("English (en)")
@@ -83,7 +83,7 @@ const seedMediaItemWithUploadedFile = async (
 
   await editor.getStringFieldByLabel("Slug").fill(slug)
   await editor.getStringFieldByLabel("Title").fill(title)
-  await editor.getRelationFieldByLabel("Media Type").selectOption("Book (book)")
+  await editor.getRelationFieldByLabel("Media Type").selectOption("Book")
   await editor
     .getRelationFieldByLabel("Content Language")
     .selectOption("English (en)")
@@ -122,9 +122,7 @@ test.describe("Sveltia admin fixed regressions", () => {
     await editor.getFieldByLabel("Slug").expectVisible()
     await editor.getStringFieldByLabel("Slug").fill(slug)
     await editor.getStringFieldByLabel("Title").fill("Regression Media")
-    await editor
-      .getRelationFieldByLabel("Media Type")
-      .selectOption("Book (book)")
+    await editor.getRelationFieldByLabel("Media Type").selectOption("Book")
     await editor
       .getRelationFieldByLabel("Content Language")
       .selectOption("English (en)")
@@ -243,9 +241,7 @@ test.describe("Sveltia admin fixed regressions", () => {
 
     await editor.getStringFieldByLabel("Slug").fill(slug)
     await editor.getStringFieldByLabel("Title").fill("Omit Empty")
-    await editor
-      .getRelationFieldByLabel("Media Type")
-      .selectOption("Book (book)")
+    await editor.getRelationFieldByLabel("Media Type").selectOption("Book")
     await editor
       .getRelationFieldByLabel("Content Language")
       .selectOption("English (en)")

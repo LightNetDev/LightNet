@@ -4,7 +4,7 @@ import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { isDefined } from "../utils/is-defined"
 import { projectPath } from "../utils/paths"
-import { inlineTranslation } from "./fields/inline-translation"
+import { inlineTranslation, translatedLabel } from "./fields/inline-translation"
 import { languagesSelect } from "./languages"
 
 export const mediaItemCollection: Collection = {
@@ -38,7 +38,7 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       hint: "Choose the kind of media this content represents.",
       collection: "media-types",
-      display_fields: [`{{label.${config.defaultLocale}}} ({{slug}})`],
+      display_fields: [translatedLabel()],
     },
     languagesSelect(),
     {
@@ -145,7 +145,7 @@ export const mediaItemCollection: Collection = {
       widget: "relation",
       multiple: true,
       collection: "categories",
-      display_fields: [`{{label.${config.defaultLocale}}}`],
+      display_fields: [translatedLabel()],
     },
     {
       name: "description",
