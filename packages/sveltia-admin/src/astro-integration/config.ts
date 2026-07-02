@@ -168,6 +168,16 @@ export const adminConfigSchema = z.object({
        */
       showSlugField: z.boolean().default(true),
       /**
+       * Set the language used for entry summaries.
+       *
+       * The value must match the `code` of one site language configured for this site.
+       * Make sure all entry labels include a translation for this language.
+       *
+       * @example "en"
+       */
+      summaryLocale: z.string().optional(),
+
+      /**
        * Use Cloudflare r2 for content uploads.
        */
       fileStorage: r2Storage.optional(),

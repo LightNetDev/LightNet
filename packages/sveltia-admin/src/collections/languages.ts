@@ -5,6 +5,8 @@ import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 import { projectPath } from "../utils/paths"
 import { inlineTranslation } from "./fields/inline-translation"
 
+const { summaryLocale } = adminConfig.experimental
+
 export const languagesSelect = () => {
   const commonProperties = {
     name: "language",
@@ -20,7 +22,7 @@ export const languagesSelect = () => {
       file: "languages",
       value_field: "{{languages.*.code}}",
       display_fields: [
-        `{{languages.*.label.${config.defaultLocale}}} ({{languages.*.code}})`,
+        `{{languages.*.label.${summaryLocale ?? config.defaultLocale}}} ({{languages.*.code}})`,
       ],
     }
   } else {
@@ -29,7 +31,7 @@ export const languagesSelect = () => {
       widget: "select",
       options: config.languages.map(({ code, label }) => {
         return {
-          label: `${label[config.defaultLocale]} (${code})`,
+          label: `${label[summaryLocale ?? config.defaultLocale]} (${code})`,
           value: code,
         }
       }),
@@ -60,7 +62,7 @@ const languagesCollection: CollectionFile = {
       allow_reorder: false,
       root: true,
       collapsed: "auto",
-      summary: `{{label.${config.defaultLocale}}}  ({{code}})`,
+      summary: `{{label.${summaryLocale ?? config.defaultLocale}}}  ({{code}})`,
       fields: [
         {
           name: "code",

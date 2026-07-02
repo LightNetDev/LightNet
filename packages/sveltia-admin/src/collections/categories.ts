@@ -1,9 +1,8 @@
 import type { Collection } from "@sveltia/cms"
-import config from "virtual:lightnet/config"
 import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { projectPath } from "../utils/paths"
-import { inlineTranslation } from "./fields/inline-translation"
+import { inlineTranslation, translatedLabel } from "./fields/inline-translation"
 
 export const categoriesCollection: Collection = {
   name: "categories",
@@ -17,8 +16,8 @@ export const categoriesCollection: Collection = {
   format: "json",
   slug: adminConfig.experimental.showSlugField
     ? "{{fields._slug}}"
-    : `{{label.${config.defaultLocale}}}`,
-  summary: `{{label.${config.defaultLocale}}}`,
+    : translatedLabel(),
+  summary: translatedLabel(),
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {
