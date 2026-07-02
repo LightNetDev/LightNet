@@ -24,8 +24,7 @@ export const inlineTranslation = (options: Options): Field => ({
     ...locale,
     widget: "string",
     required:
-      locale.name === config.defaultLocale ||
-      (summaryLocale && locale.name === summaryLocale),
+      locale.name === config.defaultLocale || locale.name === summaryLocale,
   })),
 })
 
