@@ -1,5 +1,11 @@
 # @lightnet/sveltia-admin
 
+## 4.2.0
+
+### Minor Changes
+
+- [#425](https://github.com/LightNetDev/LightNet/pull/425) [`d21b3c1`](https://github.com/LightNetDev/LightNet/commit/d21b3c18fe5368555be56015625632b391c29dd8) - Added summaryLocale config option to support choosing the language for entry summaries.
+
 ## 4.1.0
 
 ### Minor Changes
