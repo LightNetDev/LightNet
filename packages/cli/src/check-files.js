@@ -238,25 +238,52 @@ export async function checkFiles(options, runtime = {}) {
         }))
 
       if (shouldDelete) {
-        const deletedContentTargets = contentFileStorage
-          ? await contentFileStorage.delete(
-              contentDeletions.map((deletion) => deletion.target),
-            )
-          : []
-        const deletedLocalTargets = [
-          ...(await mediaThumbnailStorage.delete(
-            localDeletions
-              .filter((deletion) => deletion.target.startsWith(mediaImagesDir))
-              .map((deletion) => deletion.target),
-          )),
-          ...(await categoryThumbnailStorage.delete(
-            localDeletions
-              .filter((deletion) =>
-                deletion.target.startsWith(categoryImagesDir),
-              )
-              .map((deletion) => deletion.target),
-          )),
-        ]
+        const { deletedContentTargets, deletedLocalTargets } = await runSpinner(
+          {
+            error: "File deletion failed.",
+            start: formatDeletionProgress("Deleting", deletions.length),
+            stop: (result) => {
+              const deletedCount =
+                result.deletedContentTargets.length +
+                result.deletedLocalTargets.length
+              return formatDeletionProgress("Deleted", deletedCount)
+            },
+            task: async () => {
+              const [
+                deletedContentTargets,
+                deletedMediaThumbnailTargets,
+                deletedCategoryThumbnailTargets,
+              ] = await Promise.all([
+                contentFileStorage
+                  ? contentFileStorage.delete(
+                      contentDeletions.map((deletion) => deletion.target),
+                    )
+                  : [],
+                mediaThumbnailStorage.delete(
+                  localDeletions
+                    .filter((deletion) =>
+                      deletion.target.startsWith(mediaImagesDir),
+                    )
+                    .map((deletion) => deletion.target),
+                ),
+                categoryThumbnailStorage.delete(
+                  localDeletions
+                    .filter((deletion) =>
+                      deletion.target.startsWith(categoryImagesDir),
+                    )
+                    .map((deletion) => deletion.target),
+                ),
+              ])
+              return {
+                deletedContentTargets,
+                deletedLocalTargets: [
+                  ...deletedMediaThumbnailTargets,
+                  ...deletedCategoryThumbnailTargets,
+                ],
+              }
+            },
+          },
+        )
         const deletedTargets = new Set([
           ...deletedContentTargets,
           ...deletedLocalTargets,
@@ -378,6 +405,14 @@ async function runSpinner({ error, start, stop, task }) {
  */
 function formatContentCheckSummary(result) {
   return `Checked content files: ${result.referenceCount} references, ${result.missingReferences.length} missing, ${result.orphanedFiles.length} orphaned.`
+}
+
+/**
+ * @param {string} action
+ * @param {number} count
+ */
+function formatDeletionProgress(action, count) {
+  return `${action} ${count} orphaned file${count === 1 ? "" : "s"}.`
 }
 
 /**
