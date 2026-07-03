@@ -1,6 +1,6 @@
 # LightNet CLI
 
-Command-line tools for working with LightNet sites. The CLI currently includes translation validation and file consistency checks.
+Command-line tools for working with LightNet sites. The CLI currently includes translation validation, file consistency checks, and media link availability checks.
 
 ## Install
 

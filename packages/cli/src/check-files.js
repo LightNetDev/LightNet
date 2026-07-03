@@ -1,33 +1,25 @@
 // @ts-check
 
-import { execFile } from "node:child_process"
-import { access, readdir, readFile, unlink } from "node:fs/promises"
-import { join, posix, relative, resolve } from "node:path"
-import {
-  cwd as processCwd,
-  env as processEnv,
-  stdin,
-  stdout,
-} from "node:process"
-import { createInterface } from "node:readline/promises"
-import { promisify } from "node:util"
+import { join, posix, resolve } from "node:path"
+import { cwd as processCwd, stdin, stdout } from "node:process"
+
+import { confirm, intro, isCancel, log, outro, text } from "@clack/prompts"
 
 import { CliError } from "./support/cli-error.js"
+import { contentCollections } from "./support/content-collections.js"
 import {
-  deleteR2Objects,
-  ensureR2Config,
-  validateR2ReferencesWithRefresh,
-} from "./support/r2.js"
+  contentFiles,
+  files,
+  pathExists,
+  toLocalContentDisplayPath,
+} from "./support/filesystem.js"
+import { createR2FileStorage } from "./support/r2.js"
 
-const execFileAsync = promisify(execFile)
-const localJunkFileNames = new Set([".DS_Store"])
 const supportedScopes = new Set(["content-files", "thumbnails"])
 
 const mediaDir = "src/content/media"
 const mediaImagesDir = "src/content/media/images"
-const categoriesDir = "src/content/categories"
 const categoryImagesDir = "src/content/categories/images"
-const publicFilesDir = "public/files"
 
 /**
  * @typedef {{
@@ -38,27 +30,9 @@ const publicFilesDir = "public/files"
  * }} CheckFilesOptions
  */
 
-/**
- * @typedef {{
- *   path: string
- *   content: Array<{type: "upload"|"link", url: string}>
- *   image?: string
- * }} ParsedMediaItem
- */
-
-/**
- * @typedef {{
- *   path: string
- *   image?: string
- * }} ParsedCategory
- */
-
-/**
- * @typedef {{
- *   log: (...args: unknown[]) => void
- *   error: (...args: unknown[]) => void
- * }} Logger
- */
+/** @typedef {import("./support/content-collections.js").MediaItem} MediaItem */
+/** @typedef {import("./support/content-collections.js").Category} Category */
+/** @typedef {import("./support/filesystem.js").FileStorage} FileStorage */
 
 /**
  * @typedef {{
@@ -69,13 +43,17 @@ const publicFilesDir = "public/files"
 
 /**
  * @typedef {{
+ *   displayPath: string
+ *   sources: Set<string>
+ * }} FileReference
+ */
+
+/**
+ * @typedef {{
  *   cwd?: string
- *   logger?: Logger
  *   isInteractive?: boolean
  *   promptText?: (message: string) => Promise<string>
  *   promptConfirm?: (message: string) => Promise<boolean>
- *   promptSecret?: (message: string) => Promise<string>
- *   runRclone?: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
  * }} CheckFilesRuntime
  */
 
@@ -85,34 +63,27 @@ const publicFilesDir = "public/files"
  */
 export async function checkFiles(options, runtime = {}) {
   const cwd = runtime.cwd ?? processCwd()
-  const logger = runtime.logger ?? console
   const interactive =
     runtime.isInteractive ?? Boolean(stdin.isTTY && stdout.isTTY)
   const promptText =
-    runtime.promptText ??
-    (async (message) =>
-      defaultPromptText(message, { input: stdin, output: stdout }))
+    runtime.promptText ?? (async (message) => defaultPromptText(message))
   const promptConfirm =
-    runtime.promptConfirm ??
-    (async (message) =>
-      defaultPromptConfirm(message, { input: stdin, output: stdout }))
-  const promptSecret = runtime.promptSecret
-  const runRclone =
-    runtime.runRclone ??
-    ((args, commandCwd, commandEnv) =>
-      execFileAsync("rclone", args, {
-        cwd: commandCwd,
-        env: commandEnv ?? processEnv,
-      }))
+    runtime.promptConfirm ?? (async (message) => defaultPromptConfirm(message))
 
   const scopes = parseScopes(options.scope)
   const includeContentFiles = scopes.has("content-files")
   const includeThumbnails = scopes.has("thumbnails")
 
+  intro("check-files")
+
   await assertLightNetSiteRoot(cwd)
 
-  const mediaItems = await readMediaItems(cwd)
-  const categories = await readCategories(cwd)
+  const collections = contentCollections(cwd)
+  const mediaItems = await collections.getMediaItems()
+  const categories = await collections.getCategories()
+  log.message(
+    `Checking ${mediaItems.length} media items and ${categories.length} categories.`,
+  )
 
   /** @type {MissingReference[]} */
   let missingContentFiles = []
@@ -127,40 +98,36 @@ export async function checkFiles(options, runtime = {}) {
   /** @type {string[]} */
   const warnings = []
 
-  let r2Config = undefined
+  /** @type {FileStorage|undefined} */
+  let contentFileStorage = undefined
+  const mediaThumbnailStorage = files(cwd, { rootDir: mediaImagesDir })
+  const categoryThumbnailStorage = files(cwd, { rootDir: categoryImagesDir })
 
   if (includeContentFiles) {
     if (options.r2) {
-      r2Config = await ensureR2Config({
+      contentFileStorage = createR2FileStorage({
         cwd,
         interactive,
-        logger,
-        promptText,
-      })
-      const r2Result = await validateR2ReferencesWithRefresh({
-        cwd,
-        interactive,
-        logger,
         promptConfirm,
         promptText,
-        promptSecret,
-        config: r2Config,
-        references: collectR2ContentReferences(mediaItems, r2Config.publicUrl),
-        runRclone,
       })
-      r2Config = r2Result.config
+      const r2Result = await validateContentFiles({
+        mediaItems,
+        storage: contentFileStorage,
+      })
       missingContentFiles = r2Result.missingReferences
-      orphanedContentFiles = r2Result.orphanedObjects
+      orphanedContentFiles = r2Result.orphanedFiles
       if (r2Result.referenceCount === 0) {
         warnings.push(
           'No R2-backed content file references found. Use "--scope=thumbnails" or check your "--r2" setup.',
         )
       }
     } else {
-      const localContentResult = await validateLocalContentFiles(
-        cwd,
+      contentFileStorage = contentFiles(cwd)
+      const localContentResult = await validateContentFiles({
         mediaItems,
-      )
+        storage: contentFileStorage,
+      })
       missingContentFiles = localContentResult.missingReferences
       orphanedContentFiles = localContentResult.orphanedFiles
       if (localContentResult.referenceCount === 0) {
@@ -173,45 +140,48 @@ export async function checkFiles(options, runtime = {}) {
 
   if (includeThumbnails) {
     const thumbnailsResult = await validateThumbnails(
-      cwd,
       mediaItems,
       categories,
+      mediaThumbnailStorage,
+      categoryThumbnailStorage,
     )
     orphanedMediaThumbnails = thumbnailsResult.orphanedMediaThumbnails
     orphanedCategoryThumbnails = thumbnailsResult.orphanedCategoryThumbnails
   }
 
   if (options.fix) {
-    /** @type {{displayPath:string, kind:"local-file"|"r2-object", target:string}[]} */
+    /** @type {{displayPath:string, target:string}[]} */
     const deletions = []
+    /** @type {{displayPath:string, target:string}[]} */
+    const contentDeletions = []
+    /** @type {{displayPath:string, target:string}[]} */
+    const localDeletions = []
     for (const filePath of orphanedContentFiles) {
-      if (options.r2) {
-        deletions.push({
-          displayPath: filePath,
-          kind: "r2-object",
-          target: filePath,
-        })
-      } else {
-        deletions.push({
-          displayPath: filePath,
-          kind: "local-file",
-          target: resolve(cwd, filePath),
-        })
+      if (!contentFileStorage) {
+        throw new CliError("Missing file storage for content deletion.")
       }
+      const deletion = {
+        displayPath: formatContentFilePath(filePath, options),
+        target: filePath,
+      }
+      contentDeletions.push(deletion)
+      deletions.push(deletion)
     }
     for (const filePath of orphanedMediaThumbnails) {
-      deletions.push({
+      const deletion = {
         displayPath: filePath,
-        kind: "local-file",
-        target: resolve(cwd, filePath),
-      })
+        target: filePath,
+      }
+      localDeletions.push(deletion)
+      deletions.push(deletion)
     }
     for (const filePath of orphanedCategoryThumbnails) {
-      deletions.push({
+      const deletion = {
         displayPath: filePath,
-        kind: "local-file",
-        target: resolve(cwd, filePath),
-      })
+        target: filePath,
+      }
+      localDeletions.push(deletion)
+      deletions.push(deletion)
     }
 
     if (deletions.length > 0) {
@@ -224,28 +194,48 @@ export async function checkFiles(options, runtime = {}) {
         options.yes ||
         (await confirmDeletion({
           deletions,
-          logger,
           promptConfirm,
         }))
 
       if (shouldDelete) {
-        removedItems = await deleteItems({
-          cwd,
-          logger,
-          r2Config,
-          deletions,
-          options,
-          promptSecret,
-          runRclone,
-        })
+        const deletedContentTargets = contentFileStorage
+          ? await contentFileStorage.delete(
+              contentDeletions.map((deletion) => deletion.target),
+            )
+          : []
+        const deletedLocalTargets = [
+          ...(await mediaThumbnailStorage.delete(
+            localDeletions
+              .filter((deletion) => deletion.target.startsWith(mediaImagesDir))
+              .map((deletion) => deletion.target),
+          )),
+          ...(await categoryThumbnailStorage.delete(
+            localDeletions
+              .filter((deletion) =>
+                deletion.target.startsWith(categoryImagesDir),
+              )
+              .map((deletion) => deletion.target),
+          )),
+        ]
+        const deletedTargets = new Set([
+          ...deletedContentTargets,
+          ...deletedLocalTargets,
+        ])
+        for (const deletion of [...contentDeletions, ...localDeletions]) {
+          if (deletedTargets.has(deletion.target)) {
+            removedItems.push(deletion.displayPath)
+          } else {
+            log.error(`Failed to delete "${deletion.displayPath}".`)
+          }
+        }
         orphanedContentFiles = orphanedContentFiles.filter(
-          (item) => !removedItems.includes(item),
+          (item) => !deletedTargets.has(item),
         )
         orphanedMediaThumbnails = orphanedMediaThumbnails.filter(
-          (item) => !removedItems.includes(item),
+          (item) => !deletedTargets.has(item),
         )
         orphanedCategoryThumbnails = orphanedCategoryThumbnails.filter(
-          (item) => !removedItems.includes(item),
+          (item) => !deletedTargets.has(item),
         )
       }
     }
@@ -259,64 +249,59 @@ export async function checkFiles(options, runtime = {}) {
     orphanedCategoryThumbnails.length > 0
 
   if (!hasIssues && removedItems.length === 0) {
+    outro("No issues found. 🎉")
     return true
   }
 
   for (const warning of warnings) {
-    logger.error(warning)
+    log.warn(warning)
   }
 
   printMissingReferenceSection(
-    logger,
     "Missing referenced content files",
     missingContentFiles,
   )
   printSection(
-    logger,
     options.r2 ? "Orphaned R2 objects" : "Orphaned local content files",
-    orphanedContentFiles,
+    orphanedContentFiles.map((filePath) =>
+      formatContentFilePath(filePath, options),
+    ),
   )
-  printSection(logger, "Orphaned media thumbnails", orphanedMediaThumbnails)
-  printSection(
-    logger,
-    "Orphaned category thumbnails",
-    orphanedCategoryThumbnails,
-  )
-  printSection(logger, "Removed items", removedItems)
+  printSection("Orphaned media thumbnails", orphanedMediaThumbnails)
+  printSection("Orphaned category thumbnails", orphanedCategoryThumbnails)
+  printSection("Removed items", removedItems)
+
+  outro(hasIssues ? "Issues found. 🚧" : "Cleanup complete. 🧹")
 
   return !hasIssues
 }
 
 /**
- * @param {Logger} logger
  * @param {string} title
  * @param {string[]} items
  */
-function printSection(logger, title, items) {
+function printSection(title, items) {
   if (items.length === 0) {
     return
   }
-  logger.error("")
-  logger.error(`${title} (${items.length})`)
+  log.warn(`${title} (${items.length})`)
   for (const item of items) {
-    logger.error(`- ${item}`)
+    log.message(`• ${item}`)
   }
 }
 
 /**
- * @param {Logger} logger
  * @param {string} title
  * @param {MissingReference[]} items
  */
-function printMissingReferenceSection(logger, title, items) {
+function printMissingReferenceSection(title, items) {
   if (items.length === 0) {
     return
   }
-  logger.error("")
-  logger.error(`${title} (${items.length})`)
+  log.error(`${title} (${items.length})`)
   for (const item of items) {
-    logger.error(
-      `- ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
+    log.message(
+      `• ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
     )
   }
 }
@@ -361,106 +346,17 @@ async function assertLightNetSiteRoot(cwd) {
 }
 
 /**
- * @param {string} cwd
+ * @param {MediaItem[]} mediaItems
+ * @param {Category[]} categories
+ * @param {FileStorage} mediaThumbnailStorage
+ * @param {FileStorage} categoryThumbnailStorage
  */
-async function readMediaItems(cwd) {
-  const files = await listJsonFiles(resolve(cwd, mediaDir))
-  /** @type {ParsedMediaItem[]} */
-  const items = []
-  for (const filePath of files) {
-    items.push(await readMediaItem(filePath))
-  }
-  return items
-}
-
-/**
- * @param {string} cwd
- */
-async function readCategories(cwd) {
-  const absoluteDir = resolve(cwd, categoriesDir)
-  if (!(await pathExists(absoluteDir))) {
-    return []
-  }
-  const files = await listJsonFiles(absoluteDir)
-  /** @type {ParsedCategory[]} */
-  const items = []
-  for (const filePath of files) {
-    items.push(await readCategory(filePath))
-  }
-  return items
-}
-
-/**
- * @param {string} filePath
- * @returns {Promise<ParsedMediaItem>}
- */
-async function readMediaItem(filePath) {
-  const value = await readJsonFile(filePath)
-  if (!isPlainObject(value)) {
-    throw new CliError(
-      `Invalid media item in "${filePath}": expected an object.`,
-    )
-  }
-
-  const image = readOptionalImageReference(value.image, filePath)
-  const content = readContentArray(value.content, filePath)
-
-  return {
-    path: filePath,
-    content,
-    image,
-  }
-}
-
-/**
- * @param {string} filePath
- * @returns {Promise<ParsedCategory>}
- */
-async function readCategory(filePath) {
-  const value = await readJsonFile(filePath)
-  if (!isPlainObject(value)) {
-    throw new CliError(`Invalid category in "${filePath}": expected an object.`)
-  }
-
-  return {
-    path: filePath,
-    image: readOptionalImageReference(value.image, filePath),
-  }
-}
-
-/**
- * @param {string} cwd
- * @param {ParsedMediaItem[]} mediaItems
- */
-async function validateLocalContentFiles(cwd, mediaItems) {
-  const references = collectLocalContentReferences(mediaItems)
-  const files = await collectLocalContentFiles(cwd)
-
-  const missingReferences = [...references.entries()]
-    .filter(([path]) => !files.urlSet.has(path))
-    .map(([path, sources]) => ({
-      path,
-      sources: [...sources].toSorted(),
-    }))
-    .sort((a, b) => a.path.localeCompare(b.path))
-  const orphanedFiles = [...files.pathByUrl.entries()]
-    .filter(([url]) => !references.has(url))
-    .map(([, filePath]) => filePath)
-    .sort()
-
-  return {
-    missingReferences,
-    orphanedFiles,
-    referenceCount: references.size,
-  }
-}
-
-/**
- * @param {string} cwd
- * @param {ParsedMediaItem[]} mediaItems
- * @param {ParsedCategory[]} categories
- */
-async function validateThumbnails(cwd, mediaItems, categories) {
+async function validateThumbnails(
+  mediaItems,
+  categories,
+  mediaThumbnailStorage,
+  categoryThumbnailStorage,
+) {
   const mediaReferences = new Set(
     mediaItems
       .map((item) => toThumbnailPath("media", item.image))
@@ -472,17 +368,10 @@ async function validateThumbnails(cwd, mediaItems, categories) {
       .filter((value) => value !== undefined),
   )
 
-  const mediaFiles = await collectLocalFiles(resolve(cwd, mediaImagesDir), {
-    includeRootPrefix: mediaImagesDir,
-    ignoreJunk: true,
-  })
-  const categoryFiles = await collectLocalFiles(
-    resolve(cwd, categoryImagesDir),
-    {
-      includeRootPrefix: categoryImagesDir,
-      ignoreJunk: true,
-    },
-  )
+  const initializedMediaStorage = await mediaThumbnailStorage.init()
+  const initializedCategoryStorage = await categoryThumbnailStorage.init()
+  const mediaFiles = await initializedMediaStorage.list()
+  const categoryFiles = await initializedCategoryStorage.list()
 
   return {
     orphanedMediaThumbnails: mediaFiles.filter(
@@ -495,51 +384,66 @@ async function validateThumbnails(cwd, mediaItems, categories) {
 }
 
 /**
- * @param {ParsedMediaItem[]} mediaItems
+ * @param {{
+ *   mediaItems: MediaItem[]
+ *   storage: FileStorage
+ * }} args
  */
-function collectLocalContentReferences(mediaItems) {
-  const references = new Map()
-  for (const item of mediaItems) {
-    const sourceFileName = posix.basename(toPosixPath(item.path))
-    for (const contentItem of item.content) {
-      if (
-        contentItem.type === "upload" &&
-        contentItem.url.startsWith("/files")
-      ) {
-        const sources = references.get(contentItem.url) ?? new Set()
-        sources.add(sourceFileName)
-        references.set(contentItem.url, sources)
-      }
+async function validateContentFiles({ mediaItems, storage }) {
+  const initializedStorage = await storage.init()
+  const references = collectContentReferences(mediaItems, initializedStorage)
+  if (references.size === 0) {
+    return {
+      missingReferences: /** @type {MissingReference[]} */ ([]),
+      orphanedFiles: /** @type {string[]} */ ([]),
+      referenceCount: 0,
     }
   }
-  return references
+
+  const files = await initializedStorage.list()
+  const fileSet = new Set(files)
+
+  const missingReferences = [...references.entries()]
+    .filter(([path]) => !fileSet.has(path))
+    .map(([, reference]) => ({
+      path: reference.displayPath,
+      sources: [...reference.sources].toSorted(),
+    }))
+    .sort((a, b) => a.path.localeCompare(b.path))
+
+  const orphanedFiles = files
+    .filter((filePath) => !references.has(filePath))
+    .sort()
+
+  return {
+    missingReferences,
+    orphanedFiles,
+    referenceCount: references.size,
+  }
 }
 
 /**
- * @param {ParsedMediaItem[]} mediaItems
- * @param {string} publicUrl
+ * @param {MediaItem[]} mediaItems
+ * @param {FileStorage} storage
  */
-function collectR2ContentReferences(mediaItems, publicUrl) {
+function collectContentReferences(mediaItems, storage) {
   const references = new Map()
-  const normalizedBase = publicUrl.replace(/\/+$/, "")
   for (const item of mediaItems) {
     const sourceFileName = posix.basename(toPosixPath(item.path))
     for (const contentItem of item.content) {
-      if (
-        contentItem.type !== "upload" ||
-        !contentItem.url.startsWith(normalizedBase)
-      ) {
+      if (contentItem.type !== "upload") {
         continue
       }
-      const relativePath = contentItem.url
-        .slice(normalizedBase.length)
-        .replace(/^\/+/, "")
-      const current = references.get(contentItem.url)
+      const filePath = storage.toPath(contentItem.url)
+      if (!filePath) {
+        continue
+      }
+      const current = references.get(filePath)
       if (current) {
         current.sources.add(sourceFileName)
       } else {
-        references.set(contentItem.url, {
-          key: relativePath,
+        references.set(filePath, {
+          displayPath: contentItem.url,
           sources: new Set([sourceFileName]),
         })
       }
@@ -549,57 +453,18 @@ function collectR2ContentReferences(mediaItems, publicUrl) {
 }
 
 /**
- * @param {string} cwd
- */
-async function collectLocalContentFiles(cwd) {
-  const files = await collectLocalFiles(resolve(cwd, publicFilesDir), {
-    includeRootPrefix: publicFilesDir,
-    ignoreJunk: true,
-  })
-  const pathByUrl = new Map(
-    files.map((filePath) => [
-      `/${toPosixPath(relative(resolve(cwd, "public"), resolve(cwd, filePath)))}`,
-      filePath,
-    ]),
-  )
-  return {
-    pathByUrl,
-    urlSet: new Set(pathByUrl.keys()),
-  }
-}
-
-/**
- * @param {string} absoluteDir
- * @param {{includeRootPrefix:string, ignoreJunk:boolean}} options
- */
-async function collectLocalFiles(absoluteDir, options) {
-  if (!(await pathExists(absoluteDir))) {
-    return []
-  }
-  const files = await walkFiles(absoluteDir)
-  return files
-    .filter((filePath) =>
-      options.ignoreJunk
-        ? !localJunkFileNames.has(posix.basename(filePath))
-        : true,
-    )
-    .map((filePath) =>
-      toPosixPath(
-        join(options.includeRootPrefix, relative(absoluteDir, filePath)),
-      ),
-    )
-    .sort()
-}
-
-/**
  * @param {"media"|"categories"} kind
  * @param {string|undefined} image
  */
 function toThumbnailPath(kind, image) {
-  if (typeof image !== "string" || !image.startsWith("./images/")) {
+  if (typeof image !== "string") {
     return undefined
   }
-  const relativePath = image.slice("./images/".length)
+  const relativePath = image.startsWith("./images/")
+    ? image.slice("./images/".length)
+    : image.startsWith("images/")
+      ? image.slice("images/".length)
+      : undefined
   if (
     !relativePath ||
     relativePath.startsWith("/") ||
@@ -613,194 +478,25 @@ function toThumbnailPath(kind, image) {
 }
 
 /**
+ * @param {string} path
+ * @param {CheckFilesOptions} options
+ */
+function formatContentFilePath(path, options) {
+  return options.r2 ? path : toLocalContentDisplayPath(path)
+}
+
+/**
  * @param {{
- *   deletions: {displayPath:string, kind:"local-file"|"r2-object", target:string}[]
- *   logger: Logger
+ *   deletions: {displayPath:string, target:string}[]
  *   promptConfirm: (message:string)=>Promise<boolean>
  * }} args
  */
-async function confirmDeletion({ deletions, logger, promptConfirm }) {
-  logger.error("")
-  logger.error(`Files to remove (${deletions.length})`)
+async function confirmDeletion({ deletions, promptConfirm }) {
+  log.warn(`Files to remove (${deletions.length})`)
   for (const deletion of deletions) {
-    logger.error(`- ${deletion.displayPath}`)
+    log.message(`• ${deletion.displayPath}`)
   }
   return promptConfirm("Delete these files? [y/N] ")
-}
-
-/**
- * @param {{
- *   cwd: string
- *   logger: Logger
- *   r2Config: import("./support/r2.js").R2Config|undefined
- *   deletions: {displayPath:string, kind:"local-file"|"r2-object", target:string}[]
- *   options: CheckFilesOptions
- *   promptSecret?: (message: string) => Promise<string>
- *   runRclone: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
- * }} args
- */
-async function deleteItems({
-  cwd,
-  logger,
-  r2Config,
-  deletions,
-  options,
-  promptSecret,
-  runRclone,
-}) {
-  /** @type {string[]} */
-  const removed = []
-  const r2ObjectKeys = []
-  for (const deletion of deletions) {
-    try {
-      if (deletion.kind === "local-file") {
-        await unlink(deletion.target)
-        removed.push(deletion.displayPath)
-      } else {
-        if (!options.r2 || !r2Config) {
-          throw new CliError("Missing R2 config for remote deletion.")
-        }
-        r2ObjectKeys.push(deletion.target)
-      }
-    } catch (error) {
-      logger.error(
-        error instanceof Error
-          ? `Failed to delete "${deletion.displayPath}": ${error.message}`
-          : `Failed to delete "${deletion.displayPath}".`,
-      )
-    }
-  }
-  if (r2ObjectKeys.length > 0) {
-    if (!r2Config) {
-      throw new CliError("Missing R2 config for remote deletion.")
-    }
-    const removedRemoteItems = await deleteR2Objects({
-      cwd,
-      config: r2Config,
-      objectKeys: r2ObjectKeys,
-      promptSecret,
-      runRclone,
-    })
-    removed.push(...removedRemoteItems)
-    const failedRemoteItems = r2ObjectKeys.filter(
-      (item) => !removedRemoteItems.includes(item),
-    )
-    for (const item of failedRemoteItems) {
-      logger.error(`Failed to delete "${item}".`)
-    }
-  }
-  return removed
-}
-
-/**
- * @param {string} filePath
- */
-async function readJsonFile(filePath) {
-  const text = await readFile(filePath, "utf8")
-  try {
-    return JSON.parse(text)
-  } catch {
-    throw new CliError(`Invalid JSON in "${filePath}".`)
-  }
-}
-
-/**
- * @param {string} dirPath
- */
-async function listJsonFiles(dirPath) {
-  if (!(await pathExists(dirPath))) {
-    return []
-  }
-  const files = await walkFiles(dirPath)
-  return files.filter((filePath) => filePath.endsWith(".json")).sort()
-}
-
-/**
- * @param {string} dirPath
- */
-async function walkFiles(dirPath) {
-  /** @type {string[]} */
-  const files = []
-  const entries = await readdir(dirPath, { withFileTypes: true })
-  for (const entry of entries) {
-    const entryPath = join(dirPath, entry.name)
-    if (entry.isDirectory()) {
-      files.push(...(await walkFiles(entryPath)))
-    } else if (entry.isFile()) {
-      files.push(entryPath)
-    }
-  }
-  return files
-}
-
-/**
- * @param {unknown} value
- * @param {string} filePath
- */
-function readOptionalImageReference(value, filePath) {
-  if (value === undefined) {
-    return undefined
-  }
-  if (typeof value !== "string") {
-    throw new CliError(
-      `Invalid "image" in "${filePath}": expected a string when provided.`,
-    )
-  }
-  return value
-}
-
-/**
- * @param {unknown} value
- * @param {string} filePath
- * @returns {Array<{type: "upload"|"link", url: string}>}
- */
-function readContentArray(value, filePath) {
-  if (!Array.isArray(value) || value.length === 0) {
-    throw new CliError(
-      `Invalid "content" in "${filePath}": expected a non-empty array.`,
-    )
-  }
-
-  return value.map((item) => {
-    if (!isPlainObject(item)) {
-      throw new CliError(
-        `Invalid "content" in "${filePath}": expected array items to be objects.`,
-      )
-    }
-    if (item.type !== "upload" && item.type !== "link") {
-      throw new CliError(
-        `Invalid "content.type" in "${filePath}": expected "upload" or "link".`,
-      )
-    }
-    if (typeof item.url !== "string") {
-      throw new CliError(
-        `Invalid "content.url" in "${filePath}": expected a string.`,
-      )
-    }
-    return {
-      type: item.type,
-      url: item.url,
-    }
-  })
-}
-
-/**
- * @param {unknown} value
- */
-function isPlainObject(value) {
-  return typeof value === "object" && value !== null && !Array.isArray(value)
-}
-
-/**
- * @param {string} filePath
- */
-async function pathExists(filePath) {
-  try {
-    await access(filePath)
-    return true
-  } catch {
-    return false
-  }
 }
 
 /**
@@ -812,22 +508,19 @@ function toPosixPath(filePath) {
 
 /**
  * @param {string} message
- * @param {{input: NodeJS.ReadableStream, output: NodeJS.WritableStream}} io
  */
-async function defaultPromptText(message, io) {
-  const rl = createInterface(io)
-  try {
-    return await rl.question(message)
-  } finally {
-    rl.close()
-  }
+async function defaultPromptText(message) {
+  const answer = await text({ message })
+  return isCancel(answer) ? "" : String(answer)
 }
 
 /**
  * @param {string} message
- * @param {{input: NodeJS.ReadableStream, output: NodeJS.WritableStream}} io
  */
-async function defaultPromptConfirm(message, io) {
-  const answer = (await defaultPromptText(message, io)).trim().toLowerCase()
-  return answer === "y" || answer === "yes"
+async function defaultPromptConfirm(message) {
+  const answer = await confirm({
+    message,
+    initialValue: false,
+  })
+  return isCancel(answer) ? false : answer
 }
