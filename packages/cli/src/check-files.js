@@ -82,7 +82,7 @@ export async function checkFiles(options, runtime = {}) {
   const mediaItems = await collections.getMediaItems()
   const categories = await collections.getCategories()
   log.message(
-    `Checked ${mediaItems.length} media items and ${categories.length} categories.`,
+    `Checking ${mediaItems.length} media items and ${categories.length} categories.`,
   )
 
   /** @type {MissingReference[]} */
