@@ -1,5 +1,15 @@
 # @lightnet/cli
 
+## 4.4.0
+
+### Minor Changes
+
+- [#429](https://github.com/LightNetDev/LightNet/pull/429) [`00faa68`](https://github.com/LightNetDev/LightNet/commit/00faa6806bbdb74aef665d71b813449f2a15137f) - Add `check-translations --no-build` and `check-translations --build` support and improve CLI check commands.
+
+### Patch Changes
+
+- [#429](https://github.com/LightNetDev/LightNet/pull/429) [`00faa68`](https://github.com/LightNetDev/LightNet/commit/00faa6806bbdb74aef665d71b813449f2a15137f) - Rename `check-files --yes` to `check-files --no-confirm` for clearer unattended deletion.
+
 ## 4.3.0
 
 ### Minor Changes
