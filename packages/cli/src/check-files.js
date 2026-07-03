@@ -81,6 +81,9 @@ export async function checkFiles(options, runtime = {}) {
   const collections = contentCollections(cwd)
   const mediaItems = await collections.getMediaItems()
   const categories = await collections.getCategories()
+  log.message(
+    `Checked ${mediaItems.length} media items and ${categories.length} categories.`,
+  )
 
   /** @type {MissingReference[]} */
   let missingContentFiles = []
@@ -246,7 +249,7 @@ export async function checkFiles(options, runtime = {}) {
     orphanedCategoryThumbnails.length > 0
 
   if (!hasIssues && removedItems.length === 0) {
-    outro("Everything fine! 🎉")
+    outro("No issues found. 🎉")
     return true
   }
 
@@ -268,7 +271,7 @@ export async function checkFiles(options, runtime = {}) {
   printSection("Orphaned category thumbnails", orphanedCategoryThumbnails)
   printSection("Removed items", removedItems)
 
-  outro(hasIssues ? "Time to fix things 🛠️" : "Cleanup complete")
+  outro(hasIssues ? "Issues found. 🚧" : "Cleanup complete. 🧹")
 
   return !hasIssues
 }
@@ -454,10 +457,14 @@ function collectContentReferences(mediaItems, storage) {
  * @param {string|undefined} image
  */
 function toThumbnailPath(kind, image) {
-  if (typeof image !== "string" || !image.startsWith("./images/")) {
+  if (typeof image !== "string") {
     return undefined
   }
-  const relativePath = image.slice("./images/".length)
+  const relativePath = image.startsWith("./images/")
+    ? image.slice("./images/".length)
+    : image.startsWith("images/")
+      ? image.slice("images/".length)
+      : undefined
   if (
     !relativePath ||
     relativePath.startsWith("/") ||

@@ -49,7 +49,7 @@ export async function checkTranslations() {
 
   const buildAvailable = await runBuild()
   if (!buildAvailable) {
-    outro("Please fix pnpm build before running check-translations again.")
+    outro("Build failed. 🚧")
     return false
   }
   const translations = await readTranslations()
@@ -65,7 +65,7 @@ export async function checkTranslations() {
     .filter((translation) => translation.missingLocales.length > 0)
 
   if (incompleteTranslations.length === 0) {
-    outro("Everything fine! 🎉")
+    outro("No issues found. 🎉")
     return true
   }
 
@@ -79,7 +79,7 @@ export async function checkTranslations() {
     printMissingTranslations(source, grouped[source.type])
   }
 
-  outro("Time to fix things 🛠️")
+  outro("Issues found. 🚧")
 
   return false
 }
