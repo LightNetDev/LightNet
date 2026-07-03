@@ -3,7 +3,8 @@
 import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { cwd } from "node:process"
-import { intro, outro, log } from "@clack/prompts"
+import { spawn } from "node:child_process"
+import { intro, outro, log, confirm, taskLog } from "@clack/prompts"
 
 /**
  * @typedef {{
@@ -44,6 +45,12 @@ const translationSources = [
 
 export async function checkTranslations() {
   intro("check-translations")
+
+  const buildAvailable = await runBuild()
+  if (!buildAvailable) {
+    outro("Please fix pnpm build before running check-translations again.")
+    return false
+  }
   const translations = await readTranslations()
   const languages = await readLanguages()
   if (!translations || !languages || translations.length === 0) {
@@ -74,6 +81,63 @@ export async function checkTranslations() {
   outro("Time to fix things 🛠️")
 
   return false
+}
+
+async function runBuild() {
+  const shouldRunBuild = await confirm({
+    message:
+      "Run pnpm build now? Command requires an up-to-date dist/ directory.",
+    initialValue: false,
+  })
+  if (!shouldRunBuild) {
+    return true
+  }
+  const buildLog = taskLog({
+    title: "Running pnpm build",
+  })
+
+  const child = spawn("pnpm", ["build"], {
+    shell: process.platform === "win32",
+  })
+
+  child.stdout?.setEncoding("utf8")
+  child.stderr?.setEncoding("utf8")
+
+  child.stdout?.on("data", (chunk) => {
+    for (const line of chunk.trimEnd().split("\n")) {
+      if (line) {
+        buildLog.message(line)
+      }
+    }
+  })
+
+  child.stderr?.on("data", (chunk) => {
+    for (const line of chunk.trimEnd().split("\n")) {
+      if (line) {
+        buildLog.message(line)
+      }
+    }
+  })
+
+  try {
+    await new Promise((resolve, reject) => {
+      child.on("error", reject)
+
+      child.on("close", (code) => {
+        if (code === 0) {
+          resolve(0)
+        } else {
+          reject(new Error(`pnpm build failed with exit code ${code}`))
+        }
+      })
+    })
+    buildLog.success("Build completed")
+    return true
+  } catch (e) {
+    buildLog.message(`${e}`)
+    buildLog.error("pnpm build failed")
+    return false
+  }
 }
 
 /**
