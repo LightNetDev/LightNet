@@ -1,5 +1,19 @@
 # @lightnet/cli
 
+## 4.3.0
+
+### Minor Changes
+
+- [#427](https://github.com/LightNetDev/LightNet/pull/427) [`d34539d`](https://github.com/LightNetDev/LightNet/commit/d34539dc21d8e37d25cf65233ba0837675062fd7) - Add a `lightnet check-links` command that validates media content URLs without downloading linked files.
+
+- [#427](https://github.com/LightNetDev/LightNet/pull/427) [`d34539d`](https://github.com/LightNetDev/LightNet/commit/d34539dc21d8e37d25cf65233ba0837675062fd7) - check-translations will provide option to run `pnpm build`
+
+### Patch Changes
+
+- [#427](https://github.com/LightNetDev/LightNet/pull/427) [`d34539d`](https://github.com/LightNetDev/LightNet/commit/d34539dc21d8e37d25cf65233ba0837675062fd7) - Refactor check-files content storage handling.
+
+- [#427](https://github.com/LightNetDev/LightNet/pull/427) [`d34539d`](https://github.com/LightNetDev/LightNet/commit/d34539dc21d8e37d25cf65233ba0837675062fd7) - Improve output of check-translations
+
 ## 4.2.0
 
 ### Minor Changes
