@@ -25,7 +25,7 @@ const categoryImagesDir = "src/content/categories/images"
  * @typedef {{
  *   scope?: string
  *   fix?: boolean
- *   yes?: boolean
+ *   confirm?: boolean
  *   r2?: boolean
  * }} CheckFilesOptions
  */
@@ -185,13 +185,14 @@ export async function checkFiles(options, runtime = {}) {
     }
 
     if (deletions.length > 0) {
-      if (!options.yes && !interactive) {
+      const shouldSkipConfirmation = options.confirm === false
+      if (!shouldSkipConfirmation && !interactive) {
         throw new CliError(
-          'Deletion requires confirmation. Re-run with "--fix --yes" in non-interactive environments.',
+          'Deletion requires confirmation. Re-run with "--fix --no-confirm" in non-interactive environments.',
         )
       }
       const shouldDelete =
-        options.yes ||
+        shouldSkipConfirmation ||
         (await confirmDeletion({
           deletions,
           promptConfirm,
