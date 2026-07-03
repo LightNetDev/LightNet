@@ -286,7 +286,7 @@ function printSection(title, items) {
   }
   log.warn(`${title} (${items.length})`)
   for (const item of items) {
-    log.message(`· ${item}`)
+    log.message(`• ${item}`)
   }
 }
 
@@ -301,7 +301,7 @@ function printMissingReferenceSection(title, items) {
   log.error(`${title} (${items.length})`)
   for (const item of items) {
     log.message(
-      `· ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
+      `• ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
     )
   }
 }
@@ -494,7 +494,7 @@ function formatContentFilePath(path, options) {
 async function confirmDeletion({ deletions, promptConfirm }) {
   log.warn(`Files to remove (${deletions.length})`)
   for (const deletion of deletions) {
-    log.message(`· ${deletion.displayPath}`)
+    log.message(`• ${deletion.displayPath}`)
   }
   return promptConfirm("Delete these files? [y/N] ")
 }

@@ -159,7 +159,7 @@ function printMissingTranslations(source, translations) {
         t1.key.localeCompare(t2.key),
     )
     .forEach(({ key, missingLocales }) => {
-      log.message(`· ${key} > Missing: ${missingLocales.join(", ")}`)
+      log.message(`• ${key} > Missing: ${missingLocales.join(", ")}`)
     })
 
   log.message(`Action: ${source.action}`)
