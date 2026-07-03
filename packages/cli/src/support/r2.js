@@ -1,6 +1,9 @@
 // @ts-check
 
 import { execFile } from "node:child_process"
+import { mkdtemp, rm, writeFile } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import { env as processEnv } from "node:process"
 import { promisify } from "node:util"
 
@@ -15,6 +18,7 @@ import { CliError } from "./cli-error.js"
 
 const execFileAsync = promisify(execFile)
 const sessionSecretEnvName = "LIGHTNET_R2_SECRET_ACCESS_KEY"
+const r2DeleteBatchSize = 1000
 
 /**
  * @typedef {{
@@ -117,18 +121,16 @@ export function createR2FileStorage({
   const storage = {
     async init() {
       await getConfig()
+      await getSecretAccessKey()
       return storage
     },
     async list() {
       return runWithRefresh(async (config) => {
-        const secretAccessKey = await getSecretAccessKey()
-        const sharedArgs = {
+        const bucketObjects = await listR2Objects({
           cwd,
           config,
-          secretAccessKey,
-        }
-        await assertR2Access(sharedArgs)
-        const bucketObjects = await listR2Objects(sharedArgs)
+          secretAccessKey: await getSecretAccessKey(),
+        })
         return bucketObjects.map((item) => item.key).sort()
       })
     },
@@ -138,22 +140,12 @@ export function createR2FileStorage({
     async delete(paths) {
       const r2Config = await getConfig()
       const secretAccessKey = await getSecretAccessKey()
-      /** @type {string[]} */
-      const removed = []
-      for (const path of paths) {
-        try {
-          await runConfiguredRclone({
-            args: ["deletefile", makeR2Path(r2Config, path)],
-            cwd,
-            config: r2Config,
-            secretAccessKey,
-          })
-          removed.push(path)
-        } catch {
-          // The caller prints per-file failures based on the returned paths.
-        }
-      }
-      return removed
+      return deleteR2Objects({
+        config: r2Config,
+        cwd,
+        paths,
+        secretAccessKey,
+      })
     },
     /**
      * @param {string} url
@@ -167,32 +159,134 @@ export function createR2FileStorage({
         return undefined
       }
       const path = url.slice(normalizedBase.length).replace(/^\/+/, "")
-      return path || undefined
+      return decodeR2ObjectPath(path) || undefined
     },
   }
   return storage
 }
 
 /**
+ * @param {string} path
+ */
+function decodeR2ObjectPath(path) {
+  try {
+    return decodeURIComponent(path)
+  } catch {
+    return path
+  }
+}
+
+/**
  * @param {{
- *   cwd: string
  *   config: R2Config
+ *   cwd: string
+ *   paths: string[]
  *   secretAccessKey: string
  * }} args
  */
-async function assertR2Access(args) {
-  try {
-    await runConfiguredRclone({
-      args: ["lsjson", makeR2Path(args.config), "--files-only"],
-      ...args,
-    })
-  } catch (error) {
-    throw new CliError(
-      error instanceof Error
-        ? `Unable to access R2 bucket "${args.config.bucket}": ${error.message}`
-        : `Unable to access R2 bucket "${args.config.bucket}".`,
-    )
+async function deleteR2Objects({ config, cwd, paths, secretAccessKey }) {
+  /** @type {string[]} */
+  const removed = []
+  const batchablePaths = paths.filter((path) => !path.includes("\n"))
+  const singleDeletePaths = paths.filter((path) => path.includes("\n"))
+
+  for (
+    let index = 0;
+    index < batchablePaths.length;
+    index += r2DeleteBatchSize
+  ) {
+    const batch = batchablePaths.slice(index, index + r2DeleteBatchSize)
+    try {
+      await deleteR2ObjectBatch({ config, cwd, paths: batch, secretAccessKey })
+      removed.push(...batch)
+    } catch {
+      removed.push(
+        ...(await deleteR2ObjectsIndividually({
+          config,
+          cwd,
+          paths: batch,
+          secretAccessKey,
+        })),
+      )
+    }
   }
+
+  removed.push(
+    ...(await deleteR2ObjectsIndividually({
+      config,
+      cwd,
+      paths: singleDeletePaths,
+      secretAccessKey,
+    })),
+  )
+
+  return removed
+}
+
+/**
+ * @param {{
+ *   config: R2Config
+ *   cwd: string
+ *   paths: string[]
+ *   secretAccessKey: string
+ * }} args
+ */
+async function deleteR2ObjectBatch({ config, cwd, paths, secretAccessKey }) {
+  if (paths.length === 0) {
+    return
+  }
+
+  const tempDir = await mkdtemp(join(tmpdir(), "lightnet-r2-delete-"))
+  const fileListPath = join(tempDir, "files.txt")
+  try {
+    await writeFile(fileListPath, `${paths.join("\n")}\n`, "utf8")
+    await runConfiguredRclone({
+      args: [
+        "delete",
+        makeR2Path(config),
+        "--files-from-raw",
+        fileListPath,
+        "--fast-list",
+      ],
+      cwd,
+      config,
+      secretAccessKey,
+    })
+  } finally {
+    await rm(tempDir, { force: true, recursive: true })
+  }
+}
+
+/**
+ * @param {{
+ *   config: R2Config
+ *   cwd: string
+ *   paths: string[]
+ *   secretAccessKey: string
+ * }} args
+ */
+async function deleteR2ObjectsIndividually({
+  config,
+  cwd,
+  paths,
+  secretAccessKey,
+}) {
+  /** @type {string[]} */
+  const removed = []
+  for (const path of paths) {
+    try {
+      await runConfiguredRclone({
+        args: ["deletefile", makeR2Path(config, path)],
+        cwd,
+        config,
+        secretAccessKey,
+      })
+      removed.push(path)
+    } catch {
+      // The caller prints per-file failures based on the returned paths.
+    }
+  }
+  return removed
 }
 
 /**
@@ -203,18 +297,28 @@ async function assertR2Access(args) {
  * }} args
  */
 async function listR2Objects(args) {
-  const { stdout: listJson } = await runConfiguredRclone({
-    args: [
-      "lsjson",
-      makeR2Path(args.config),
-      "--recursive",
-      "--files-only",
-      "--fast-list",
-      "--no-mimetype",
-      "--no-modtime",
-    ],
-    ...args,
-  })
+  let listJson
+  try {
+    const result = await runConfiguredRclone({
+      args: [
+        "lsjson",
+        makeR2Path(args.config),
+        "--recursive",
+        "--files-only",
+        "--fast-list",
+        "--no-mimetype",
+        "--no-modtime",
+      ],
+      ...args,
+    })
+    listJson = result.stdout
+  } catch (error) {
+    throw new CliError(
+      error instanceof Error
+        ? `Unable to access R2 bucket "${args.config.bucket}": ${error.message}`
+        : `Unable to access R2 bucket "${args.config.bucket}".`,
+    )
+  }
 
   let parsed
   try {

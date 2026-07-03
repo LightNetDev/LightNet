@@ -3,7 +3,15 @@
 import { join, posix, resolve } from "node:path"
 import { cwd as processCwd, stdin, stdout } from "node:process"
 
-import { confirm, intro, isCancel, log, outro, text } from "@clack/prompts"
+import {
+  confirm,
+  intro,
+  isCancel,
+  log,
+  outro,
+  spinner,
+  text,
+} from "@clack/prompts"
 
 import { CliError } from "./support/cli-error.js"
 import { contentCollections } from "./support/content-collections.js"
@@ -48,6 +56,8 @@ const categoryImagesDir = "src/content/categories/images"
  * }} FileReference
  */
 
+/** @typedef {MissingReference} WrongTypeReference */
+
 /**
  * @typedef {{
  *   cwd?: string
@@ -79,14 +89,15 @@ export async function checkFiles(options, runtime = {}) {
   await assertLightNetSiteRoot(cwd)
 
   const collections = contentCollections(cwd)
-  const mediaItems = await collections.getMediaItems()
-  const categories = await collections.getCategories()
-  log.message(
-    `Checking ${mediaItems.length} media items and ${categories.length} categories.`,
-  )
+  const [mediaItems, categories] = await Promise.all([
+    collections.getMediaItems(),
+    collections.getCategories(),
+  ])
 
   /** @type {MissingReference[]} */
   let missingContentFiles = []
+  /** @type {WrongTypeReference[]} */
+  let wrongTypeR2ContentFiles = []
   /** @type {string[]} */
   let orphanedContentFiles = []
   /** @type {string[]} */
@@ -104,18 +115,40 @@ export async function checkFiles(options, runtime = {}) {
   const categoryThumbnailStorage = files(cwd, { rootDir: categoryImagesDir })
 
   if (includeContentFiles) {
+    contentFileStorage = options.r2
+      ? createR2FileStorage({
+          cwd,
+          interactive,
+          promptConfirm,
+          promptText,
+        })
+      : contentFiles(cwd)
+    contentFileStorage = await contentFileStorage.init()
+  }
+
+  log.message(
+    `Checking ${mediaItems.length} media items and ${categories.length} categories.`,
+  )
+
+  if (includeContentFiles) {
+    if (!contentFileStorage) {
+      throw new CliError("Missing file storage for content validation.")
+    }
+    const initializedContentFileStorage = contentFileStorage
     if (options.r2) {
-      contentFileStorage = createR2FileStorage({
-        cwd,
-        interactive,
-        promptConfirm,
-        promptText,
-      })
-      const r2Result = await validateContentFiles({
-        mediaItems,
-        storage: contentFileStorage,
+      const r2Result = await runSpinner({
+        error: "Content file check failed.",
+        start: "Listing R2 objects and checking content file references",
+        stop: (result) => formatContentCheckSummary(result),
+        task: () =>
+          validateContentFiles({
+            includeLinkReferences: true,
+            mediaItems,
+            storage: initializedContentFileStorage,
+          }),
       })
       missingContentFiles = r2Result.missingReferences
+      wrongTypeR2ContentFiles = r2Result.wrongTypeReferences
       orphanedContentFiles = r2Result.orphanedFiles
       if (r2Result.referenceCount === 0) {
         warnings.push(
@@ -123,10 +156,15 @@ export async function checkFiles(options, runtime = {}) {
         )
       }
     } else {
-      contentFileStorage = contentFiles(cwd)
-      const localContentResult = await validateContentFiles({
-        mediaItems,
-        storage: contentFileStorage,
+      const localContentResult = await runSpinner({
+        error: "Content file check failed.",
+        start: "Checking local content files",
+        stop: (result) => formatContentCheckSummary(result),
+        task: () =>
+          validateContentFiles({
+            mediaItems,
+            storage: initializedContentFileStorage,
+          }),
       })
       missingContentFiles = localContentResult.missingReferences
       orphanedContentFiles = localContentResult.orphanedFiles
@@ -139,12 +177,19 @@ export async function checkFiles(options, runtime = {}) {
   }
 
   if (includeThumbnails) {
-    const thumbnailsResult = await validateThumbnails(
-      mediaItems,
-      categories,
-      mediaThumbnailStorage,
-      categoryThumbnailStorage,
-    )
+    const thumbnailsResult = await runSpinner({
+      error: "Thumbnail check failed.",
+      start: "Checking thumbnails",
+      stop: (result) =>
+        `Checked thumbnails: ${result.orphanedMediaThumbnails.length} orphaned media, ${result.orphanedCategoryThumbnails.length} orphaned categories.`,
+      task: () =>
+        validateThumbnails(
+          mediaItems,
+          categories,
+          mediaThumbnailStorage,
+          categoryThumbnailStorage,
+        ),
+    })
     orphanedMediaThumbnails = thumbnailsResult.orphanedMediaThumbnails
     orphanedCategoryThumbnails = thumbnailsResult.orphanedCategoryThumbnails
   }
@@ -199,25 +244,52 @@ export async function checkFiles(options, runtime = {}) {
         }))
 
       if (shouldDelete) {
-        const deletedContentTargets = contentFileStorage
-          ? await contentFileStorage.delete(
-              contentDeletions.map((deletion) => deletion.target),
-            )
-          : []
-        const deletedLocalTargets = [
-          ...(await mediaThumbnailStorage.delete(
-            localDeletions
-              .filter((deletion) => deletion.target.startsWith(mediaImagesDir))
-              .map((deletion) => deletion.target),
-          )),
-          ...(await categoryThumbnailStorage.delete(
-            localDeletions
-              .filter((deletion) =>
-                deletion.target.startsWith(categoryImagesDir),
-              )
-              .map((deletion) => deletion.target),
-          )),
-        ]
+        const { deletedContentTargets, deletedLocalTargets } = await runSpinner(
+          {
+            error: "File deletion failed.",
+            start: formatDeletionProgress("Deleting", deletions.length),
+            stop: (result) => {
+              const deletedCount =
+                result.deletedContentTargets.length +
+                result.deletedLocalTargets.length
+              return formatDeletionProgress("Deleted", deletedCount)
+            },
+            task: async () => {
+              const [
+                deletedContentTargets,
+                deletedMediaThumbnailTargets,
+                deletedCategoryThumbnailTargets,
+              ] = await Promise.all([
+                contentFileStorage
+                  ? contentFileStorage.delete(
+                      contentDeletions.map((deletion) => deletion.target),
+                    )
+                  : [],
+                mediaThumbnailStorage.delete(
+                  localDeletions
+                    .filter((deletion) =>
+                      deletion.target.startsWith(mediaImagesDir),
+                    )
+                    .map((deletion) => deletion.target),
+                ),
+                categoryThumbnailStorage.delete(
+                  localDeletions
+                    .filter((deletion) =>
+                      deletion.target.startsWith(categoryImagesDir),
+                    )
+                    .map((deletion) => deletion.target),
+                ),
+              ])
+              return {
+                deletedContentTargets,
+                deletedLocalTargets: [
+                  ...deletedMediaThumbnailTargets,
+                  ...deletedCategoryThumbnailTargets,
+                ],
+              }
+            },
+          },
+        )
         const deletedTargets = new Set([
           ...deletedContentTargets,
           ...deletedLocalTargets,
@@ -245,6 +317,7 @@ export async function checkFiles(options, runtime = {}) {
   const hasIssues =
     warnings.length > 0 ||
     missingContentFiles.length > 0 ||
+    wrongTypeR2ContentFiles.length > 0 ||
     orphanedContentFiles.length > 0 ||
     orphanedMediaThumbnails.length > 0 ||
     orphanedCategoryThumbnails.length > 0
@@ -261,6 +334,10 @@ export async function checkFiles(options, runtime = {}) {
   printMissingReferenceSection(
     "Missing referenced content files",
     missingContentFiles,
+  )
+  printWrongTypeReferenceSection(
+    "R2 objects referenced as links",
+    wrongTypeR2ContentFiles,
   )
   printSection(
     options.r2 ? "Orphaned R2 objects" : "Orphaned local content files",
@@ -305,6 +382,64 @@ function printMissingReferenceSection(title, items) {
       `• ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
     )
   }
+}
+
+/**
+ * @param {string} title
+ * @param {WrongTypeReference[]} items
+ */
+function printWrongTypeReferenceSection(title, items) {
+  if (items.length === 0) {
+    return
+  }
+  log.warn(`${title} (${items.length})`)
+  for (const item of items) {
+    log.message(
+      `• ${item.path} should use type "upload" (referenced by ${item.sources.toSorted().join(", ")})`,
+    )
+  }
+}
+
+/**
+ * @template T
+ * @param {{
+ *   error: string
+ *   start: string
+ *   stop: (result: T) => string
+ *   task: () => Promise<T>
+ * }} args
+ * @returns {Promise<T>}
+ */
+async function runSpinner({ error, start, stop, task }) {
+  const activeSpinner = spinner()
+  activeSpinner.start(start)
+  try {
+    const result = await task()
+    activeSpinner.stop(stop(result))
+    return result
+  } catch (caughtError) {
+    activeSpinner.error(error)
+    throw caughtError
+  }
+}
+
+/**
+ * @param {{
+ *   missingReferences: MissingReference[]
+ *   orphanedFiles: string[]
+ *   referenceCount: number
+ * }} result
+ */
+function formatContentCheckSummary(result) {
+  return `Checked content files: ${result.referenceCount} references, ${result.missingReferences.length} missing, ${result.orphanedFiles.length} orphaned.`
+}
+
+/**
+ * @param {string} action
+ * @param {number} count
+ */
+function formatDeletionProgress(action, count) {
+  return `${action} ${count} orphaned file${count === 1 ? "" : "s"}.`
 }
 
 /**
@@ -369,10 +504,15 @@ async function validateThumbnails(
       .filter((value) => value !== undefined),
   )
 
-  const initializedMediaStorage = await mediaThumbnailStorage.init()
-  const initializedCategoryStorage = await categoryThumbnailStorage.init()
-  const mediaFiles = await initializedMediaStorage.list()
-  const categoryFiles = await initializedCategoryStorage.list()
+  const [initializedMediaStorage, initializedCategoryStorage] =
+    await Promise.all([
+      mediaThumbnailStorage.init(),
+      categoryThumbnailStorage.init(),
+    ])
+  const [mediaFiles, categoryFiles] = await Promise.all([
+    initializedMediaStorage.list(),
+    initializedCategoryStorage.list(),
+  ])
 
   return {
     orphanedMediaThumbnails: mediaFiles.filter(
@@ -386,18 +526,28 @@ async function validateThumbnails(
 
 /**
  * @param {{
+ *   includeLinkReferences?: boolean
  *   mediaItems: MediaItem[]
  *   storage: FileStorage
  * }} args
  */
-async function validateContentFiles({ mediaItems, storage }) {
+async function validateContentFiles({
+  includeLinkReferences = false,
+  mediaItems,
+  storage,
+}) {
   const initializedStorage = await storage.init()
-  const references = collectContentReferences(mediaItems, initializedStorage)
+  const { references, wrongTypeReferences } = collectContentReferences(
+    mediaItems,
+    initializedStorage,
+    { includeLinkReferences },
+  )
   if (references.size === 0) {
     return {
       missingReferences: /** @type {MissingReference[]} */ ([]),
       orphanedFiles: /** @type {string[]} */ ([]),
       referenceCount: 0,
+      wrongTypeReferences: /** @type {WrongTypeReference[]} */ ([]),
     }
   }
 
@@ -416,41 +566,74 @@ async function validateContentFiles({ mediaItems, storage }) {
     .filter((filePath) => !references.has(filePath))
     .sort()
 
+  const existingWrongTypeReferences = [...wrongTypeReferences.entries()]
+    .filter(([path]) => fileSet.has(path))
+    .map(([, reference]) => ({
+      path: reference.displayPath,
+      sources: [...reference.sources].toSorted(),
+    }))
+    .sort((a, b) => a.path.localeCompare(b.path))
+
   return {
     missingReferences,
     orphanedFiles,
     referenceCount: references.size,
+    wrongTypeReferences: existingWrongTypeReferences,
   }
 }
 
 /**
  * @param {MediaItem[]} mediaItems
  * @param {FileStorage} storage
+ * @param {{includeLinkReferences:boolean}} options
  */
-function collectContentReferences(mediaItems, storage) {
+function collectContentReferences(mediaItems, storage, options) {
   const references = new Map()
+  const wrongTypeReferences = new Map()
   for (const item of mediaItems) {
     const sourceFileName = posix.basename(toPosixPath(item.path))
     for (const contentItem of item.content) {
-      if (contentItem.type !== "upload") {
+      const isLinkReference = contentItem.type === "link"
+      if (
+        contentItem.type !== "upload" &&
+        !(options.includeLinkReferences && isLinkReference)
+      ) {
         continue
       }
       const filePath = storage.toPath(contentItem.url)
       if (!filePath) {
         continue
       }
-      const current = references.get(filePath)
-      if (current) {
-        current.sources.add(sourceFileName)
-      } else {
-        references.set(filePath, {
-          displayPath: contentItem.url,
-          sources: new Set([sourceFileName]),
-        })
+      addFileReference(references, filePath, contentItem.url, sourceFileName)
+      if (isLinkReference) {
+        addFileReference(
+          wrongTypeReferences,
+          filePath,
+          contentItem.url,
+          sourceFileName,
+        )
       }
     }
   }
-  return references
+  return { references, wrongTypeReferences }
+}
+
+/**
+ * @param {Map<string, FileReference>} references
+ * @param {string} filePath
+ * @param {string} displayPath
+ * @param {string} sourceFileName
+ */
+function addFileReference(references, filePath, displayPath, sourceFileName) {
+  const current = references.get(filePath)
+  if (current) {
+    current.sources.add(sourceFileName)
+    return
+  }
+  references.set(filePath, {
+    displayPath,
+    sources: new Set([sourceFileName]),
+  })
 }
 
 /**

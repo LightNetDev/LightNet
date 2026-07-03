@@ -58,23 +58,24 @@ export function files(cwd, options) {
      * @param {string[]} paths
      */
     async delete(paths) {
-      /** @type {string[]} */
-      const removed = []
-      for (const path of paths) {
-        try {
-          await unlink(
-            resolve(
-              cwd,
-              options.toAbsolutePath?.(path) ??
-                toLocalFilePath(options.rootDir, path),
-            ),
-          )
-          removed.push(path)
-        } catch {
-          // The caller prints per-file failures based on the returned paths.
-        }
-      }
-      return removed
+      const removals = await Promise.all(
+        paths.map(async (path) => {
+          try {
+            await unlink(
+              resolve(
+                cwd,
+                options.toAbsolutePath?.(path) ??
+                  toLocalFilePath(options.rootDir, path),
+              ),
+            )
+            return path
+          } catch {
+            // The caller prints per-file failures based on the returned paths.
+            return undefined
+          }
+        }),
+      )
+      return removals.filter((path) => path !== undefined)
     },
     /**
      * @param {string} url
@@ -161,13 +162,17 @@ async function walkFiles(dirPath) {
   /** @type {string[]} */
   const files = []
   const entries = await readdir(dirPath, { withFileTypes: true })
-  for (const entry of entries) {
-    const entryPath = join(dirPath, entry.name)
-    if (entry.isDirectory()) {
-      files.push(...(await walkFiles(entryPath)))
-    } else if (entry.isFile()) {
-      files.push(entryPath)
-    }
+  const nestedFiles = await Promise.all(
+    entries.map(async (entry) => {
+      const entryPath = join(dirPath, entry.name)
+      if (entry.isDirectory()) {
+        return walkFiles(entryPath)
+      }
+      return entry.isFile() ? [entryPath] : []
+    }),
+  )
+  for (const item of nestedFiles) {
+    files.push(...item)
   }
   return files
 }

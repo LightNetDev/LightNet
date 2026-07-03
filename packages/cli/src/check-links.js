@@ -3,7 +3,7 @@
 import { posix, resolve } from "node:path"
 import { cwd as processCwd, stdin, stdout } from "node:process"
 
-import { intro, isCancel, log, outro, text } from "@clack/prompts"
+import { intro, isCancel, log, outro, progress, text } from "@clack/prompts"
 
 import {
   cliConfigFileName,
@@ -96,12 +96,10 @@ export async function checkLinks(options, runtime = {}) {
     return true
   }
 
-  const results = await mapConcurrent(
-    references,
-    defaultConcurrency,
-    (reference) =>
-      checkLink(reference.resolvedUrl, { fetch: runFetch, timeoutMs }),
-  )
+  const results = await checkReferencesWithProgress(references, {
+    fetch: runFetch,
+    timeoutMs,
+  })
   const checkedLinks = references
     .map((reference, index) => ({ reference, result: results[index] }))
     .sort((a, b) =>
@@ -139,6 +137,46 @@ export async function checkLinks(options, runtime = {}) {
   outro("Issues found. 🚧")
 
   return false
+}
+
+/**
+ * @param {LinkReference[]} references
+ * @param {{fetch: typeof fetch, timeoutMs: number}} options
+ */
+async function checkReferencesWithProgress(references, options) {
+  const linkProgress = progress({ max: references.length })
+  let completed = 0
+  linkProgress.start(`Checking links (0/${references.length})`)
+
+  try {
+    const results = await mapConcurrent(
+      references,
+      defaultConcurrency,
+      async (reference) => {
+        const result = await checkLink(reference.resolvedUrl, options)
+        completed += 1
+        linkProgress.advance(
+          1,
+          `Checking links (${completed}/${references.length})`,
+        )
+        return result
+      },
+    )
+    const protectedCount = results.filter((result) =>
+      isProtectedLink(result),
+    ).length
+    const unavailableCount = results.filter(
+      (result) => !result.ok && !isProtectedLink(result),
+    ).length
+    const availableCount = results.length - protectedCount - unavailableCount
+    linkProgress.stop(
+      `Checked links: ${availableCount} available, ${protectedCount} protected, ${unavailableCount} unavailable.`,
+    )
+    return results
+  } catch (error) {
+    linkProgress.error("Link check failed.")
+    throw error
+  }
 }
 
 /**
