@@ -56,6 +56,8 @@ const categoryImagesDir = "src/content/categories/images"
  * }} FileReference
  */
 
+/** @typedef {MissingReference} WrongTypeReference */
+
 /**
  * @typedef {{
  *   cwd?: string
@@ -94,6 +96,8 @@ export async function checkFiles(options, runtime = {}) {
 
   /** @type {MissingReference[]} */
   let missingContentFiles = []
+  /** @type {WrongTypeReference[]} */
+  let wrongTypeR2ContentFiles = []
   /** @type {string[]} */
   let orphanedContentFiles = []
   /** @type {string[]} */
@@ -138,11 +142,13 @@ export async function checkFiles(options, runtime = {}) {
         stop: (result) => formatContentCheckSummary(result),
         task: () =>
           validateContentFiles({
+            includeLinkReferences: true,
             mediaItems,
             storage: initializedContentFileStorage,
           }),
       })
       missingContentFiles = r2Result.missingReferences
+      wrongTypeR2ContentFiles = r2Result.wrongTypeReferences
       orphanedContentFiles = r2Result.orphanedFiles
       if (r2Result.referenceCount === 0) {
         warnings.push(
@@ -311,6 +317,7 @@ export async function checkFiles(options, runtime = {}) {
   const hasIssues =
     warnings.length > 0 ||
     missingContentFiles.length > 0 ||
+    wrongTypeR2ContentFiles.length > 0 ||
     orphanedContentFiles.length > 0 ||
     orphanedMediaThumbnails.length > 0 ||
     orphanedCategoryThumbnails.length > 0
@@ -327,6 +334,10 @@ export async function checkFiles(options, runtime = {}) {
   printMissingReferenceSection(
     "Missing referenced content files",
     missingContentFiles,
+  )
+  printWrongTypeReferenceSection(
+    "R2 objects referenced as links",
+    wrongTypeR2ContentFiles,
   )
   printSection(
     options.r2 ? "Orphaned R2 objects" : "Orphaned local content files",
@@ -369,6 +380,22 @@ function printMissingReferenceSection(title, items) {
   for (const item of items) {
     log.message(
       `• ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
+    )
+  }
+}
+
+/**
+ * @param {string} title
+ * @param {WrongTypeReference[]} items
+ */
+function printWrongTypeReferenceSection(title, items) {
+  if (items.length === 0) {
+    return
+  }
+  log.warn(`${title} (${items.length})`)
+  for (const item of items) {
+    log.message(
+      `• ${item.path} should use type "upload" (referenced by ${item.sources.toSorted().join(", ")})`,
     )
   }
 }
@@ -499,18 +526,28 @@ async function validateThumbnails(
 
 /**
  * @param {{
+ *   includeLinkReferences?: boolean
  *   mediaItems: MediaItem[]
  *   storage: FileStorage
  * }} args
  */
-async function validateContentFiles({ mediaItems, storage }) {
+async function validateContentFiles({
+  includeLinkReferences = false,
+  mediaItems,
+  storage,
+}) {
   const initializedStorage = await storage.init()
-  const references = collectContentReferences(mediaItems, initializedStorage)
+  const { references, wrongTypeReferences } = collectContentReferences(
+    mediaItems,
+    initializedStorage,
+    { includeLinkReferences },
+  )
   if (references.size === 0) {
     return {
       missingReferences: /** @type {MissingReference[]} */ ([]),
       orphanedFiles: /** @type {string[]} */ ([]),
       referenceCount: 0,
+      wrongTypeReferences: /** @type {WrongTypeReference[]} */ ([]),
     }
   }
 
@@ -529,41 +566,74 @@ async function validateContentFiles({ mediaItems, storage }) {
     .filter((filePath) => !references.has(filePath))
     .sort()
 
+  const existingWrongTypeReferences = [...wrongTypeReferences.entries()]
+    .filter(([path]) => fileSet.has(path))
+    .map(([, reference]) => ({
+      path: reference.displayPath,
+      sources: [...reference.sources].toSorted(),
+    }))
+    .sort((a, b) => a.path.localeCompare(b.path))
+
   return {
     missingReferences,
     orphanedFiles,
     referenceCount: references.size,
+    wrongTypeReferences: existingWrongTypeReferences,
   }
 }
 
 /**
  * @param {MediaItem[]} mediaItems
  * @param {FileStorage} storage
+ * @param {{includeLinkReferences:boolean}} options
  */
-function collectContentReferences(mediaItems, storage) {
+function collectContentReferences(mediaItems, storage, options) {
   const references = new Map()
+  const wrongTypeReferences = new Map()
   for (const item of mediaItems) {
     const sourceFileName = posix.basename(toPosixPath(item.path))
     for (const contentItem of item.content) {
-      if (contentItem.type !== "upload") {
+      const isLinkReference = contentItem.type === "link"
+      if (
+        contentItem.type !== "upload" &&
+        !(options.includeLinkReferences && isLinkReference)
+      ) {
         continue
       }
       const filePath = storage.toPath(contentItem.url)
       if (!filePath) {
         continue
       }
-      const current = references.get(filePath)
-      if (current) {
-        current.sources.add(sourceFileName)
-      } else {
-        references.set(filePath, {
-          displayPath: contentItem.url,
-          sources: new Set([sourceFileName]),
-        })
+      addFileReference(references, filePath, contentItem.url, sourceFileName)
+      if (isLinkReference) {
+        addFileReference(
+          wrongTypeReferences,
+          filePath,
+          contentItem.url,
+          sourceFileName,
+        )
       }
     }
   }
-  return references
+  return { references, wrongTypeReferences }
+}
+
+/**
+ * @param {Map<string, FileReference>} references
+ * @param {string} filePath
+ * @param {string} displayPath
+ * @param {string} sourceFileName
+ */
+function addFileReference(references, filePath, displayPath, sourceFileName) {
+  const current = references.get(filePath)
+  if (current) {
+    current.sources.add(sourceFileName)
+    return
+  }
+  references.set(filePath, {
+    displayPath,
+    sources: new Set([sourceFileName]),
+  })
 }
 
 /**
