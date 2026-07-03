@@ -159,10 +159,21 @@ export function createR2FileStorage({
         return undefined
       }
       const path = url.slice(normalizedBase.length).replace(/^\/+/, "")
-      return path || undefined
+      return decodeR2ObjectPath(path) || undefined
     },
   }
   return storage
+}
+
+/**
+ * @param {string} path
+ */
+function decodeR2ObjectPath(path) {
+  try {
+    return decodeURIComponent(path)
+  } catch {
+    return path
+  }
 }
 
 /**
