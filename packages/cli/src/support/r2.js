@@ -1,18 +1,19 @@
 // @ts-check
 
 import { execFile } from "node:child_process"
-import { access, readFile, writeFile } from "node:fs/promises"
-import { resolve } from "node:path"
 import { env as processEnv } from "node:process"
 import { promisify } from "node:util"
 
 import { isCancel, log, password } from "@clack/prompts"
 
+import {
+  cliConfigFileName,
+  readCliConfig,
+  writeCliConfig,
+} from "./cli-config.js"
 import { CliError } from "./cli-error.js"
 
 const execFileAsync = promisify(execFile)
-const cliConfigFileName = ".lightnet-cli.config.json"
-const gitIgnoreEntry = `${cliConfigFileName}\n`
 const sessionSecretEnvName = "LIGHTNET_R2_SECRET_ACCESS_KEY"
 
 /**
@@ -288,12 +289,7 @@ async function promptForR2Config({ cwd, promptText }) {
     },
   }
 
-  await writeFile(
-    resolve(cwd, cliConfigFileName),
-    `${JSON.stringify(nextConfig, null, 2)}\n`,
-    "utf8",
-  )
-  await ensureGitignoreContainsConfig(cwd)
+  await writeCliConfig(cwd, nextConfig)
 
   return nextConfig.r2
 }
@@ -335,22 +331,6 @@ async function promptRequiredText(promptText, message) {
 }
 
 /**
- * @param {string} cwd
- */
-async function readCliConfig(cwd) {
-  const filePath = resolve(cwd, cliConfigFileName)
-  if (!(await pathExists(filePath))) {
-    return undefined
-  }
-  const contents = await readFile(filePath, "utf8")
-  try {
-    return JSON.parse(contents)
-  } catch {
-    throw new CliError(`Invalid JSON in "${cliConfigFileName}".`)
-  }
-}
-
-/**
  * @param {unknown} config
  * @returns {R2Config|undefined}
  */
@@ -377,23 +357,6 @@ function parseR2Config(config) {
     return undefined
   }
   return { publicUrl, accountId, accessKeyId, bucket }
-}
-
-/**
- * @param {string} cwd
- */
-async function ensureGitignoreContainsConfig(cwd) {
-  const filePath = resolve(cwd, ".gitignore")
-  const contents = (await pathExists(filePath))
-    ? await readFile(filePath, "utf8")
-    : ""
-  if (contents.includes(cliConfigFileName)) {
-    return
-  }
-  const next = contents
-    ? `${contents}${contents.endsWith("\n") ? "" : "\n"}${gitIgnoreEntry}`
-    : gitIgnoreEntry
-  await writeFile(filePath, next, "utf8")
 }
 
 /**
@@ -441,18 +404,6 @@ function getSanitizedRcloneError(error) {
     }
   }
   return "rclone command failed."
-}
-
-/**
- * @param {string} filePath
- */
-async function pathExists(filePath) {
-  try {
-    await access(filePath)
-    return true
-  } catch {
-    return false
-  }
 }
 
 /**

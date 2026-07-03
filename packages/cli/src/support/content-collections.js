@@ -47,12 +47,7 @@ export function contentCollections(cwd) {
   return {
     async getMediaItems() {
       const files = await jsonFiles(resolve(cwd, mediaDir))
-      /** @type {MediaItem[]} */
-      const items = []
-      for (const filePath of files) {
-        items.push(await readMediaItem(cwd, filePath))
-      }
-      return items
+      return Promise.all(files.map((filePath) => readMediaItem(cwd, filePath)))
     },
     async getCategories() {
       const absoluteDir = resolve(cwd, categoriesDir)
@@ -60,12 +55,7 @@ export function contentCollections(cwd) {
         return []
       }
       const files = await jsonFiles(absoluteDir)
-      /** @type {Category[]} */
-      const items = []
-      for (const filePath of files) {
-        items.push(await readCategory(cwd, filePath))
-      }
-      return items
+      return Promise.all(files.map((filePath) => readCategory(cwd, filePath)))
     },
   }
 }

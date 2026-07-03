@@ -5,6 +5,7 @@ import { Command } from "commander"
 
 import pkg from "../package.json" with { type: "json" }
 import { checkFiles } from "./check-files.js"
+import { checkLinks } from "./check-links.js"
 import { checkTranslations } from "./check-translations.js"
 import { CliError } from "./support/cli-error.js"
 const { version } = pkg
@@ -43,6 +44,24 @@ program
   .action(async (options) => {
     try {
       const checkSuccessful = await checkFiles(options)
+      commandExitCode = checkSuccessful ? 0 : 1
+    } catch (error) {
+      if (error instanceof CliError) {
+        console.error(error.message)
+        commandExitCode = 1
+        return
+      }
+      throw error
+    }
+  })
+
+program
+  .command("check-links")
+  .description("check media content links in a LightNet site")
+  .option("--timeout <ms>", "request timeout per link in milliseconds")
+  .action(async (options) => {
+    try {
+      const checkSuccessful = await checkLinks(options)
       commandExitCode = checkSuccessful ? 0 : 1
     } catch (error) {
       if (error instanceof CliError) {
