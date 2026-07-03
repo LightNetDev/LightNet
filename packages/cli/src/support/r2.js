@@ -117,18 +117,16 @@ export function createR2FileStorage({
   const storage = {
     async init() {
       await getConfig()
+      await getSecretAccessKey()
       return storage
     },
     async list() {
       return runWithRefresh(async (config) => {
-        const secretAccessKey = await getSecretAccessKey()
-        const sharedArgs = {
+        const bucketObjects = await listR2Objects({
           cwd,
           config,
-          secretAccessKey,
-        }
-        await assertR2Access(sharedArgs)
-        const bucketObjects = await listR2Objects(sharedArgs)
+          secretAccessKey: await getSecretAccessKey(),
+        })
         return bucketObjects.map((item) => item.key).sort()
       })
     },
@@ -180,12 +178,22 @@ export function createR2FileStorage({
  *   secretAccessKey: string
  * }} args
  */
-async function assertR2Access(args) {
+async function listR2Objects(args) {
+  let listJson
   try {
-    await runConfiguredRclone({
-      args: ["lsjson", makeR2Path(args.config), "--files-only"],
+    const result = await runConfiguredRclone({
+      args: [
+        "lsjson",
+        makeR2Path(args.config),
+        "--recursive",
+        "--files-only",
+        "--fast-list",
+        "--no-mimetype",
+        "--no-modtime",
+      ],
       ...args,
     })
+    listJson = result.stdout
   } catch (error) {
     throw new CliError(
       error instanceof Error
@@ -193,28 +201,6 @@ async function assertR2Access(args) {
         : `Unable to access R2 bucket "${args.config.bucket}".`,
     )
   }
-}
-
-/**
- * @param {{
- *   cwd: string
- *   config: R2Config
- *   secretAccessKey: string
- * }} args
- */
-async function listR2Objects(args) {
-  const { stdout: listJson } = await runConfiguredRclone({
-    args: [
-      "lsjson",
-      makeR2Path(args.config),
-      "--recursive",
-      "--files-only",
-      "--fast-list",
-      "--no-mimetype",
-      "--no-modtime",
-    ],
-    ...args,
-  })
 
   let parsed
   try {

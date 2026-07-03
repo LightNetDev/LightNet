@@ -3,7 +3,15 @@
 import { join, posix, resolve } from "node:path"
 import { cwd as processCwd, stdin, stdout } from "node:process"
 
-import { confirm, intro, isCancel, log, outro, text } from "@clack/prompts"
+import {
+  confirm,
+  intro,
+  isCancel,
+  log,
+  outro,
+  spinner,
+  text,
+} from "@clack/prompts"
 
 import { CliError } from "./support/cli-error.js"
 import { contentCollections } from "./support/content-collections.js"
@@ -79,11 +87,10 @@ export async function checkFiles(options, runtime = {}) {
   await assertLightNetSiteRoot(cwd)
 
   const collections = contentCollections(cwd)
-  const mediaItems = await collections.getMediaItems()
-  const categories = await collections.getCategories()
-  log.message(
-    `Checking ${mediaItems.length} media items and ${categories.length} categories.`,
-  )
+  const [mediaItems, categories] = await Promise.all([
+    collections.getMediaItems(),
+    collections.getCategories(),
+  ])
 
   /** @type {MissingReference[]} */
   let missingContentFiles = []
@@ -104,16 +111,36 @@ export async function checkFiles(options, runtime = {}) {
   const categoryThumbnailStorage = files(cwd, { rootDir: categoryImagesDir })
 
   if (includeContentFiles) {
+    contentFileStorage = options.r2
+      ? createR2FileStorage({
+          cwd,
+          interactive,
+          promptConfirm,
+          promptText,
+        })
+      : contentFiles(cwd)
+    contentFileStorage = await contentFileStorage.init()
+  }
+
+  log.message(
+    `Checking ${mediaItems.length} media items and ${categories.length} categories.`,
+  )
+
+  if (includeContentFiles) {
+    if (!contentFileStorage) {
+      throw new CliError("Missing file storage for content validation.")
+    }
+    const initializedContentFileStorage = contentFileStorage
     if (options.r2) {
-      contentFileStorage = createR2FileStorage({
-        cwd,
-        interactive,
-        promptConfirm,
-        promptText,
-      })
-      const r2Result = await validateContentFiles({
-        mediaItems,
-        storage: contentFileStorage,
+      const r2Result = await runSpinner({
+        error: "Content file check failed.",
+        start: "Listing R2 objects and checking content file references",
+        stop: (result) => formatContentCheckSummary(result),
+        task: () =>
+          validateContentFiles({
+            mediaItems,
+            storage: initializedContentFileStorage,
+          }),
       })
       missingContentFiles = r2Result.missingReferences
       orphanedContentFiles = r2Result.orphanedFiles
@@ -123,10 +150,15 @@ export async function checkFiles(options, runtime = {}) {
         )
       }
     } else {
-      contentFileStorage = contentFiles(cwd)
-      const localContentResult = await validateContentFiles({
-        mediaItems,
-        storage: contentFileStorage,
+      const localContentResult = await runSpinner({
+        error: "Content file check failed.",
+        start: "Checking local content files",
+        stop: (result) => formatContentCheckSummary(result),
+        task: () =>
+          validateContentFiles({
+            mediaItems,
+            storage: initializedContentFileStorage,
+          }),
       })
       missingContentFiles = localContentResult.missingReferences
       orphanedContentFiles = localContentResult.orphanedFiles
@@ -139,12 +171,19 @@ export async function checkFiles(options, runtime = {}) {
   }
 
   if (includeThumbnails) {
-    const thumbnailsResult = await validateThumbnails(
-      mediaItems,
-      categories,
-      mediaThumbnailStorage,
-      categoryThumbnailStorage,
-    )
+    const thumbnailsResult = await runSpinner({
+      error: "Thumbnail check failed.",
+      start: "Checking thumbnails",
+      stop: (result) =>
+        `Checked thumbnails: ${result.orphanedMediaThumbnails.length} orphaned media, ${result.orphanedCategoryThumbnails.length} orphaned categories.`,
+      task: () =>
+        validateThumbnails(
+          mediaItems,
+          categories,
+          mediaThumbnailStorage,
+          categoryThumbnailStorage,
+        ),
+    })
     orphanedMediaThumbnails = thumbnailsResult.orphanedMediaThumbnails
     orphanedCategoryThumbnails = thumbnailsResult.orphanedCategoryThumbnails
   }
@@ -308,6 +347,40 @@ function printMissingReferenceSection(title, items) {
 }
 
 /**
+ * @template T
+ * @param {{
+ *   error: string
+ *   start: string
+ *   stop: (result: T) => string
+ *   task: () => Promise<T>
+ * }} args
+ * @returns {Promise<T>}
+ */
+async function runSpinner({ error, start, stop, task }) {
+  const activeSpinner = spinner()
+  activeSpinner.start(start)
+  try {
+    const result = await task()
+    activeSpinner.stop(stop(result))
+    return result
+  } catch (caughtError) {
+    activeSpinner.error(error)
+    throw caughtError
+  }
+}
+
+/**
+ * @param {{
+ *   missingReferences: MissingReference[]
+ *   orphanedFiles: string[]
+ *   referenceCount: number
+ * }} result
+ */
+function formatContentCheckSummary(result) {
+  return `Checked content files: ${result.referenceCount} references, ${result.missingReferences.length} missing, ${result.orphanedFiles.length} orphaned.`
+}
+
+/**
  * @param {string|undefined} rawScope
  */
 function parseScopes(rawScope) {
@@ -369,10 +442,15 @@ async function validateThumbnails(
       .filter((value) => value !== undefined),
   )
 
-  const initializedMediaStorage = await mediaThumbnailStorage.init()
-  const initializedCategoryStorage = await categoryThumbnailStorage.init()
-  const mediaFiles = await initializedMediaStorage.list()
-  const categoryFiles = await initializedCategoryStorage.list()
+  const [initializedMediaStorage, initializedCategoryStorage] =
+    await Promise.all([
+      mediaThumbnailStorage.init(),
+      categoryThumbnailStorage.init(),
+    ])
+  const [mediaFiles, categoryFiles] = await Promise.all([
+    initializedMediaStorage.list(),
+    initializedCategoryStorage.list(),
+  ])
 
   return {
     orphanedMediaThumbnails: mediaFiles.filter(
