@@ -1,5 +1,19 @@
 # @lightnet/cli
 
+## 4.4.1
+
+### Patch Changes
+
+- [#431](https://github.com/LightNetDev/LightNet/pull/431) [`aa5968f`](https://github.com/LightNetDev/LightNet/commit/aa5968f26112f93121f03e7aafdfb04018186032) - Delete orphaned R2 objects from `check-files --fix --r2` in batches instead of spawning one rclone process per file.
+
+- [#431](https://github.com/LightNetDev/LightNet/pull/431) [`aa5968f`](https://github.com/LightNetDev/LightNet/commit/aa5968f26112f93121f03e7aafdfb04018186032) - Show progress feedback while `check-files` and `check-links` perform long-running checks.
+
+- [#431](https://github.com/LightNetDev/LightNet/pull/431) [`aa5968f`](https://github.com/LightNetDev/LightNet/commit/aa5968f26112f93121f03e7aafdfb04018186032) - Improve `check-files` performance by avoiding duplicate R2 listings and parallelizing independent filesystem work.
+
+- [#431](https://github.com/LightNetDev/LightNet/pull/431) [`aa5968f`](https://github.com/LightNetDev/LightNet/commit/aa5968f26112f93121f03e7aafdfb04018186032) - Protect R2 objects referenced by media content links from `check-files --fix --r2` cleanup and warn that they should use upload content.
+
+- [#431](https://github.com/LightNetDev/LightNet/pull/431) [`aa5968f`](https://github.com/LightNetDev/LightNet/commit/aa5968f26112f93121f03e7aafdfb04018186032) - Decode percent-encoded R2 public URLs when matching `check-files --r2` references against bucket objects.
+
 ## 4.4.0
 
 ### Minor Changes
