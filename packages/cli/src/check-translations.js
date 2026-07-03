@@ -1,10 +1,11 @@
 // @ts-check
 
+import { spawn } from "node:child_process"
 import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { cwd } from "node:process"
-import { spawn } from "node:child_process"
-import { intro, outro, log, confirm, taskLog } from "@clack/prompts"
+
+import { confirm, intro, log, outro, taskLog } from "@clack/prompts"
 
 /**
  * @typedef {{

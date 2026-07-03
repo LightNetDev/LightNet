@@ -1,11 +1,16 @@
 // @ts-check
 
+import { execFile } from "node:child_process"
 import { access, readFile, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
-import { env as processEnv, stdin, stdout } from "node:process"
+import { env as processEnv } from "node:process"
+import { promisify } from "node:util"
+
+import { isCancel, log, password } from "@clack/prompts"
 
 import { CliError } from "./cli-error.js"
 
+const execFileAsync = promisify(execFile)
 const cliConfigFileName = ".lightnet-cli.config.json"
 const gitIgnoreEntry = `${cliConfigFileName}\n`
 const sessionSecretEnvName = "LIGHTNET_R2_SECRET_ACCESS_KEY"
@@ -20,25 +25,13 @@ const sessionSecretEnvName = "LIGHTNET_R2_SECRET_ACCESS_KEY"
  */
 
 /**
- * @typedef {{
- *   path: string
- *   sources: string[]
- * }} MissingReference
- */
-
-/**
- * @typedef {Map<string, {key: string, sources: Set<string>}>} R2ReferenceMap
- */
-
-/**
  * @param {{
  *   cwd: string
  *   interactive: boolean
- *   logger: {error: (...args: unknown[]) => void}
  *   promptText: (message: string) => Promise<string>
  * }} args
  */
-export async function ensureR2Config({ cwd, interactive, logger, promptText }) {
+async function initR2Config({ cwd, interactive, promptText }) {
   const config = await readCliConfig(cwd)
   const parsed = parseR2Config(config)
   if (parsed) {
@@ -51,7 +44,7 @@ export async function ensureR2Config({ cwd, interactive, logger, promptText }) {
     )
   }
 
-  logger.error(`Missing R2 config in "${cliConfigFileName}".`)
+  log.error(`Missing R2 config in "${cliConfigFileName}".`)
   return promptForR2Config({ cwd, promptText })
 }
 
@@ -59,157 +52,131 @@ export async function ensureR2Config({ cwd, interactive, logger, promptText }) {
  * @param {{
  *   cwd: string
  *   interactive: boolean
- *   logger: {error: (...args: unknown[]) => void}
  *   promptConfirm: (message: string) => Promise<boolean>
  *   promptText: (message: string) => Promise<string>
- *   promptSecret?: (message: string) => Promise<string>
- *   config: R2Config
- *   references: R2ReferenceMap
- *   runRclone: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
  * }} args
  */
-export async function validateR2ReferencesWithRefresh(args) {
-  try {
-    return {
-      ...(await validateR2References(args)),
-      config: args.config,
+export function createR2FileStorage({
+  cwd,
+  interactive,
+  promptConfirm,
+  promptText,
+}) {
+  /** @type {R2Config|undefined} */
+  let config
+  /** @type {string|undefined} */
+  let secretAccessKey
+
+  /** @returns {Promise<R2Config>} */
+  const getConfig = async () => {
+    if (config) {
+      return config
     }
-  } catch (error) {
-    if (!args.interactive) {
-      throw error
-    }
-    args.logger.error(
-      error instanceof Error ? error.message : "R2 validation failed.",
-    )
-    const shouldRefresh = await args.promptConfirm(
-      "Refresh saved R2 settings and try again? [y/N] ",
-    )
-    if (!shouldRefresh) {
-      throw error
-    }
-    const refreshedConfig = await promptForR2Config({
-      cwd: args.cwd,
-      promptText: args.promptText,
+    const initializedConfig = await initR2Config({
+      cwd,
+      interactive,
+      promptText,
     })
-    return {
-      ...(await validateR2References({
-        ...args,
-        config: refreshedConfig,
-      })),
-      config: refreshedConfig,
-    }
+    config = initializedConfig
+    return initializedConfig
   }
-}
 
-/**
- * @param {{
- *   cwd: string
- *   config: R2Config
- *   objectKeys: string[]
- *   promptSecret?: (message: string) => Promise<string>
- *   runRclone: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
- * }} args
- */
-export async function deleteR2Objects({
-  cwd,
-  config,
-  objectKeys,
-  promptSecret,
-  runRclone,
-}) {
-  /** @type {string} */
-  const secretAccessKey = await promptRequiredSecret(promptSecret)
-  /** @type {string[]} */
-  const removed = []
+  /** @returns {Promise<string>} */
+  const getSecretAccessKey = async () => {
+    if (!secretAccessKey) {
+      secretAccessKey = await promptRequiredSecret()
+    }
+    return secretAccessKey
+  }
 
-  for (const objectKey of objectKeys) {
+  /**
+   * @template T
+   * @param {(config: R2Config) => Promise<T>} operation
+   */
+  const runWithRefresh = async (operation) => {
     try {
-      await runConfiguredRclone({
-        args: ["deletefile", makeR2Path(config, objectKey)],
-        config,
-        cwd,
-        promptSecret: async () => secretAccessKey,
-        runRclone,
+      return await operation(await getConfig())
+    } catch (error) {
+      if (!interactive) {
+        throw error
+      }
+      log.error(error instanceof Error ? error.message : "R2 operation failed.")
+      const shouldRefresh = await promptConfirm(
+        "Refresh saved R2 settings and try again? [y/N] ",
+      )
+      if (!shouldRefresh) {
+        throw error
+      }
+      const refreshedConfig = await promptForR2Config({ cwd, promptText })
+      config = refreshedConfig
+      return operation(refreshedConfig)
+    }
+  }
+
+  const storage = {
+    async init() {
+      await getConfig()
+      return storage
+    },
+    async list() {
+      return runWithRefresh(async (config) => {
+        const secretAccessKey = await getSecretAccessKey()
+        const sharedArgs = {
+          cwd,
+          config,
+          secretAccessKey,
+        }
+        await assertR2Access(sharedArgs)
+        const bucketObjects = await listR2Objects(sharedArgs)
+        return bucketObjects.map((item) => item.key).sort()
       })
-      removed.push(objectKey)
-    } catch {
-      // caller prints a per-file failure message
-    }
+    },
+    /**
+     * @param {string[]} paths
+     */
+    async delete(paths) {
+      const r2Config = await getConfig()
+      const secretAccessKey = await getSecretAccessKey()
+      /** @type {string[]} */
+      const removed = []
+      for (const path of paths) {
+        try {
+          await runConfiguredRclone({
+            args: ["deletefile", makeR2Path(r2Config, path)],
+            cwd,
+            config: r2Config,
+            secretAccessKey,
+          })
+          removed.push(path)
+        } catch {
+          // The caller prints per-file failures based on the returned paths.
+        }
+      }
+      return removed
+    },
+    /**
+     * @param {string} url
+     */
+    toPath(url) {
+      if (!config) {
+        throw new CliError("R2 storage must be initialized before use.")
+      }
+      const normalizedBase = config.publicUrl.replace(/\/+$/, "")
+      if (!url.startsWith(normalizedBase)) {
+        return undefined
+      }
+      const path = url.slice(normalizedBase.length).replace(/^\/+/, "")
+      return path || undefined
+    },
   }
-
-  return removed
+  return storage
 }
 
 /**
  * @param {{
  *   cwd: string
  *   config: R2Config
- *   references: R2ReferenceMap
- *   promptSecret?: (message: string) => Promise<string>
- *   runRclone: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
- * }} args
- */
-async function validateR2References({
-  cwd,
-  config,
-  references,
-  promptSecret,
-  runRclone,
-}) {
-  if (references.size === 0) {
-    return {
-      missingReferences: /** @type {MissingReference[]} */ ([]),
-      orphanedObjects: /** @type {string[]} */ ([]),
-      referenceCount: 0,
-    }
-  }
-
-  /** @type {string} */
-  const secretAccessKey = await promptRequiredSecret(promptSecret)
-  await assertR2Access({
-    cwd,
-    config,
-    promptSecret: async () => secretAccessKey,
-    runRclone,
-  })
-  const bucketObjects = await listR2Objects({
-    cwd,
-    config,
-    promptSecret: async () => secretAccessKey,
-    runRclone,
-  })
-
-  const objectKeys = new Set(bucketObjects.map((item) => item.key))
-  const referencedKeys = new Set(
-    [...references.values()].map((reference) => reference.key),
-  )
-
-  const missingReferences = [...references.entries()]
-    .filter(([, reference]) => !objectKeys.has(reference.key))
-    .map(([url, { sources }]) => ({
-      path: url,
-      sources: [...sources].toSorted(),
-    }))
-    .sort((a, b) => a.path.localeCompare(b.path))
-
-  const orphanedObjects = bucketObjects
-    .filter((item) => !referencedKeys.has(item.key))
-    .map((item) => item.key)
-    .sort()
-
-  return {
-    missingReferences,
-    orphanedObjects,
-    referenceCount: references.size,
-  }
-}
-
-/**
- * @param {{
- *   cwd: string
- *   config: R2Config
- *   promptSecret: (message: string) => Promise<string>
- *   runRclone: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
+ *   secretAccessKey: string
  * }} args
  */
 async function assertR2Access(args) {
@@ -231,8 +198,7 @@ async function assertR2Access(args) {
  * @param {{
  *   cwd: string
  *   config: R2Config
- *   promptSecret: (message: string) => Promise<string>
- *   runRclone: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
+ *   secretAccessKey: string
  * }} args
  */
 async function listR2Objects(args) {
@@ -273,25 +239,17 @@ async function listR2Objects(args) {
  *   args: string[]
  *   cwd: string
  *   config: R2Config
- *   promptSecret: (message: string) => Promise<string>
- *   runRclone: (args: string[], cwd: string, env?: NodeJS.ProcessEnv) => Promise<{stdout:string, stderr:string}>
+ *   secretAccessKey: string
  * }} args
  */
-async function runConfiguredRclone({
-  args,
-  cwd,
-  config,
-  promptSecret,
-  runRclone,
-}) {
-  const secretAccessKey = await promptSecret("R2 secretAccessKey: ")
+async function runConfiguredRclone({ args, cwd, config, secretAccessKey }) {
   const env = {
     ...processEnv,
     RCLONE_S3_SECRET_ACCESS_KEY: secretAccessKey,
   }
 
   try {
-    return await runRclone(
+    return await defaultRunRclone(
       [
         ...args,
         "--s3-provider",
@@ -341,26 +299,21 @@ async function promptForR2Config({ cwd, promptText }) {
 }
 
 /**
- * @param {((message:string)=>Promise<string>) | undefined} promptSecret
  * @returns {Promise<string>}
  */
-async function promptRequiredSecret(promptSecret) {
+async function promptRequiredSecret() {
   const sessionSecret = processEnv[sessionSecretEnvName]
   if (typeof sessionSecret === "string" && sessionSecret.trim()) {
     return sessionSecret
   }
 
-  /** @type {(message:string)=>Promise<string>} */
-  const prompt =
-    promptSecret ??
-    ((message) =>
-      defaultPromptSecret(message, {
-        input: stdin,
-        output: stdout,
-      }))
-
   while (true) {
-    const value = await prompt("R2 secretAccessKey: ")
+    const value = await password({
+      message: "R2 secretAccessKey:",
+    })
+    if (isCancel(value)) {
+      throw new CliError("Secret access key prompt cancelled.")
+    }
     if (value.trim()) {
       processEnv[sessionSecretEnvName] = value
       return value
@@ -461,6 +414,18 @@ function getR2Endpoint(accountId) {
 }
 
 /**
+ * @param {string[]} args
+ * @param {string} cwd
+ * @param {NodeJS.ProcessEnv} [env]
+ */
+async function defaultRunRclone(args, cwd, env) {
+  return execFileAsync("rclone", args, {
+    cwd,
+    env: env ?? processEnv,
+  })
+}
+
+/**
  * @param {unknown} error
  */
 function getSanitizedRcloneError(error) {
@@ -495,67 +460,4 @@ async function pathExists(filePath) {
  */
 function isPlainObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value)
-}
-
-/**
- * @param {string} message
- * @param {{input: NodeJS.ReadStream, output: NodeJS.WriteStream}} io
- */
-async function defaultPromptSecret(message, io) {
-  if (
-    !io.input.isTTY ||
-    !io.output.isTTY ||
-    typeof io.input.setRawMode !== "function"
-  ) {
-    throw new CliError(
-      "Secret access key prompt requires an interactive terminal.",
-    )
-  }
-
-  return await new Promise((resolve, reject) => {
-    let value = ""
-    const wasRaw = io.input.isRaw
-
-    io.output.write(message)
-    io.input.resume()
-    io.input.setEncoding("utf8")
-    io.input.setRawMode(true)
-
-    /**
-     * @param {string} chunk
-     */
-    const onData = (chunk) => {
-      for (const character of chunk) {
-        if (character === "\r" || character === "\n") {
-          cleanup()
-          io.output.write("\n")
-          resolve(value)
-          return
-        }
-        if (character === "\u0003" || character === "\u0004") {
-          cleanup()
-          io.output.write("\n")
-          reject(new CliError("Secret access key prompt cancelled."))
-          return
-        }
-        if (
-          character === "\u007f" ||
-          character === "\b" ||
-          character === "\x08"
-        ) {
-          value = value.slice(0, -1)
-          continue
-        }
-        value += character
-      }
-    }
-
-    const cleanup = () => {
-      io.input.off("data", onData)
-      io.input.setRawMode(Boolean(wasRaw))
-      io.input.pause()
-    }
-
-    io.input.on("data", onData)
-  })
 }
