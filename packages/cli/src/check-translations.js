@@ -22,6 +22,12 @@ import { confirm, intro, log, outro, taskLog } from "@clack/prompts"
  * }} Languages
  */
 
+/**
+ * @typedef {{
+ *   build?: boolean
+ * }} CheckTranslationsOptions
+ */
+
 const lightnetCachePath = resolve(cwd(), "node_modules", ".cache", "lightnet")
 
 /** @type {{type:Translation["type"], title:string, action:string}[]} */
@@ -44,14 +50,18 @@ const translationSources = [
   },
 ]
 
-export async function checkTranslations() {
+/**
+ * @param {CheckTranslationsOptions} [options]
+ */
+export async function checkTranslations(options = {}) {
   intro("check-translations")
 
-  const buildAvailable = await runBuild()
+  const buildAvailable = await runBuild(options.build)
   if (!buildAvailable) {
     outro("Build failed. 🚧")
     return false
   }
+
   const translations = await readTranslations()
   const languages = await readLanguages()
   if (!translations || !languages || translations.length === 0) {
@@ -84,12 +94,19 @@ export async function checkTranslations() {
   return false
 }
 
-async function runBuild() {
-  const shouldRunBuild = await confirm({
-    message:
-      "Run pnpm build now? Command requires an up-to-date dist/ directory.",
-    initialValue: false,
-  })
+/**
+ *
+ * @param {boolean|undefined} build
+ * @returns
+ */
+async function runBuild(build) {
+  const shouldRunBuild =
+    build ??
+    (await confirm({
+      message:
+        "Run pnpm build now? Command requires an up-to-date dist/ directory.",
+      initialValue: false,
+    }))
   if (!shouldRunBuild) {
     return true
   }

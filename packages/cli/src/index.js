@@ -21,8 +21,10 @@ program
 program
   .command("check-translations")
   .description("check if last build has been missing any translations")
-  .action(async () => {
-    const checkSuccessful = await checkTranslations()
+  .option("--build", "run pnpm build before checking translations")
+  .option("--no-build", "skip the build prompt and use the latest dist/ output")
+  .action(async (options) => {
+    const checkSuccessful = await checkTranslations(options)
     commandExitCode = checkSuccessful ? 0 : 1
   })
 
