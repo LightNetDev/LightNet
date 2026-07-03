@@ -6,9 +6,7 @@ import { resolve } from "node:path"
 import { CliError } from "./cli-error.js"
 import { pathExists } from "./filesystem.js"
 
-export const cliConfigFileName = ".lightnet-cli.config.json"
-
-const gitIgnoreEntry = `${cliConfigFileName}\n`
+export const cliConfigFileName = "lightnet-cli.json"
 
 /**
  * @param {string} cwd
@@ -36,22 +34,4 @@ export async function writeCliConfig(cwd, config) {
     `${JSON.stringify(config, null, 2)}\n`,
     "utf8",
   )
-  await ensureGitignoreContainsConfig(cwd)
-}
-
-/**
- * @param {string} cwd
- */
-async function ensureGitignoreContainsConfig(cwd) {
-  const filePath = resolve(cwd, ".gitignore")
-  const contents = (await pathExists(filePath))
-    ? await readFile(filePath, "utf8")
-    : ""
-  if (contents.includes(cliConfigFileName)) {
-    return
-  }
-  const next = contents
-    ? `${contents}${contents.endsWith("\n") ? "" : "\n"}${gitIgnoreEntry}`
-    : gitIgnoreEntry
-  await writeFile(filePath, next, "utf8")
 }

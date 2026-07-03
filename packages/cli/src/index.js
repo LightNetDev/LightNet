@@ -21,8 +21,10 @@ program
 program
   .command("check-translations")
   .description("check if last build has been missing any translations")
-  .action(async () => {
-    const checkSuccessful = await checkTranslations()
+  .option("--build", "run pnpm build before checking translations")
+  .option("--no-build", "skip the build prompt and use the latest dist/ output")
+  .action(async (options) => {
+    const checkSuccessful = await checkTranslations(options)
     commandExitCode = checkSuccessful ? 0 : 1
   })
 
@@ -32,7 +34,7 @@ program
     "check for missing and orphaned content files and thumbnails in a LightNet site",
   )
   .option("--fix", "remove orphaned files")
-  .option("--yes", "skip deletion confirmation when used with --fix")
+  .option("--no-confirm", "skip deletion confirmation when used with --fix")
   .option(
     "--r2",
     "validate remote content files in Cloudflare R2 instead of public/files",
