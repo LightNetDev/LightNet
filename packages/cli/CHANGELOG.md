@@ -1,5 +1,19 @@
 # @lightnet/cli
 
+## 4.4.2
+
+### Patch Changes
+
+- [#433](https://github.com/LightNetDev/LightNet/pull/433) [`dbde36e`](https://github.com/LightNetDev/LightNet/commit/dbde36e7a25bf6470783e9594260b666e09c2783) - Make `check-files` summaries clearer by explaining what was compared and what needs attention.
+
+- [#433](https://github.com/LightNetDev/LightNet/pull/433) [`dbde36e`](https://github.com/LightNetDev/LightNet/commit/dbde36e7a25bf6470783e9594260b666e09c2783) - Handle Ctrl+C cancellation consistently for interactive `check-*` command prompts.
+
+- [#433](https://github.com/LightNetDev/LightNet/pull/433) [`dbde36e`](https://github.com/LightNetDev/LightNet/commit/dbde36e7a25bf6470783e9594260b666e09c2783) - Replace `check-files --fix --no-confirm` with `check-files --fix-without-confirm` for non-interactive cleanup.
+
+- [#433](https://github.com/LightNetDev/LightNet/pull/433) [`dbde36e`](https://github.com/LightNetDev/LightNet/commit/dbde36e7a25bf6470783e9594260b666e09c2783) - Treat warning-only `check-files` runs as successful when no local content file references are found.
+
+- [#433](https://github.com/LightNetDev/LightNet/pull/433) [`dbde36e`](https://github.com/LightNetDev/LightNet/commit/dbde36e7a25bf6470783e9594260b666e09c2783) - Improve `check-files` and `check-links` output for long referenced paths and URLs.
+
 ## 4.4.1
 
 ### Patch Changes
