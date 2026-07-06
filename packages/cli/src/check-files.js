@@ -377,9 +377,7 @@ function printMissingReferenceSection(title, items) {
   }
   log.error(`${title} (${items.length})`)
   for (const item of items) {
-    log.message(
-      `• ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
-    )
+    log.message(`• ${item.path}\n${formatReferenceSources(item.sources)}`)
   }
 }
 
@@ -394,9 +392,21 @@ function printWrongTypeReferenceSection(title, items) {
   log.warn(`${title} (${items.length})`)
   for (const item of items) {
     log.message(
-      `• ${item.path} should use type "upload" (referenced by ${item.sources.toSorted().join(", ")})`,
+      `• ${item.path}\n  Expected type: "upload"\n${formatReferenceSources(item.sources)}`,
     )
   }
+}
+
+/**
+ * @param {string[]} sources
+ */
+function formatReferenceSources(sources) {
+  const sortedSources = sources.toSorted()
+  if (sortedSources.length === 1) {
+    return `  Referenced by: ${sortedSources[0]}`
+  }
+  return ["  Referenced by:", ...sortedSources.map((source) => `  - ${source}`)]
+    .join("\n")
 }
 
 /**
