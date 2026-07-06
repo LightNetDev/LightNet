@@ -21,6 +21,7 @@ import {
   pathExists,
   toLocalContentDisplayPath,
 } from "./support/filesystem.js"
+import { cancelPrompt } from "./support/prompt-cancel.js"
 import { createR2FileStorage } from "./support/r2.js"
 
 const supportedScopes = new Set(["content-files", "thumbnails"])
@@ -704,7 +705,10 @@ function toPosixPath(filePath) {
  */
 async function defaultPromptText(message) {
   const answer = await text({ message })
-  return isCancel(answer) ? "" : String(answer)
+  if (isCancel(answer)) {
+    cancelPrompt()
+  }
+  return String(answer)
 }
 
 /**
@@ -715,5 +719,8 @@ async function defaultPromptConfirm(message) {
     message,
     initialValue: false,
   })
-  return isCancel(answer) ? false : answer
+  if (isCancel(answer)) {
+    cancelPrompt()
+  }
+  return answer
 }

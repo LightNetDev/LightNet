@@ -8,6 +8,7 @@ import { checkFiles } from "./check-files.js"
 import { checkLinks } from "./check-links.js"
 import { checkTranslations } from "./check-translations.js"
 import { CliError } from "./support/cli-error.js"
+import { PromptCancelled } from "./support/prompt-cancel.js"
 const { version } = pkg
 
 const program = new Command()
@@ -24,8 +25,12 @@ program
   .option("--build", "run pnpm build before checking translations")
   .option("--no-build", "skip the build prompt and use the latest dist/ output")
   .action(async (options) => {
-    const checkSuccessful = await checkTranslations(options)
-    commandExitCode = checkSuccessful ? 0 : 1
+    try {
+      const checkSuccessful = await checkTranslations(options)
+      commandExitCode = checkSuccessful ? 0 : 1
+    } catch (error) {
+      handleCommandError(error)
+    }
   })
 
 program
@@ -48,12 +53,7 @@ program
       const checkSuccessful = await checkFiles(options)
       commandExitCode = checkSuccessful ? 0 : 1
     } catch (error) {
-      if (error instanceof CliError) {
-        console.error(error.message)
-        commandExitCode = 1
-        return
-      }
-      throw error
+      handleCommandError(error)
     }
   })
 
@@ -66,14 +66,25 @@ program
       const checkSuccessful = await checkLinks(options)
       commandExitCode = checkSuccessful ? 0 : 1
     } catch (error) {
-      if (error instanceof CliError) {
-        console.error(error.message)
-        commandExitCode = 1
-        return
-      }
-      throw error
+      handleCommandError(error)
     }
   })
 
 await program.parseAsync()
 process.exitCode = commandExitCode
+
+/**
+ * @param {unknown} error
+ */
+function handleCommandError(error) {
+  if (error instanceof PromptCancelled) {
+    commandExitCode = 0
+    return
+  }
+  if (error instanceof CliError) {
+    console.error(error.message)
+    commandExitCode = 1
+    return
+  }
+  throw error
+}

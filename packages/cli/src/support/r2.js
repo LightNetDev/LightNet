@@ -15,6 +15,7 @@ import {
   writeCliConfig,
 } from "./cli-config.js"
 import { CliError } from "./cli-error.js"
+import { cancelPrompt } from "./prompt-cancel.js"
 
 const execFileAsync = promisify(execFile)
 const sessionSecretEnvName = "LIGHTNET_R2_SECRET_ACCESS_KEY"
@@ -412,7 +413,7 @@ async function promptRequiredSecret() {
       message: "R2 secretAccessKey:",
     })
     if (isCancel(value)) {
-      throw new CliError("Secret access key prompt cancelled.")
+      cancelPrompt()
     }
     if (value.trim()) {
       processEnv[sessionSecretEnvName] = value

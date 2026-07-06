@@ -5,7 +5,9 @@ import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { cwd } from "node:process"
 
-import { confirm, intro, log, outro, taskLog } from "@clack/prompts"
+import { confirm, intro, isCancel, log, outro, taskLog } from "@clack/prompts"
+
+import { cancelPrompt } from "./support/prompt-cancel.js"
 
 /**
  * @typedef {{
@@ -100,13 +102,7 @@ export async function checkTranslations(options = {}) {
  * @returns
  */
 async function runBuild(build) {
-  const shouldRunBuild =
-    build ??
-    (await confirm({
-      message:
-        "Run pnpm build now? Command requires an up-to-date dist/ directory.",
-      initialValue: false,
-    }))
+  const shouldRunBuild = build ?? (await promptRunBuild())
   if (!shouldRunBuild) {
     return true
   }
@@ -156,6 +152,18 @@ async function runBuild(build) {
     buildLog.error("pnpm build failed")
     return false
   }
+}
+
+async function promptRunBuild() {
+  const answer = await confirm({
+    message:
+      "Run pnpm build now? Command requires an up-to-date dist/ directory.",
+    initialValue: false,
+  })
+  if (isCancel(answer)) {
+    cancelPrompt()
+  }
+  return answer
 }
 
 /**

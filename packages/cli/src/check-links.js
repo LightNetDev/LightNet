@@ -13,6 +13,7 @@ import {
 import { CliError } from "./support/cli-error.js"
 import { contentCollections } from "./support/content-collections.js"
 import { pathExists } from "./support/filesystem.js"
+import { cancelPrompt } from "./support/prompt-cancel.js"
 
 const mediaDir = "src/content/media"
 const defaultConcurrency = 24
@@ -487,7 +488,10 @@ function toPosixPath(filePath) {
  */
 async function defaultPromptText(message) {
   const answer = await text({ message })
-  return isCancel(answer) ? "" : String(answer)
+  if (isCancel(answer)) {
+    cancelPrompt()
+  }
+  return String(answer)
 }
 
 /**
