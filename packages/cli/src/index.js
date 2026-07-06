@@ -39,7 +39,7 @@ program
     "check for missing and orphaned content files and thumbnails in a LightNet site",
   )
   .option("--fix", "remove orphaned files")
-  .option("--no-confirm", "skip deletion confirmation when used with --fix")
+  .option("--fix-without-confirm", "remove orphaned files without confirmation")
   .option(
     "--r2",
     "validate remote content files in Cloudflare R2 instead of public/files",

@@ -34,7 +34,7 @@ const categoryImagesDir = "src/content/categories/images"
  * @typedef {{
  *   scope?: string
  *   fix?: boolean
- *   confirm?: boolean
+ *   fixWithoutConfirm?: boolean
  *   r2?: boolean
  * }} CheckFilesOptions
  */
@@ -194,7 +194,7 @@ export async function checkFiles(options, runtime = {}) {
     orphanedCategoryThumbnails = thumbnailsResult.orphanedCategoryThumbnails
   }
 
-  if (options.fix) {
+  if (options.fix || options.fixWithoutConfirm) {
     /** @type {{displayPath:string, target:string}[]} */
     const deletions = []
     /** @type {{displayPath:string, target:string}[]} */
@@ -230,10 +230,10 @@ export async function checkFiles(options, runtime = {}) {
     }
 
     if (deletions.length > 0) {
-      const shouldSkipConfirmation = options.confirm === false
+      const shouldSkipConfirmation = options.fixWithoutConfirm === true
       if (!shouldSkipConfirmation && !interactive) {
         throw new CliError(
-          'Deletion requires confirmation. Re-run with "--fix --no-confirm" in non-interactive environments.',
+          'Deletion requires confirmation. Re-run with "--fix-without-confirm" in non-interactive environments.',
         )
       }
       const shouldDelete =
