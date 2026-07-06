@@ -25,8 +25,8 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
-    "commander": "^15.0.0",
-    "@clack/prompts": "^1.6.0"
+    "@clack/prompts": "^1.7.0",
+    "commander": "^15.0.0"
   },
   "engines": {
     "node": ">=22"
