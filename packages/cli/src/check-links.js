@@ -13,6 +13,7 @@ import {
 import { CliError } from "./support/cli-error.js"
 import { contentCollections } from "./support/content-collections.js"
 import { pathExists } from "./support/filesystem.js"
+import { cancelPrompt } from "./support/prompt-cancel.js"
 
 const mediaDir = "src/content/media"
 const defaultConcurrency = 24
@@ -126,11 +127,7 @@ export async function checkLinks(options, runtime = {}) {
   log.error(`Unavailable links (${unavailableLinks.length})`)
   for (const { reference, result } of unavailableLinks) {
     log.message(
-      `· ${reference.displayUrl} (${formatFailure(result)}, referenced by ${[
-        ...reference.sources,
-      ]
-        .toSorted()
-        .join(", ")})`,
+      `• ${reference.displayUrl}\n  Result: ${formatFailure(result)}\n${formatReferenceSources(reference.sources)}`,
     )
   }
 
@@ -332,13 +329,23 @@ function printProtectedLinks(links) {
   log.warn(`Protected or forbidden links (${links.length})`)
   for (const { reference, result } of links) {
     log.message(
-      `· ${reference.displayUrl} (${formatFailure(result)}, referenced by ${[
-        ...reference.sources,
-      ]
-        .toSorted()
-        .join(", ")})`,
+      `• ${reference.displayUrl}\n  Result: ${formatFailure(result)}\n${formatReferenceSources(reference.sources)}`,
     )
   }
+}
+
+/**
+ * @param {Set<string>} sources
+ */
+function formatReferenceSources(sources) {
+  const sortedSources = [...sources].toSorted()
+  if (sortedSources.length === 1) {
+    return `  Referenced by: ${sortedSources[0]}`
+  }
+  return [
+    "  Referenced by:",
+    ...sortedSources.map((source) => `  - ${source}`),
+  ].join("\n")
 }
 
 /**
@@ -483,7 +490,10 @@ function toPosixPath(filePath) {
  */
 async function defaultPromptText(message) {
   const answer = await text({ message })
-  return isCancel(answer) ? "" : String(answer)
+  if (isCancel(answer)) {
+    cancelPrompt()
+  }
+  return String(answer)
 }
 
 /**

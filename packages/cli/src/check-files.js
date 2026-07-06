@@ -21,6 +21,7 @@ import {
   pathExists,
   toLocalContentDisplayPath,
 } from "./support/filesystem.js"
+import { cancelPrompt } from "./support/prompt-cancel.js"
 import { createR2FileStorage } from "./support/r2.js"
 
 const supportedScopes = new Set(["content-files", "thumbnails"])
@@ -33,7 +34,7 @@ const categoryImagesDir = "src/content/categories/images"
  * @typedef {{
  *   scope?: string
  *   fix?: boolean
- *   confirm?: boolean
+ *   fixWithoutConfirm?: boolean
  *   r2?: boolean
  * }} CheckFilesOptions
  */
@@ -170,7 +171,7 @@ export async function checkFiles(options, runtime = {}) {
       orphanedContentFiles = localContentResult.orphanedFiles
       if (localContentResult.referenceCount === 0) {
         warnings.push(
-          'No local "/files" content file references found. Use "--scope=thumbnails" or run with "--r2".',
+          'No local "/files" content file references found. If your content files are stored in R2, consider re-running with "--r2".',
         )
       }
     }
@@ -180,8 +181,7 @@ export async function checkFiles(options, runtime = {}) {
     const thumbnailsResult = await runSpinner({
       error: "Thumbnail check failed.",
       start: "Checking thumbnails",
-      stop: (result) =>
-        `Checked thumbnails: ${result.orphanedMediaThumbnails.length} orphaned media, ${result.orphanedCategoryThumbnails.length} orphaned categories.`,
+      stop: (result) => formatThumbnailCheckSummary(result),
       task: () =>
         validateThumbnails(
           mediaItems,
@@ -194,7 +194,7 @@ export async function checkFiles(options, runtime = {}) {
     orphanedCategoryThumbnails = thumbnailsResult.orphanedCategoryThumbnails
   }
 
-  if (options.fix) {
+  if (options.fix || options.fixWithoutConfirm) {
     /** @type {{displayPath:string, target:string}[]} */
     const deletions = []
     /** @type {{displayPath:string, target:string}[]} */
@@ -230,10 +230,10 @@ export async function checkFiles(options, runtime = {}) {
     }
 
     if (deletions.length > 0) {
-      const shouldSkipConfirmation = options.confirm === false
+      const shouldSkipConfirmation = options.fixWithoutConfirm === true
       if (!shouldSkipConfirmation && !interactive) {
         throw new CliError(
-          'Deletion requires confirmation. Re-run with "--fix --no-confirm" in non-interactive environments.',
+          'Deletion requires confirmation. Re-run with "--fix-without-confirm" in non-interactive environments.',
         )
       }
       const shouldDelete =
@@ -315,20 +315,19 @@ export async function checkFiles(options, runtime = {}) {
   }
 
   const hasIssues =
-    warnings.length > 0 ||
     missingContentFiles.length > 0 ||
     wrongTypeR2ContentFiles.length > 0 ||
     orphanedContentFiles.length > 0 ||
     orphanedMediaThumbnails.length > 0 ||
     orphanedCategoryThumbnails.length > 0
 
+  for (const warning of warnings) {
+    log.warn(warning)
+  }
+
   if (!hasIssues && removedItems.length === 0) {
     outro("No issues found. 🎉")
     return true
-  }
-
-  for (const warning of warnings) {
-    log.warn(warning)
   }
 
   printMissingReferenceSection(
@@ -378,9 +377,7 @@ function printMissingReferenceSection(title, items) {
   }
   log.error(`${title} (${items.length})`)
   for (const item of items) {
-    log.message(
-      `• ${item.path} (referenced by ${item.sources.toSorted().join(", ")})`,
-    )
+    log.message(`• ${item.path}\n${formatReferenceSources(item.sources)}`)
   }
 }
 
@@ -395,9 +392,23 @@ function printWrongTypeReferenceSection(title, items) {
   log.warn(`${title} (${items.length})`)
   for (const item of items) {
     log.message(
-      `• ${item.path} should use type "upload" (referenced by ${item.sources.toSorted().join(", ")})`,
+      `• ${item.path}\n  Expected type: "upload"\n${formatReferenceSources(item.sources)}`,
     )
   }
+}
+
+/**
+ * @param {string[]} sources
+ */
+function formatReferenceSources(sources) {
+  const sortedSources = sources.toSorted()
+  if (sortedSources.length === 1) {
+    return `  Referenced by: ${sortedSources[0]}`
+  }
+  return [
+    "  Referenced by:",
+    ...sortedSources.map((source) => `  - ${source}`),
+  ].join("\n")
 }
 
 /**
@@ -425,13 +436,58 @@ async function runSpinner({ error, start, stop, task }) {
 
 /**
  * @param {{
+ *   fileCount: number
  *   missingReferences: MissingReference[]
  *   orphanedFiles: string[]
  *   referenceCount: number
  * }} result
  */
 function formatContentCheckSummary(result) {
-  return `Checked content files: ${result.referenceCount} references, ${result.missingReferences.length} missing, ${result.orphanedFiles.length} orphaned.`
+  const issues = [
+    formatFindingCount(result.missingReferences.length, "missing reference"),
+    formatFindingCount(result.orphanedFiles.length, "orphaned file"),
+  ]
+
+  if (result.referenceCount === 0 && result.fileCount === 0) {
+    return `Content files: none found.`
+  }
+
+  return `Content files: ${formatCount(result.referenceCount, "reference")}, ${formatCount(result.fileCount, "file")}; ${issues.join(", ")}.`
+}
+
+/**
+ * @param {{
+ *   fileCount: number
+ *   orphanedCategoryThumbnails: string[]
+ *   orphanedMediaThumbnails: string[]
+ *   referenceCount: number
+ * }} result
+ */
+function formatThumbnailCheckSummary(result) {
+  const orphanedThumbnails =
+    result.orphanedMediaThumbnails.length +
+    result.orphanedCategoryThumbnails.length
+
+  return `Thumbnails: ${formatCount(result.referenceCount, "reference")}, ${formatCount(result.fileCount, "file")}; orphaned: ${orphanedThumbnails} (${result.orphanedMediaThumbnails.length} media, ${result.orphanedCategoryThumbnails.length} categories).`
+}
+
+/**
+ * @param {number} count
+ * @param {string} singular
+ */
+function formatFindingCount(count, singular) {
+  if (count === 0) {
+    return `no ${singular}s`
+  }
+  return formatCount(count, singular)
+}
+
+/**
+ * @param {number} count
+ * @param {string} singular
+ */
+function formatCount(count, singular) {
+  return `${count} ${singular}${count === 1 ? "" : "s"}`
 }
 
 /**
@@ -515,12 +571,14 @@ async function validateThumbnails(
   ])
 
   return {
+    fileCount: mediaFiles.length + categoryFiles.length,
     orphanedMediaThumbnails: mediaFiles.filter(
       (file) => !mediaReferences.has(file),
     ),
     orphanedCategoryThumbnails: categoryFiles.filter(
       (file) => !categoryReferences.has(file),
     ),
+    referenceCount: mediaReferences.size + categoryReferences.size,
   }
 }
 
@@ -542,8 +600,10 @@ async function validateContentFiles({
     initializedStorage,
     { includeLinkReferences },
   )
+  const files = await initializedStorage.list()
   if (references.size === 0) {
     return {
+      fileCount: files.length,
       missingReferences: /** @type {MissingReference[]} */ ([]),
       orphanedFiles: /** @type {string[]} */ ([]),
       referenceCount: 0,
@@ -551,7 +611,6 @@ async function validateContentFiles({
     }
   }
 
-  const files = await initializedStorage.list()
   const fileSet = new Set(files)
 
   const missingReferences = [...references.entries()]
@@ -575,6 +634,7 @@ async function validateContentFiles({
     .sort((a, b) => a.path.localeCompare(b.path))
 
   return {
+    fileCount: files.length,
     missingReferences,
     orphanedFiles,
     referenceCount: references.size,
@@ -695,7 +755,10 @@ function toPosixPath(filePath) {
  */
 async function defaultPromptText(message) {
   const answer = await text({ message })
-  return isCancel(answer) ? "" : String(answer)
+  if (isCancel(answer)) {
+    cancelPrompt()
+  }
+  return String(answer)
 }
 
 /**
@@ -706,5 +769,8 @@ async function defaultPromptConfirm(message) {
     message,
     initialValue: false,
   })
-  return isCancel(answer) ? false : answer
+  if (isCancel(answer)) {
+    cancelPrompt()
+  }
+  return answer
 }
