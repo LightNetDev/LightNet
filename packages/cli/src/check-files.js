@@ -181,8 +181,7 @@ export async function checkFiles(options, runtime = {}) {
     const thumbnailsResult = await runSpinner({
       error: "Thumbnail check failed.",
       start: "Checking thumbnails",
-      stop: (result) =>
-        `Checked thumbnails: ${result.orphanedMediaThumbnails.length} orphaned media, ${result.orphanedCategoryThumbnails.length} orphaned categories.`,
+      stop: (result) => formatThumbnailCheckSummary(result),
       task: () =>
         validateThumbnails(
           mediaItems,
@@ -406,8 +405,10 @@ function formatReferenceSources(sources) {
   if (sortedSources.length === 1) {
     return `  Referenced by: ${sortedSources[0]}`
   }
-  return ["  Referenced by:", ...sortedSources.map((source) => `  - ${source}`)]
-    .join("\n")
+  return [
+    "  Referenced by:",
+    ...sortedSources.map((source) => `  - ${source}`),
+  ].join("\n")
 }
 
 /**
@@ -435,13 +436,58 @@ async function runSpinner({ error, start, stop, task }) {
 
 /**
  * @param {{
+ *   fileCount: number
  *   missingReferences: MissingReference[]
  *   orphanedFiles: string[]
  *   referenceCount: number
  * }} result
  */
 function formatContentCheckSummary(result) {
-  return `Checked content files: ${result.referenceCount} references, ${result.missingReferences.length} missing, ${result.orphanedFiles.length} orphaned.`
+  const issues = [
+    formatFindingCount(result.missingReferences.length, "missing reference"),
+    formatFindingCount(result.orphanedFiles.length, "orphaned file"),
+  ]
+
+  if (result.referenceCount === 0 && result.fileCount === 0) {
+    return `Content files: none found.`
+  }
+
+  return `Content files: ${formatCount(result.referenceCount, "reference")}, ${formatCount(result.fileCount, "file")}; ${issues.join(", ")}.`
+}
+
+/**
+ * @param {{
+ *   fileCount: number
+ *   orphanedCategoryThumbnails: string[]
+ *   orphanedMediaThumbnails: string[]
+ *   referenceCount: number
+ * }} result
+ */
+function formatThumbnailCheckSummary(result) {
+  const orphanedThumbnails =
+    result.orphanedMediaThumbnails.length +
+    result.orphanedCategoryThumbnails.length
+
+  return `Thumbnails: ${formatCount(result.referenceCount, "reference")}, ${formatCount(result.fileCount, "file")}; orphaned: ${orphanedThumbnails} (${result.orphanedMediaThumbnails.length} media, ${result.orphanedCategoryThumbnails.length} categories).`
+}
+
+/**
+ * @param {number} count
+ * @param {string} singular
+ */
+function formatFindingCount(count, singular) {
+  if (count === 0) {
+    return `no ${singular}s`
+  }
+  return formatCount(count, singular)
+}
+
+/**
+ * @param {number} count
+ * @param {string} singular
+ */
+function formatCount(count, singular) {
+  return `${count} ${singular}${count === 1 ? "" : "s"}`
 }
 
 /**
@@ -525,12 +571,14 @@ async function validateThumbnails(
   ])
 
   return {
+    fileCount: mediaFiles.length + categoryFiles.length,
     orphanedMediaThumbnails: mediaFiles.filter(
       (file) => !mediaReferences.has(file),
     ),
     orphanedCategoryThumbnails: categoryFiles.filter(
       (file) => !categoryReferences.has(file),
     ),
+    referenceCount: mediaReferences.size + categoryReferences.size,
   }
 }
 
@@ -552,8 +600,10 @@ async function validateContentFiles({
     initializedStorage,
     { includeLinkReferences },
   )
+  const files = await initializedStorage.list()
   if (references.size === 0) {
     return {
+      fileCount: files.length,
       missingReferences: /** @type {MissingReference[]} */ ([]),
       orphanedFiles: /** @type {string[]} */ ([]),
       referenceCount: 0,
@@ -561,7 +611,6 @@ async function validateContentFiles({
     }
   }
 
-  const files = await initializedStorage.list()
   const fileSet = new Set(files)
 
   const missingReferences = [...references.entries()]
@@ -585,6 +634,7 @@ async function validateContentFiles({
     .sort((a, b) => a.path.localeCompare(b.path))
 
   return {
+    fileCount: files.length,
     missingReferences,
     orphanedFiles,
     referenceCount: references.size,

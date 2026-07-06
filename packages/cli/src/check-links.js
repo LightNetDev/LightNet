@@ -342,8 +342,10 @@ function formatReferenceSources(sources) {
   if (sortedSources.length === 1) {
     return `  Referenced by: ${sortedSources[0]}`
   }
-  return ["  Referenced by:", ...sortedSources.map((source) => `  - ${source}`)]
-    .join("\n")
+  return [
+    "  Referenced by:",
+    ...sortedSources.map((source) => `  - ${source}`),
+  ].join("\n")
 }
 
 /**
