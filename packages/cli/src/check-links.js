@@ -126,7 +126,7 @@ export async function checkLinks(options, runtime = {}) {
   log.error(`Unavailable links (${unavailableLinks.length})`)
   for (const { reference, result } of unavailableLinks) {
     log.message(
-      `· ${reference.displayUrl} (${formatFailure(result)}, referenced by ${[
+      `• ${reference.displayUrl} (${formatFailure(result)}, referenced by ${[
         ...reference.sources,
       ]
         .toSorted()
@@ -332,7 +332,7 @@ function printProtectedLinks(links) {
   log.warn(`Protected or forbidden links (${links.length})`)
   for (const { reference, result } of links) {
     log.message(
-      `· ${reference.displayUrl} (${formatFailure(result)}, referenced by ${[
+      `• ${reference.displayUrl} (${formatFailure(result)}, referenced by ${[
         ...reference.sources,
       ]
         .toSorted()
