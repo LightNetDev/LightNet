@@ -36,3 +36,4 @@ blob-report/
 playwright/.cache/
 
 .pnpm-store
+lightnet-cli.json
