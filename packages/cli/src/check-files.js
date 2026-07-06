@@ -170,7 +170,7 @@ export async function checkFiles(options, runtime = {}) {
       orphanedContentFiles = localContentResult.orphanedFiles
       if (localContentResult.referenceCount === 0) {
         warnings.push(
-          'No local "/files" content file references found. Use "--scope=thumbnails" or run with "--r2".',
+          'No local "/files" content file references found. If your content files are stored in R2, consider re-running with "--r2".',
         )
       }
     }
@@ -315,20 +315,19 @@ export async function checkFiles(options, runtime = {}) {
   }
 
   const hasIssues =
-    warnings.length > 0 ||
     missingContentFiles.length > 0 ||
     wrongTypeR2ContentFiles.length > 0 ||
     orphanedContentFiles.length > 0 ||
     orphanedMediaThumbnails.length > 0 ||
     orphanedCategoryThumbnails.length > 0
 
+  for (const warning of warnings) {
+    log.warn(warning)
+  }
+
   if (!hasIssues && removedItems.length === 0) {
     outro("No issues found. 🎉")
     return true
-  }
-
-  for (const warning of warnings) {
-    log.warn(warning)
   }
 
   printMissingReferenceSection(
