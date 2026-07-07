@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.5.0
+
+### Minor Changes
+
+- [#437](https://github.com/LightNetDev/LightNet/pull/437) [`91446d3`](https://github.com/LightNetDev/LightNet/commit/91446d3102da0383dfffa836578c02286d0258c9) - Add `lightnet r2` commands for listing, deleting, and copying Cloudflare R2 files through the project R2 configuration.
+
 ## 4.4.2
 
 ### Patch Changes
