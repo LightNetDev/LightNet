@@ -9,13 +9,24 @@ import {
   stdout,
 } from "node:process"
 
-import { confirm, isCancel, log, text } from "@clack/prompts"
+import { confirm, intro, isCancel, log, outro, text } from "@clack/prompts"
 
 import { CliError } from "./support/cli-error.js"
 import { cancelPrompt } from "./support/prompt-cancel.js"
 import { createR2Client } from "./support/r2.js"
 
 const remotePathPrefix = "r2:"
+const defaultRcloneOptions = {
+  checkers: 16,
+  transfers: 8,
+}
+
+/**
+ * @typedef {{
+ *   transfers?: number
+ *   checkers?: number
+ * }} RcloneOptions
+ */
 
 /**
  * @typedef {{
@@ -79,6 +90,7 @@ export async function listR2(path, runtime = {}) {
  * @param {R2Runtime} [runtime]
  */
 export async function removeR2(path, options, runtime = {}) {
+  intro("r2 rm")
   const r2Path = normalizeR2Path(path)
   const isBucketRoot = isR2BucketRootPath(path)
   if (isBucketRoot && !options.recursive) {
@@ -133,7 +145,10 @@ export async function removeR2(path, options, runtime = {}) {
   const client = createR2CommandClient(runtime)
   await client.remove(r2Path, {
     recursive: options.recursive === true,
+    rcloneOptions:
+      options.recursive === true ? defaultRcloneOptions : undefined,
   })
+  outro("R2 delete complete.")
 }
 
 /**
@@ -143,6 +158,7 @@ export async function removeR2(path, options, runtime = {}) {
  * @param {R2Runtime} [runtime]
  */
 export async function copyR2(source, destination, options = {}, runtime = {}) {
+  intro("r2 cp")
   const sourcePath = parseCopyPath(source)
   const destinationPath = parseCopyPath(destination)
   if (!sourcePath.remote && !destinationPath.remote) {
@@ -193,6 +209,7 @@ export async function copyR2(source, destination, options = {}, runtime = {}) {
   }
   await replaceCopyTargetBeforeCopy({
     client,
+    rcloneOptions: defaultRcloneOptions,
     runtime,
     sourceType,
     targetPath,
@@ -202,8 +219,9 @@ export async function copyR2(source, destination, options = {}, runtime = {}) {
   await client.copy(
     await toRcloneCopyPath(sourcePath, client, runtime),
     await toRcloneCopyPath(targetPath, client, runtime),
-    { to: shouldUseCopyTo },
+    { rcloneOptions: defaultRcloneOptions, to: shouldUseCopyTo },
   )
+  outro("R2 copy complete.")
 }
 
 /**
@@ -213,6 +231,7 @@ export async function copyR2(source, destination, options = {}, runtime = {}) {
  * @param {R2Runtime} [runtime]
  */
 export async function moveR2(source, destination, options, runtime = {}) {
+  intro("r2 mv")
   const sourcePath = parseR2OnlyPath(source, "Move source")
   const destinationPath = parseR2OnlyPath(destination, "Move destination")
   if (isR2BucketRootPath(source) || isR2BucketRootPath(destination)) {
@@ -251,6 +270,7 @@ export async function moveR2(source, destination, options, runtime = {}) {
   })
   await replaceCopyTargetBeforeCopy({
     client,
+    rcloneOptions: defaultRcloneOptions,
     runtime,
     sourceType,
     targetPath,
@@ -260,13 +280,15 @@ export async function moveR2(source, destination, options, runtime = {}) {
   await client.move(
     await toRcloneCopyPath(sourcePath, client, runtime),
     await toRcloneCopyPath(targetPath, client, runtime),
-    { to: shouldUseMoveTo },
+    { rcloneOptions: defaultRcloneOptions, to: shouldUseMoveTo },
   )
+  outro("R2 move complete.")
 }
 
 /**
  * @param {{
  *   client: ReturnType<typeof createR2CommandClient>,
+ *   rcloneOptions?: RcloneOptions,
  *   runtime: R2Runtime,
  *   sourceType: CopyPathType,
  *   targetPath: CopyPath,
@@ -275,6 +297,7 @@ export async function moveR2(source, destination, options, runtime = {}) {
  */
 async function replaceCopyTargetBeforeCopy({
   client,
+  rcloneOptions,
   runtime,
   sourceType,
   targetPath,
@@ -284,7 +307,7 @@ async function replaceCopyTargetBeforeCopy({
     return
   }
   if (targetPath.remote) {
-    await client.remove(targetPath.path, { recursive: true })
+    await client.remove(targetPath.path, { recursive: true, rcloneOptions })
     return
   }
   await rm(resolveLocalPath(targetPath.path, runtime), {

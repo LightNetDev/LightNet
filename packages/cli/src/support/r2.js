@@ -23,6 +23,13 @@ const r2DeleteBatchSize = 1000
 
 /**
  * @typedef {{
+ *   transfers?: number
+ *   checkers?: number
+ * }} RcloneOptions
+ */
+
+/**
+ * @typedef {{
  *   publicUrl: string
  *   accountId: string
  *   accessKeyId: string
@@ -222,7 +229,7 @@ export function createR2Client({ cwd, interactive, promptText }) {
     },
     /**
      * @param {string} path
-     * @param {{recursive?: boolean}} [options]
+     * @param {{recursive?: boolean, rcloneOptions?: RcloneOptions}} [options]
      */
     async remove(path, options = {}) {
       const r2Config = await getConfig()
@@ -234,13 +241,14 @@ export function createR2Client({ cwd, interactive, promptText }) {
           : ["deletefile", r2Path],
         cwd,
         config: r2Config,
+        rcloneOptions: options.rcloneOptions,
         secretAccessKey,
       })
     },
     /**
      * @param {string} source
      * @param {string} destination
-     * @param {{to?: boolean}} [options]
+     * @param {{to?: boolean, rcloneOptions?: RcloneOptions}} [options]
      */
     async copy(source, destination, options = {}) {
       const r2Config = await getConfig()
@@ -248,13 +256,14 @@ export function createR2Client({ cwd, interactive, promptText }) {
         args: [options.to ? "copyto" : "copy", source, destination],
         cwd,
         config: r2Config,
+        rcloneOptions: options.rcloneOptions,
         secretAccessKey: await getSecretAccessKey(),
       })
     },
     /**
      * @param {string} source
      * @param {string} destination
-     * @param {{to?: boolean}} [options]
+     * @param {{to?: boolean, rcloneOptions?: RcloneOptions}} [options]
      */
     async move(source, destination, options = {}) {
       const r2Config = await getConfig()
@@ -262,6 +271,7 @@ export function createR2Client({ cwd, interactive, promptText }) {
         args: [options.to ? "moveto" : "move", source, destination],
         cwd,
         config: r2Config,
+        rcloneOptions: options.rcloneOptions,
         secretAccessKey: await getSecretAccessKey(),
       })
     },
@@ -496,10 +506,17 @@ async function listR2Objects(args) {
  *   args: string[]
  *   cwd: string
  *   config: R2Config
+ *   rcloneOptions?: RcloneOptions
  *   secretAccessKey: string
  * }} args
  */
-async function runConfiguredRclone({ args, cwd, config, secretAccessKey }) {
+async function runConfiguredRclone({
+  args,
+  cwd,
+  config,
+  rcloneOptions,
+  secretAccessKey,
+}) {
   const env = {
     ...processEnv,
     RCLONE_S3_SECRET_ACCESS_KEY: secretAccessKey,
@@ -518,6 +535,7 @@ async function runConfiguredRclone({ args, cwd, config, secretAccessKey }) {
         "--s3-endpoint",
         getR2Endpoint(config.accountId),
         "--s3-no-check-bucket",
+        ...formatRcloneOptions(rcloneOptions),
       ],
       cwd,
       env,
@@ -525,6 +543,21 @@ async function runConfiguredRclone({ args, cwd, config, secretAccessKey }) {
   } catch (error) {
     throw new CliError(getSanitizedRcloneError(error))
   }
+}
+
+/**
+ * @param {RcloneOptions|undefined} options
+ */
+function formatRcloneOptions(options) {
+  /** @type {string[]} */
+  const args = []
+  if (options?.transfers !== undefined) {
+    args.push("--transfers", String(options.transfers))
+  }
+  if (options?.checkers !== undefined) {
+    args.push("--checkers", String(options.checkers))
+  }
+  return args
 }
 
 /**
@@ -698,9 +731,16 @@ async function defaultRunRclone(args, cwd, env) {
  */
 function getSanitizedRcloneError(error) {
   if (isPlainObject(error)) {
-    const processError = /** @type {{stderr?: unknown, stdout?: unknown}} */ (
-      error
-    )
+    const processError =
+      /** @type {{code?: unknown, stderr?: unknown, stdout?: unknown}} */ (
+        error
+      )
+    if (processError.code === "ENOENT") {
+      return [
+        "rclone is required for lightnet r2 commands but was not found on PATH.",
+        "Install rclone: https://rclone.org/install/",
+      ].join("\n")
+    }
     if (typeof processError.stderr === "string" && processError.stderr.trim()) {
       return processError.stderr.trim()
     }
