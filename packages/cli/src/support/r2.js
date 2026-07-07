@@ -90,7 +90,7 @@ export function createR2FileStorage({
   /** @returns {Promise<string>} */
   const getSecretAccessKey = async () => {
     if (!secretAccessKey) {
-      secretAccessKey = await promptRequiredSecret()
+      secretAccessKey = await promptRequiredSecret({ interactive })
     }
     return secretAccessKey
   }
@@ -164,6 +164,99 @@ export function createR2FileStorage({
     },
   }
   return storage
+}
+
+/**
+ * @param {{
+ *   cwd: string
+ *   interactive: boolean
+ *   promptText: (message: string) => Promise<string>
+ * }} args
+ */
+export function createR2Client({ cwd, interactive, promptText }) {
+  /** @type {R2Config|undefined} */
+  let config
+  /** @type {string|undefined} */
+  let secretAccessKey
+
+  /** @returns {Promise<R2Config>} */
+  const getConfig = async () => {
+    if (config) {
+      return config
+    }
+    const initializedConfig = await initR2Config({
+      cwd,
+      interactive,
+      promptText,
+    })
+    config = initializedConfig
+    return initializedConfig
+  }
+
+  /** @returns {Promise<string>} */
+  const getSecretAccessKey = async () => {
+    if (!secretAccessKey) {
+      secretAccessKey = await promptRequiredSecret({ interactive })
+    }
+    return secretAccessKey
+  }
+
+  return {
+    /**
+     * @param {string} [path]
+     */
+    async list(path) {
+      const r2Config = await getConfig()
+      const result = await runConfiguredRclone({
+        args: [
+          "lsf",
+          makeR2Path(r2Config, normalizeR2ObjectPath(path)),
+          "--recursive",
+          "--files-only",
+        ],
+        cwd,
+        config: r2Config,
+        secretAccessKey: await getSecretAccessKey(),
+      })
+      return result.stdout
+    },
+    /**
+     * @param {string} path
+     * @param {{recursive?: boolean}} [options]
+     */
+    async remove(path, options = {}) {
+      const r2Config = await getConfig()
+      const secretAccessKey = await getSecretAccessKey()
+      const r2Path = makeR2Path(r2Config, normalizeR2ObjectPath(path))
+      await runConfiguredRclone({
+        args: options.recursive
+          ? ["delete", r2Path, "--rmdirs"]
+          : ["deletefile", r2Path],
+        cwd,
+        config: r2Config,
+        secretAccessKey,
+      })
+    },
+    /**
+     * @param {string} source
+     * @param {string} destination
+     */
+    async copy(source, destination) {
+      const r2Config = await getConfig()
+      await runConfiguredRclone({
+        args: ["copy", source, destination],
+        cwd,
+        config: r2Config,
+        secretAccessKey: await getSecretAccessKey(),
+      })
+    },
+    /**
+     * @param {string} path
+     */
+    async toRemotePath(path) {
+      return makeR2Path(await getConfig(), normalizeR2ObjectPath(path))
+    },
+  }
 }
 
 /**
@@ -366,6 +459,7 @@ async function runConfiguredRclone({ args, cwd, config, secretAccessKey }) {
         "auto",
         "--s3-endpoint",
         getR2Endpoint(config.accountId),
+        "--s3-no-check-bucket",
       ],
       cwd,
       env,
@@ -400,12 +494,19 @@ async function promptForR2Config({ cwd, promptText }) {
 }
 
 /**
+ * @param {{interactive?: boolean}} [args]
  * @returns {Promise<string>}
  */
-async function promptRequiredSecret() {
+async function promptRequiredSecret({ interactive = true } = {}) {
   const sessionSecret = processEnv[sessionSecretEnvName]
   if (typeof sessionSecret === "string" && sessionSecret.trim()) {
     return sessionSecret
+  }
+
+  if (!interactive) {
+    throw new CliError(
+      `Missing R2 secret access key. Set ${sessionSecretEnvName} in non-interactive environments.`,
+    )
   }
 
   while (true) {
@@ -420,6 +521,13 @@ async function promptRequiredSecret() {
       return value
     }
   }
+}
+
+/**
+ * @param {string} [path]
+ */
+function normalizeR2ObjectPath(path) {
+  return path?.replace(/^r2:/, "").replace(/^\/+/, "") ?? ""
 }
 
 /**

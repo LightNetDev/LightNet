@@ -7,6 +7,7 @@ import pkg from "../package.json" with { type: "json" }
 import { checkFiles } from "./check-files.js"
 import { checkLinks } from "./check-links.js"
 import { checkTranslations } from "./check-translations.js"
+import { copyR2, listR2, removeR2 } from "./r2.js"
 import { CliError } from "./support/cli-error.js"
 import { PromptCancelled } from "./support/prompt-cancel.js"
 const { version } = pkg
@@ -65,6 +66,51 @@ program
     try {
       const checkSuccessful = await checkLinks(options)
       commandExitCode = checkSuccessful ? 0 : 1
+    } catch (error) {
+      handleCommandError(error)
+    }
+  })
+
+const r2Command = program
+  .command("r2")
+  .description("manage Cloudflare R2 files with rclone")
+
+r2Command
+  .command("ls")
+  .description("list R2 objects")
+  .argument("[path]", "R2 path or prefix")
+  .action(async (path) => {
+    try {
+      await listR2(path)
+    } catch (error) {
+      handleCommandError(error)
+    }
+  })
+
+r2Command
+  .command("rm")
+  .description("delete an R2 file; use -r to delete a directory/prefix")
+  .argument("<path>", "R2 file path, or directory/prefix with -r")
+  .option("-r, --recursive", "delete a directory/prefix recursively")
+  .option("-f, --force", "delete without confirmation")
+  .action(async (path, options) => {
+    try {
+      await removeR2(path, options)
+    } catch (error) {
+      handleCommandError(error)
+    }
+  })
+
+r2Command
+  .command("cp")
+  .description(
+    'copy files between R2 and the local filesystem; prefix the R2 side with "r2:"',
+  )
+  .argument("<source>", 'source path; use "r2:<path>" for R2')
+  .argument("<destination>", 'destination path; use "r2:<path>" for R2')
+  .action(async (source, destination) => {
+    try {
+      await copyR2(source, destination)
     } catch (error) {
       handleCommandError(error)
     }
