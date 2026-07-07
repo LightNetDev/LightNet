@@ -91,9 +91,19 @@ export async function removeR2(path, options, runtime = {}) {
   }
 
   const interactive = getInteractive(runtime)
+  if (isBucketRoot && options.force && !options.longForce && !interactive) {
+    throw new CliError(
+      'Ignoring "-f" for R2 bucket-root cleanup. If you are sure you want to delete the entire R2 bucket, use "--force".',
+    )
+  }
   if (isBucketRoot && !interactive && !options.longForce) {
     throw new CliError(
-      'Cleaning the R2 bucket root requires interactive confirmation or "--force".',
+      'Cleaning the R2 bucket root requires interactive confirmation. If you are sure you want to delete the entire R2 bucket, use "--force".',
+    )
+  }
+  if (isBucketRoot && options.force && !options.longForce) {
+    log.warn(
+      'Ignoring "-f" for R2 bucket-root cleanup. Use "--force" if you are sure you want to delete the entire R2 bucket.',
     )
   }
   if (!options.force && !interactive) {
@@ -165,6 +175,7 @@ export async function copyR2(source, destination, options = {}, runtime = {}) {
     (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
 
   const confirmedRootOverwrite = await confirmCopyRootOverwrite({
+    force: options.force === true,
     longForce: options.longForce === true,
     runtime,
     targetPath,
@@ -284,6 +295,7 @@ async function replaceCopyTargetBeforeCopy({
 
 /**
  * @param {{
+ *   force: boolean,
  *   longForce: boolean,
  *   runtime: R2Runtime,
  *   targetPath: CopyPath,
@@ -291,6 +303,7 @@ async function replaceCopyTargetBeforeCopy({
  * }} args
  */
 async function confirmCopyRootOverwrite({
+  force,
   longForce,
   runtime,
   targetPath,
@@ -305,9 +318,19 @@ async function confirmCopyRootOverwrite({
   if (longForce) {
     return true
   }
+  if (force && !getInteractive(runtime)) {
+    throw new CliError(
+      'Ignoring "-f" for R2 bucket-root replacement. If you are sure you want to replace the entire R2 bucket, use "--force".',
+    )
+  }
   if (!getInteractive(runtime)) {
     throw new CliError(
-      'Replacing the R2 bucket root requires interactive confirmation or "--force".',
+      'Replacing the R2 bucket root requires interactive confirmation. If you are sure you want to replace the entire R2 bucket, use "--force".',
+    )
+  }
+  if (force) {
+    log.warn(
+      'Ignoring "-f" for R2 bucket-root replacement. Use "--force" if you are sure you want to replace the entire R2 bucket.',
     )
   }
   const shouldOverwrite = await getPromptConfirm(runtime)(
