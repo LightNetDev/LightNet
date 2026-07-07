@@ -96,10 +96,11 @@ r2Command
   .option("-r, --recursive", "delete a directory/prefix recursively")
   .option(
     "-f, --force",
-    "delete without confirmation, except when cleaning the bucket root",
+    'delete without confirmation; use "--force" to clean the bucket root without confirmation',
   )
   .action(async (path, options) => {
     try {
+      options.longForce = hasLongForceFlag()
       await removeR2(path, options)
     } catch (error) {
       handleCommandError(error)
@@ -113,9 +114,13 @@ r2Command
   )
   .argument("<source>", 'source path; use "r2:<path>" for R2')
   .argument("<destination>", 'destination path; use "r2:<path>" for R2')
-  .option("-f, --force", "overwrite existing files without confirmation")
+  .option(
+    "-f, --force",
+    'overwrite without confirmation; use "--force" to replace the bucket root without confirmation',
+  )
   .action(async (source, destination, options) => {
     try {
+      options.longForce = hasLongForceFlag()
       await copyR2(source, destination, options)
     } catch (error) {
       handleCommandError(error)
@@ -153,4 +158,8 @@ function handleCommandError(error) {
     return
   }
   throw error
+}
+
+function hasLongForceFlag() {
+  return process.argv.includes("--force")
 }
