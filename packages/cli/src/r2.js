@@ -25,6 +25,12 @@ const remotePathPrefix = "r2:"
 
 /**
  * @typedef {{
+ *   force?: boolean
+ * }} R2MoveOptions
+ */
+
+/**
+ * @typedef {{
  *   remote: boolean
  *   path: string
  * }} CopyPath
@@ -179,6 +185,64 @@ export async function copyR2(source, destination, options = {}, runtime = {}) {
 }
 
 /**
+ * @param {string} source
+ * @param {string} destination
+ * @param {R2MoveOptions} options
+ * @param {R2Runtime} [runtime]
+ */
+export async function moveR2(source, destination, options, runtime = {}) {
+  const sourcePath = parseR2OnlyPath(source, "Move source")
+  const destinationPath = parseR2OnlyPath(destination, "Move destination")
+  if (isR2BucketRootPath(source) || isR2BucketRootPath(destination)) {
+    throw new CliError("Refusing to move the R2 bucket root.")
+  }
+
+  const client = createR2CommandClient(runtime)
+  const sourceType = await getCopyPathType(sourcePath, client, runtime)
+  if (sourceType === "missing") {
+    throw new CliError(`Move source "${source}" does not exist.`)
+  }
+  const destinationType = await getCopyPathType(
+    destinationPath,
+    client,
+    runtime,
+  )
+  const targetPath = getCopyTargetPath({
+    destination: destinationPath,
+    destinationType,
+    runtime,
+    source: sourcePath,
+    sourceType,
+  })
+  const targetType = await getCopyPathType(targetPath, client, runtime)
+  const shouldUseMoveTo =
+    sourceType === "file" &&
+    (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
+
+  await confirmCopyOverwrite({
+    destination,
+    force: options.force === true,
+    runtime,
+    sourceType,
+    targetPath,
+    targetType,
+  })
+  await replaceCopyTargetBeforeCopy({
+    client,
+    runtime,
+    sourceType,
+    targetPath,
+    targetType,
+  })
+
+  await client.move(
+    await toRcloneCopyPath(sourcePath, client, runtime),
+    await toRcloneCopyPath(targetPath, client, runtime),
+    { to: shouldUseMoveTo },
+  )
+}
+
+/**
  * @param {{
  *   client: ReturnType<typeof createR2CommandClient>,
  *   runtime: R2Runtime,
@@ -245,6 +309,21 @@ function getPromptConfirm(runtime) {
 function parseCopyPath(value) {
   if (!value.startsWith(remotePathPrefix)) {
     return { remote: false, path: value }
+  }
+  return { remote: true, path: normalizeR2Path(value) }
+}
+
+/**
+ * @param {string} value
+ * @param {string} label
+ * @returns {CopyPath}
+ */
+function parseR2OnlyPath(value, label) {
+  if (value.startsWith(remotePathPrefix)) {
+    return { remote: true, path: normalizeR2Path(value) }
+  }
+  if (value.startsWith("/") || value.startsWith("./") || value === ".") {
+    throw new CliError(`${label} must be an R2 path, not a local path.`)
   }
   return { remote: true, path: normalizeR2Path(value) }
 }

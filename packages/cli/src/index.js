@@ -7,7 +7,7 @@ import pkg from "../package.json" with { type: "json" }
 import { checkFiles } from "./check-files.js"
 import { checkLinks } from "./check-links.js"
 import { checkTranslations } from "./check-translations.js"
-import { copyR2, listR2, removeR2 } from "./r2.js"
+import { copyR2, listR2, moveR2, removeR2 } from "./r2.js"
 import { CliError } from "./support/cli-error.js"
 import { PromptCancelled } from "./support/prompt-cancel.js"
 const { version } = pkg
@@ -117,6 +117,20 @@ r2Command
   .action(async (source, destination, options) => {
     try {
       await copyR2(source, destination, options)
+    } catch (error) {
+      handleCommandError(error)
+    }
+  })
+
+r2Command
+  .command("mv")
+  .description("move or rename an R2 file or directory/prefix")
+  .argument("<source>", "R2 source path")
+  .argument("<destination>", "R2 destination path")
+  .option("-f, --force", "overwrite existing destination without confirmation")
+  .action(async (source, destination, options) => {
+    try {
+      await moveR2(source, destination, options)
     } catch (error) {
       handleCommandError(error)
     }

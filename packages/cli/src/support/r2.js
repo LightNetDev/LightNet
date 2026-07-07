@@ -252,6 +252,20 @@ export function createR2Client({ cwd, interactive, promptText }) {
       })
     },
     /**
+     * @param {string} source
+     * @param {string} destination
+     * @param {{to?: boolean}} [options]
+     */
+    async move(source, destination, options = {}) {
+      const r2Config = await getConfig()
+      await runConfiguredRclone({
+        args: [options.to ? "moveto" : "move", source, destination],
+        cwd,
+        config: r2Config,
+        secretAccessKey: await getSecretAccessKey(),
+      })
+    },
+    /**
      * @param {string} path
      * @returns {Promise<"file"|"directory"|"missing">}
      */
