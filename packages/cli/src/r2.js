@@ -1,6 +1,7 @@
 // @ts-check
 
-import { resolve } from "node:path"
+import { rm, stat } from "node:fs/promises"
+import { basename, join, posix, resolve } from "node:path"
 import {
   cwd as processCwd,
   env as processEnv,
@@ -8,13 +9,28 @@ import {
   stdout,
 } from "node:process"
 
-import { confirm, isCancel, text } from "@clack/prompts"
+import { confirm, isCancel, log, text } from "@clack/prompts"
 
 import { CliError } from "./support/cli-error.js"
 import { cancelPrompt } from "./support/prompt-cancel.js"
 import { createR2Client } from "./support/r2.js"
 
 const remotePathPrefix = "r2:"
+
+/**
+ * @typedef {{
+ *   force?: boolean
+ * }} R2CopyOptions
+ */
+
+/**
+ * @typedef {{
+ *   remote: boolean
+ *   path: string
+ * }} CopyPath
+ */
+
+/** @typedef {"file"|"directory"|"missing"} CopyPathType */
 
 /**
  * @typedef {{
@@ -56,20 +72,40 @@ export async function listR2(path, runtime = {}) {
  */
 export async function removeR2(path, options, runtime = {}) {
   const r2Path = normalizeR2Path(path)
-  if (!r2Path) {
+  const isBucketRoot = isR2BucketRootPath(path)
+  if (isBucketRoot && !options.recursive) {
+    throw new CliError(
+      'Refusing to delete the R2 bucket root without "--recursive".',
+    )
+  }
+  if (!r2Path && !isBucketRoot) {
     throw new CliError("Refusing to delete the R2 bucket root.")
   }
 
   const interactive = getInteractive(runtime)
+  if (isBucketRoot && !interactive) {
+    throw new CliError(
+      "Cleaning the R2 bucket root requires interactive confirmation.",
+    )
+  }
   if (!options.force && !interactive) {
     throw new CliError(
       'R2 deletion requires confirmation. Re-run with "--force" in non-interactive environments.',
     )
   }
 
-  const shouldDelete =
-    options.force ||
-    (await getPromptConfirm(runtime)(`Delete R2 path "${r2Path}"? [y/N] `))
+  if (isBucketRoot) {
+    log.warn(
+      "This will delete ALL files in the configured R2 bucket. This cannot be undone.",
+    )
+  }
+
+  const shouldDelete = isBucketRoot
+    ? await getPromptConfirm(runtime)(
+        "Delete all files in the R2 bucket? [y/N] ",
+      )
+    : options.force ||
+      (await getPromptConfirm(runtime)(`Delete R2 path "${r2Path}"? [y/N] `))
 
   if (!shouldDelete) {
     return
@@ -84,9 +120,10 @@ export async function removeR2(path, options, runtime = {}) {
 /**
  * @param {string} source
  * @param {string} destination
+ * @param {R2CopyOptions} [options]
  * @param {R2Runtime} [runtime]
  */
-export async function copyR2(source, destination, runtime = {}) {
+export async function copyR2(source, destination, options = {}, runtime = {}) {
   const sourcePath = parseCopyPath(source)
   const destinationPath = parseCopyPath(destination)
   if (sourcePath.remote === destinationPath.remote) {
@@ -96,14 +133,78 @@ export async function copyR2(source, destination, runtime = {}) {
   }
 
   const client = createR2CommandClient(runtime)
-  const rcloneSource = sourcePath.remote
-    ? await client.toRemotePath(sourcePath.path)
-    : resolveLocalPath(sourcePath.path, runtime)
-  const rcloneDestination = destinationPath.remote
-    ? await client.toRemotePath(destinationPath.path)
-    : resolveLocalPath(destinationPath.path, runtime)
+  const sourceType = await getCopyPathType(sourcePath, client, runtime)
+  if (sourceType === "missing") {
+    throw new CliError(`Copy source "${source}" does not exist.`)
+  }
 
-  await client.copy(rcloneSource, rcloneDestination)
+  const destinationType = await getCopyPathType(
+    destinationPath,
+    client,
+    runtime,
+  )
+  const targetPath = getCopyTargetPath({
+    destination: destinationPath,
+    destinationType,
+    runtime,
+    source: sourcePath,
+    sourceType,
+  })
+  const targetType = await getCopyPathType(targetPath, client, runtime)
+  const shouldUseCopyTo =
+    sourceType === "file" &&
+    (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
+
+  await confirmCopyOverwrite({
+    destination,
+    force: options.force === true,
+    runtime,
+    sourceType,
+    targetPath,
+    targetType,
+  })
+  await replaceCopyTargetBeforeCopy({
+    client,
+    runtime,
+    sourceType,
+    targetPath,
+    targetType,
+  })
+
+  await client.copy(
+    await toRcloneCopyPath(sourcePath, client, runtime),
+    await toRcloneCopyPath(targetPath, client, runtime),
+    { to: shouldUseCopyTo },
+  )
+}
+
+/**
+ * @param {{
+ *   client: ReturnType<typeof createR2CommandClient>,
+ *   runtime: R2Runtime,
+ *   sourceType: CopyPathType,
+ *   targetPath: CopyPath,
+ *   targetType: CopyPathType
+ * }} args
+ */
+async function replaceCopyTargetBeforeCopy({
+  client,
+  runtime,
+  sourceType,
+  targetPath,
+  targetType,
+}) {
+  if (sourceType !== "directory" || targetType !== "directory") {
+    return
+  }
+  if (targetPath.remote) {
+    await client.remove(targetPath.path, { recursive: true })
+    return
+  }
+  await rm(resolveLocalPath(targetPath.path, runtime), {
+    force: true,
+    recursive: true,
+  })
 }
 
 /**
@@ -149,6 +250,147 @@ function parseCopyPath(value) {
 }
 
 /**
+ * @param {{
+ *   destination: CopyPath,
+ *   destinationType: CopyPathType,
+ *   runtime: R2Runtime,
+ *   source: CopyPath,
+ *   sourceType: CopyPathType
+ * }} args
+ * @returns {CopyPath}
+ */
+function getCopyTargetPath({
+  destination,
+  destinationType,
+  runtime,
+  source,
+  sourceType,
+}) {
+  if (sourceType === "directory") {
+    if (destinationType === "file") {
+      throw new CliError("Cannot copy a directory to an existing file.")
+    }
+    return destination
+  }
+
+  if (
+    destinationType === "directory" ||
+    (destinationType === "missing" && isDirectoryLikeCopyPath(destination))
+  ) {
+    return {
+      ...destination,
+      path: joinCopyPath(destination, getCopyPathName(source, runtime)),
+    }
+  }
+
+  return destination
+}
+
+/**
+ * @param {{
+ *   destination: string,
+ *   force: boolean,
+ *   runtime: R2Runtime,
+ *   sourceType: CopyPathType,
+ *   targetPath: CopyPath,
+ *   targetType: CopyPathType
+ * }} args
+ */
+async function confirmCopyOverwrite({
+  destination,
+  force,
+  runtime,
+  sourceType,
+  targetPath,
+  targetType,
+}) {
+  if (targetType === "missing") {
+    return
+  }
+  if (
+    sourceType === "file" &&
+    targetType === "directory" &&
+    !isDirectoryLikeCopyPath(targetPath)
+  ) {
+    throw new CliError("Cannot overwrite an existing directory with a file.")
+  }
+  if (force) {
+    return
+  }
+  if (!getInteractive(runtime)) {
+    throw new CliError(
+      'Copy would overwrite existing files. Re-run with "--force" in non-interactive environments.',
+    )
+  }
+  const shouldOverwrite = await getPromptConfirm(runtime)(
+    `Overwrite existing destination "${destination}"? [y/N] `,
+  )
+  if (!shouldOverwrite) {
+    cancelPrompt()
+  }
+}
+
+/**
+ * @param {CopyPath} copyPath
+ * @param {ReturnType<typeof createR2CommandClient>} client
+ * @param {R2Runtime} runtime
+ * @returns {Promise<CopyPathType>}
+ */
+async function getCopyPathType(copyPath, client, runtime) {
+  if (copyPath.remote) {
+    return client.getPathType(copyPath.path)
+  }
+  try {
+    const stats = await stat(resolveLocalPath(copyPath.path, runtime))
+    return stats.isDirectory() ? "directory" : "file"
+  } catch (error) {
+    if (isLocalNotFoundError(error)) {
+      return "missing"
+    }
+    throw error
+  }
+}
+
+/**
+ * @param {CopyPath} copyPath
+ * @param {ReturnType<typeof createR2CommandClient>} client
+ * @param {R2Runtime} runtime
+ */
+async function toRcloneCopyPath(copyPath, client, runtime) {
+  return copyPath.remote
+    ? await client.toRemotePath(copyPath.path)
+    : resolveLocalPath(copyPath.path, runtime)
+}
+
+/**
+ * @param {CopyPath} copyPath
+ */
+function isDirectoryLikeCopyPath(copyPath) {
+  return copyPath.path === "." || copyPath.path.endsWith("/")
+}
+
+/**
+ * @param {CopyPath} parent
+ * @param {string} child
+ */
+function joinCopyPath(parent, child) {
+  if (parent.remote) {
+    return parent.path ? posix.join(parent.path, child) : child
+  }
+  return join(parent.path, child)
+}
+
+/**
+ * @param {CopyPath} copyPath
+ * @param {R2Runtime} runtime
+ */
+function getCopyPathName(copyPath, runtime) {
+  return copyPath.remote
+    ? posix.basename(copyPath.path.replace(/\/+$/, ""))
+    : basename(resolveLocalPath(copyPath.path, runtime))
+}
+
+/**
  * @param {string} path
  * @param {R2Runtime} runtime
  */
@@ -168,6 +410,25 @@ function getInvocationCwd(runtime) {
  */
 function normalizeR2Path(path) {
   return path?.replace(/^r2:/, "").replace(/^\/+/, "") ?? ""
+}
+
+/**
+ * @param {string} path
+ */
+function isR2BucketRootPath(path) {
+  return path.trim() === "/"
+}
+
+/**
+ * @param {unknown} error
+ */
+function isLocalNotFoundError(error) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === "ENOENT"
+  )
 }
 
 /**

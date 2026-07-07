@@ -89,10 +89,15 @@ r2Command
 
 r2Command
   .command("rm")
-  .description("delete an R2 file; use -r to delete a directory/prefix")
-  .argument("<path>", "R2 file path, or directory/prefix with -r")
+  .description(
+    'delete an R2 file; use -r to delete a directory/prefix or "/" to clean the bucket',
+  )
+  .argument("<path>", 'R2 file path, directory/prefix with -r, or "/" with -r')
   .option("-r, --recursive", "delete a directory/prefix recursively")
-  .option("-f, --force", "delete without confirmation")
+  .option(
+    "-f, --force",
+    "delete without confirmation, except when cleaning the bucket root",
+  )
   .action(async (path, options) => {
     try {
       await removeR2(path, options)
@@ -108,9 +113,10 @@ r2Command
   )
   .argument("<source>", 'source path; use "r2:<path>" for R2')
   .argument("<destination>", 'destination path; use "r2:<path>" for R2')
-  .action(async (source, destination) => {
+  .option("-f, --force", "overwrite existing files without confirmation")
+  .action(async (source, destination, options) => {
     try {
-      await copyR2(source, destination)
+      await copyR2(source, destination, options)
     } catch (error) {
       handleCommandError(error)
     }

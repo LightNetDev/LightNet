@@ -240,15 +240,59 @@ export function createR2Client({ cwd, interactive, promptText }) {
     /**
      * @param {string} source
      * @param {string} destination
+     * @param {{to?: boolean}} [options]
      */
-    async copy(source, destination) {
+    async copy(source, destination, options = {}) {
       const r2Config = await getConfig()
       await runConfiguredRclone({
-        args: ["copy", source, destination],
+        args: [options.to ? "copyto" : "copy", source, destination],
         cwd,
         config: r2Config,
         secretAccessKey: await getSecretAccessKey(),
       })
+    },
+    /**
+     * @param {string} path
+     * @returns {Promise<"file"|"directory"|"missing">}
+     */
+    async getPathType(path) {
+      const normalizedPath = normalizeR2ObjectPath(path)
+      if (!normalizedPath) {
+        return "directory"
+      }
+      const r2Config = await getConfig()
+      try {
+        const result = await runConfiguredRclone({
+          args: [
+            "lsjson",
+            makeR2Path(r2Config, normalizedPath),
+            "--max-depth",
+            "1",
+            "--no-mimetype",
+            "--no-modtime",
+          ],
+          cwd,
+          config: r2Config,
+          secretAccessKey: await getSecretAccessKey(),
+        })
+        const entries = parseRcloneJsonList(result.stdout)
+        if (entries.length === 0) {
+          return "missing"
+        }
+        if (
+          entries.length === 1 &&
+          !entries[0].isDir &&
+          entries[0].name === getR2PathName(normalizedPath)
+        ) {
+          return "file"
+        }
+        return "directory"
+      } catch (error) {
+        if (isRcloneNotFoundError(error)) {
+          return "missing"
+        }
+        throw error
+      }
     },
     /**
      * @param {string} path
@@ -528,6 +572,40 @@ async function promptRequiredSecret({ interactive = true } = {}) {
  */
 function normalizeR2ObjectPath(path) {
   return path?.replace(/^r2:/, "").replace(/^\/+/, "") ?? ""
+}
+
+/**
+ * @param {string} output
+ * @returns {{name:string, isDir:boolean}[]}
+ */
+function parseRcloneJsonList(output) {
+  const parsed = JSON.parse(output)
+  if (!Array.isArray(parsed)) {
+    throw new CliError("Unexpected rclone JSON listing output.")
+  }
+  return parsed
+    .filter((item) => isPlainObject(item) && typeof item.Name === "string")
+    .map((item) => ({
+      name: String(item.Name),
+      isDir: item.IsDir === true,
+    }))
+}
+
+/**
+ * @param {string} path
+ */
+function getR2PathName(path) {
+  return path.replace(/\/+$/, "").split("/").at(-1) ?? ""
+}
+
+/**
+ * @param {unknown} error
+ */
+function isRcloneNotFoundError(error) {
+  return (
+    error instanceof Error &&
+    /not found|directory not found|object not found/i.test(error.message)
+  )
 }
 
 /**
