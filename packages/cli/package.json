@@ -3,7 +3,7 @@
   "description": "CLI for managing LightNet projects",
   "type": "module",
   "license": "MIT",
-  "version": "4.6.1",
+  "version": "4.6.2",
   "publishConfig": {
     "access": "public"
   },

@@ -1,5 +1,15 @@
 # @lightnet/cli
 
+## 4.6.2
+
+### Patch Changes
+
+- [#443](https://github.com/LightNetDev/LightNet/pull/443) [`6593139`](https://github.com/LightNetDev/LightNet/commit/65931398471107c03bca6bf4de675599b11db5e5) - Add Clack intro and completion messages to mutating `lightnet r2` commands while keeping `lightnet r2 ls` pipe-friendly.
+
+- [#443](https://github.com/LightNetDev/LightNet/pull/443) [`6593139`](https://github.com/LightNetDev/LightNet/commit/65931398471107c03bca6bf4de675599b11db5e5) - Improve `lightnet r2 cp`, `lightnet r2 mv`, and recursive `lightnet r2 rm` performance by passing tuned rclone concurrency settings internally.
+
+- [#443](https://github.com/LightNetDev/LightNet/pull/443) [`6593139`](https://github.com/LightNetDev/LightNet/commit/65931398471107c03bca6bf4de675599b11db5e5) - Show a clear install message when `lightnet r2` commands cannot find `rclone` on PATH.
+
 ## 4.6.1
 
 ### Patch Changes
