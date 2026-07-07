@@ -109,7 +109,7 @@ r2Command
 r2Command
   .command("cp")
   .description(
-    'copy files between R2 and the local filesystem; prefix the R2 side with "r2:"',
+    'copy files between R2 and local paths, or inside R2; prefix R2 paths with "r2:"',
   )
   .argument("<source>", 'source path; use "r2:<path>" for R2')
   .argument("<destination>", 'destination path; use "r2:<path>" for R2')

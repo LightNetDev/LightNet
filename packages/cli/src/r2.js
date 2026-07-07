@@ -132,9 +132,9 @@ export async function removeR2(path, options, runtime = {}) {
 export async function copyR2(source, destination, options = {}, runtime = {}) {
   const sourcePath = parseCopyPath(source)
   const destinationPath = parseCopyPath(destination)
-  if (sourcePath.remote === destinationPath.remote) {
+  if (!sourcePath.remote && !destinationPath.remote) {
     throw new CliError(
-      `R2 copy requires exactly one R2 path. Prefix the remote side with "${remotePathPrefix}".`,
+      `R2 copy requires at least one R2 path. Prefix R2 paths with "${remotePathPrefix}".`,
     )
   }
 
