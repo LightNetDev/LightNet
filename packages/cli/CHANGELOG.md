@@ -1,5 +1,17 @@
 # @lightnet/cli
 
+## 4.6.0
+
+### Minor Changes
+
+- [#439](https://github.com/LightNetDev/LightNet/pull/439) [`2572437`](https://github.com/LightNetDev/LightNet/commit/25724372a47ac8fcac1fd5959c442d6619f5b758) - Update `lightnet r2 cp` to support Unix-like file overwrite behavior and prompt before overwriting unless `-f` is provided.
+
+- [#439](https://github.com/LightNetDev/LightNet/pull/439) [`2572437`](https://github.com/LightNetDev/LightNet/commit/25724372a47ac8fcac1fd5959c442d6619f5b758) - Allow `lightnet r2 cp` to copy files and prefixes inside the configured R2 bucket with `r2:` source and destination paths.
+
+- [#439](https://github.com/LightNetDev/LightNet/pull/439) [`2572437`](https://github.com/LightNetDev/LightNet/commit/25724372a47ac8fcac1fd5959c442d6619f5b758) - Add `lightnet r2 mv` for moving and renaming files and prefixes inside the configured R2 bucket.
+
+- [#439](https://github.com/LightNetDev/LightNet/pull/439) [`2572437`](https://github.com/LightNetDev/LightNet/commit/25724372a47ac8fcac1fd5959c442d6619f5b758) - Update `lightnet r2 rm` to use OS-style deletion flags with `-r` for recursive prefix removal and `-f` for skipping confirmation.
+
 ## 4.5.0
 
 ### Minor Changes
