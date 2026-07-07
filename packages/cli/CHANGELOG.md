@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.6.1
+
+### Patch Changes
+
+- [#441](https://github.com/LightNetDev/LightNet/pull/441) [`b643414`](https://github.com/LightNetDev/LightNet/commit/b643414852ed1e6d80fa013dff9e1189c9f7ba35) - Protect R2 bucket-root delete and copy replacement with a visible warning and require the long `--force` flag to bypass confirmation.
+
 ## 4.6.0
 
 ### Minor Changes
