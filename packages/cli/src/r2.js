@@ -20,6 +20,7 @@ const remotePathPrefix = "r2:"
 /**
  * @typedef {{
  *   force?: boolean
+ *   longForce?: boolean
  * }} R2CopyOptions
  */
 
@@ -42,6 +43,7 @@ const remotePathPrefix = "r2:"
  * @typedef {{
  *   force?: boolean
  *   recursive?: boolean
+ *   longForce?: boolean
  * }} R2RemoveOptions
  */
 
@@ -89,9 +91,19 @@ export async function removeR2(path, options, runtime = {}) {
   }
 
   const interactive = getInteractive(runtime)
-  if (isBucketRoot && !interactive) {
+  if (isBucketRoot && options.force && !options.longForce && !interactive) {
     throw new CliError(
-      "Cleaning the R2 bucket root requires interactive confirmation.",
+      'Ignoring "-f" for R2 bucket-root cleanup. If you are sure you want to delete the entire R2 bucket, use "--force".',
+    )
+  }
+  if (isBucketRoot && !interactive && !options.longForce) {
+    throw new CliError(
+      'Cleaning the R2 bucket root requires interactive confirmation. If you are sure you want to delete the entire R2 bucket, use "--force".',
+    )
+  }
+  if (isBucketRoot && options.force && !options.longForce) {
+    log.warn(
+      'Ignoring "-f" for R2 bucket-root cleanup. Use "--force" if you are sure you want to delete the entire R2 bucket.',
     )
   }
   if (!options.force && !interactive) {
@@ -107,14 +119,15 @@ export async function removeR2(path, options, runtime = {}) {
   }
 
   const shouldDelete = isBucketRoot
-    ? await getPromptConfirm(runtime)(
+    ? options.longForce ||
+      (await getPromptConfirm(runtime)(
         "Delete all files in the R2 bucket? [y/N] ",
-      )
+      ))
     : options.force ||
       (await getPromptConfirm(runtime)(`Delete R2 path "${r2Path}"? [y/N] `))
 
   if (!shouldDelete) {
-    return
+    cancelPrompt()
   }
 
   const client = createR2CommandClient(runtime)
@@ -161,14 +174,23 @@ export async function copyR2(source, destination, options = {}, runtime = {}) {
     sourceType === "file" &&
     (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
 
-  await confirmCopyOverwrite({
-    destination,
+  const confirmedRootOverwrite = await confirmCopyRootOverwrite({
     force: options.force === true,
+    longForce: options.longForce === true,
     runtime,
-    sourceType,
     targetPath,
     targetType,
   })
+  if (!confirmedRootOverwrite) {
+    await confirmCopyOverwrite({
+      destination,
+      force: options.force === true,
+      runtime,
+      sourceType,
+      targetPath,
+      targetType,
+    })
+  }
   await replaceCopyTargetBeforeCopy({
     client,
     runtime,
@@ -269,6 +291,55 @@ async function replaceCopyTargetBeforeCopy({
     force: true,
     recursive: true,
   })
+}
+
+/**
+ * @param {{
+ *   force: boolean,
+ *   longForce: boolean,
+ *   runtime: R2Runtime,
+ *   targetPath: CopyPath,
+ *   targetType: CopyPathType
+ * }} args
+ */
+async function confirmCopyRootOverwrite({
+  force,
+  longForce,
+  runtime,
+  targetPath,
+  targetType,
+}) {
+  if (!isR2BucketRootCopyPath(targetPath) || targetType === "missing") {
+    return false
+  }
+  log.warn(
+    "This will replace ALL files in the configured R2 bucket. This cannot be undone.",
+  )
+  if (longForce) {
+    return true
+  }
+  if (force && !getInteractive(runtime)) {
+    throw new CliError(
+      'Ignoring "-f" for R2 bucket-root replacement. If you are sure you want to replace the entire R2 bucket, use "--force".',
+    )
+  }
+  if (!getInteractive(runtime)) {
+    throw new CliError(
+      'Replacing the R2 bucket root requires interactive confirmation. If you are sure you want to replace the entire R2 bucket, use "--force".',
+    )
+  }
+  if (force) {
+    log.warn(
+      'Ignoring "-f" for R2 bucket-root replacement. Use "--force" if you are sure you want to replace the entire R2 bucket.',
+    )
+  }
+  const shouldOverwrite = await getPromptConfirm(runtime)(
+    "Replace all files in the R2 bucket? [y/N] ",
+  )
+  if (!shouldOverwrite) {
+    cancelPrompt()
+  }
+  return true
 }
 
 /**
@@ -496,6 +567,13 @@ function normalizeR2Path(path) {
  */
 function isR2BucketRootPath(path) {
   return path.trim() === "/"
+}
+
+/**
+ * @param {CopyPath} path
+ */
+function isR2BucketRootCopyPath(path) {
+  return path.remote && path.path === ""
 }
 
 /**
