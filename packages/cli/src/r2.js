@@ -87,69 +87,111 @@ export async function listR2(path, runtime = {}) {
 }
 
 /**
- * @param {string} path
+ * @param {string|string[]} paths
  * @param {R2RemoveOptions} options
  * @param {R2Runtime} [runtime]
  */
-export async function removeR2(path, options, runtime = {}) {
+export async function removeR2(paths, options, runtime = {}) {
   intro("r2 rm")
-  const r2Path = normalizeR2Path(path)
-  const isBucketRoot = isR2BucketRootPath(path)
-  if (isBucketRoot && !options.recursive) {
+  const removePaths = Array.isArray(paths) ? paths : [paths]
+  const rootPaths = removePaths.filter((path) => isR2BucketRootPath(path))
+  const hasBucketRoot = rootPaths.length > 0
+  if (removePaths.length === 0) {
+    throw new CliError("R2 deletion requires at least one path.")
+  }
+  if (hasBucketRoot && removePaths.length > 1) {
+    throw new CliError(
+      "Refusing to delete the R2 bucket root with other paths.",
+    )
+  }
+  if (hasBucketRoot && !options.recursive) {
     throw new CliError(
       'Refusing to delete the R2 bucket root without "--recursive".',
     )
   }
-  if (!r2Path && !isBucketRoot) {
-    throw new CliError("Refusing to delete the R2 bucket root.")
+
+  const r2Paths = removePaths.map((path) => normalizeR2Path(path))
+  for (const [index, r2Path] of r2Paths.entries()) {
+    if (!r2Path && !isR2BucketRootPath(removePaths[index])) {
+      throw new CliError("Refusing to delete the R2 bucket root.")
+    }
   }
 
   const interactive = getInteractive(runtime)
-  if (isBucketRoot && options.force && !options.longForce && !interactive) {
+  if (hasBucketRoot && options.force && !options.longForce && !interactive) {
     throw new CliError(
       'Ignoring "-f" for R2 bucket-root cleanup. If you are sure you want to delete the entire R2 bucket, use "--force".',
     )
   }
-  if (isBucketRoot && !interactive && !options.longForce) {
+  if (hasBucketRoot && !interactive && !options.longForce) {
     throw new CliError(
       'Cleaning the R2 bucket root requires interactive confirmation. If you are sure you want to delete the entire R2 bucket, use "--force".',
     )
   }
-  if (isBucketRoot && options.force && !options.longForce) {
+  if (hasBucketRoot && options.force && !options.longForce) {
     log.warn(
       'Ignoring "-f" for R2 bucket-root cleanup. Use "--force" if you are sure you want to delete the entire R2 bucket.',
     )
   }
-  if (!options.force && !interactive) {
-    throw new CliError(
-      'R2 deletion requires confirmation. Re-run with "--force" in non-interactive environments.',
-    )
-  }
-
-  if (isBucketRoot) {
+  if (hasBucketRoot) {
     log.warn(
       "This will delete ALL files in the configured R2 bucket. This cannot be undone.",
     )
   }
 
-  const shouldDelete = isBucketRoot
-    ? options.longForce ||
-      (await getPromptConfirm(runtime)(
-        "Delete all files in the R2 bucket? [y/N] ",
-      ))
-    : options.force ||
-      (await getPromptConfirm(runtime)(`Delete R2 path "${r2Path}"? [y/N] `))
+  const client = createR2CommandClient(runtime)
+  const targets = []
+  for (const [index, r2Path] of r2Paths.entries()) {
+    const originalPath = removePaths[index]
+    const isBucketRoot = isR2BucketRootPath(originalPath)
+    const pathType = isBucketRoot
+      ? "directory"
+      : await getCopyPathType({ remote: true, path: r2Path }, client, runtime)
 
-  if (!shouldDelete) {
-    cancelPrompt()
+    if (pathType === "missing") {
+      if (options.force) {
+        continue
+      }
+      throw new CliError(`R2 path "${r2Path}" does not exist.`)
+    }
+    if (pathType === "directory" && !options.recursive) {
+      throw new CliError(
+        `R2 path "${r2Path}" is a directory. Re-run with "--recursive" to delete directories.`,
+      )
+    }
+    targets.push({
+      isBucketRoot,
+      path: r2Path,
+      recursive: pathType === "directory",
+    })
   }
 
-  const client = createR2CommandClient(runtime)
-  await client.remove(r2Path, {
-    recursive: options.recursive === true,
-    rcloneOptions:
-      options.recursive === true ? defaultRcloneOptions : undefined,
-  })
+  if (targets.length > 0 && !options.force && !interactive) {
+    throw new CliError(
+      'R2 deletion requires confirmation. Re-run with "--force" in non-interactive environments.',
+    )
+  }
+
+  for (const target of targets) {
+    const shouldDelete = target.isBucketRoot
+      ? options.longForce ||
+        (await getPromptConfirm(runtime)(
+          "Delete all files in the R2 bucket? [y/N] ",
+        ))
+      : options.force ||
+        (await getPromptConfirm(runtime)(
+          `Delete R2 path "${target.path}"? [y/N] `,
+        ))
+
+    if (!shouldDelete) {
+      cancelPrompt()
+    }
+
+    await client.remove(target.path, {
+      recursive: target.recursive,
+      rcloneOptions: target.recursive ? defaultRcloneOptions : undefined,
+    })
+  }
   outro("R2 delete complete.")
 }
 

@@ -92,16 +92,19 @@ r2Command
   .description(
     'delete an R2 file; use -r to delete a directory/prefix or "/" to clean the bucket',
   )
-  .argument("<path>", 'R2 file path, directory/prefix with -r, or "/" with -r')
+  .argument(
+    "<paths...>",
+    'R2 file path(s), directory/prefix paths with -r, or "/" with -r',
+  )
   .option("-r, --recursive", "delete a directory/prefix recursively")
   .option(
     "-f, --force",
     'delete without confirmation; use "--force" to clean the bucket root without confirmation',
   )
-  .action(async (path, options) => {
+  .action(async (paths, options) => {
     try {
       options.longForce = hasLongForceFlag()
-      await removeR2(path, options)
+      await removeR2(paths, options)
     } catch (error) {
       handleCommandError(error)
     }
