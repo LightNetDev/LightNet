@@ -268,12 +268,17 @@ export function createR2Client({ cwd, interactive, promptText }) {
     /**
      * @param {string} source
      * @param {string} destination
-     * @param {{to?: boolean, rcloneOptions?: RcloneOptions}} [options]
+     * @param {{ignoreExisting?: boolean, to?: boolean, rcloneOptions?: RcloneOptions}} [options]
      */
     async move(source, destination, options = {}) {
       const r2Config = await getConfig()
       await runConfiguredRclone({
-        args: [options.to ? "moveto" : "move", source, destination],
+        args: [
+          options.to ? "moveto" : "move",
+          source,
+          destination,
+          ...(options.ignoreExisting ? ["--ignore-existing"] : []),
+        ],
         cwd,
         config: r2Config,
         rcloneOptions: options.rcloneOptions,

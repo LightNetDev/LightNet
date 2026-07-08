@@ -133,12 +133,12 @@ r2Command
 r2Command
   .command("mv")
   .description("move or rename an R2 file or directory/prefix")
-  .argument("<source>", "R2 source path")
-  .argument("<destination>", "R2 destination path")
+  .argument("<paths...>", "R2 source path(s) followed by a destination path")
   .option("-f, --force", "overwrite existing destination without confirmation")
-  .action(async (source, destination, options) => {
+  .option("-n, --no-clobber", "skip existing destination files")
+  .action(async (paths, options) => {
     try {
-      await moveR2(source, destination, options)
+      await moveR2(paths, options)
     } catch (error) {
       handleCommandError(error)
     }
