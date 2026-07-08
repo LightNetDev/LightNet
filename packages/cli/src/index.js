@@ -92,16 +92,20 @@ r2Command
   .description(
     'delete an R2 file; use -r to delete a directory/prefix or "/" to clean the bucket',
   )
-  .argument("<path>", 'R2 file path, directory/prefix with -r, or "/" with -r')
+  .argument(
+    "<paths...>",
+    'R2 file path(s), directory/prefix paths with -r, or "/" with -r',
+  )
   .option("-r, --recursive", "delete a directory/prefix recursively")
+  .option("--progress", "show operation progress")
   .option(
     "-f, --force",
     'delete without confirmation; use "--force" to clean the bucket root without confirmation',
   )
-  .action(async (path, options) => {
+  .action(async (paths, options) => {
     try {
       options.longForce = hasLongForceFlag()
-      await removeR2(path, options)
+      await removeR2(paths, options)
     } catch (error) {
       handleCommandError(error)
     }
@@ -112,16 +116,20 @@ r2Command
   .description(
     'copy files between R2 and local paths, or inside R2; prefix R2 paths with "r2:"',
   )
-  .argument("<source>", 'source path; use "r2:<path>" for R2')
-  .argument("<destination>", 'destination path; use "r2:<path>" for R2')
-  .option(
-    "-f, --force",
-    'overwrite without confirmation; use "--force" to replace the bucket root without confirmation',
+  .argument(
+    "<paths...>",
+    'source path(s) followed by a destination path; use "r2:<path>" for R2',
   )
-  .action(async (source, destination, options) => {
+  .option("-r, --recursive", "copy directories recursively")
+  .option("-R", "copy directories recursively")
+  .option("-a, --archive", "copy directories recursively")
+  .option("-f, --force", "overwrite existing files without confirmation")
+  .option("-n, --no-clobber", "skip existing destination files")
+  .option("--progress", "show operation progress")
+  .action(async (paths, options) => {
     try {
-      options.longForce = hasLongForceFlag()
-      await copyR2(source, destination, options)
+      options.recursive = options.recursive || options.R || options.archive
+      await copyR2(paths, options)
     } catch (error) {
       handleCommandError(error)
     }
@@ -130,12 +138,13 @@ r2Command
 r2Command
   .command("mv")
   .description("move or rename an R2 file or directory/prefix")
-  .argument("<source>", "R2 source path")
-  .argument("<destination>", "R2 destination path")
+  .argument("<paths...>", "R2 source path(s) followed by a destination path")
   .option("-f, --force", "overwrite existing destination without confirmation")
-  .action(async (source, destination, options) => {
+  .option("-n, --no-clobber", "skip existing destination files")
+  .option("--progress", "show operation progress")
+  .action(async (paths, options) => {
     try {
-      await moveR2(source, destination, options)
+      await moveR2(paths, options)
     } catch (error) {
       handleCommandError(error)
     }
