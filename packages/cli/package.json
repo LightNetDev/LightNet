@@ -18,6 +18,9 @@
   "bin": {
     "lightnet": "./src/index.js"
   },
+  "scripts": {
+    "test": "vitest"
+  },
   "homepage": "https://lightnet.community",
   "files": [
     "src",
@@ -27,6 +30,9 @@
   "dependencies": {
     "@clack/prompts": "^1.7.0",
     "commander": "^15.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": ">=22"
