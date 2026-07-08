@@ -9,7 +9,15 @@ import {
   stdout,
 } from "node:process"
 
-import { confirm, intro, isCancel, log, outro, text } from "@clack/prompts"
+import {
+  confirm,
+  intro,
+  isCancel,
+  log,
+  outro,
+  progress,
+  text,
+} from "@clack/prompts"
 
 import { CliError } from "./support/cli-error.js"
 import { cancelPrompt } from "./support/prompt-cancel.js"
@@ -32,6 +40,7 @@ const defaultRcloneOptions = {
  * @typedef {{
  *   force?: boolean
  *   noClobber?: boolean
+ *   progress?: boolean
  *   recursive?: boolean
  * }} R2CopyOptions
  */
@@ -40,6 +49,7 @@ const defaultRcloneOptions = {
  * @typedef {{
  *   force?: boolean
  *   noClobber?: boolean
+ *   progress?: boolean
  * }} R2MoveOptions
  */
 
@@ -57,6 +67,7 @@ const defaultRcloneOptions = {
  *   force?: boolean
  *   recursive?: boolean
  *   longForce?: boolean
+ *   progress?: boolean
  * }} R2RemoveOptions
  */
 
@@ -186,11 +197,26 @@ export async function removeR2(paths, options, runtime = {}) {
     if (!shouldDelete) {
       cancelPrompt()
     }
+  }
 
-    await client.remove(target.path, {
-      recursive: target.recursive,
-      rcloneOptions: target.recursive ? defaultRcloneOptions : undefined,
-    })
+  const removeProgress = createR2Progress({
+    enabled: options.progress === true && targets.length > 0,
+    label: "Deleting R2 paths",
+    max: targets.length,
+    success: "R2 delete complete.",
+  })
+  try {
+    for (const target of targets) {
+      await client.remove(target.path, {
+        recursive: target.recursive,
+        rcloneOptions: target.recursive ? defaultRcloneOptions : undefined,
+      })
+      removeProgress.advance()
+    }
+    removeProgress.stop()
+  } catch (error) {
+    removeProgress.error("R2 delete failed.")
+    throw error
   }
   outro("R2 delete complete.")
 }
@@ -233,6 +259,7 @@ export async function copyR2(paths, options = {}, runtime = {}) {
     )
   }
 
+  const operations = []
   for (const [index, sourcePath] of sourcePaths.entries()) {
     const source = sources[index]
     const sourceType = await getCopyPathType(sourcePath, client, runtime)
@@ -267,15 +294,32 @@ export async function copyR2(paths, options = {}, runtime = {}) {
       targetType,
     })
 
-    await client.copy(
-      await toRcloneCopyPath(sourcePath, client, runtime),
-      await toRcloneCopyPath(targetPath, client, runtime),
-      {
-        ignoreExisting: options.noClobber === true,
-        rcloneOptions: defaultRcloneOptions,
-        to: shouldUseCopyTo,
-      },
-    )
+    operations.push({ shouldUseCopyTo, sourcePath, targetPath })
+  }
+
+  const copyProgress = createR2Progress({
+    enabled: options.progress === true,
+    label: "Copying R2 paths",
+    max: operations.length,
+    success: "R2 copy complete.",
+  })
+  try {
+    for (const operation of operations) {
+      await client.copy(
+        await toRcloneCopyPath(operation.sourcePath, client, runtime),
+        await toRcloneCopyPath(operation.targetPath, client, runtime),
+        {
+          ignoreExisting: options.noClobber === true,
+          rcloneOptions: defaultRcloneOptions,
+          to: operation.shouldUseCopyTo,
+        },
+      )
+      copyProgress.advance()
+    }
+    copyProgress.stop()
+  } catch (error) {
+    copyProgress.error("R2 copy failed.")
+    throw error
   }
   outro("R2 copy complete.")
 }
@@ -318,6 +362,7 @@ export async function moveR2(paths, options = {}, runtime = {}) {
     )
   }
 
+  const operations = []
   for (const [index, sourcePath] of sourcePaths.entries()) {
     const source = sources[index]
     const sourceType = await getCopyPathType(sourcePath, client, runtime)
@@ -347,15 +392,32 @@ export async function moveR2(paths, options = {}, runtime = {}) {
       targetType,
     })
 
-    await client.move(
-      await toRcloneCopyPath(sourcePath, client, runtime),
-      await toRcloneCopyPath(targetPath, client, runtime),
-      {
-        ignoreExisting: options.noClobber === true,
-        rcloneOptions: defaultRcloneOptions,
-        to: shouldUseMoveTo,
-      },
-    )
+    operations.push({ shouldUseMoveTo, sourcePath, targetPath })
+  }
+
+  const moveProgress = createR2Progress({
+    enabled: options.progress === true,
+    label: "Moving R2 paths",
+    max: operations.length,
+    success: "R2 move complete.",
+  })
+  try {
+    for (const operation of operations) {
+      await client.move(
+        await toRcloneCopyPath(operation.sourcePath, client, runtime),
+        await toRcloneCopyPath(operation.targetPath, client, runtime),
+        {
+          ignoreExisting: options.noClobber === true,
+          rcloneOptions: defaultRcloneOptions,
+          to: operation.shouldUseMoveTo,
+        },
+      )
+      moveProgress.advance()
+    }
+    moveProgress.stop()
+  } catch (error) {
+    moveProgress.error("R2 move failed.")
+    throw error
   }
   outro("R2 move complete.")
 }
@@ -369,6 +431,39 @@ function createR2CommandClient(runtime) {
     interactive: getInteractive(runtime),
     promptText: getPromptText(runtime),
   })
+}
+
+/**
+ * @param {{enabled: boolean, label: string, max: number, success: string}} options
+ */
+function createR2Progress({ enabled, label, max, success }) {
+  if (!enabled || max === 0) {
+    return {
+      advance() {},
+      error() {},
+      stop() {},
+    }
+  }
+
+  const operationProgress = progress({ max })
+  let completed = 0
+  operationProgress.start(`${label} (0/${max})`)
+
+  return {
+    advance() {
+      completed += 1
+      operationProgress.advance(1, `${label} (${completed}/${max})`)
+    },
+    /**
+     * @param {string} message
+     */
+    error(message) {
+      operationProgress.error(message)
+    },
+    stop() {
+      operationProgress.stop(success)
+    },
+  }
 }
 
 /**

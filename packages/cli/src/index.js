@@ -97,6 +97,7 @@ r2Command
     'R2 file path(s), directory/prefix paths with -r, or "/" with -r',
   )
   .option("-r, --recursive", "delete a directory/prefix recursively")
+  .option("--progress", "show operation progress")
   .option(
     "-f, --force",
     'delete without confirmation; use "--force" to clean the bucket root without confirmation',
@@ -124,6 +125,7 @@ r2Command
   .option("-a, --archive", "copy directories recursively")
   .option("-f, --force", "overwrite existing files without confirmation")
   .option("-n, --no-clobber", "skip existing destination files")
+  .option("--progress", "show operation progress")
   .action(async (paths, options) => {
     try {
       options.recursive = options.recursive || options.R || options.archive
@@ -139,6 +141,7 @@ r2Command
   .argument("<paths...>", "R2 source path(s) followed by a destination path")
   .option("-f, --force", "overwrite existing destination without confirmation")
   .option("-n, --no-clobber", "skip existing destination files")
+  .option("--progress", "show operation progress")
   .action(async (paths, options) => {
     try {
       await moveR2(paths, options)
