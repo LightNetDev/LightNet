@@ -31,7 +31,8 @@ const defaultRcloneOptions = {
 /**
  * @typedef {{
  *   force?: boolean
- *   longForce?: boolean
+ *   noClobber?: boolean
+ *   recursive?: boolean
  * }} R2CopyOptions
  */
 
@@ -152,75 +153,87 @@ export async function removeR2(path, options, runtime = {}) {
 }
 
 /**
- * @param {string} source
- * @param {string} destination
+ * @param {string|string[]} paths
  * @param {R2CopyOptions} [options]
  * @param {R2Runtime} [runtime]
  */
-export async function copyR2(source, destination, options = {}, runtime = {}) {
+export async function copyR2(paths, options = {}, runtime = {}) {
   intro("r2 cp")
-  const sourcePath = parseCopyPath(source)
+  const { sources, destination } = parseCopyArguments(paths)
+  if (options.force && options.noClobber) {
+    throw new CliError('Cannot use "--force" with "--no-clobber".')
+  }
+  const sourcePaths = sources.map((source) => parseCopyPath(source))
   const destinationPath = parseCopyPath(destination)
-  if (!sourcePath.remote && !destinationPath.remote) {
+  if (
+    !destinationPath.remote &&
+    sourcePaths.every((sourcePath) => !sourcePath.remote)
+  ) {
     throw new CliError(
       `R2 copy requires at least one R2 path. Prefix R2 paths with "${remotePathPrefix}".`,
     )
   }
 
   const client = createR2CommandClient(runtime)
-  const sourceType = await getCopyPathType(sourcePath, client, runtime)
-  if (sourceType === "missing") {
-    throw new CliError(`Copy source "${source}" does not exist.`)
-  }
-
   const destinationType = await getCopyPathType(
     destinationPath,
     client,
     runtime,
   )
-  const targetPath = getCopyTargetPath({
-    destination: destinationPath,
-    destinationType,
-    runtime,
-    source: sourcePath,
-    sourceType,
-  })
-  const targetType = await getCopyPathType(targetPath, client, runtime)
-  const shouldUseCopyTo =
-    sourceType === "file" &&
-    (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
+  if (
+    sourcePaths.length > 1 &&
+    destinationType !== "directory" &&
+    !isDirectoryLikeCopyPath(destinationPath)
+  ) {
+    throw new CliError(
+      "Copying multiple sources requires a directory destination.",
+    )
+  }
 
-  const confirmedRootOverwrite = await confirmCopyRootOverwrite({
-    force: options.force === true,
-    longForce: options.longForce === true,
-    runtime,
-    targetPath,
-    targetType,
-  })
-  if (!confirmedRootOverwrite) {
+  for (const [index, sourcePath] of sourcePaths.entries()) {
+    const source = sources[index]
+    const sourceType = await getCopyPathType(sourcePath, client, runtime)
+    if (sourceType === "missing") {
+      throw new CliError(`Copy source "${source}" does not exist.`)
+    }
+    if (sourceType === "directory" && !options.recursive) {
+      throw new CliError(
+        `Copy source "${source}" is a directory. Re-run with "--recursive" to copy directories.`,
+      )
+    }
+
+    const targetPath = getCopyTargetPath({
+      destination: destinationPath,
+      destinationType,
+      runtime,
+      source: sourcePath,
+      sourceType,
+    })
+    const targetType = await getCopyPathType(targetPath, client, runtime)
+    const shouldUseCopyTo =
+      sourceType === "file" &&
+      (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
+
     await confirmCopyOverwrite({
       destination,
       force: options.force === true,
+      noClobber: options.noClobber === true,
       runtime,
       sourceType,
       targetPath,
       targetType,
     })
-  }
-  await replaceCopyTargetBeforeCopy({
-    client,
-    rcloneOptions: defaultRcloneOptions,
-    runtime,
-    sourceType,
-    targetPath,
-    targetType,
-  })
 
-  await client.copy(
-    await toRcloneCopyPath(sourcePath, client, runtime),
-    await toRcloneCopyPath(targetPath, client, runtime),
-    { rcloneOptions: defaultRcloneOptions, to: shouldUseCopyTo },
-  )
+    await client.copy(
+      await toRcloneCopyPath(sourcePath, client, runtime),
+      await toRcloneCopyPath(targetPath, client, runtime),
+      {
+        ignoreExisting: options.noClobber === true,
+        rcloneOptions: defaultRcloneOptions,
+        to: shouldUseCopyTo,
+      },
+    )
+  }
   outro("R2 copy complete.")
 }
 
@@ -263,6 +276,7 @@ export async function moveR2(source, destination, options, runtime = {}) {
   await confirmCopyOverwrite({
     destination,
     force: options.force === true,
+    noClobber: false,
     runtime,
     sourceType,
     targetPath,
@@ -317,55 +331,6 @@ async function replaceCopyTargetBeforeCopy({
 }
 
 /**
- * @param {{
- *   force: boolean,
- *   longForce: boolean,
- *   runtime: R2Runtime,
- *   targetPath: CopyPath,
- *   targetType: CopyPathType
- * }} args
- */
-async function confirmCopyRootOverwrite({
-  force,
-  longForce,
-  runtime,
-  targetPath,
-  targetType,
-}) {
-  if (!isR2BucketRootCopyPath(targetPath) || targetType === "missing") {
-    return false
-  }
-  log.warn(
-    "This will replace ALL files in the configured R2 bucket. This cannot be undone.",
-  )
-  if (longForce) {
-    return true
-  }
-  if (force && !getInteractive(runtime)) {
-    throw new CliError(
-      'Ignoring "-f" for R2 bucket-root replacement. If you are sure you want to replace the entire R2 bucket, use "--force".',
-    )
-  }
-  if (!getInteractive(runtime)) {
-    throw new CliError(
-      'Replacing the R2 bucket root requires interactive confirmation. If you are sure you want to replace the entire R2 bucket, use "--force".',
-    )
-  }
-  if (force) {
-    log.warn(
-      'Ignoring "-f" for R2 bucket-root replacement. Use "--force" if you are sure you want to replace the entire R2 bucket.',
-    )
-  }
-  const shouldOverwrite = await getPromptConfirm(runtime)(
-    "Replace all files in the R2 bucket? [y/N] ",
-  )
-  if (!shouldOverwrite) {
-    cancelPrompt()
-  }
-  return true
-}
-
-/**
  * @param {R2Runtime} runtime
  */
 function createR2CommandClient(runtime) {
@@ -408,6 +373,23 @@ function parseCopyPath(value) {
 }
 
 /**
+ * @param {string|string[]} paths
+ * @returns {{sources: string[], destination: string}}
+ */
+function parseCopyArguments(paths) {
+  const copyPaths = Array.isArray(paths) ? paths : [paths]
+  if (copyPaths.length < 2) {
+    throw new CliError(
+      "R2 copy requires at least one source and a destination.",
+    )
+  }
+  return {
+    sources: copyPaths.slice(0, -1),
+    destination: copyPaths[copyPaths.length - 1],
+  }
+}
+
+/**
  * @param {string} value
  * @param {string} label
  * @returns {CopyPath}
@@ -443,6 +425,18 @@ function getCopyTargetPath({
     if (destinationType === "file") {
       throw new CliError("Cannot copy a directory to an existing file.")
     }
+    if (isCopyPathContentsOnly(source)) {
+      return destination
+    }
+    if (
+      destinationType === "directory" ||
+      isDirectoryLikeCopyPath(destination)
+    ) {
+      return {
+        ...destination,
+        path: joinCopyPath(destination, getCopyPathName(source, runtime)),
+      }
+    }
     return destination
   }
 
@@ -463,6 +457,7 @@ function getCopyTargetPath({
  * @param {{
  *   destination: string,
  *   force: boolean,
+ *   noClobber: boolean,
  *   runtime: R2Runtime,
  *   sourceType: CopyPathType,
  *   targetPath: CopyPath,
@@ -472,6 +467,7 @@ function getCopyTargetPath({
 async function confirmCopyOverwrite({
   destination,
   force,
+  noClobber,
   runtime,
   sourceType,
   targetPath,
@@ -479,6 +475,9 @@ async function confirmCopyOverwrite({
 }) {
   if (targetType === "missing") {
     return
+  }
+  if (sourceType === "directory" && targetType === "file") {
+    throw new CliError("Cannot copy a directory to an existing file.")
   }
   if (
     sourceType === "file" &&
@@ -490,14 +489,19 @@ async function confirmCopyOverwrite({
   if (force) {
     return
   }
+  if (noClobber) {
+    return
+  }
   if (!getInteractive(runtime)) {
     throw new CliError(
       'Copy would overwrite existing files. Re-run with "--force" in non-interactive environments.',
     )
   }
-  const shouldOverwrite = await getPromptConfirm(runtime)(
-    `Overwrite existing destination "${destination}"? [y/N] `,
-  )
+  const message =
+    sourceType === "directory"
+      ? `Overwrite any existing files under destination "${destination}"? [y/N] `
+      : `Overwrite existing destination "${destination}"? [y/N] `
+  const shouldOverwrite = await getPromptConfirm(runtime)(message)
   if (!shouldOverwrite) {
     cancelPrompt()
   }
@@ -540,6 +544,16 @@ async function toRcloneCopyPath(copyPath, client, runtime) {
  */
 function isDirectoryLikeCopyPath(copyPath) {
   return copyPath.path === "." || copyPath.path.endsWith("/")
+}
+
+/**
+ * @param {CopyPath} copyPath
+ */
+function isCopyPathContentsOnly(copyPath) {
+  const path = copyPath.remote
+    ? copyPath.path
+    : copyPath.path.replaceAll("\\", "/")
+  return path === "." || path.endsWith("/.")
 }
 
 /**
@@ -590,13 +604,6 @@ function normalizeR2Path(path) {
  */
 function isR2BucketRootPath(path) {
   return path.trim() === "/"
-}
-
-/**
- * @param {CopyPath} path
- */
-function isR2BucketRootCopyPath(path) {
-  return path.remote && path.path === ""
 }
 
 /**

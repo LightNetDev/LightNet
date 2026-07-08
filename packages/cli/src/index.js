@@ -112,16 +112,19 @@ r2Command
   .description(
     'copy files between R2 and local paths, or inside R2; prefix R2 paths with "r2:"',
   )
-  .argument("<source>", 'source path; use "r2:<path>" for R2')
-  .argument("<destination>", 'destination path; use "r2:<path>" for R2')
-  .option(
-    "-f, --force",
-    'overwrite without confirmation; use "--force" to replace the bucket root without confirmation',
+  .argument(
+    "<paths...>",
+    'source path(s) followed by a destination path; use "r2:<path>" for R2',
   )
-  .action(async (source, destination, options) => {
+  .option("-r, --recursive", "copy directories recursively")
+  .option("-R", "copy directories recursively")
+  .option("-a, --archive", "copy directories recursively")
+  .option("-f, --force", "overwrite existing files without confirmation")
+  .option("-n, --no-clobber", "skip existing destination files")
+  .action(async (paths, options) => {
     try {
-      options.longForce = hasLongForceFlag()
-      await copyR2(source, destination, options)
+      options.recursive = options.recursive || options.R || options.archive
+      await copyR2(paths, options)
     } catch (error) {
       handleCommandError(error)
     }
