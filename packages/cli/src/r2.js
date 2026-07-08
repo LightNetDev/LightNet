@@ -1,6 +1,6 @@
 // @ts-check
 
-import { stat } from "node:fs/promises"
+import { readdir, stat } from "node:fs/promises"
 import { basename, join, posix, resolve } from "node:path"
 import {
   cwd as processCwd,
@@ -78,6 +78,7 @@ const defaultRcloneOptions = {
  *   isInteractive?: boolean
  *   promptConfirm?: (message: string) => Promise<boolean>
  *   promptText?: (message: string) => Promise<string>
+ *   createR2Client?: typeof createR2Client
  *   writeStdout?: (message: string) => void
  * }} R2Runtime
  */
@@ -285,10 +286,12 @@ export async function copyR2(paths, options = {}, runtime = {}) {
       (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
 
     await confirmCopyOverwrite({
+      client,
       destination,
       force: options.force === true,
       noClobber: options.noClobber === true,
       runtime,
+      sourcePath,
       sourceType,
       targetPath,
       targetType,
@@ -383,10 +386,12 @@ export async function moveR2(paths, options = {}, runtime = {}) {
       (targetType !== "directory" || isDirectoryLikeCopyPath(destinationPath))
 
     await confirmCopyOverwrite({
+      client,
       destination,
       force: options.force === true,
       noClobber: options.noClobber === true,
       runtime,
+      sourcePath,
       sourceType,
       targetPath,
       targetType,
@@ -426,7 +431,7 @@ export async function moveR2(paths, options = {}, runtime = {}) {
  * @param {R2Runtime} runtime
  */
 function createR2CommandClient(runtime) {
-  return createR2Client({
+  return (runtime.createR2Client ?? createR2Client)({
     cwd: runtime.cwd ?? processCwd(),
     interactive: getInteractive(runtime),
     promptText: getPromptText(runtime),
@@ -580,20 +585,24 @@ function getCopyTargetPath({
 
 /**
  * @param {{
+ *   client: ReturnType<typeof createR2CommandClient>,
  *   destination: string,
  *   force: boolean,
  *   noClobber: boolean,
  *   runtime: R2Runtime,
+ *   sourcePath: CopyPath,
  *   sourceType: CopyPathType,
  *   targetPath: CopyPath,
  *   targetType: CopyPathType
  * }} args
  */
 async function confirmCopyOverwrite({
+  client,
   destination,
   force,
   noClobber,
   runtime,
+  sourcePath,
   sourceType,
   targetPath,
   targetType,
@@ -617,10 +626,26 @@ async function confirmCopyOverwrite({
   if (noClobber) {
     return
   }
+  const overwrittenPaths =
+    sourceType === "directory"
+      ? await getDirectoryOverwritePaths({
+          client,
+          runtime,
+          sourcePath,
+          targetPath,
+        })
+      : [formatCopyPath(targetPath)]
+  if (overwrittenPaths.length === 0) {
+    return
+  }
   if (!getInteractive(runtime)) {
     throw new CliError(
       'Transfer would overwrite existing files. Re-run with "--force" in non-interactive environments.',
     )
+  }
+  log.warn(`Files to overwrite (${overwrittenPaths.length})`)
+  for (const overwrittenPath of overwrittenPaths) {
+    log.message(`• ${overwrittenPath}`)
   }
   const message =
     sourceType === "directory"
@@ -630,6 +655,94 @@ async function confirmCopyOverwrite({
   if (!shouldOverwrite) {
     cancelPrompt()
   }
+}
+
+/**
+ * @param {{
+ *   client: ReturnType<typeof createR2CommandClient>
+ *   runtime: R2Runtime
+ *   sourcePath: CopyPath
+ *   targetPath: CopyPath
+ * }} args
+ */
+async function getDirectoryOverwritePaths({
+  client,
+  runtime,
+  sourcePath,
+  targetPath,
+}) {
+  const sourceFiles = await listCopyFiles(sourcePath, client, runtime)
+  if (sourceFiles.length === 0) {
+    return []
+  }
+  const targetFiles = new Set(await listCopyFiles(targetPath, client, runtime))
+  return sourceFiles
+    .filter((relativePath) => targetFiles.has(relativePath))
+    .map((relativePath) =>
+      formatCopyPath({
+        ...targetPath,
+        path: joinCopyPath(targetPath, relativePath),
+      }),
+    )
+}
+
+/**
+ * @param {CopyPath} copyPath
+ * @param {ReturnType<typeof createR2CommandClient>} client
+ * @param {R2Runtime} runtime
+ */
+async function listCopyFiles(copyPath, client, runtime) {
+  if (copyPath.remote) {
+    return parseRcloneFileList(await client.list(copyPath.path))
+  }
+  return listLocalFiles(resolveLocalPath(copyPath.path, runtime))
+}
+
+/**
+ * @param {string} root
+ * @param {string} [prefix]
+ * @returns {Promise<string[]>}
+ */
+async function listLocalFiles(root, prefix = "") {
+  const entries = await readdir(root, { withFileTypes: true })
+  const files = []
+  for (const entry of entries) {
+    const relativePath = prefix
+      ? joinRelativePath(prefix, entry.name)
+      : entry.name
+    const absolutePath = join(root, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...(await listLocalFiles(absolutePath, relativePath)))
+    } else if (entry.isFile()) {
+      files.push(relativePath)
+    }
+  }
+  return files
+}
+
+/**
+ * @param {string} output
+ */
+function parseRcloneFileList(output) {
+  return output
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+}
+
+/**
+ * @param {string} parent
+ * @param {string} child
+ */
+function joinRelativePath(parent, child) {
+  return parent ? posix.join(parent, child) : child
+}
+
+/**
+ * @param {CopyPath} copyPath
+ */
+function formatCopyPath(copyPath) {
+  return copyPath.remote ? `${remotePathPrefix}${copyPath.path}` : copyPath.path
 }
 
 /**
