@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.7.1
+
+### Patch Changes
+
+- [#447](https://github.com/LightNetDev/LightNet/pull/447) [`0d8fece`](https://github.com/LightNetDev/LightNet/commit/0d8fece3527a67a21c6272b422c62152948b32a1) - Only prompt for `lightnet r2 cp` and `lightnet r2 mv` when files would actually be overwritten, and list the destination files before confirmation.
+
 ## 4.7.0
 
 ### Minor Changes
