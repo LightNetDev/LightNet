@@ -1,5 +1,17 @@
 # @lightnet/cli
 
+## 4.7.0
+
+### Minor Changes
+
+- [#445](https://github.com/LightNetDev/LightNet/pull/445) [`53b6a0d`](https://github.com/LightNetDev/LightNet/commit/53b6a0db8d9e6dca38c808d925007cb2ae343076) - Add a `--progress` option to `lightnet r2 cp`, `lightnet r2 mv`, and `lightnet r2 rm`.
+
+- [#445](https://github.com/LightNetDev/LightNet/pull/445) [`53b6a0d`](https://github.com/LightNetDev/LightNet/commit/53b6a0db8d9e6dca38c808d925007cb2ae343076) - Update `lightnet r2 cp` to follow Unix-style copy semantics for files and directories.
+
+- [#445](https://github.com/LightNetDev/LightNet/pull/445) [`53b6a0d`](https://github.com/LightNetDev/LightNet/commit/53b6a0db8d9e6dca38c808d925007cb2ae343076) - Update `lightnet r2 mv` to use safer Unix-like move semantics inside the configured R2 bucket.
+
+- [#445](https://github.com/LightNetDev/LightNet/pull/445) [`53b6a0d`](https://github.com/LightNetDev/LightNet/commit/53b6a0db8d9e6dca38c808d925007cb2ae343076) - Update `lightnet r2 rm` to follow safer Unix-like delete semantics inside the configured R2 bucket.
+
 ## 4.6.2
 
 ### Patch Changes
