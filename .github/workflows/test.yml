@@ -18,8 +18,8 @@ jobs:
   run-unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/setup@v2
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/setup@v2.1.0
         with:
           cache: true
           require-lockfile: true
@@ -27,12 +27,12 @@ jobs:
   run-e2e-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/setup@v2
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/setup@v2.1.0
         with:
           cache: true
           require-lockfile: true
-      - uses: actions/cache@v6
+      - uses: actions/cache@v6.1.0
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
@@ -40,7 +40,7 @@ jobs:
       - if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm --filter lightnet exec playwright install --with-deps chromium
       - run: pnpm e2e
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.1
         if: ${{ !cancelled() }}
         with:
           name: lightnet-playwright-report

@@ -18,8 +18,8 @@ jobs:
   check-code-style:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/setup@v2
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/setup@v2.1.0
         with:
           cache: true
           require-lockfile: true
