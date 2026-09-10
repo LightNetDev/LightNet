@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.6.1
+
+### Patch Changes
+
+- [#451](https://github.com/LightNetDev/LightNet/pull/451) [`9d61e70`](https://github.com/LightNetDev/LightNet/commit/9d61e70cc322e818c5d527801e9f35c956907d36) - Test github release workflow.
+
 ## 4.6.0
 
 ### Minor Changes
