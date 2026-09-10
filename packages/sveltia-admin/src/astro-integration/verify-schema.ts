@@ -1,7 +1,7 @@
 import { AstroError } from "astro/errors"
 import { z } from "astro/zod"
 
-export function verifySchema<T extends z.Schema>(
+export function verifySchema<T extends z.ZodType>(
   schema: T,
   toVerify: unknown,
   errorMessage: string | ((id: string | undefined) => string),

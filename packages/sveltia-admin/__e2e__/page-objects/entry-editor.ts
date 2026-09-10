@@ -345,7 +345,7 @@ class EntryEditor {
   async save() {
     await this.attemptSave()
     await expect(
-      this.page.getByRole("alert").filter({ hasText: "Entry has been saved." }),
+      this.page.getByRole("alert").filter({ hasText: "Entry saved." }),
     ).toBeVisible()
   }
 

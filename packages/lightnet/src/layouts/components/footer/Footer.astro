@@ -46,43 +46,40 @@ const footerItems = [
 <footer class="w-full border-t border-gray-200 bg-white text-sm text-gray-800">
   <div
     class="mx-auto flex w-full max-w-screen-xl px-4 py-4 md:px-8 md:py-6"
-    class:list={footerItems.length === 0
-      ? "flex-col justify-between gap-4 sm:flex-row sm:items-center"
-      : "flex-col gap-2"}
+    class:list={
+      footerItems.length === 0
+        ? "flex-col justify-between gap-4 sm:flex-row sm:items-center"
+        : "flex-col gap-2"
+    }
   >
     {shouldShowLanguageSelectionMenu && <LanguageSelectionMenu />}
-    {
-      (footerItems.length > 0 || config.credits) && (
-        <div class="flex shrink flex-col gap-6 md:flex-row md:items-start md:justify-between">
-          {footerItems.length > 0 && (
-            <div class="flex w-full min-w-0 flex-1 shrink flex-wrap">
-              {footerItems.map((item, index) => (
-                <span class="inline-flex">
-                  {item.type === "text" ? (
-                    <span>{item.label}</span>
-                  ) : (
-                    <a
-                      {...getLinkAttributes(item.href)}
-                      class="underline-offset-4 hover:underline"
-                    >
-                      {item.label}
-                    </a>
-                  )}
-                  {index !== footerItems.length - 1 && (
-                    <span
-                      class="shrink-0 px-2 text-gray-400"
-                      aria-hidden="true"
-                    >
-                      &middot;
-                    </span>
-                  )}
-                </span>
-              ))}
-            </div>
-          )}
-          {config.credits && <Credits />}
-        </div>
-      )
-    }
+    {(footerItems.length > 0 || config.credits) && (
+      <div class="flex shrink flex-col gap-6 md:flex-row md:items-start md:justify-between">
+        {footerItems.length > 0 && (
+          <div class="flex w-full min-w-0 flex-1 shrink flex-wrap">
+            {footerItems.map((item, index) => (
+              <span class="inline-flex">
+                {item.type === "text" ? (
+                  <span>{item.label}</span>
+                ) : (
+                  <a
+                    {...getLinkAttributes(item.href)}
+                    class="underline-offset-4 hover:underline"
+                  >
+                    {item.label}
+                  </a>
+                )}
+                {index !== footerItems.length - 1 && (
+                  <span class="shrink-0 px-2 text-gray-400" aria-hidden="true">
+                    &middot;
+                  </span>
+                )}
+              </span>
+            ))}
+          </div>
+        )}
+        {config.credits && <Credits />}
+      </div>
+    )}
   </div>
 </footer>

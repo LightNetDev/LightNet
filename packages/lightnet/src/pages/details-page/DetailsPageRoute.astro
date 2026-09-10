@@ -41,11 +41,9 @@ if (detailsPage?.layout === "custom") {
 }
 ---
 
-{
-  layout === "default" && (
-    <DefaultDetailsPage mediaId={mediaId} {...detailsPage} />
-  )
-}
+{layout === "default" && (
+  <DefaultDetailsPage mediaId={mediaId} {...detailsPage} />
+)}
 {layout === "video" && <VideoDetailsPage mediaId={mediaId} {...detailsPage} />}
 {layout === "audio" && <AudioDetailsPage mediaId={mediaId} {...detailsPage} />}
 {CustomDetails && <CustomDetails mediaId={mediaId} {...detailsPage} />}

@@ -96,66 +96,19 @@ const gridLayouts = {
 } as const
 ---
 
-{
-  layout === "grid" && (
-    <Section {...sectionProps}>
-      <ol
-        class="grid items-end justify-between gap-4 md:gap-8"
-        class:list={gridLayouts[resolvedItemWidth]}
-      >
-        {items.map((item) => {
-          const coverImageStyle = types[item.data.type.id].coverImageStyle
-          return (
-            <li>
-              <a
-                href={detailsPagePath(currentLocale, item)}
-                class="group flex flex-col gap-3"
-              >
-                <CoverImageDecorator
-                  style={coverImageStyle}
-                  className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
-                >
-                  <Image
-                    class="h-full w-full object-cover"
-                    class:list={[
-                      coverImageStyle === "video" && "absolute top-0",
-                    ]}
-                    src={item.data.image}
-                    alt=""
-                    widths={[128, 256, 512, 768]}
-                    sizes={imageSizes[resolvedItemWidth]}
-                  />
-                </CoverImageDecorator>
-
-                <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
-                  <Icon
-                    className={`${types[item.data.type.id].icon} me-2 align-bottom`}
-                    ariaLabel={types[item.data.type.id].labelText}
-                  />
-                  {item.data.title}
-                </span>
-              </a>
-            </li>
-          )
-        })}
-      </ol>
-    </Section>
-  )
-}
-{
-  layout === "carousel" && (
-    <CarouselSection {...sectionProps}>
+{layout === "grid" && (
+  <Section {...sectionProps}>
+    <ol
+      class="grid items-end justify-between gap-4 md:gap-8"
+      class:list={gridLayouts[resolvedItemWidth]}
+    >
       {items.map((item) => {
         const coverImageStyle = types[item.data.type.id].coverImageStyle
         return (
-          <li
-            class={`carousel-item--${resolvedItemWidth} h-full`}
-            role="group"
-            aria-roledescription="slide"
-          >
+          <li>
             <a
               href={detailsPagePath(currentLocale, item)}
-              class="group flex h-full flex-col justify-end gap-3"
+              class="group flex flex-col gap-3"
             >
               <CoverImageDecorator
                 style={coverImageStyle}
@@ -163,6 +116,7 @@ const gridLayouts = {
               >
                 <Image
                   class="h-full w-full object-cover"
+                  class:list={[coverImageStyle === "video" && "absolute top-0"]}
                   src={item.data.image}
                   alt=""
                   widths={[128, 256, 512, 768]}
@@ -181,6 +135,46 @@ const gridLayouts = {
           </li>
         )
       })}
-    </CarouselSection>
-  )
-}
+    </ol>
+  </Section>
+)}
+{layout === "carousel" && (
+  <CarouselSection {...sectionProps}>
+    {items.map((item) => {
+      const coverImageStyle = types[item.data.type.id].coverImageStyle
+      return (
+        <li
+          class={`carousel-item--${resolvedItemWidth} h-full`}
+          role="group"
+          aria-roledescription="slide"
+        >
+          <a
+            href={detailsPagePath(currentLocale, item)}
+            class="group flex h-full flex-col justify-end gap-3"
+          >
+            <CoverImageDecorator
+              style={coverImageStyle}
+              className="outline-2 outline-gray-400 transition-all duration-75 ease-in-out sm:group-hover:outline"
+            >
+              <Image
+                class="h-full w-full object-cover"
+                src={item.data.image}
+                alt=""
+                widths={[128, 256, 512, 768]}
+                sizes={imageSizes[resolvedItemWidth]}
+              />
+            </CoverImageDecorator>
+
+            <span class="line-clamp-2 h-12 text-balance text-sm font-bold text-gray-700">
+              <Icon
+                className={`${types[item.data.type.id].icon} me-2 align-bottom`}
+                ariaLabel={types[item.data.type.id].labelText}
+              />
+              {item.data.title}
+            </span>
+          </a>
+        </li>
+      )
+    })}
+  </CarouselSection>
+)}

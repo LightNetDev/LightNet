@@ -117,9 +117,7 @@ class CollectionPage {
     ).toBeVisible()
     await this.page.getByRole("button", { name: "Delete", exact: true }).click()
     await expect(
-      this.page
-        .getByRole("alert")
-        .filter({ hasText: "Entry has been deleted." }),
+      this.page.getByRole("alert").filter({ hasText: "Entry deleted." }),
     ).toBeVisible()
   }
 }

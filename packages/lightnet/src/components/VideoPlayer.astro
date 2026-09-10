@@ -93,62 +93,60 @@ async function parseUrl(
 ---
 
 <div class="aspect-video w-full overflow-hidden bg-black md:rounded-lg">
-  {
-    host === "youtube" ? (
-      <iframe
-        class="h-full w-full"
-        src={`https://www.youtube-nocookie.com/embed/${id}`}
-        title={title}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      />
-    ) : host === "vimeo" ? (
-      <iframe
-        class="h-full w-full"
-        title={title}
-        src={`https://player.vimeo.com/video/${id}`}
-        allow="autoplay; fullscreen; picture-in-picture"
-        allowfullscreen
-      />
-    ) : host === "mp4" ? (
-      <video class="h-full w-full" controls preload="auto" poster={image}>
-        <source src={id} type="video/mp4" />
-      </video>
-    ) : (
-      <a
-        class="group relative flex h-full w-full items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-        {...getLinkAttributes(href ?? url)}
-      >
-        {imageMetadata ? (
-          <Image
-            src={imageMetadata}
-            alt={title ?? ""}
-            class="h-full w-full object-cover"
-          />
-        ) : (
-          <div class="flex h-full w-full items-center justify-center bg-gray-900 text-gray-200">
-            <span class="text-sm font-medium">{t("ln.external-link")}</span>
-          </div>
-        )}
-        <div class="absolute inset-0 z-10 bg-black/35 transition group-hover:bg-black/50" />
-        <div class="absolute inset-0 z-20 flex items-center justify-center">
-          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-black shadow-lg transition group-hover:scale-105">
-            <svg
-              class="h-7 w-7"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </span>
+  {host === "youtube" ? (
+    <iframe
+      class="h-full w-full"
+      src={`https://www.youtube-nocookie.com/embed/${id}`}
+      title={title}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+    ></iframe>
+  ) : host === "vimeo" ? (
+    <iframe
+      class="h-full w-full"
+      title={title}
+      src={`https://player.vimeo.com/video/${id}`}
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  ) : host === "mp4" ? (
+    <video class="h-full w-full" controls preload="auto" poster={image}>
+      <source src={id} type="video/mp4" />
+    </video>
+  ) : (
+    <a
+      class="group relative flex h-full w-full items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+      {...getLinkAttributes(href ?? url)}
+    >
+      {imageMetadata ? (
+        <Image
+          src={imageMetadata}
+          alt={title ?? ""}
+          class="h-full w-full object-cover"
+        />
+      ) : (
+        <div class="flex h-full w-full items-center justify-center bg-gray-900 text-gray-200">
+          <span class="text-sm font-medium">{t("ln.external-link")}</span>
         </div>
-        <div class="absolute bottom-0 end-0 start-0 z-20 flex items-center gap-2 rounded bg-black/70 px-4 py-4 text-sm font-medium text-white backdrop-blur md:text-sm">
-          <ExternalLinkIcon className="shrink-0 rtl:scale-x-[-1]" />
-          {t("ln.external-link")}
-        </div>
-      </a>
-    )
-  }
+      )}
+      <div class="absolute inset-0 z-10 bg-black/35 transition group-hover:bg-black/50" />
+      <div class="absolute inset-0 z-20 flex items-center justify-center">
+        <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-black shadow-lg transition group-hover:scale-105">
+          <svg
+            class="h-7 w-7"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+      </div>
+      <div class="absolute bottom-0 end-0 start-0 z-20 flex items-center gap-2 rounded bg-black/70 px-4 py-4 text-sm font-medium text-white backdrop-blur md:text-sm">
+        <ExternalLinkIcon className="shrink-0 rtl:scale-x-[-1]" />
+        {t("ln.external-link")}
+      </div>
+    </a>
+  )}
 </div>

@@ -1,6 +1,7 @@
 ---
 # Use Lightnet layout for markdown pages.
 layout: "lightnet/layouts/MarkdownPage.astro"
+title: "About"
 ---
 
 # About

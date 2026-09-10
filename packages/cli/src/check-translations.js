@@ -3,7 +3,7 @@
 import { spawn } from "node:child_process"
 import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
-import { cwd } from "node:process"
+import { cwd, stdin, stdout } from "node:process"
 
 import { confirm, intro, isCancel, log, outro, taskLog } from "@clack/prompts"
 
@@ -30,7 +30,14 @@ import { cancelPrompt } from "./support/prompt-cancel.js"
  * }} CheckTranslationsOptions
  */
 
-const lightnetCachePath = resolve(cwd(), "node_modules", ".cache", "lightnet")
+/**
+ * @typedef {{
+ *   cwd?: string
+ *   isInteractive?: boolean
+ *   promptRunBuild?: () => Promise<boolean>
+ *   write?: (message: string) => void
+ * }} CheckTranslationsRuntime
+ */
 
 /** @type {{type:Translation["type"], title:string, action:string}[]} */
 const translationSources = [
@@ -54,18 +61,33 @@ const translationSources = [
 
 /**
  * @param {CheckTranslationsOptions} [options]
+ * @param {CheckTranslationsRuntime} [runtime]
  */
-export async function checkTranslations(options = {}) {
-  intro("check-translations")
+export async function checkTranslations(options = {}, runtime = {}) {
+  const lightnetCachePath = resolve(
+    runtime.cwd ?? cwd(),
+    "node_modules",
+    ".cache",
+    "lightnet",
+  )
+  const interactive =
+    runtime.isInteractive ?? Boolean(stdin.isTTY && stdout.isTTY)
+  const output = createOutput(interactive, runtime.write)
 
-  const buildAvailable = await runBuild(options.build)
+  output.intro("check-translations")
+
+  const buildAvailable = await runBuild(options.build, {
+    interactive,
+    output,
+    promptRunBuild: runtime.promptRunBuild,
+  })
   if (!buildAvailable) {
-    outro("Build failed. 🚧")
+    output.outro("Build failed. 🚧")
     return false
   }
 
-  const translations = await readTranslations()
-  const languages = await readLanguages()
+  const translations = await readTranslations(lightnetCachePath, output)
+  const languages = await readLanguages(lightnetCachePath, output)
   if (!translations || !languages || translations.length === 0) {
     return false
   }
@@ -77,7 +99,7 @@ export async function checkTranslations(options = {}) {
     .filter((translation) => translation.missingLocales.length > 0)
 
   if (incompleteTranslations.length === 0) {
-    outro("No issues found. 🎉")
+    output.outro("No issues found. 🎉")
     return true
   }
 
@@ -86,29 +108,42 @@ export async function checkTranslations(options = {}) {
     (translation) => translation.type,
   )
 
-  log.error("Translation check failed")
+  output.error("Translation check failed")
   for (const source of translationSources) {
-    printMissingTranslations(source, grouped[source.type])
+    printMissingTranslations(source, grouped[source.type], output)
   }
 
-  outro("Issues found. 🚧")
+  output.outro("Issues found. 🚧")
 
   return false
 }
 
 /**
- *
  * @param {boolean|undefined} build
- * @returns
+ * @param {{
+ *   interactive: boolean
+ *   output: ReturnType<typeof createOutput>
+ *   promptRunBuild?: () => Promise<boolean>
+ * }} runtime
  */
-async function runBuild(build) {
-  const shouldRunBuild = build ?? (await promptRunBuild())
+async function runBuild(build, { interactive, output, promptRunBuild }) {
+  const shouldRunBuild =
+    build ??
+    (interactive ? await (promptRunBuild ?? defaultPromptRunBuild)() : false)
   if (!shouldRunBuild) {
     return true
   }
-  const buildLog = taskLog({
-    title: "Running pnpm build",
-  })
+  const buildLog = interactive
+    ? taskLog({ title: "Running pnpm build" })
+    : {
+        error: output.error,
+        message: output.message,
+        success: output.message,
+      }
+
+  if (!interactive) {
+    output.message("Running pnpm build")
+  }
 
   const child = spawn("pnpm", ["build"], {
     shell: process.platform === "win32",
@@ -154,7 +189,7 @@ async function runBuild(build) {
   }
 }
 
-async function promptRunBuild() {
+async function defaultPromptRunBuild() {
   const answer = await confirm({
     message:
       "Run pnpm build now? Command requires an up-to-date dist/ directory.",
@@ -170,13 +205,14 @@ async function promptRunBuild() {
  *
  * @param {{title:string, action:string}} source
  * @param {(Translation & {missingLocales:string[]})[]|undefined} translations
+ * @param {ReturnType<typeof createOutput>} output
  */
-function printMissingTranslations(source, translations) {
+function printMissingTranslations(source, translations, output) {
   if (!translations || translations.length === 0) {
     return
   }
 
-  log.warn(source.title)
+  output.warn(source.title)
   translations
     .toSorted(
       (t1, t2) =>
@@ -184,10 +220,10 @@ function printMissingTranslations(source, translations) {
         t1.key.localeCompare(t2.key),
     )
     .forEach(({ key, missingLocales }) => {
-      log.message(`• ${key} > Missing: ${missingLocales.join(", ")}`)
+      output.message(`• ${key} > Missing: ${missingLocales.join(", ")}`)
     })
 
-  log.message(`Action: ${source.action}`)
+  output.message(`Action: ${source.action}`)
 }
 
 /**
@@ -201,9 +237,11 @@ function getMissingLocales(translation, languages) {
 }
 
 /**
+ * @param {string} lightnetCachePath
+ * @param {ReturnType<typeof createOutput>} output
  * @returns {Promise<Translation[]|undefined>}
  */
-async function readTranslations() {
+async function readTranslations(lightnetCachePath, output) {
   try {
     const translationsText = await readFile(
       resolve(lightnetCachePath, "translations.jsonl"),
@@ -214,16 +252,18 @@ async function readTranslations() {
       .filter((line) => line.trim())
       .map((line) => JSON.parse(line))
   } catch {
-    log.error("No translation build cache found.")
-    log.error("Action: Run build and try lightnet check-translations again.")
+    output.error("No translation build cache found.")
+    output.error("Action: Run build and try lightnet check-translations again.")
     return undefined
   }
 }
 
 /**
+ * @param {string} lightnetCachePath
+ * @param {ReturnType<typeof createOutput>} output
  * @returns {Promise<Languages|undefined>}
  */
-async function readLanguages() {
+async function readLanguages(lightnetCachePath, output) {
   try {
     const languagesText = await readFile(
       resolve(lightnetCachePath, "languages.json"),
@@ -231,8 +271,37 @@ async function readLanguages() {
     )
     return JSON.parse(languagesText)
   } catch {
-    log.error("No language manifest found from the last build.")
-    log.error("Action: Run build and try lightnet check-translations again.")
+    output.error("No language manifest found from the last build.")
+    output.error("Action: Run build and try lightnet check-translations again.")
     return undefined
+  }
+}
+
+/**
+ * @param {boolean} interactive
+ * @param {(message: string) => void | undefined} write
+ */
+function createOutput(
+  interactive,
+  write = (message) => {
+    stdout.write(`${message}\n`)
+  },
+) {
+  if (interactive) {
+    return {
+      error: log.error,
+      intro,
+      message: log.message,
+      outro,
+      warn: log.warn,
+    }
+  }
+
+  return {
+    error: write,
+    intro: write,
+    message: write,
+    outro: write,
+    warn: write,
   }
 }

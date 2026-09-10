@@ -74,26 +74,24 @@ const iconDirectionClass =
   id={id}
   aria-label={title}
 >
-  {
-    title && (
-      <h2
-        class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-12 sm:text-3xl"
-        class:list={[titleClass]}
-      >
-        {titleHref ? (
-          <a href={titleHref} class="group flex items-center">
-            {title}
-            <ChevronRightIcon
-              size="2rem"
-              strokeWidth="3px"
-              className={`transition-colors duration-75 ease-in-out group-hover:text-primary ${iconDirectionClass}`}
-            />
-          </a>
-        ) : (
-          <>{title}</>
-        )}
-      </h2>
-    )
-  }
+  {title && (
+    <h2
+      class="mb-10 text-balance text-2xl font-bold text-gray-700 sm:mb-12 sm:text-3xl"
+      class:list={[titleClass]}
+    >
+      {titleHref ? (
+        <a href={titleHref} class="group flex items-center">
+          {title}
+          <ChevronRightIcon
+            size="2rem"
+            strokeWidth="3px"
+            className={`transition-colors duration-75 ease-in-out group-hover:text-primary ${iconDirectionClass}`}
+          />
+        </a>
+      ) : (
+        <>{title}</>
+      )}
+    </h2>
+  )}
   <slot />
 </section>

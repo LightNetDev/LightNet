@@ -11,8 +11,6 @@ const { mediaId } = Astro.props
 const collections = await getCollectionsForMediaItem(mediaId)
 ---
 
-{
-  collections.map((id) => (
-    <MediaCollection collectionId={id} disableItem={mediaId} />
-  ))
-}
+{collections.map((id) => (
+  <MediaCollection collectionId={id} disableItem={mediaId} />
+))}

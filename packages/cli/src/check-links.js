@@ -1,6 +1,6 @@
 // @ts-check
 
-import { posix, resolve } from "node:path"
+import { matchesGlob, posix, resolve } from "node:path"
 import { cwd as processCwd, stdin, stdout } from "node:process"
 
 import { intro, isCancel, log, outro, progress, text } from "@clack/prompts"
@@ -28,6 +28,7 @@ const requestHeaders = {
 
 /**
  * @typedef {{
+ *   exclude?: string[]
  *   timeout?: string
  * }} CheckLinksOptions
  */
@@ -47,6 +48,14 @@ const requestHeaders = {
  *   resolvedUrl: string
  *   sources: Set<string>
  * }} LinkReference
+ */
+
+/**
+ * @typedef {{
+ *   displayUrl: string
+ *   patterns: Set<string>
+ *   sources: Set<string>
+ * }} ExcludedLinkReference
  */
 
 /**
@@ -73,6 +82,7 @@ export async function checkLinks(options, runtime = {}) {
     "--timeout",
     defaultTimeoutMs,
   )
+  const excludePatterns = parseExcludePatterns(options.exclude)
 
   intro("check-links")
 
@@ -82,17 +92,28 @@ export async function checkLinks(options, runtime = {}) {
   const mediaItems = await collections.getMediaItems()
   const siteUrl = await initSiteUrl({
     cwd,
+    excludePatterns,
     interactive,
     mediaItems,
     promptText,
   })
-  const references = collectLinkReferences(mediaItems, siteUrl)
+  const { excludedReferences, references } = collectLinkReferences(
+    mediaItems,
+    siteUrl,
+    excludePatterns,
+  )
   log.message(
     `Checking ${references.length} unique links from ${mediaItems.length} media items.`,
   )
 
+  printExcludedLinks(excludedReferences)
+
   if (references.length === 0) {
-    log.warn("No media content URLs found.")
+    log.warn(
+      excludedReferences.length > 0
+        ? "No media content URLs require checking."
+        : "No media content URLs found.",
+    )
     outro("No issues found. 🎉")
     return true
   }
@@ -179,14 +200,25 @@ async function checkReferencesWithProgress(references, options) {
 /**
  * @param {{
  *   cwd: string
+ *   excludePatterns: string[]
  *   interactive: boolean
  *   mediaItems: MediaItem[]
  *   promptText: (message: string) => Promise<string>
  * }} args
  */
-async function initSiteUrl({ cwd, interactive, mediaItems, promptText }) {
+async function initSiteUrl({
+  cwd,
+  excludePatterns,
+  interactive,
+  mediaItems,
+  promptText,
+}) {
   const needsSiteUrl = mediaItems.some((item) =>
-    item.content.some((contentItem) => isRootRelativeUrl(contentItem.url)),
+    item.content.some(
+      (contentItem) =>
+        isRootRelativeUrl(contentItem.url) &&
+        findMatchingPatterns(contentItem.url, excludePatterns).length === 0,
+    ),
   )
   if (!needsSiteUrl) {
     return undefined
@@ -236,13 +268,36 @@ function parseSiteUrl(config) {
 /**
  * @param {MediaItem[]} mediaItems
  * @param {string|undefined} siteUrl
+ * @param {string[]} excludePatterns
  */
-function collectLinkReferences(mediaItems, siteUrl) {
+function collectLinkReferences(mediaItems, siteUrl, excludePatterns) {
   /** @type {Map<string, LinkReference>} */
   const references = new Map()
+  /** @type {Map<string, ExcludedLinkReference>} */
+  const excludedReferences = new Map()
   for (const item of mediaItems) {
     const sourceFileName = posix.basename(toPosixPath(item.path))
     for (const contentItem of item.content) {
+      const matchingPatterns = findMatchingPatterns(
+        contentItem.url,
+        excludePatterns,
+      )
+      if (matchingPatterns.length > 0) {
+        const current = excludedReferences.get(contentItem.url)
+        if (current) {
+          current.sources.add(sourceFileName)
+          for (const pattern of matchingPatterns) {
+            current.patterns.add(pattern)
+          }
+        } else {
+          excludedReferences.set(contentItem.url, {
+            displayUrl: contentItem.url,
+            patterns: new Set(matchingPatterns),
+            sources: new Set([sourceFileName]),
+          })
+        }
+        continue
+      }
       const resolvedUrl = resolveUrl(contentItem.url, siteUrl)
       const current = references.get(resolvedUrl)
       if (current) {
@@ -259,9 +314,14 @@ function collectLinkReferences(mediaItems, siteUrl) {
       }
     }
   }
-  return [...references.values()].sort((a, b) =>
-    a.displayUrl.localeCompare(b.displayUrl),
-  )
+  return {
+    excludedReferences: [...excludedReferences.values()].sort((a, b) =>
+      a.displayUrl.localeCompare(b.displayUrl),
+    ),
+    references: [...references.values()].sort((a, b) =>
+      a.displayUrl.localeCompare(b.displayUrl),
+    ),
+  }
 }
 
 /**
@@ -330,6 +390,25 @@ function printProtectedLinks(links) {
   for (const { reference, result } of links) {
     log.message(
       `• ${reference.displayUrl}\n  Result: ${formatFailure(result)}\n${formatReferenceSources(reference.sources)}`,
+    )
+  }
+}
+
+/**
+ * @param {ExcludedLinkReference[]} links
+ */
+function printExcludedLinks(links) {
+  if (links.length === 0) {
+    return
+  }
+
+  log.info(`Excluded links (${links.length})`)
+  for (const link of links) {
+    const patterns = [...link.patterns]
+      .toSorted()
+      .map((pattern) => `"${pattern}"`)
+    log.message(
+      `• ${link.displayUrl}\n  Excluded by: ${patterns.join(", ")}\n${formatReferenceSources(link.sources)}`,
     )
   }
 }
@@ -424,6 +503,63 @@ function parsePositiveInteger(rawValue, optionName, defaultValue) {
     throw new CliError(`Expected "${optionName}" to be a positive integer.`)
   }
   return value
+}
+
+/**
+ * @param {string[]|undefined} patterns
+ */
+function parseExcludePatterns(patterns) {
+  return (patterns ?? []).map((pattern) => {
+    if (!isValidGlobPattern(pattern)) {
+      throw new CliError(`Invalid "--exclude" glob pattern "${pattern}".`)
+    }
+    return pattern
+  })
+}
+
+/**
+ * @param {string} url
+ * @param {string[]} patterns
+ */
+function findMatchingPatterns(url, patterns) {
+  return patterns.filter((pattern) => matchesGlob(url, pattern))
+}
+
+/**
+ * Node's glob matcher treats unclosed groups as non-matches, so validate them
+ * explicitly to turn common malformed patterns into actionable CLI errors.
+ *
+ * @param {string} pattern
+ */
+function isValidGlobPattern(pattern) {
+  /** @type {Partial<Record<string, string>>} */
+  const pairs = { "[": "]", "{": "}", "(": ")" }
+  /** @type {string[]} */
+  const expectedClosers = []
+  let escaped = false
+
+  for (const character of pattern) {
+    if (escaped) {
+      escaped = false
+      continue
+    }
+    if (character === "\\") {
+      escaped = true
+      continue
+    }
+    const closer = pairs[character]
+    if (closer) {
+      expectedClosers.push(closer)
+      continue
+    }
+    if (character === "]" || character === "}" || character === ")") {
+      if (expectedClosers.pop() !== character) {
+        return false
+      }
+    }
+  }
+
+  return !escaped && expectedClosers.length === 0
 }
 
 /**

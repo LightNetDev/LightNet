@@ -20,7 +20,7 @@
     "e2e:admin": "pnpm --filter=@lightnet/sveltia-admin e2e",
     "test": "pnpm -r --if-present test"
   },
-  "packageManager": "pnpm@11.10.0",
+  "packageManager": "pnpm@12.3.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet"
@@ -30,23 +30,23 @@
   },
   "homepage": "https://lightnet.community",
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.31.0",
+    "@astrojs/check": "^0.9.10",
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.2",
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.13.2",
+    "@types/node": "^24.13.3",
     "astro": "^6.4.8",
-    "eslint": "^10.6.0",
+    "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^1.7.0",
-    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "eslint-plugin-astro": "^3.1.0",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.7.0",
-    "prettier": "^3.9.4",
-    "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.8.0",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^1.0.0",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.1"
+    "typescript-eslint": "^8.70.0"
   },
   "engines": {
     "node": ">=22"

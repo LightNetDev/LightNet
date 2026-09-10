@@ -60,35 +60,29 @@ const subtitleSizes = {
         !disableOverlay && "bg-gradient-radial from-black/30 to-black/40",
       ]}
     >
-      {
-        title && (
-          <h1
-            class="max-w-screen-md text-balance font-bold tracking-tight transition-transform duration-1000 group-hover:scale-[102%]"
-            class:list={[titleSizes[titleSize], titleClass]}
-          >
-            {title}
-          </h1>
-        )
-      }
-      {
-        subtitle && (
-          <p
-            class="mt-1 max-w-screen-sm text-balance font-bold md:mt-2"
-            class:list={[
-              "sm:text-lg md:text-2xl",
-              subtitleSizes[subtitleSize],
-              subtitleClass,
-            ]}
-          >
-            {subtitle}
-          </p>
-        )
-      }
-      {
-        showSearch && (
-          <SearchInput className="mt-6 max-w-sm md:mt-10 md:max-w-md" />
-        )
-      }
+      {title && (
+        <h1
+          class="max-w-screen-md text-balance font-bold tracking-tight transition-transform duration-1000 group-hover:scale-[102%]"
+          class:list={[titleSizes[titleSize], titleClass]}
+        >
+          {title}
+        </h1>
+      )}
+      {subtitle && (
+        <p
+          class="mt-1 max-w-screen-sm text-balance font-bold md:mt-2"
+          class:list={[
+            "sm:text-lg md:text-2xl",
+            subtitleSizes[subtitleSize],
+            subtitleClass,
+          ]}
+        >
+          {subtitle}
+        </p>
+      )}
+      {showSearch && (
+        <SearchInput className="mt-6 max-w-sm md:mt-10 md:max-w-md" />
+      )}
       <slot />
     </div>
   </div>

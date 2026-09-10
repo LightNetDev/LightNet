@@ -40,39 +40,35 @@ const items = (config.mainMenu ?? []).map(({ href, label, requiresLocale }) => {
   >
     <SquarePenIcon />
   </a>
-  {
-    !config.searchPage?.hideHeaderSearchIcon && (
-      <a
-        class="flex p-3 text-gray-600 hover:text-primary"
-        aria-label={t("ln.search.title")}
-        data-astro-prefetch="viewport"
-        href={searchPagePath(currentLocale)}
-      >
-        <SearchIcon />
-      </a>
-    )
-  }
+  {!config.searchPage?.hideHeaderSearchIcon && (
+    <a
+      class="flex p-3 text-gray-600 hover:text-primary"
+      aria-label={t("ln.search.title")}
+      data-astro-prefetch="viewport"
+      href={searchPagePath(currentLocale)}
+    >
+      <SearchIcon />
+    </a>
+  )}
 
   <LanguageSelectionMenu />
 
-  {
-    !!items.length && (
-      <Menu label="ln.header.open-main-menu">
-        <MenuIcon slot="icon" />
-        {items.map(({ labelText, href, isActive, isExternal }) => (
-          <MenuItem href={href} active={isActive}>
-            {labelText}
-            {isExternal && (
-              <ExternalLinkIcon
-                size="1.2rem"
-                className="shrink-0 rtl:scale-x-[-1]"
-              />
-            )}
-          </MenuItem>
-        ))}
-      </Menu>
-    )
-  }
+  {!!items.length && (
+    <Menu label="ln.header.open-main-menu">
+      <MenuIcon slot="icon" />
+      {items.map(({ labelText, href, isActive, isExternal }) => (
+        <MenuItem href={href} active={isActive}>
+          {labelText}
+          {isExternal && (
+            <ExternalLinkIcon
+              size="1.2rem"
+              className="shrink-0 rtl:scale-x-[-1]"
+            />
+          )}
+        </MenuItem>
+      ))}
+    </Menu>
+  )}
 </nav>
 <script>
   const initAdminButton = () => {

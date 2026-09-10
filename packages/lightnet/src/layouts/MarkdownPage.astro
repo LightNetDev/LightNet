@@ -3,11 +3,12 @@ import Page, { type Props as PageProps } from "./Page.astro"
 
 type Props = PageProps & {
   className?: string
+  frontmatter: PageProps
 }
 const { className, ...pageProps } = Astro.props
 ---
 
-<Page {...pageProps}>
+<Page {...pageProps} {...pageProps.frontmatter}>
   <article
     class="prose mx-auto mt-8 max-w-screen-md px-4 prose-img:rounded-md sm:mt-16 md:px-8"
     class:list={[className]}
