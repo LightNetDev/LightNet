@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // @ts-check
 
-import { Command } from "commander"
+import { Command, Option } from "commander"
 
 import pkg from "../package.json" with { type: "json" }
 import { checkFiles } from "./check-files.js"
@@ -62,6 +62,14 @@ program
   .command("check-links")
   .description("check media content links in a LightNet site")
   .option("--timeout <ms>", "request timeout per link in milliseconds")
+  .addOption(
+    new Option(
+      "--exclude <pattern>",
+      "exclude media content URLs matching a glob pattern (repeatable)",
+    )
+      .default([])
+      .argParser((pattern, patterns) => [...patterns, pattern]),
+  )
   .action(async (options) => {
     try {
       const checkSuccessful = await checkLinks(options)
