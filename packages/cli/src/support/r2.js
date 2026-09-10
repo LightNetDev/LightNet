@@ -617,9 +617,10 @@ async function promptRequiredSecret({ interactive = true } = {}) {
     if (isCancel(value)) {
       cancelPrompt()
     }
-    if (value.trim()) {
-      processEnv[sessionSecretEnvName] = value
-      return value
+    const secret = typeof value === "string" ? value : ""
+    if (secret.trim()) {
+      processEnv[sessionSecretEnvName] = secret
+      return secret
     }
   }
 }

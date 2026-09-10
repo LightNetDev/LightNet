@@ -772,5 +772,5 @@ async function defaultPromptConfirm(message) {
   if (isCancel(answer)) {
     cancelPrompt()
   }
-  return answer
+  return Boolean(answer)
 }
