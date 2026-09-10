@@ -10,13 +10,15 @@ const { links: languageMenuItems } = getLanguageSelectionMenuItems({
   pathname: Astro.url.pathname,
   tConfigField,
 })
+const currentLanguage = languageMenuItems.find(({ active }) => active)
 ---
 
-<label class="inline-flex items-center gap-2 py-2 font-medium">
+<label class="relative inline-flex self-start items-center gap-2 rounded py-2 font-medium focus-within:ring-2 focus-within:ring-gray-900 focus-within:ring-offset-2">
   <GlobeIcon className="h-5 w-5 shrink-0 text-gray-600" aria-hidden="true" />
+  <span aria-hidden="true">{currentLanguage?.label}</span>
   <span class="sr-only">{t("ln.select-language")}</span>
   <select
-    class="min-w-0 cursor-pointer appearance-none border-0 bg-transparent p-0 pr-0 outline-none focus:ring-0"
+    class="absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
     aria-label={t("ln.select-language")}
     data-footer-language-select
   >
