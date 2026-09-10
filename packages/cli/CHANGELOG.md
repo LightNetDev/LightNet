@@ -1,5 +1,19 @@
 # @lightnet/cli
 
+## 4.8.0
+
+### Minor Changes
+
+- [#449](https://github.com/LightNetDev/LightNet/pull/449) [`b4b1ba9`](https://github.com/LightNetDev/LightNet/commit/b4b1ba9e591af8f6870f2b3eb04029820a008393) - Add repeatable `--exclude` glob exclusions to `check-links` for explicitly exempt media URLs.
+
+### Patch Changes
+
+- [#449](https://github.com/LightNetDev/LightNet/pull/449) [`b4b1ba9`](https://github.com/LightNetDev/LightNet/commit/b4b1ba9e591af8f6870f2b3eb04029820a008393) - Update dependencies
+
+- [#449](https://github.com/LightNetDev/LightNet/pull/449) [`b4b1ba9`](https://github.com/LightNetDev/LightNet/commit/b4b1ba9e591af8f6870f2b3eb04029820a008393) - Support non interactive usage of check-translations cli script.
+
+- [#449](https://github.com/LightNetDev/LightNet/pull/449) [`b4b1ba9`](https://github.com/LightNetDev/LightNet/commit/b4b1ba9e591af8f6870f2b3eb04029820a008393) - Internal fix typings after dependency update.
+
 ## 4.7.1
 
 ### Patch Changes
