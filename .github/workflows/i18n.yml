@@ -13,10 +13,10 @@ jobs:
   update-translation-status:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.head_ref }}
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@v2.1.0
         with:
           cache: true
           require-lockfile: true
@@ -35,7 +35,7 @@ jobs:
           fi
       - if: steps.check_changes.outputs.changes == 'true'
         name: Create PR
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v8.1.1
         with:
           title: Update translation status report
           body: This PR updates the translation status report.
