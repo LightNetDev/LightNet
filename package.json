@@ -21,6 +21,13 @@
     "test": "pnpm -r --if-present test"
   },
   "packageManager": "pnpm@12.3.4",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.0.0",
+      "onFail": "download"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/LightNetDev/lightnet"
