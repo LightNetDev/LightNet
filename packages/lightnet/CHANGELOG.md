@@ -1,5 +1,17 @@
 # lightnet
 
+## 4.6.0
+
+### Minor Changes
+
+- [#449](https://github.com/LightNetDev/LightNet/pull/449) [`b4b1ba9`](https://github.com/LightNetDev/LightNet/commit/b4b1ba9e591af8f6870f2b3eb04029820a008393) - Support passing Markdown frontmatter to Page props.
+
+### Patch Changes
+
+- [#449](https://github.com/LightNetDev/LightNet/pull/449) [`b4b1ba9`](https://github.com/LightNetDev/LightNet/commit/b4b1ba9e591af8f6870f2b3eb04029820a008393) - Make globe icon in footer language selection menu clickable.
+
+- [#449](https://github.com/LightNetDev/LightNet/pull/449) [`b4b1ba9`](https://github.com/LightNetDev/LightNet/commit/b4b1ba9e591af8f6870f2b3eb04029820a008393) - Update dependencies
+
 ## 4.5.2
 
 ### Patch Changes
