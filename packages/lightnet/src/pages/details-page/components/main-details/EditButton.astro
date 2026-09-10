@@ -13,9 +13,10 @@ const { mediaId } = Astro.props
   id="edit-btn"
   data-media-id={mediaId}
   href="#"
-  ><SquarePenIcon />
-  {Astro.locals.i18n.t("ln.details.edit")}</a
 >
+  <SquarePenIcon />
+  {Astro.locals.i18n.t("ln.details.edit")}
+</a>
 <script>
   const initEditButton = () => {
     const adminPath = localStorage.getItem("ln.adminPaths")

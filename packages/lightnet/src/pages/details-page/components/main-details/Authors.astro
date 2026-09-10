@@ -10,10 +10,8 @@ const item = await getMediaItem(Astro.props.mediaId)
 const authors = item.data.authors?.join(", ")
 ---
 
-{
-  authors && (
-    <div class="text-xl sm:text-2xl" class:list={Astro.props.className}>
-      {authors}
-    </div>
-  )
-}
+{authors && (
+  <div class="text-xl sm:text-2xl" class:list={Astro.props.className}>
+    {authors}
+  </div>
+)}

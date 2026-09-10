@@ -31,23 +31,18 @@ const logoAlt = (() => {
   class="flex items-center gap-3 font-bold text-gray-600 md:text-lg"
   href={localizePath(currentLocale, "/")}
 >
-  {
-    logo &&
-      (logo.format === "svg" ? (
-        <img
-          src={logo.src}
-          alt={logoAlt}
-          style={`width:${getWidth(logo)}px;`}
-        />
-      ) : (
-        <Image
-          src={logo}
-          alt={logoAlt}
-          style={`width:${getWidth(logo)}px;`}
-          width={getWidth(logo)}
-          densities={[1.5, 2, 3]}
-          loading="eager"
-        />
-      ))
-  }{!config.logo?.replacesTitle && tConfigField(config.title, config)}</a
->
+  {logo &&
+    (logo.format === "svg" ? (
+      <img src={logo.src} alt={logoAlt} style={`width:${getWidth(logo)}px;`} />
+    ) : (
+      <Image
+        src={logo}
+        alt={logoAlt}
+        style={`width:${getWidth(logo)}px;`}
+        width={getWidth(logo)}
+        densities={[1.5, 2, 3]}
+        loading="eager"
+      />
+    ))}
+  {!config.logo?.replacesTitle && tConfigField(config.title, config)}
+</a>

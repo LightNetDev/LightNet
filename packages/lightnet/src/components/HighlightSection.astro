@@ -34,34 +34,28 @@ const iconDirectionClass =
       class="aspect-[4/3] w-full shrink-0 object-cover md:w-1/2 xl:aspect-video"
     />
     <div class="my-16 max-w-screen-sm px-4 md:px-8 lg:my-24 xl:px-16">
-      {
-        title && (
-          <h2
-            class="mb-4 text-balance text-2xl font-bold sm:mb-8 sm:text-3xl"
-            class:list={titleClass}
-          >
-            {title}
-          </h2>
-        )
-      }
-      {
-        text && (
-          <p class="mb-10 text-lg sm:mb-12" class:list={textClass}>
-            {text}
-          </p>
-        )
-      }
-      {
-        link && (
-          <a
-            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-gray-50 shadow-sm hover:bg-primary/85 hover:text-gray-100"
-            href={link.href}
-          >
-            {link.text}
-            <ArrowRightIcon className={iconDirectionClass} />
-          </a>
-        )
-      }
+      {title && (
+        <h2
+          class="mb-4 text-balance text-2xl font-bold sm:mb-8 sm:text-3xl"
+          class:list={titleClass}
+        >
+          {title}
+        </h2>
+      )}
+      {text && (
+        <p class="mb-10 text-lg sm:mb-12" class:list={textClass}>
+          {text}
+        </p>
+      )}
+      {link && (
+        <a
+          class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-gray-50 shadow-sm hover:bg-primary/85 hover:text-gray-100"
+          href={link.href}
+        >
+          {link.text}
+          <ArrowRightIcon className={iconDirectionClass} />
+        </a>
+      )}
       <slot />
     </div>
   </div>

@@ -13,9 +13,7 @@ export type Props = {
 const { mediaId, imageSize } = Astro.props
 ---
 
-<div
-  class="mx-auto mt-10 flex max-w-screen-md flex-col items-center gap-8 px-4 sm:mt-20 sm:flex-row sm:items-start sm:gap-14 md:px-8"
->
+<div class="mx-auto mt-10 flex max-w-screen-md flex-col items-center gap-8 px-4 sm:mt-20 sm:flex-row sm:items-start sm:gap-14 md:px-8">
   <CoverImage size={imageSize} mediaId={mediaId} />
   <div class="flex w-full grow flex-col items-center sm:items-start">
     <Title className="text-center sm:text-start" mediaId={mediaId} />

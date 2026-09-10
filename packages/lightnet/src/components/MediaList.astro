@@ -47,65 +47,63 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <ol class="divide-y divide-gray-200">
-  {
-    items.map((item) => (
-      <li lang={item.data.language}>
-        <a
-          href={
-            item.disabled
-              ? "javascript:void(0)"
-              : detailsPagePath(currentLocale, {
-                  id: item.id,
-                })
-          }
-          class="group flex overflow-hidden py-4 transition-colors ease-in-out md:rounded-sm md:py-6 md:hover:bg-gray-100"
-          class:list={
-            item.disabled ? "pointer-events-none cursor-default opacity-50" : ""
-          }
-          tabindex={item.disabled ? -1 : 0}
-        >
-          <div class="flex h-32 w-32 shrink-0 flex-col items-start justify-center">
-            <CoverImageDecorator
-              style={mediaTypes[item.data.type.id].coverImageStyle}
-            >
-              <Image
-                class="max-h-32 w-auto max-w-32 object-cover"
-                class:list={[
-                  mediaTypes[item.data.type.id].coverImageStyle === "video" &&
-                    "aspect-video",
-                ]}
-                src={item.data.image}
-                width={256}
-                alt=""
-              />
-            </CoverImageDecorator>
-          </div>
-
-          <div
-            class="ms-4 flex grow flex-col justify-center sm:ms-6"
-            lang={item.data.language}
+  {items.map((item) => (
+    <li lang={item.data.language}>
+      <a
+        href={
+          item.disabled
+            ? "javascript:void(0)"
+            : detailsPagePath(currentLocale, {
+                id: item.id,
+              })
+        }
+        class="group flex overflow-hidden py-4 transition-colors ease-in-out md:rounded-sm md:py-6 md:hover:bg-gray-100"
+        class:list={
+          item.disabled ? "pointer-events-none cursor-default opacity-50" : ""
+        }
+        tabindex={item.disabled ? -1 : 0}
+      >
+        <div class="flex h-32 w-32 shrink-0 flex-col items-start justify-center">
+          <CoverImageDecorator
+            style={mediaTypes[item.data.type.id].coverImageStyle}
           >
-            <p class="mb-1 line-clamp-3 text-balance font-bold text-gray-700 md:mb-3">
-              <Icon
-                className={`${mediaTypes[item.data.type.id].icon} me-2 align-bottom text-2xl text-gray-700`}
-                ariaLabel={mediaTypes[item.data.type.id].labelText}
-              />
-              <span>{item.data.title}</span>
-            </p>
-            <div class="mb-3 flex flex-col flex-wrap items-start gap-2 text-balance md:flex-row md:items-center md:gap-3">
-              {!!item.data.authors?.length && (
-                <p class="mb-1 md:mb-0 md:text-base">
-                  {item.data.authors.join(", ")}
-                </p>
-              )}
-            </div>
-          </div>
+            <Image
+              class="max-h-32 w-auto max-w-32 object-cover"
+              class:list={[
+                mediaTypes[item.data.type.id].coverImageStyle === "video" &&
+                  "aspect-video",
+              ]}
+              src={item.data.image}
+              width={256}
+              alt=""
+            />
+          </CoverImageDecorator>
+        </div>
 
-          <ChevronRightIcon
-            className={`my-auto me-4 ms-2 hidden shrink-0 text-gray-300 sm:block md:group-hover:text-primary ${iconDirectionClass}`}
-          />
-        </a>
-      </li>
-    ))
-  }
+        <div
+          class="ms-4 flex grow flex-col justify-center sm:ms-6"
+          lang={item.data.language}
+        >
+          <p class="mb-1 line-clamp-3 text-balance font-bold text-gray-700 md:mb-3">
+            <Icon
+              className={`${mediaTypes[item.data.type.id].icon} me-2 align-bottom text-2xl text-gray-700`}
+              ariaLabel={mediaTypes[item.data.type.id].labelText}
+            />
+            <span>{item.data.title}</span>
+          </p>
+          <div class="mb-3 flex flex-col flex-wrap items-start gap-2 text-balance md:flex-row md:items-center md:gap-3">
+            {!!item.data.authors?.length && (
+              <p class="mb-1 md:mb-0 md:text-base">
+                {item.data.authors.join(", ")}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <ChevronRightIcon
+          className={`my-auto me-4 ms-2 hidden shrink-0 text-gray-300 sm:block md:group-hover:text-primary ${iconDirectionClass}`}
+        />
+      </a>
+    </li>
+  ))}
 </ol>

@@ -13,14 +13,12 @@ const { description, language } = item.data
 const { direction, code: lang } = resolveLanguage(language)
 ---
 
-{
-  description && (
-    <div
-      dir={direction}
-      class="prose prose-gray mx-auto mt-8 max-w-screen-md px-4 md:mt-12 md:px-8"
-      set:html={await markdownToHtml(description)}
-      lang={lang}
-      id="description"
-    />
-  )
-}
+{description && (
+  <div
+    dir={direction}
+    class="prose prose-gray mx-auto mt-8 max-w-screen-md px-4 md:mt-12 md:px-8"
+    set:html={await markdownToHtml(description)}
+    lang={lang}
+    id="description"
+  />
+)}

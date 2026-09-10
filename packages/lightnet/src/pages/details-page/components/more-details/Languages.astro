@@ -32,17 +32,15 @@ const translationLanguages = await Promise.all(
   <Label>{translations.length ? t("ln.languages") : t("ln.language")}</Label>
   <ul class="flex flex-wrap gap-2">
     <li class="py-1 pe-2 text-gray-800">{currentLanguage.labelText}</li>
-    {
-      translationLanguages.map((translation) => (
-        <li class="flex rounded-lg border border-gray-200 px-4 py-1 text-gray-600 hover:bg-gray-200">
-          <a
-            href={detailsPagePath(currentLocale, translation)}
-            hreflang={translation.language}
-          >
-            {translation.labelText}
-          </a>
-        </li>
-      ))
-    }
+    {translationLanguages.map((translation) => (
+      <li class="flex rounded-lg border border-gray-200 px-4 py-1 text-gray-600 hover:bg-gray-200">
+        <a
+          href={detailsPagePath(currentLocale, translation)}
+          hreflang={translation.language}
+        >
+          {translation.labelText}
+        </a>
+      </li>
+    ))}
   </ul>
 </div>
