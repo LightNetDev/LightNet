@@ -61,7 +61,7 @@ export default function lightnetPlausibleAnalytics(
   }
 }
 
-function verifySchema<T extends z.Schema>(
+function verifySchema<T extends z.ZodType>(
   schema: T,
   toVerify: unknown,
   errorMessage: string,

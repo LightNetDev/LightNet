@@ -1,7 +1,7 @@
 import { AstroError } from "astro/errors"
 import { z } from "astro/zod"
 
-export async function verifySchemaAsync<T extends z.Schema>(
+export async function verifySchemaAsync<T extends z.ZodType>(
   schema: T,
   toVerify: unknown,
   errorMessage: string | ((id: string | undefined) => string),
@@ -15,7 +15,7 @@ export async function verifySchemaAsync<T extends z.Schema>(
   throwParseError(toVerify, errorMessage, hint, parsed)
 }
 
-export function verifySchema<T extends z.Schema>(
+export function verifySchema<T extends z.ZodType>(
   schema: T,
   toVerify: unknown,
   errorMessage: string | ((id: string | undefined) => string),
