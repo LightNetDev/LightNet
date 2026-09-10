@@ -71,16 +71,23 @@ class GlobalSearch {
 
   async openResult(summary: string) {
     const result = this.result(summary)
+    const saveButton = this.page.getByRole("button", { name: "Save" })
 
     await result.click()
 
-    if (await this.page.getByRole("button", { name: "Save" }).count()) {
+    if (
+      await saveButton
+        .waitFor({ state: "visible", timeout: 1_000 })
+        .then(() => true)
+        .catch(() => false)
+    ) {
       return
     }
 
     const refreshedResult = this.result(summary)
     await expect(refreshedResult).toBeVisible()
-    await refreshedResult.dblclick()
+    await refreshedResult.click()
+    await expect(saveButton).toBeVisible()
   }
 
   async clear() {
