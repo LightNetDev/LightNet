@@ -13,15 +13,13 @@ jobs:
   update-translation-status:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v6
+      - uses: pnpm/setup@v2
         with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-      - run: pnpm ci
+          cache: true
+          require-lockfile: true
       - run: pnpm --silent translation-status > packages/lightnet/src/i18n/translations/TRANSLATION-STATUS.md
         name: Generate translation status report
       - run: |
