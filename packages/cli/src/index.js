@@ -37,7 +37,7 @@ program
 program
   .command("check-files")
   .description(
-    "check for missing and orphaned content files and thumbnails in a LightNet site",
+    "check for missing and orphaned content files and images in a LightNet site",
   )
   .option("--fix", "remove orphaned files")
   .option("--fix-without-confirm", "remove orphaned files without confirmation")
@@ -45,10 +45,7 @@ program
     "--r2",
     "validate remote content files in Cloudflare R2 instead of public/files",
   )
-  .option(
-    "--scope <values>",
-    "comma-separated scopes: content-files,thumbnails",
-  )
+  .option("--scope <values>", "comma-separated scopes: content-files,images")
   .action(async (options) => {
     try {
       const checkSuccessful = await checkFiles(options)
