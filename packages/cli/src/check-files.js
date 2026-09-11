@@ -24,7 +24,7 @@ import {
 import { cancelPrompt } from "./support/prompt-cancel.js"
 import { createR2FileStorage } from "./support/r2.js"
 
-const supportedScopes = new Set(["content-files", "thumbnails"])
+const supportedScopes = new Set(["content-files", "images"])
 
 const mediaDir = "src/content/media"
 const mediaImagesDir = "src/content/media/images"
@@ -83,7 +83,7 @@ export async function checkFiles(options, runtime = {}) {
 
   const scopes = parseScopes(options.scope)
   const includeContentFiles = scopes.has("content-files")
-  const includeThumbnails = scopes.has("thumbnails")
+  const includeImages = scopes.has("images")
 
   intro("check-files")
 
@@ -102,9 +102,9 @@ export async function checkFiles(options, runtime = {}) {
   /** @type {string[]} */
   let orphanedContentFiles = []
   /** @type {string[]} */
-  let orphanedMediaThumbnails = []
+  let orphanedMediaImages = []
   /** @type {string[]} */
-  let orphanedCategoryThumbnails = []
+  let orphanedCategoryImages = []
   /** @type {string[]} */
   let removedItems = []
   /** @type {string[]} */
@@ -112,8 +112,8 @@ export async function checkFiles(options, runtime = {}) {
 
   /** @type {FileStorage|undefined} */
   let contentFileStorage = undefined
-  const mediaThumbnailStorage = files(cwd, { rootDir: mediaImagesDir })
-  const categoryThumbnailStorage = files(cwd, { rootDir: categoryImagesDir })
+  const mediaImageStorage = files(cwd, { rootDir: mediaImagesDir })
+  const categoryImageStorage = files(cwd, { rootDir: categoryImagesDir })
 
   if (includeContentFiles) {
     contentFileStorage = options.r2
@@ -153,7 +153,7 @@ export async function checkFiles(options, runtime = {}) {
       orphanedContentFiles = r2Result.orphanedFiles
       if (r2Result.referenceCount === 0) {
         warnings.push(
-          'No R2-backed content file references found. Use "--scope=thumbnails" or check your "--r2" setup.',
+          'No R2-backed content file references found. Use "--scope=images" or check your "--r2" setup.',
         )
       }
     } else {
@@ -177,21 +177,21 @@ export async function checkFiles(options, runtime = {}) {
     }
   }
 
-  if (includeThumbnails) {
-    const thumbnailsResult = await runSpinner({
-      error: "Thumbnail check failed.",
-      start: "Checking thumbnails",
-      stop: (result) => formatThumbnailCheckSummary(result),
+  if (includeImages) {
+    const imagesResult = await runSpinner({
+      error: "Image check failed.",
+      start: "Checking images",
+      stop: (result) => formatImageCheckSummary(result),
       task: () =>
-        validateThumbnails(
+        validateImages(
           mediaItems,
           categories,
-          mediaThumbnailStorage,
-          categoryThumbnailStorage,
+          mediaImageStorage,
+          categoryImageStorage,
         ),
     })
-    orphanedMediaThumbnails = thumbnailsResult.orphanedMediaThumbnails
-    orphanedCategoryThumbnails = thumbnailsResult.orphanedCategoryThumbnails
+    orphanedMediaImages = imagesResult.orphanedMediaImages
+    orphanedCategoryImages = imagesResult.orphanedCategoryImages
   }
 
   if (options.fix || options.fixWithoutConfirm) {
@@ -212,7 +212,7 @@ export async function checkFiles(options, runtime = {}) {
       contentDeletions.push(deletion)
       deletions.push(deletion)
     }
-    for (const filePath of orphanedMediaThumbnails) {
+    for (const filePath of orphanedMediaImages) {
       const deletion = {
         displayPath: filePath,
         target: filePath,
@@ -220,7 +220,7 @@ export async function checkFiles(options, runtime = {}) {
       localDeletions.push(deletion)
       deletions.push(deletion)
     }
-    for (const filePath of orphanedCategoryThumbnails) {
+    for (const filePath of orphanedCategoryImages) {
       const deletion = {
         displayPath: filePath,
         target: filePath,
@@ -257,22 +257,22 @@ export async function checkFiles(options, runtime = {}) {
             task: async () => {
               const [
                 deletedContentTargets,
-                deletedMediaThumbnailTargets,
-                deletedCategoryThumbnailTargets,
+                deletedMediaImageTargets,
+                deletedCategoryImageTargets,
               ] = await Promise.all([
                 contentFileStorage
                   ? contentFileStorage.delete(
                       contentDeletions.map((deletion) => deletion.target),
                     )
                   : [],
-                mediaThumbnailStorage.delete(
+                mediaImageStorage.delete(
                   localDeletions
                     .filter((deletion) =>
                       deletion.target.startsWith(mediaImagesDir),
                     )
                     .map((deletion) => deletion.target),
                 ),
-                categoryThumbnailStorage.delete(
+                categoryImageStorage.delete(
                   localDeletions
                     .filter((deletion) =>
                       deletion.target.startsWith(categoryImagesDir),
@@ -283,8 +283,8 @@ export async function checkFiles(options, runtime = {}) {
               return {
                 deletedContentTargets,
                 deletedLocalTargets: [
-                  ...deletedMediaThumbnailTargets,
-                  ...deletedCategoryThumbnailTargets,
+                  ...deletedMediaImageTargets,
+                  ...deletedCategoryImageTargets,
                 ],
               }
             },
@@ -304,10 +304,10 @@ export async function checkFiles(options, runtime = {}) {
         orphanedContentFiles = orphanedContentFiles.filter(
           (item) => !deletedTargets.has(item),
         )
-        orphanedMediaThumbnails = orphanedMediaThumbnails.filter(
+        orphanedMediaImages = orphanedMediaImages.filter(
           (item) => !deletedTargets.has(item),
         )
-        orphanedCategoryThumbnails = orphanedCategoryThumbnails.filter(
+        orphanedCategoryImages = orphanedCategoryImages.filter(
           (item) => !deletedTargets.has(item),
         )
       }
@@ -318,8 +318,8 @@ export async function checkFiles(options, runtime = {}) {
     missingContentFiles.length > 0 ||
     wrongTypeR2ContentFiles.length > 0 ||
     orphanedContentFiles.length > 0 ||
-    orphanedMediaThumbnails.length > 0 ||
-    orphanedCategoryThumbnails.length > 0
+    orphanedMediaImages.length > 0 ||
+    orphanedCategoryImages.length > 0
 
   for (const warning of warnings) {
     log.warn(warning)
@@ -344,8 +344,8 @@ export async function checkFiles(options, runtime = {}) {
       formatContentFilePath(filePath, options),
     ),
   )
-  printSection("Orphaned media thumbnails", orphanedMediaThumbnails)
-  printSection("Orphaned category thumbnails", orphanedCategoryThumbnails)
+  printSection("Orphaned media images", orphanedMediaImages)
+  printSection("Orphaned category images", orphanedCategoryImages)
   printSection("Removed items", removedItems)
 
   outro(hasIssues ? "Issues found. 🚧" : "Cleanup complete. 🧹")
@@ -458,17 +458,16 @@ function formatContentCheckSummary(result) {
 /**
  * @param {{
  *   fileCount: number
- *   orphanedCategoryThumbnails: string[]
- *   orphanedMediaThumbnails: string[]
+ *   orphanedCategoryImages: string[]
+ *   orphanedMediaImages: string[]
  *   referenceCount: number
  * }} result
  */
-function formatThumbnailCheckSummary(result) {
-  const orphanedThumbnails =
-    result.orphanedMediaThumbnails.length +
-    result.orphanedCategoryThumbnails.length
+function formatImageCheckSummary(result) {
+  const orphanedImages =
+    result.orphanedMediaImages.length + result.orphanedCategoryImages.length
 
-  return `Thumbnails: ${formatCount(result.referenceCount, "reference")}, ${formatCount(result.fileCount, "file")}; orphaned: ${orphanedThumbnails} (${result.orphanedMediaThumbnails.length} media, ${result.orphanedCategoryThumbnails.length} categories).`
+  return `Images: ${formatCount(result.referenceCount, "reference")}, ${formatCount(result.fileCount, "file")}; orphaned: ${orphanedImages} (${result.orphanedMediaImages.length} media, ${result.orphanedCategoryImages.length} categories).`
 }
 
 /**
@@ -502,7 +501,7 @@ function formatDeletionProgress(action, count) {
  * @param {string|undefined} rawScope
  */
 function parseScopes(rawScope) {
-  const values = (rawScope ?? "content-files,thumbnails")
+  const values = (rawScope ?? "content-files,images")
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean)
@@ -510,7 +509,7 @@ function parseScopes(rawScope) {
   if (values.length === 0) {
     throw new CliError(
       // intentionally kept as a CLI-facing validation error
-      'Expected "--scope" to include at least one of "content-files" or "thumbnails".',
+      'Expected "--scope" to include at least one of "content-files" or "images".',
     )
   }
 
@@ -518,7 +517,7 @@ function parseScopes(rawScope) {
   for (const scope of scopes) {
     if (!supportedScopes.has(scope)) {
       throw new CliError(
-        `Unsupported scope "${scope}". Allowed values: content-files, thumbnails.`,
+        `Unsupported scope "${scope}". Allowed values: content-files, images.`,
       )
     }
   }
@@ -540,31 +539,28 @@ async function assertLightNetSiteRoot(cwd) {
 /**
  * @param {MediaItem[]} mediaItems
  * @param {Category[]} categories
- * @param {FileStorage} mediaThumbnailStorage
- * @param {FileStorage} categoryThumbnailStorage
+ * @param {FileStorage} mediaImageStorage
+ * @param {FileStorage} categoryImageStorage
  */
-async function validateThumbnails(
+async function validateImages(
   mediaItems,
   categories,
-  mediaThumbnailStorage,
-  categoryThumbnailStorage,
+  mediaImageStorage,
+  categoryImageStorage,
 ) {
   const mediaReferences = new Set(
     mediaItems
-      .map((item) => toThumbnailPath("media", item.image))
+      .map((item) => toImagePath("media", item.image))
       .filter((value) => value !== undefined),
   )
   const categoryReferences = new Set(
     categories
-      .map((item) => toThumbnailPath("categories", item.image))
+      .map((item) => toImagePath("categories", item.image))
       .filter((value) => value !== undefined),
   )
 
   const [initializedMediaStorage, initializedCategoryStorage] =
-    await Promise.all([
-      mediaThumbnailStorage.init(),
-      categoryThumbnailStorage.init(),
-    ])
+    await Promise.all([mediaImageStorage.init(), categoryImageStorage.init()])
   const [mediaFiles, categoryFiles] = await Promise.all([
     initializedMediaStorage.list(),
     initializedCategoryStorage.list(),
@@ -572,10 +568,10 @@ async function validateThumbnails(
 
   return {
     fileCount: mediaFiles.length + categoryFiles.length,
-    orphanedMediaThumbnails: mediaFiles.filter(
+    orphanedMediaImages: mediaFiles.filter(
       (file) => !mediaReferences.has(file),
     ),
-    orphanedCategoryThumbnails: categoryFiles.filter(
+    orphanedCategoryImages: categoryFiles.filter(
       (file) => !categoryReferences.has(file),
     ),
     referenceCount: mediaReferences.size + categoryReferences.size,
@@ -700,7 +696,7 @@ function addFileReference(references, filePath, displayPath, sourceFileName) {
  * @param {"media"|"categories"} kind
  * @param {string|undefined} image
  */
-function toThumbnailPath(kind, image) {
+function toImagePath(kind, image) {
   if (typeof image !== "string") {
     return undefined
   }
