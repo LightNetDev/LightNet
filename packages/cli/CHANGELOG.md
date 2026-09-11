@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.8.1
+
+### Patch Changes
+
+- [#454](https://github.com/LightNetDev/LightNet/pull/454) [`5de5b93`](https://github.com/LightNetDev/LightNet/commit/5de5b931575a9e864c5acfdf991e0e9b2980030b) - Rename check-files scope `thumbnails` to `images`.
+
 ## 4.8.0
 
 ### Minor Changes
