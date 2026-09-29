@@ -11,7 +11,7 @@ export const categoriesCollection: Collection = {
     "Use categories to group related media items by topic. Examples: discipleship, youth, prayer. [Read documentation](https://docs.lightnet.community/content/categories/)",
   label_singular: "Category",
   folder: projectPath("src/content/categories"),
-  create: true,
+  create: !adminConfig.experimental.hideCategoriesCollection,
   hide: adminConfig.experimental.hideCategoriesCollection,
   format: "json",
   slug: adminConfig.experimental.showSlugField
