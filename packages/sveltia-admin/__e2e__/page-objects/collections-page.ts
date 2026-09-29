@@ -5,40 +5,18 @@ import { CollectionPage, collectionPaths } from "./collection-entries-page"
 class CollectionsPage {
   constructor(private readonly page: Page) {}
 
-  private sidebarOption(label: string) {
-    return this.page.getByRole("option", { name: new RegExp(label) }).first()
-  }
-
-  private sidebarButton(label: string) {
-    return this.page.locator("button").filter({ hasText: label }).first()
-  }
-
-  private async clickSidebarItem(label: string) {
-    const option = this.sidebarOption(label)
-
-    if ((await option.count()) > 0) {
-      await option.click()
-      return
-    }
-
-    await this.sidebarButton(label).click()
+  private sidebarItem(label: string) {
+    return this.page.getByRole("treeitem", { name: label })
   }
 
   async expectVisibleCollections(labels: Array<keyof typeof collectionPaths>) {
     for (const label of labels) {
-      const option = this.sidebarOption(label)
-
-      if ((await option.count()) > 0) {
-        await expect(option).toBeVisible()
-        continue
-      }
-
-      await expect(this.sidebarButton(label)).toBeVisible()
+      await expect(this.sidebarItem(label)).toBeVisible()
     }
   }
 
   async openCollection(label: keyof typeof collectionPaths) {
-    await this.clickSidebarItem(label)
+    await this.sidebarItem(label).click()
 
     if (label === "Languages") {
       await expect(this.page).toHaveURL(
