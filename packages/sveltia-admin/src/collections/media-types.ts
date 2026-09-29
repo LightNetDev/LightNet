@@ -41,7 +41,7 @@ export const mediaTypeCollection: Collection = {
       required: false,
       typeKey: "layout",
       label: "Details Page Configuration",
-      default: {},
+      default: { layout: "default" },
       widget: "object",
       types: [
         {
