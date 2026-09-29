@@ -42,6 +42,10 @@ export default function lightnetSveltiaAdmin(
 
         updateConfig({
           vite: {
+            optimizeDeps: {
+              // Vite's optimizer does not serve the font assets referenced by Sveltia's npm build.
+              exclude: ["@sveltia/cms"],
+            },
             plugins: [vitePluginSveltiaAdminConfig(preparedConfig)],
           },
         })
