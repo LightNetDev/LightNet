@@ -12,6 +12,7 @@ export const mediaTypeCollection: Collection = {
   label_singular: "Media Type",
   folder: projectPath("src/content/media-types"),
   format: "json",
+  create: !adminConfig.experimental.hideMediaTypesCollection,
   hide: adminConfig.experimental.hideMediaTypesCollection,
   slug: adminConfig.experimental.showSlugField
     ? "{{fields._slug}}"
@@ -41,7 +42,7 @@ export const mediaTypeCollection: Collection = {
       required: false,
       typeKey: "layout",
       label: "Details Page Configuration",
-      default: {},
+      default: { layout: "default" },
       widget: "object",
       types: [
         {

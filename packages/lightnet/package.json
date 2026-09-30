@@ -56,29 +56,29 @@
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",
-    "@iconify-json/lucide": "^1.2.130",
+    "@iconify-json/lucide": "^1.2.137",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",
     "@tailwindcss/typography": "^0.5.20",
-    "@tanstack/react-virtual": "^3.14.11",
-    "autoprefixer": "^10.5.5",
+    "@tanstack/react-virtual": "^3.14.13",
+    "autoprefixer": "^10.6.1",
     "embla-carousel": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "fuse.js": "^7.5.0",
     "i18next": "^26.4.2",
-    "lucide-react": "^1.43.0",
-    "marked": "^18.0.12",
+    "lucide-react": "^1.48.0",
+    "marked": "^18.0.14",
     "postcss": "^8.5.28",
     "postcss-load-config": "^6.0.1",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^",
     "@playwright/test": "^1.63.0",
-    "@types/react": "^19.2.18",
+    "@types/react": "^19.3.0",
     "astro": "^6.4.8",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.2"
   },
   "engines": {
     "node": ">=22"

@@ -27,9 +27,8 @@ class CollectionPage {
 
   private entrySummary(summary: string) {
     return this.page
-      .getByRole("row", {
-        name: new RegExp(this.escapeForRegExp(summary)),
-      })
+      .getByRole("row")
+      .filter({ hasText: new RegExp(this.escapeForRegExp(summary)) })
       .first()
   }
 
@@ -117,7 +116,7 @@ class CollectionPage {
     ).toBeVisible()
     await this.page.getByRole("button", { name: "Delete", exact: true }).click()
     await expect(
-      this.page.getByRole("alert").filter({ hasText: "Entry deleted." }),
+      this.page.getByRole("status").filter({ hasText: "Entry deleted." }),
     ).toBeVisible()
   }
 }
