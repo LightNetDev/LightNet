@@ -30,6 +30,7 @@
   },
   "exports": {
     ".": "./src/astro-integration/integration.ts",
+    "./admin.html.ts": "./src/admin.html.ts",
     "./Admin.astro": "./src/Admin.astro",
     "./config.json.ts": "./src/config.json.ts"
   },

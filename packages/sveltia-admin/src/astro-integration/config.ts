@@ -54,11 +54,17 @@ const r2Storage = z.object({
 
 export const adminConfigSchema = z.object({
   /**
-   * Path for the admin page.
+   * Nonempty path for the admin page. The site root is not supported.
+   * Provide a valid URL path with any special characters percent-encoded.
    *
-   * Default is /admin
+   * Default is "admin"
    */
-  path: z.string().default("admin").transform(normalizeAdminPath),
+  path: z
+    .string()
+    .trim()
+    .default("admin")
+    .transform(normalizeAdminPath)
+    .pipe(z.string().trim().min(1, "Admin path must not be empty")),
   /**
    * Maximum upload file size in megabytes.
    *

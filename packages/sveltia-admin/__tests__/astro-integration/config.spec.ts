@@ -3,6 +3,24 @@ import { afterEach, describe, expect, test, vi } from "vitest"
 import { adminConfigSchema } from "../../src/astro-integration/config"
 
 describe("adminConfigSchema", () => {
+  test.each(["", "/", "///", "  ", " / ", "/ /"])(
+    "Should reject an empty normalized admin path: %j",
+    (path) => {
+      const result = adminConfigSchema.safeParse({ path })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error.issues).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              path: ["path"],
+              message: "Admin path must not be empty",
+            }),
+          ]),
+        )
+      }
+    },
+  )
+
   test("Should apply top-level defaults", () => {
     const config = adminConfigSchema.parse({})
 
@@ -83,12 +101,14 @@ describe("adminConfigSchema", () => {
     })
   })
 
-  test("Should normalize admin paths with leading and trailing slashes", () => {
-    const config = adminConfigSchema.parse({
-      path: "/admin/",
-    })
-
-    expect(config.path).toBe("admin")
+  test.each([
+    ["admin", "admin"],
+    ["/admin/", "admin"],
+    ["  admin  ", "admin"],
+    ["  ///admin///  ", "admin"],
+    [" /tools/content/ ", "tools/content"],
+  ])("Should normalize valid admin path %j to %j", (path, expected) => {
+    expect(adminConfigSchema.parse({ path }).path).toBe(expected)
   })
 })
 
