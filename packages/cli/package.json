@@ -19,7 +19,7 @@
     "lightnet": "./src/index.js"
   },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest run"
   },
   "homepage": "https://lightnet.community",
   "files": [

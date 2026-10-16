@@ -27,7 +27,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
     "e2e": "playwright test"
   },
   "exports": {
