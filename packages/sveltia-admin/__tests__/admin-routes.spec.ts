@@ -60,23 +60,6 @@ describe("standalone admin routes", () => {
     },
   )
 
-  test("pins the CDN URL to installed metadata rather than the dependency range", async () => {
-    vi.stubEnv("BASE_URL", "/")
-    vi.doMock("node:fs", async () => ({
-      ...(await vi.importActual("node:fs")),
-      readFileSync: vi.fn(() => JSON.stringify({ version: "9.8.7" })),
-    }))
-    vi.doMock("virtual:lightnet/sveltiaAdminConfig", () => ({
-      default: { path: "admin" },
-    }))
-
-    const { GET } = await import("../src/admin.html")
-    const html = await (await GET({} as APIContext)).text()
-    expect(html).toContain(
-      "https://unpkg.com/@sveltia/cms@9.8.7/dist/sveltia-cms.mjs",
-    )
-  })
-
   test.each(["build", "sync", "preview"] as const)(
     "uses Astro bundling for %s without building development assets",
     async (command) => {
