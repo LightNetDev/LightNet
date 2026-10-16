@@ -1,7 +1,6 @@
 import type { Collection } from "@sveltia/cms"
 import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { projectPath } from "../utils/paths"
 import { inlineTranslation, translatedLabel } from "./fields/inline-translation"
 
 export const mediaTypeCollection: Collection = {
@@ -10,7 +9,7 @@ export const mediaTypeCollection: Collection = {
   description:
     "Use media types to organize media items by format. Examples: books, videos, audio. [Read documentation](https://docs.lightnet.community/content/media-types/)",
   label_singular: "Media Type",
-  folder: projectPath("src/content/media-types"),
+  folder: "src/content/media-types",
   format: "json",
   create: !adminConfig.experimental.hideMediaTypesCollection,
   hide: adminConfig.experimental.hideMediaTypesCollection,

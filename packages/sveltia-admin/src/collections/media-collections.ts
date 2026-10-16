@@ -1,7 +1,6 @@
 import type { Collection } from "@sveltia/cms"
 import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { projectPath } from "../utils/paths"
 import { inlineTranslation, translatedLabel } from "./fields/inline-translation"
 
 export const mediaCollectionCollection: Collection = {
@@ -12,7 +11,7 @@ export const mediaCollectionCollection: Collection = {
   label_singular: "Media Collection",
   create: !adminConfig.experimental.hideMediaCollectionsCollection,
   hide: adminConfig.experimental.hideMediaCollectionsCollection,
-  folder: projectPath("src/content/media-collections"),
+  folder: "src/content/media-collections",
   format: "json",
   slug: adminConfig.experimental.showSlugField
     ? "{{fields._slug}}"

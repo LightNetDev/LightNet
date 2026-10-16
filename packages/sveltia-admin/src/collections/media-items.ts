@@ -3,7 +3,6 @@ import config from "virtual:lightnet/config"
 import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
 import { isDefined } from "../utils/is-defined"
-import { projectPath } from "../utils/paths"
 import { inlineTranslation, translatedLabel } from "./fields/inline-translation"
 import { languagesSelect } from "./languages"
 
@@ -13,7 +12,7 @@ export const mediaItemCollection: Collection = {
   description:
     "Use media items to add resources people can open or download. Examples: a book PDF, a YouTube link. [Read documentation](https://docs.lightnet.community/content/media-items/)",
   label_singular: "Media Item",
-  folder: projectPath("src/content/media"),
+  folder: "src/content/media",
   create: true,
   preview_path: `${config.defaultLocale}/media/{{filename}}`,
   format: "json",
@@ -175,7 +174,7 @@ function getFileStorage() {
   const externalFileStorage = adminConfig.experimental.fileStorage
   if (!externalFileStorage) {
     return {
-      media_folder: projectPath("public/files"),
+      media_folder: "public/files",
       public_folder: "/files",
       hint: `Upload a file up to ${adminConfig.maxFileSize} MB.`,
       media_libraries: {
