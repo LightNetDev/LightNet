@@ -174,7 +174,7 @@ function getFileStorage() {
   const externalFileStorage = adminConfig.experimental.fileStorage
   if (!externalFileStorage) {
     return {
-      media_folder: "public/files",
+      media_folder: "/public/files",
       public_folder: "/files",
       hint: `Upload a file up to ${adminConfig.maxFileSize} MB.`,
       media_libraries: {
