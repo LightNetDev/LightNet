@@ -7,6 +7,7 @@ import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
 import tailwind from "./tailwind"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
+import { sitemap } from "./sitemap"
 
 export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
   return {
@@ -72,7 +73,7 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
         updateConfig({
-          integrations: [tailwind(), react()],
+          integrations: [tailwind(), react(), ...sitemap(config, astroConfig)],
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },
