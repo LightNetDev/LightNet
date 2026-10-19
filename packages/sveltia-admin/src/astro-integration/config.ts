@@ -162,7 +162,7 @@ export const adminConfigSchema = z.object({
        */
       showDateCreatedField: z.boolean().default(true),
       /**
-       * Show `commonI`d field in the media item editor.
+       * Show `commonId` field in the media item editor.
        *
        * @default true
        */
