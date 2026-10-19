@@ -1,0 +1,42 @@
+{
+  "name": "@lightnet/sveltia-github-auth",
+  "description": "Portable GitHub OAuth handlers for Sveltia CMS.",
+  "type": "module",
+  "license": "MIT",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LightNetDev/lightnet",
+    "directory": "packages/sveltia-github-auth"
+  },
+  "bugs": {
+    "url": "https://github.com/LightNetDev/lightnet/issues"
+  },
+  "homepage": "https://lightnet.community",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE.txt"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./handle-auth.ts": "./src/handle-auth.ts",
+    "./handle-callback.ts": "./src/handle-callback.ts"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.5",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
