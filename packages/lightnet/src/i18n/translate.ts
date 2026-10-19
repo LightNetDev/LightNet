@@ -1,9 +1,12 @@
 import { AstroError } from "astro/errors"
 import i18next, { type TOptions } from "i18next"
 import config from "virtual:lightnet/config"
+import {
+  recordingEnabled,
+  recordTranslation,
+} from "virtual:lightnet/translation-recorder"
 
 import { lazy } from "../utils/lazy"
-import { recordTranslation } from "./record-translation"
 import { type LightNetTranslationKey, loadTranslations } from "./translations"
 
 // We add (string & NonNullable<unknown>) to preserve typescript autocompletion for known keys
@@ -103,8 +106,7 @@ export async function useTranslate(
 }
 
 async function recordAllTranslations() {
-  if (!import.meta.env.PROD) {
-    // only record translations during build time
+  if (!recordingEnabled) {
     return
   }
 

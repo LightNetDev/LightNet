@@ -3,6 +3,11 @@ declare module "virtual:lightnet/config" {
   export default config
 }
 
+declare module "virtual:lightnet/translation-recorder" {
+  export const recordingEnabled: boolean
+  export const recordTranslation: typeof import("../i18n/record-translation").recordTranslation
+}
+
 declare module "virtual:lightnet/logo" {
   const logo: ImageMetadata | undefined = import("astro").ImageMetadata
   export default logo

@@ -58,11 +58,6 @@ const createTranslationStore = async () => {
 }
 
 export async function recordTranslation(translation: Translation) {
-  if (!import.meta.env.PROD) {
-    // only record during build
-    return
-  }
-
   const key = translation.type + translation.key
   if (recordedTranslations.has(key)) {
     return

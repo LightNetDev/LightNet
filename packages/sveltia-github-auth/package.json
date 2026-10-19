@@ -1,0 +1,48 @@
+{
+  "name": "@lightnet/sveltia-github-auth",
+  "description": "Cloudflare backend integration for Sveltia GitHub authentication.",
+  "type": "module",
+  "license": "MIT",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LightNetDev/lightnet",
+    "directory": "packages/sveltia-github-auth"
+  },
+  "bugs": {
+    "url": "https://github.com/LightNetDev/lightnet/issues"
+  },
+  "homepage": "https://lightnet.community",
+  "keywords": [
+    "astro-integration"
+  ],
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "vitest run"
+  },
+  "exports": {
+    ".": "./src/astro-integration/integration.ts",
+    "./test.ts": "./src/test.ts"
+  },
+  "peerDependencies": {
+    "astro": "^6.3.0"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^13.7.0",
+    "wrangler": "^4.83.0"
+  },
+  "devDependencies": {
+    "astro": "^6.4.8",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

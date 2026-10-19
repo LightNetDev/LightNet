@@ -1,9 +1,9 @@
 import { AstroError } from "astro/errors"
 import type { CollectionKey } from "astro:content"
 import config from "virtual:lightnet/config"
+import { recordTranslation } from "virtual:lightnet/translation-recorder"
 
 import type { ExtendedLightnetConfig } from "../astro-integration/config"
-import { recordTranslation } from "./record-translation"
 
 /**
  * A map of translated values keyed by locale code.

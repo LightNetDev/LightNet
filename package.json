@@ -30,6 +30,7 @@
   },
   "homepage": "https://lightnet.community",
   "devDependencies": {
+    "@astrojs/cloudflare": "^13.7.0",
     "@astrojs/check": "^0.9.10",
     "@changesets/changelog-github": "^1.0.1",
     "@changesets/cli": "^3.0.3",
@@ -46,7 +47,8 @@
     "prettier-plugin-astro": "^1.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.2"
+    "typescript-eslint": "^8.71.2",
+    "wrangler": "^4.83.0"
   },
   "engines": {
     "node": ">=22"

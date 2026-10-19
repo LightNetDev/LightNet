@@ -9,6 +9,7 @@ const CONFIG = "virtual:lightnet/config"
 const LOGO = "virtual:lightnet/logo"
 const CUSTOM_HEAD = "virtual:lightnet/components/CustomHead"
 const CUSTOM_FOOTER = "virtual:lightnet/components/CustomFooter"
+const TRANSLATION_RECORDER = "virtual:lightnet/translation-recorder"
 
 const TRANSLATION_RUNTIME_MODULES = [
   fileURLToPath(new URL("../i18n/translations.ts", import.meta.url)),
@@ -16,7 +17,13 @@ const TRANSLATION_RUNTIME_MODULES = [
   fileURLToPath(new URL("../i18n/locals.ts", import.meta.url)),
 ]
 
-const VIRTUAL_MODULES = [CONFIG, LOGO, CUSTOM_HEAD, CUSTOM_FOOTER] as const
+const VIRTUAL_MODULES = [
+  CONFIG,
+  LOGO,
+  CUSTOM_HEAD,
+  CUSTOM_FOOTER,
+  TRANSLATION_RECORDER,
+] as const
 
 export function vitePluginLightnetConfig(
   config: ExtendedLightnetConfig,
@@ -50,6 +57,19 @@ export function vitePluginLightnetConfig(
     load(id): string | undefined {
       const module = VIRTUAL_MODULES.find((m) => id === `\0${m}`)
       switch (module) {
+        case TRANSLATION_RECORDER:
+          // Only prerender builds may import the filesystem-backed recorder.
+          // Production SSR also has PROD=true, so that flag cannot distinguish it.
+          if (
+            this.environment.mode === "build" &&
+            this.environment.name === "prerender"
+          ) {
+            const recorder = fileURLToPath(
+              new URL("../i18n/record-translation.ts", import.meta.url),
+            )
+            return `export const recordingEnabled = true; export { recordTranslation } from ${JSON.stringify(recorder)};`
+          }
+          return "export const recordingEnabled = false; export async function recordTranslation() {}"
         case CONFIG:
           return `export default ${JSON.stringify(config)};`
         case LOGO:

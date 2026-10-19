@@ -1,5 +1,6 @@
 // @ts-check
 import lightnetSveltiaAdmin from "@lightnet/sveltia-admin"
+import sveltiaGithubAuth from "@lightnet/sveltia-github-auth"
 import { defineConfig } from "astro/config"
 import lightnet from "lightnet"
 
@@ -11,6 +12,7 @@ export default defineConfig({
   },
   site: "https://sk8-ministries.pages.dev",
   integrations: [
+    sveltiaGithubAuth({ configPath: "../../wrangler.json" }),
     lightnet({
       title: {
         en: "Sk8 Ministries",
