@@ -29,7 +29,10 @@ export const getAllowedOrigins = (allowedOrigins?: string) => {
 /** The allow-list is required before this worker may start or complete an OAuth flow. */
 export const hasConfiguredAllowedOrigins = (allowedOrigins?: string) => {
   const origins = getAllowedOrigins(allowedOrigins)
-  return origins.length > 0 && !origins.includes(exampleAllowedOrigin)
+  return (
+    origins.length > 0 &&
+    !origins.some((origin) => origin === exampleAllowedOrigin)
+  )
 }
 
 export const isAllowedSiteId = (
