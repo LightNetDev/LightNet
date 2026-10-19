@@ -45,10 +45,11 @@ Pass these environment values to both handlers:
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GITHUB_CLIENT_ID`     | GitHub OAuth app client ID.                                                                                                                                             |
 | `GITHUB_CLIENT_SECRET` | GitHub OAuth app secret; store as a worker secret.                                                                                                                      |
-| `WORKER_ORIGIN`        | Canonical HTTPS origin of your auth service, without a trailing slash, path, query, fragment, or credentials.                                                           |
 | `ALLOWED_ORIGINS`      | Comma-separated canonical HTTPS origins allowed to receive authentication results. Explicit subdomains and non-default ports must be listed; wildcards are unsupported. |
 
-Register `${WORKER_ORIGIN}/callback` as your GitHub OAuth app callback URL. This fixed URL is used for both authorization and token exchange, including requests routed through aliases. Set your CMS GitHub backend's `base_url` to `WORKER_ORIGIN`.
+Register `https://<YOUR_WORKER_HOST>/callback` as your GitHub OAuth app's only callback URL and disable wildcard matching. The handlers omit `redirect_uri` from both OAuth requests so GitHub uses its registered callback. Set your CMS GitHub backend's `base_url` to the same HTTPS Worker origin (without `/callback`) so the state cookie is available when GitHub redirects back.
+
+Existing deployments can remove `WORKER_ORIGIN` from their environment configuration.
 
 ## Attribution
 
