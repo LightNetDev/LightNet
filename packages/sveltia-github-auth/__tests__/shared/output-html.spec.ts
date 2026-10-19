@@ -15,7 +15,7 @@ const runPopup = async (response: Response, hasOpener = true) => {
   let receive: (event: { data: string; origin: string }) => void = () => {
     throw new Error("Message listener was not registered")
   }
-  runInNewContext(html.match(/<script>([\s\S]*)<\/script>/)![1], {
+  runInNewContext(html.match(/<script\b[^>]*>([\s\S]*?)<\/script\b[^>]*>/i)![1], {
     window: {
       opener: hasOpener ? { postMessage } : null,
       addEventListener: (name: string, listener: typeof receive) => {
