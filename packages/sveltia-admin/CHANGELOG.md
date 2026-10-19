@@ -1,5 +1,15 @@
 # @lightnet/sveltia-admin
 
+## 4.2.3
+
+### Patch Changes
+
+- [#456](https://github.com/LightNetDev/LightNet/pull/456) [`2c49737`](https://github.com/LightNetDev/LightNet/commit/2c4973792aa695a2b19acc04744aca39bb7f868d) - Serve the development admin as plain HTML loading Sveltia from the CDN, pinned to the installed npm package version, to prevent reloads from interrupting local saves. Keep normal Astro bundling in production and preserve custom admin paths and Astro base paths without requiring files in the site's public directory.
+
+- [#456](https://github.com/LightNetDev/LightNet/pull/456) [`2c49737`](https://github.com/LightNetDev/LightNet/commit/2c4973792aa695a2b19acc04744aca39bb7f868d) - Update dependencies.
+- Updated dependencies [[`2c49737`](https://github.com/LightNetDev/LightNet/commit/2c4973792aa695a2b19acc04744aca39bb7f868d), [`2c49737`](https://github.com/LightNetDev/LightNet/commit/2c4973792aa695a2b19acc04744aca39bb7f868d)]:
+  - lightnet@4.6.2
+
 ## 4.2.2
 
 ### Patch Changes
