@@ -15,15 +15,18 @@ const runPopup = async (response: Response, hasOpener = true) => {
   let receive: (event: { data: string; origin: string }) => void = () => {
     throw new Error("Message listener was not registered")
   }
-  runInNewContext(html.match(/<script\b[^>]*>([\s\S]*?)<\/script\b[^>]*>/i)![1], {
-    window: {
-      opener: hasOpener ? { postMessage } : null,
-      addEventListener: (name: string, listener: typeof receive) => {
-        expect(name).toBe("message")
-        receive = listener
+  runInNewContext(
+    html.match(/<script\b[^>]*>([\s\S]*?)<\/script\b[^>]*>/i)![1],
+    {
+      window: {
+        opener: hasOpener ? { postMessage } : null,
+        addEventListener: (name: string, listener: typeof receive) => {
+          expect(name).toBe("message")
+          receive = listener
+        },
       },
     },
-  })
+  )
   return { html, postMessage, receive }
 }
 
@@ -74,10 +77,13 @@ describe("outputHTML", () => {
         env,
       }),
     )
-    receive({ data: "authorizing:github", origin: trustedOrigin })
+    receive({
+      data: "authorizing:github",
+      origin: "https://unlisted.example.org",
+    })
     expect(postMessage).toHaveBeenLastCalledWith(
       `authorization:github:error:${JSON.stringify({ provider: "github", error: "Permission denied", errorCode: "DENIED" })}`,
-      trustedOrigin,
+      "https://unlisted.example.org",
     )
   })
 
@@ -87,7 +93,7 @@ describe("outputHTML", () => {
     "https://example.com",
     `${trustedOrigin},http://evil.org`,
   ])(
-    "never releases results with unconfigured or invalid origins %j",
+    "never releases tokens with unconfigured or invalid origins %j",
     async (allowedOrigins) => {
       const { postMessage, receive } = await runPopup(
         outputHTML({
@@ -104,6 +110,40 @@ describe("outputHTML", () => {
         receive({ data: "authorizing:github", origin })
       }
       expect(postMessage).not.toHaveBeenCalled()
+    },
+  )
+
+  it.each([
+    undefined,
+    "",
+    "https://example.com",
+    `${trustedOrigin},http://evil.org`,
+  ])(
+    "delivers configuration errors despite unconfigured or invalid origins %j",
+    async (allowedOrigins) => {
+      const { postMessage, receive } = await runPopup(
+        outputHTML({
+          error: "Allowed origins are not configured.",
+          errorCode: "MISCONFIGURED_ORIGINS",
+          env: { ALLOWED_ORIGINS: allowedOrigins },
+        }),
+      )
+      expect(postMessage.mock.calls).toEqual([["authorizing:github", "*"]])
+      postMessage.mockClear()
+      const origin = "https://unlisted.example.org"
+      receive({ data: "authorizing:gitlab", origin })
+      expect(postMessage).not.toHaveBeenCalled()
+      receive({ data: "authorizing:github", origin })
+      expect(postMessage.mock.calls).toEqual([
+        [
+          `authorization:github:error:${JSON.stringify({
+            provider: "github",
+            error: "Allowed origins are not configured.",
+            errorCode: "MISCONFIGURED_ORIGINS",
+          })}`,
+          origin,
+        ],
+      ])
     },
   )
 

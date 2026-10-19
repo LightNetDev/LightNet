@@ -40,7 +40,7 @@ export const outputHTML = ({
         };
         window.addEventListener('message', ({ data, origin }) => {
           if (data !== 'authorizing:${provider}') return;
-          if (!isTrusted(origin)) return;
+          if (!${Boolean(error)} && !isTrusted(origin)) return;
           window.opener?.postMessage(
             ${serialize(authorizationMessage)}, origin,
           );
