@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test, vi } from "vitest"
 
+import type { SveltiaAdminConfig } from "../../src/astro-integration/config"
 import { adminConfigSchema } from "../../src/astro-integration/config"
 
 describe("adminConfigSchema", () => {
@@ -133,6 +134,9 @@ describe("getConfig", () => {
           branch?: string
         }
       | { name: "test-repo" },
+    fileStorage?: NonNullable<
+      SveltiaAdminConfig["experimental"]
+    >["fileStorage"],
   ) {
     vi.doMock("astro:config/server", () => ({
       site: "https://lightnet.community",
@@ -140,6 +144,7 @@ describe("getConfig", () => {
     vi.doMock("virtual:lightnet/sveltiaAdminConfig", () => ({
       default: adminConfigSchema.parse({
         backend,
+        experimental: { fileStorage },
       }),
     }))
     vi.doMock("virtual:lightnet/config", () => ({
@@ -195,4 +200,79 @@ describe("getConfig", () => {
       branch: "main",
     })
   })
+
+  test("Should expose GitHub-backed local uploads from public/files as /files URLs", async () => {
+    const config = await loadConfigWithBackend({
+      name: "github",
+      repo: "lightnet/community",
+    })
+    const media = config.collections?.find(
+      (collection) => collection.name === "media",
+    )
+
+    expect(media).toMatchObject({
+      fields: expect.arrayContaining([
+        expect.objectContaining({
+          name: "content",
+          types: expect.arrayContaining([
+            expect.objectContaining({
+              name: "upload",
+              fields: expect.arrayContaining([
+                expect.objectContaining({
+                  name: "url",
+                  media_folder: "/public/files",
+                  public_folder: "/files",
+                }),
+              ]),
+            }),
+          ]),
+        }),
+      ]),
+    })
+  })
+
+  test.each(["https://pub-example.r2.dev", "https://media.example.com"])(
+    "Should use the R2 public URL %s for uploaded files",
+    async (publicUrl) => {
+      const config = await loadConfigWithBackend(
+        { name: "github", repo: "lightnet/community" },
+        {
+          name: "cloudflare-r2",
+          accessKeyId: "test-access-key",
+          accountId: "test-account",
+          bucket: "media",
+          publicUrl,
+          prefix: "uploads/",
+        },
+      )
+      const media = config.collections?.find(
+        (collection) => collection.name === "media",
+      )
+
+      expect(media).toMatchObject({
+        fields: expect.arrayContaining([
+          expect.objectContaining({
+            name: "content",
+            types: expect.arrayContaining([
+              expect.objectContaining({
+                name: "upload",
+                fields: expect.arrayContaining([
+                  expect.objectContaining({
+                    name: "url",
+                    media_libraries: {
+                      default: false,
+                      cloudflare_r2: expect.objectContaining({
+                        public_url: publicUrl,
+                        prefix: "uploads/",
+                      }),
+                    },
+                  }),
+                ]),
+              }),
+            ]),
+          }),
+        ]),
+      })
+    },
+  )
 })

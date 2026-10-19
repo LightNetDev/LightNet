@@ -44,7 +44,7 @@ async function parseUrl(
 
   let url: URL
   try {
-    url = new URL(urlToParse)
+    url = new URL(urlToParse, Astro.url)
   } catch {
     return {
       host: "external",
@@ -81,12 +81,12 @@ async function parseUrl(
   // https://domain.com/video.mp4
   if (url.pathname.endsWith(".mp4")) {
     const image = await resolvedImage()
-    return { host: "mp4", id: url.toString(), image }
+    return { host: "mp4", id: urlToParse, image }
   }
   return {
     host: "external",
     id: null,
-    href: url.toString(),
+    href: urlToParse,
     image: await resolvedImage(),
   }
 }
