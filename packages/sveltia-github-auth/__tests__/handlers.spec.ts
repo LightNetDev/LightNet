@@ -133,7 +133,7 @@ describe("handleCallback", () => {
     expect(html).not.toContain(token)
     const postMessage = vi.fn()
     let listener: (event: { data: string; origin: string }) => void = () => {}
-    runInNewContext(html.match(/<script>([\s\S]*)<\/script>/)![1], {
+    runInNewContext(html.match(/<script>([\s\S]*)<\/script>/i)![1], {
       window: {
         opener: { postMessage },
         addEventListener: (_name: string, handler: typeof listener) => {
