@@ -8,6 +8,7 @@ import { pathWithBase } from "./utils/path-with-base"
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>LightNet Administration</title>
     <link
@@ -19,6 +20,7 @@ import { pathWithBase } from "./utils/path-with-base"
   <body>
     <script>
       import { init } from "@sveltia/cms"
+
       init({})
       window.localStorage.setItem(
         "ln.adminPaths",

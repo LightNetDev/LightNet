@@ -9,14 +9,13 @@ import { mediaCollectionCollection } from "./collections/media-collections"
 import { mediaItemCollection } from "./collections/media-items"
 import { mediaTypeCollection } from "./collections/media-types"
 import { isDefined } from "./utils/is-defined"
-import { projectPath } from "./utils/paths"
 
 export function createConfig(
   siteUrl = process.env.LIGHTNET_DEV_SITE_URL ?? site,
 ): CmsConfig {
   return {
     backend: getBackend(),
-    media_folder: projectPath("src/assets"),
+    media_folder: "src/assets",
     public_folder: "/src/assets",
     app_title: "LightNet Admin",
     logo: {
@@ -73,9 +72,13 @@ const optimizedImage = {
 
 function getBackend(): Backend {
   const { backend } = adminConfig
+  const commonConfig = {
+    root_dir: adminConfig.siteRootInRepo || undefined,
+  }
 
   if (!backend) {
     return {
+      ...commonConfig,
       name: "github",
       repo: createLocalRepoPath(),
     }
@@ -83,6 +86,7 @@ function getBackend(): Backend {
 
   if (backend.name === "github") {
     return {
+      ...commonConfig,
       ...backend,
       base_url: backend.baseUrl,
     }
@@ -90,12 +94,13 @@ function getBackend(): Backend {
 
   if (backend.name === "gitlab") {
     return {
+      ...commonConfig,
       ...backend,
       app_id: backend.appId,
       auth_type: backend.authType,
     }
   }
-  return backend
+  return { ...commonConfig, ...backend }
 }
 
 // Sveltia CMS uses repo as unique site identifier for IndexedDB

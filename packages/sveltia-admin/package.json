@@ -25,11 +25,12 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
     "e2e": "playwright test"
   },
   "exports": {
     ".": "./src/astro-integration/integration.ts",
+    "./admin.html.ts": "./src/admin.html.ts",
     "./Admin.astro": "./src/Admin.astro",
     "./config.json.ts": "./src/config.json.ts"
   },
@@ -38,15 +39,15 @@
     "lightnet": "^4.6.0"
   },
   "dependencies": {
-    "@sveltia/cms": "0.208.2"
+    "@sveltia/cms": "0.248.0"
   },
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^",
-    "@playwright/test": "^1.63.0",
+    "@playwright/test": "^1.64.1",
     "astro": "^6.4.8",
     "lightnet": "workspace:^",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.5"
   },
   "engines": {
     "node": ">=22"

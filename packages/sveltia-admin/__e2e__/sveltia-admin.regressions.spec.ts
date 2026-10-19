@@ -143,7 +143,10 @@ test.describe("Sveltia admin fixed regressions", () => {
 
     const reopened = await mediaItems.openEditor(summary)
     await reopened.getFieldByLabel("Title").expectVisible()
-    await reopened.save()
+    await app.page.getByRole("radio", { name: "Slug" }).click()
+    await expect(app.page.getByRole("textbox", { name: "Slug" })).toContainText(
+      slug,
+    )
 
     const saved = JSON.parse(
       await app.readTestRepositoryTextFile(

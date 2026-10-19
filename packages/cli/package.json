@@ -19,7 +19,7 @@
     "lightnet": "./src/index.js"
   },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest run"
   },
   "homepage": "https://lightnet.community",
   "files": [
@@ -28,11 +28,11 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
-    "@clack/prompts": "^1.8.0",
+    "@clack/prompts": "^1.8.1",
     "commander": "^15.0.0"
   },
   "devDependencies": {
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.5"
   },
   "engines": {
     "node": ">=22"

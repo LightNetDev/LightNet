@@ -1,7 +1,6 @@
 import type { Collection } from "@sveltia/cms"
 import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { projectPath } from "../utils/paths"
 import { inlineTranslation, translatedLabel } from "./fields/inline-translation"
 
 export const categoriesCollection: Collection = {
@@ -10,8 +9,8 @@ export const categoriesCollection: Collection = {
   description:
     "Use categories to group related media items by topic. Examples: discipleship, youth, prayer. [Read documentation](https://docs.lightnet.community/content/categories/)",
   label_singular: "Category",
-  folder: projectPath("src/content/categories"),
-  create: true,
+  folder: "src/content/categories",
+  create: !adminConfig.experimental.hideCategoriesCollection,
   hide: adminConfig.experimental.hideCategoriesCollection,
   format: "json",
   slug: adminConfig.experimental.showSlugField

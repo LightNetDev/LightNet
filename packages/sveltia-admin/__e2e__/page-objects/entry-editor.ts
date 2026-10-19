@@ -107,7 +107,7 @@ class ComboboxField extends EditorField {
 class ListField extends EditorField {
   async addItem(itemTypeLabel?: string) {
     await this.locator.scrollIntoViewIfNeeded()
-    await this.locator.getByRole("button", { name: /Add / }).first().click()
+    await this.locator.getByRole("button", { name: /Add / }).last().click()
 
     if (!itemTypeLabel) {
       return
@@ -148,6 +148,12 @@ class ListField extends EditorField {
 
 class TypedObjectField extends ListField {
   async addTypedItem(typeLabel: string) {
+    const removeButton = this.locator.getByRole("button", { name: "Remove" })
+
+    if (await removeButton.isVisible()) {
+      await removeButton.click()
+    }
+
     await this.addItem(typeLabel)
   }
 }
@@ -172,7 +178,7 @@ class FileField extends EditorField {
 
   private async resolveDuplicateUpload(action: "keep" | "replace") {
     const dialog = this.page
-      .locator('dialog[aria-label="File Name Conflict Resolution"][open]')
+      .getByRole("alertdialog", { name: "File Name Conflict Resolution" })
       .first()
 
     try {
@@ -195,7 +201,7 @@ class FileField extends EditorField {
 
   private async confirmPendingUpload() {
     const dialog = this.page
-      .locator('dialog[aria-label="Upload New Assets"][open]')
+      .getByRole("dialog", { name: "Upload New Assets" })
       .first()
 
     try {
@@ -277,6 +283,12 @@ class EntryEditor {
   }
 
   private fieldLocatorByLabel(label: string) {
+    if (label === "Slug") {
+      return this.page
+        .getByRole("textbox", { name: "Slug" })
+        .locator("xpath=..")
+    }
+
     return this.page
       .locator("section.field")
       .filter({ has: this.page.getByText(label, { exact: true }) })
@@ -345,7 +357,7 @@ class EntryEditor {
   async save() {
     await this.attemptSave()
     await expect(
-      this.page.getByRole("alert").filter({ hasText: "Entry saved." }),
+      this.page.getByRole("status").filter({ hasText: "Entry saved." }),
     ).toBeVisible()
   }
 

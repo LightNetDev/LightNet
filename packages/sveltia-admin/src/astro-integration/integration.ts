@@ -14,7 +14,7 @@ export default function lightnetSveltiaAdmin(
   return {
     name: "@lightnet/sveltia-admin",
     hooks: {
-      "astro:config:setup": ({ injectRoute, updateConfig }) => {
+      "astro:config:setup": ({ command, injectRoute, updateConfig }) => {
         if (Object.hasOwn(config, "imagesFolder")) {
           throw new AstroError(
             "Invalid LightNet Administration UI configuration",
@@ -29,11 +29,23 @@ export default function lightnetSveltiaAdmin(
           "Fix these errors on the sveltiaAdmin configuration inside astro.config.mjs:",
         )
 
-        injectRoute({
-          pattern: preparedConfig.path,
-          entrypoint: "@lightnet/sveltia-admin/Admin.astro",
-          prerender: true,
-        })
+        // During development, serve plain HTML to prevent Vite reloads from
+        // interrupting CMS saves. In production, use the Astro page to bundle assets.
+        // See: https://sveltiacms.app/en/docs/workflows/local#troubleshooting
+        if (command === "dev") {
+          injectRoute({
+            pattern: preparedConfig.path,
+            entrypoint: "@lightnet/sveltia-admin/admin.html.ts",
+            prerender: true,
+          })
+        } else {
+          injectRoute({
+            pattern: preparedConfig.path,
+            entrypoint: "@lightnet/sveltia-admin/Admin.astro",
+            prerender: true,
+          })
+        }
+
         injectRoute({
           pattern: `${preparedConfig.path}/config.json`,
           entrypoint: "@lightnet/sveltia-admin/config.json.ts",

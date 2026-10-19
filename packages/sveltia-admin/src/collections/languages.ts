@@ -2,7 +2,6 @@ import type { CollectionFile } from "@sveltia/cms"
 import config from "virtual:lightnet/config"
 import adminConfig from "virtual:lightnet/sveltiaAdminConfig"
 
-import { projectPath } from "../utils/paths"
 import { inlineTranslation } from "./fields/inline-translation"
 
 const { summaryLocale } = adminConfig.experimental
@@ -49,7 +48,7 @@ export const defineLanguagesCollection = () => {
 const languagesCollection: CollectionFile = {
   name: "languages",
   label: "Languages",
-  file: projectPath("languages.json"),
+  file: "languages.json",
   format: "json",
   icon: "language",
   fields: [
