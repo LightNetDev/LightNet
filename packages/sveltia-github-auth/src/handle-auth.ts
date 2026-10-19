@@ -4,7 +4,6 @@ import {
   hasConfiguredAllowedOrigins,
   isAllowedSiteId,
 } from "./shared/allowed-origins"
-import { getCallbackUrl } from "./shared/callback-url"
 import type { Env } from "./shared/env"
 import { outputHTML } from "./shared/output-html"
 import { createCodeChallenge, createCodeVerifier } from "./shared/pkce"
@@ -72,16 +71,6 @@ export const handleAuth = async (
     })
   }
 
-  const redirectUri = getCallbackUrl(env.WORKER_ORIGIN)
-  if (!redirectUri) {
-    return outputHTML({
-      env,
-      error:
-        "Worker origin is not configured. Set WORKER_ORIGIN to this Worker’s HTTPS origin.",
-      errorCode: "MISCONFIGURED_CALLBACK_URL",
-    })
-  }
-
   const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = env
   if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
     return outputHTML({
@@ -97,7 +86,6 @@ export const handleAuth = async (
     client_id: GITHUB_CLIENT_ID,
     scope,
     state: csrfToken,
-    redirect_uri: redirectUri,
     code_challenge: await createCodeChallenge(codeVerifier),
     code_challenge_method: "S256",
   })

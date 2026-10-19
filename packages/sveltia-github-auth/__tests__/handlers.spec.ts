@@ -8,7 +8,6 @@ const env: Env = {
   ALLOWED_ORIGINS: "https://cms.example.org,https://admin.example.org:8443",
   GITHUB_CLIENT_ID: "client-id",
   GITHUB_CLIENT_SECRET: "client-secret",
-  WORKER_ORIGIN: "https://auth.example.org",
 }
 
 const authorize = (
@@ -34,9 +33,7 @@ describe("handleAuth", () => {
     expect(location.origin + location.pathname).toBe(
       "https://github.com/login/oauth/authorize",
     )
-    expect(location.searchParams.get("redirect_uri")).toBe(
-      `${env.WORKER_ORIGIN}/callback`,
-    )
+    expect(location.searchParams.has("redirect_uri")).toBe(false)
     expect(location.searchParams.get("client_id")).toBe(env.GITHUB_CLIENT_ID)
     expect(location.searchParams.get("scope")).toBe("repo,user")
     expect(location.searchParams.get("code_challenge_method")).toBe("S256")
@@ -89,14 +86,6 @@ describe("handleAuth", () => {
       "MISCONFIGURED_ORIGINS",
     ],
     [{ ALLOWED_ORIGINS: "https://cms.example.org/" }, "MISCONFIGURED_ORIGINS"],
-    [
-      { WORKER_ORIGIN: "https://auth.example.org/path" },
-      "MISCONFIGURED_CALLBACK_URL",
-    ],
-    [
-      { WORKER_ORIGIN: "http://auth.example.org" },
-      "MISCONFIGURED_CALLBACK_URL",
-    ],
     [{ GITHUB_CLIENT_SECRET: "" }, "MISCONFIGURED_CLIENT"],
   ])("rejects invalid configuration %j", async (overrides, error) => {
     expect(
@@ -106,7 +95,7 @@ describe("handleAuth", () => {
 })
 
 describe("handleCallback", () => {
-  it("exchanges the code with the fixed callback and verifier and restricts popup results", async () => {
+  it("exchanges the code with the verifier without overriding the registered callback and restricts popup results", async () => {
     const { cookie, callback } = await startFlow()
     const token = "token</script><script>bad()"
     const fetchMock = vi
@@ -124,7 +113,6 @@ describe("handleCallback", () => {
       code: "authorization-code",
       client_id: env.GITHUB_CLIENT_ID,
       client_secret: env.GITHUB_CLIENT_SECRET,
-      redirect_uri: `${env.WORKER_ORIGIN}/callback`,
       code_verifier: cookie.split("=github_")[1].slice(33),
     })
     expect(response.headers.get("Cache-Control")).toBe("no-store")
