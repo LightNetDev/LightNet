@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.6.3
+
+### Patch Changes
+
+- [#458](https://github.com/LightNetDev/LightNet/pull/458) [`c1eb520`](https://github.com/LightNetDev/LightNet/commit/c1eb520dceae028e46c7b6b93a8a02c2a5169ccb) - Inline the view transition opt-in CSS in the page head to prevent browsers from aborting page transitions before the external stylesheet loads.
+
 ## 4.6.2
 
 ### Patch Changes
