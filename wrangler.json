@@ -1,6 +1,5 @@
 {
   "name": "sk8-ministries",
-  "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-03-31",
   "workers_dev": true,
   "preview_urls": true,
