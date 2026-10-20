@@ -41,11 +41,13 @@ Individual imports are also available from `@lightnet/sveltia-github-auth/handle
 
 Pass these environment values to both handlers:
 
-| Variable               | Value                                                                                                                                                                   |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GITHUB_CLIENT_ID`     | GitHub OAuth app client ID.                                                                                                                                             |
-| `GITHUB_CLIENT_SECRET` | GitHub OAuth app secret; store as a worker secret.                                                                                                                      |
-| `ALLOWED_ORIGINS`      | Comma-separated canonical HTTPS origins allowed to receive authentication results. Explicit subdomains and non-default ports must be listed; wildcards are unsupported. |
+| Variable               | Value                                                                                                                                                                                                                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GITHUB_CLIENT_ID`     | GitHub OAuth app client ID.                                                                                                                                                                                                                                                      |
+| `GITHUB_CLIENT_SECRET` | GitHub OAuth app secret; store as a worker secret.                                                                                                                                                                                                                               |
+| `ALLOWED_ORIGINS`      | Comma-separated HTTPS origins or bare hostnames allowed to receive authentication results. Bare hostnames default to `https://`. Explicit subdomains and non-default ports must be listed; paths, trailing slashes, credentials, other protocols, and wildcards are unsupported. |
+
+For example, `ALLOWED_ORIGINS=cms.yoursite.com,admin.yoursite.com:8443` allows `https://cms.yoursite.com` and `https://admin.yoursite.com:8443`. Bare hostnames and full HTTPS origins can be mixed in the same list. Any invalid entry rejects the entire list.
 
 Register `https://<YOUR_WORKER_HOST>/callback` as your GitHub OAuth app's only callback URL and disable wildcard matching. The handlers omit `redirect_uri` from both OAuth requests so GitHub uses its registered callback. Set your CMS GitHub backend's `base_url` to the same HTTPS Worker origin (without `/callback`) so the state cookie is available when GitHub redirects back.
 
