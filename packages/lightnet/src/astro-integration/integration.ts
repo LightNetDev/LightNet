@@ -5,9 +5,9 @@ import { AstroError } from "astro/errors"
 
 import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
+import { sitemap } from "./sitemap"
 import tailwind from "./tailwind"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
-import { sitemap } from "./sitemap"
 
 export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
   return {

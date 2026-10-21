@@ -132,59 +132,91 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { pathToFileURL } from "node:url"
 
-test("Should generate sitemap files with site language alternates and a base path", async () => {
-  const { updateConfig } = runSetup({
-    astroSite: "https://lightnet.community",
-    lightnetConfig: {
-      languages: [
-        ...requiredLightnetConfig.languages,
-        { code: "ar", label: { en: "Arabic" } },
-      ],
-    },
-  })
-  const sitemap = updateConfig.mock.calls[0][0].integrations.find(
-    (integration: AstroIntegration) => integration.name === "@astrojs/sitemap",
-  ) as AstroIntegration
-  const output = await mkdtemp(join(tmpdir(), "lightnet-sitemap-"))
-  const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
-
-  try {
-    await sitemap.hooks["astro:config:done"]!({
-      config: {
-        site: "https://lightnet.community",
-        base: "/library/",
-        trailingSlash: "always",
-        build: { format: "directory" },
+test.each(["admin", "internal/content-manager"])(
+  "Should generate sitemap files with language alternates and exclude admin at %s",
+  async (adminPath) => {
+    const { updateConfig } = runSetup({
+      astroSite: "https://lightnet.community",
+      lightnetConfig: {
+        languages: [
+          ...requiredLightnetConfig.languages,
+          { code: "ar", label: { en: "Arabic" } },
+        ],
       },
-    } as never)
-    await sitemap.hooks["astro:routes:resolved"]!({ routes: [] } as never)
-    await sitemap.hooks["astro:build:done"]!({
-      dir: pathToFileURL(`${output}/`),
-      pages: [
-        { pathname: "en/media/" },
-        { pathname: "de/media/" },
-        { pathname: "en/media/example/" },
-        { pathname: "de/media/example/" },
-        { pathname: "404/" },
-      ],
-      logger,
-    } as never)
+    })
+    const integrations = updateConfig.mock.calls[0][0]
+      .integrations as AstroIntegration[]
+    const sitemap = integrations.find(
+      (integration: AstroIntegration) =>
+        integration.name === "@astrojs/sitemap",
+    ) as AstroIntegration
+    const output = await mkdtemp(join(tmpdir(), "lightnet-sitemap-"))
+    const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
 
-    const index = await readFile(join(output, "sitemap-index.xml"), "utf8")
-    const xml = await readFile(join(output, "sitemap-0.xml"), "utf8")
-    expect(index).toContain("https://lightnet.community/library/sitemap-0.xml")
-    expect(xml).toContain(
-      "<loc>https://lightnet.community/library/en/media/example/</loc>",
-    )
-    expect(xml).toContain(
-      'hreflang="de" href="https://lightnet.community/library/de/media/example/"',
-    )
-    expect(xml).toContain('hreflang="en"')
-    expect(xml).not.toContain('hreflang="ar"')
-    expect(xml).not.toContain("404")
-    expect(logger.warn).not.toHaveBeenCalled()
-    expect(logger.error).not.toHaveBeenCalled()
-  } finally {
-    await rm(output, { recursive: true, force: true })
-  }
-})
+    try {
+      await sitemap.hooks["astro:config:done"]!({
+        config: {
+          site: "https://lightnet.community",
+          base: "/library/",
+          trailingSlash: "always",
+          build: { format: "directory" },
+        },
+      } as never)
+      for (const integration of integrations) {
+        await integration.hooks["astro:routes:resolved"]?.({
+          routes: [
+            {
+              entrypoint: "../../packages/sveltia-admin/src/Admin.astro",
+              patternRegex: new RegExp(`^/library/${adminPath}/?$`),
+              type: "page",
+              pathname: `/${adminPath}`,
+              generate: () => `/${adminPath}`,
+            },
+          ],
+        } as never)
+      }
+      await sitemap.hooks["astro:build:done"]!({
+        dir: pathToFileURL(`${output}/`),
+        pages: [
+          { pathname: "en/media/" },
+          { pathname: "de/media/" },
+          { pathname: "en/media/example/" },
+          { pathname: "de/media/example/" },
+          { pathname: "404/" },
+          { pathname: adminPath },
+          { pathname: `${adminPath}/` },
+          { pathname: `${adminPath}-guide/` },
+        ],
+        logger,
+      } as never)
+
+      const index = await readFile(join(output, "sitemap-index.xml"), "utf8")
+      const xml = await readFile(join(output, "sitemap-0.xml"), "utf8")
+      expect(index).toContain(
+        "https://lightnet.community/library/sitemap-0.xml",
+      )
+      expect(xml).toContain(
+        "<loc>https://lightnet.community/library/en/media/example/</loc>",
+      )
+      expect(xml).toContain(
+        'hreflang="de" href="https://lightnet.community/library/de/media/example/"',
+      )
+      expect(xml).toContain('hreflang="en"')
+      expect(xml).not.toContain('hreflang="ar"')
+      expect(xml).not.toContain("404")
+      expect(xml).not.toContain(
+        `<loc>https://lightnet.community/library/${adminPath}</loc>`,
+      )
+      expect(xml).not.toContain(
+        `<loc>https://lightnet.community/library/${adminPath}/</loc>`,
+      )
+      expect(xml).toContain(
+        `<loc>https://lightnet.community/library/${adminPath}-guide/</loc>`,
+      )
+      expect(logger.warn).not.toHaveBeenCalled()
+      expect(logger.error).not.toHaveBeenCalled()
+    } finally {
+      await rm(output, { recursive: true, force: true })
+    }
+  },
+)
