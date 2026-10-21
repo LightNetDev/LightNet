@@ -15,8 +15,8 @@ const authorize = (
   config = env,
 ) => handleAuth(new Request(`https://auth.example.org/auth?${query}`), config)
 
-const startFlow = async () => {
-  const response = await authorize()
+const startFlow = async (config = env) => {
+  const response = await authorize(undefined, config)
   const location = new URL(response.headers.get("Location")!)
   const cookie = response.headers.get("Set-Cookie")!.split(";")[0]
   const callback = new URL("https://auth.example.org/callback")
@@ -95,58 +95,69 @@ describe("handleAuth", () => {
 })
 
 describe("handleCallback", () => {
-  it("exchanges the code with the verifier without overriding the registered callback and restricts popup results", async () => {
-    const { cookie, callback } = await startFlow()
-    const token = "token</script><script>bad()"
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue(Response.json({ access_token: token }))
-    vi.stubGlobal("fetch", fetchMock)
-    const response = await handleCallback(
-      new Request(callback, { headers: { Cookie: cookie } }),
-      env,
-    )
-    expect(fetchMock).toHaveBeenCalledOnce()
-    const [url, options] = fetchMock.mock.calls[0]
-    expect(url).toBe("https://github.com/login/oauth/access_token")
-    expect(JSON.parse(options.body)).toEqual({
-      code: "authorization-code",
-      client_id: env.GITHUB_CLIENT_ID,
-      client_secret: env.GITHUB_CLIENT_SECRET,
-      code_verifier: cookie.split("=github_")[1].slice(33),
-    })
-    expect(response.headers.get("Cache-Control")).toBe("no-store")
-    expect(response.headers.get("Set-Cookie")).toContain("Max-Age=0")
-    const html = await response.text()
-    expect(html).not.toContain(token)
-    const postMessage = vi.fn()
-    let listener: (event: { data: string; origin: string }) => void = () => {}
-    runInNewContext(html.match(/<script>([\s\S]*)<\/script>/i)![1], {
-      window: {
-        opener: { postMessage },
-        addEventListener: (_name: string, handler: typeof listener) => {
-          listener = handler
+  it.each([
+    env.ALLOWED_ORIGINS,
+    "cms.example.org,admin.example.org:8443",
+    "https://cms.example.org,admin.example.org:8443",
+  ])(
+    "exchanges the code and restricts popup results with origins %s",
+    async (allowedOrigins) => {
+      const config = { ...env, ALLOWED_ORIGINS: allowedOrigins }
+      const { cookie, callback } = await startFlow(config)
+      const token = "token</script><script>bad()"
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValue(Response.json({ access_token: token }))
+      vi.stubGlobal("fetch", fetchMock)
+      const response = await handleCallback(
+        new Request(callback, { headers: { Cookie: cookie } }),
+        config,
+      )
+      expect(fetchMock).toHaveBeenCalledOnce()
+      const [url, options] = fetchMock.mock.calls[0]
+      expect(url).toBe("https://github.com/login/oauth/access_token")
+      expect(JSON.parse(options.body)).toEqual({
+        code: "authorization-code",
+        client_id: env.GITHUB_CLIENT_ID,
+        client_secret: env.GITHUB_CLIENT_SECRET,
+        code_verifier: cookie.split("=github_")[1].slice(33),
+      })
+      expect(response.headers.get("Cache-Control")).toBe("no-store")
+      expect(response.headers.get("Set-Cookie")).toContain("Max-Age=0")
+      const html = await response.text()
+      expect(html).not.toContain(token)
+      const postMessage = vi.fn()
+      let listener: (event: { data: string; origin: string }) => void = () => {}
+      runInNewContext(html.match(/<script>([\s\S]*)<\/script>/i)![1], {
+        window: {
+          opener: { postMessage },
+          addEventListener: (_name: string, handler: typeof listener) => {
+            listener = handler
+          },
         },
-      },
-    })
-    expect(postMessage).toHaveBeenCalledWith("authorizing:github", "*")
-    postMessage.mockClear()
-    listener({ data: "authorizing:github", origin: "https://evil.example.org" })
-    listener({
-      data: "authorizing:github",
-      origin: "https://admin.example.org",
-    })
-    listener({ data: "unexpected", origin: "https://cms.example.org" })
-    expect(postMessage).not.toHaveBeenCalled()
-    listener({
-      data: "authorizing:github",
-      origin: "https://admin.example.org:8443",
-    })
-    expect(postMessage).toHaveBeenCalledWith(
-      `authorization:github:success:${JSON.stringify({ provider: "github", token })}`,
-      "https://admin.example.org:8443",
-    )
-  })
+      })
+      expect(postMessage).toHaveBeenCalledWith("authorizing:github", "*")
+      postMessage.mockClear()
+      listener({
+        data: "authorizing:github",
+        origin: "https://evil.example.org",
+      })
+      listener({
+        data: "authorizing:github",
+        origin: "https://admin.example.org",
+      })
+      listener({ data: "unexpected", origin: "https://cms.example.org" })
+      expect(postMessage).not.toHaveBeenCalled()
+      listener({
+        data: "authorizing:github",
+        origin: "https://admin.example.org:8443",
+      })
+      expect(postMessage).toHaveBeenCalledWith(
+        `authorization:github:success:${JSON.stringify({ provider: "github", token })}`,
+        "https://admin.example.org:8443",
+      )
+    },
+  )
 
   it.each(["missing-cookie", "wrong-state", "missing-code", "bad-config"])(
     "rejects %s before contacting GitHub",

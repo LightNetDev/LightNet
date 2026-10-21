@@ -7,6 +7,18 @@ import {
 } from "../../src/shared/allowed-origins"
 
 describe("getAllowedOrigins", () => {
+  it("defaults bare hostnames to HTTPS in mixed lists and preserves ports", () => {
+    expect(
+      getAllowedOrigins(
+        " cms.example.org, admin.example.org:8443, https://other.example.org ",
+      ),
+    ).toEqual([
+      "https://cms.example.org",
+      "https://admin.example.org:8443",
+      "https://other.example.org",
+    ])
+  })
+
   it("trims entries, ignores empty entries, and preserves explicit ports", () => {
     expect(
       getAllowedOrigins(
@@ -29,6 +41,17 @@ describe("getAllowedOrigins", () => {
     "https://user:password@cms.example.org",
     "https://CMS.example.org",
     "https://cms.example.org:443",
+    "ftp://cms.example.org",
+    "//cms.example.org",
+    "cms.example.org/",
+    "cms.example.org/admin",
+    "cms.example.org?query=1",
+    "cms.example.org#fragment",
+    "user:password@cms.example.org",
+    "https://*.example.org",
+    "*.example.org",
+    "https:cms.example.org",
+    "http:cms.example.org",
   ])("rejects the entire list when it includes %s", (invalidOrigin) => {
     expect(
       getAllowedOrigins(`https://valid.example.org,${invalidOrigin}`),
@@ -39,6 +62,7 @@ describe("getAllowedOrigins", () => {
 describe("hasConfiguredAllowedOrigins", () => {
   it("accepts a valid origin list", () => {
     expect(hasConfiguredAllowedOrigins("https://cms.example.org")).toBe(true)
+    expect(hasConfiguredAllowedOrigins("cms.example.org")).toBe(true)
   })
 
   it.each([
@@ -46,6 +70,8 @@ describe("hasConfiguredAllowedOrigins", () => {
     "",
     "not a URL",
     "https://example.com",
+    "example.com",
+    "cms.example.org,example.com",
     "https://cms.example.org, https://example.com",
   ])("rejects empty, invalid, or placeholder configuration %j", (value) => {
     expect(hasConfiguredAllowedOrigins(value)).toBe(false)
@@ -54,6 +80,13 @@ describe("hasConfiguredAllowedOrigins", () => {
 
 describe("isAllowedSiteId", () => {
   const origins = "https://cms.example.org,https://admin.example.org:8443"
+
+  it("matches hostnames configured without a protocol", () => {
+    expect(isAllowedSiteId("cms.example.org", "cms.example.org")).toBe(true)
+    expect(isAllowedSiteId("admin.example.org", "admin.example.org:8443")).toBe(
+      true,
+    )
+  })
 
   it.each(["cms.example.org", "admin.example.org"])(
     "matches configured hostname %s",

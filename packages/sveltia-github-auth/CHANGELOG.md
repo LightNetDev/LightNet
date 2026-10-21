@@ -1,5 +1,11 @@
 # @lightnet/sveltia-github-auth
 
+## 1.1.1
+
+### Patch Changes
+
+- [#466](https://github.com/LightNetDev/LightNet/pull/466) [`1ec2a3c`](https://github.com/LightNetDev/LightNet/commit/1ec2a3ccafd83adce62dcd0635fbbe9da5946ee3) - Allow bare hostnames with optional ports in `ALLOWED_ORIGINS`, defaulting them to HTTPS. Continue requiring valid HTTPS origins and reject wildcard hostnames.
+
 ## 1.1.0
 
 ### Minor Changes
