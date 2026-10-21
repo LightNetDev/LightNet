@@ -13,6 +13,10 @@ export const sitemap = (
     return []
   }
 
+  if (lightnetConfig.disallowSearchIndexing) {
+    return []
+  }
+
   let adminRoutePatterns: RegExp[] = []
 
   return [
