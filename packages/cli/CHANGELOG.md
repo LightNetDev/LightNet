@@ -1,5 +1,15 @@
 # @lightnet/cli
 
+## 4.9.0
+
+### Minor Changes
+
+- [#469](https://github.com/LightNetDev/LightNet/pull/469) [`a0961c4`](https://github.com/LightNetDev/LightNet/commit/a0961c40fdc30a93d3d5c814343f9c12ec26b2ef) - Add repeatable --exclude to check-translations for space-separated exact keys to ignore during completeness checks.
+
+### Patch Changes
+
+- [#469](https://github.com/LightNetDev/LightNet/pull/469) [`a0961c4`](https://github.com/LightNetDev/LightNet/commit/a0961c40fdc30a93d3d5c814343f9c12ec26b2ef) - Warn about user-defined ln.* translation overrides that no longer match a built-in English key. Include source filenames and check unused keys without failing check-translations for stale overrides alone.
+
 ## 4.8.2
 
 ### Patch Changes
