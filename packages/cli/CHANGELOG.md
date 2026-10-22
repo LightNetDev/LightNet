@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.9.1
+
+### Patch Changes
+
+- [#471](https://github.com/LightNetDev/LightNet/pull/471) [`667909c`](https://github.com/LightNetDev/LightNet/commit/667909c629835b0bf7f697c6d0a92c1ad92a733e) - Check media links using a range GET and verify the first body byte can be read. Retry unsatisfiable ranges with a plain GET to support empty resources.
+
 ## 4.9.0
 
 ### Minor Changes
