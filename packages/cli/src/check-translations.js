@@ -27,6 +27,7 @@ import { cancelPrompt } from "./support/prompt-cancel.js"
 /**
  * @typedef {{
  *   build?: boolean
+ *   exclude?: string[]
  * }} CheckTranslationsOptions
  */
 
@@ -103,7 +104,9 @@ export async function checkTranslations(options = {}, runtime = {}) {
   if (!translations || !languages || translations.length === 0) {
     return false
   }
+  const excludedKeys = new Set(options.exclude ?? [])
   const incompleteTranslations = translations
+    .filter((translation) => !excludedKeys.has(translation.key))
     .map((translation) => ({
       ...translation,
       missingLocales: getMissingLocales(translation, languages),
