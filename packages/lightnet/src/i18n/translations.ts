@@ -1,6 +1,9 @@
 import { z } from "astro/zod"
 import YAML from "yaml"
 
+import { lazy } from "../utils/lazy"
+import { writeStaleTranslationOverrides } from "./record-translation"
+
 const builtInTranslations = {
   ar: () => import("./translations/ar.yml?raw"),
   bn: () => import("./translations/bn.yml?raw"),
@@ -22,23 +25,51 @@ type BuiltInLanguage = keyof typeof builtInTranslations
 
 const translationFileSchema = z.record(z.string(), z.string())
 
+const userTranslationFiles = import.meta.glob<string>(
+  ["/src/translations/*.(yml|yaml)"],
+  { query: "?raw", import: "default" },
+)
+
 const userTranslations = Object.fromEntries(
-  Object.entries(
-    import.meta.glob(["/src/translations/*.(yml|yaml)"], {
-      query: "?raw",
-      import: "default",
-    }),
-  ).map(([path, translationImport]) => {
+  Object.entries(userTranslationFiles).map(([path, translationImport]) => {
     const [fileName] = path.split("/").slice(-1)
     const lang = fileName.replace(/\.ya?ml/, "")
     return [lang, translationImport]
   }),
 )
 
-export const loadTranslations = async (bcp47: string) => ({
-  ...(await loadBuiltInTranslations(builtInTranslations, bcp47)),
-  ...(await loadUserTranslations(bcp47)),
+const staleOverrides = lazy(async () => {
+  const english = await loadBuiltInTranslations(builtInTranslations, "en")
+  await writeStaleTranslationOverrides(
+    await findStaleTranslationOverrides(english, userTranslationFiles),
+  )
 })
+
+export async function findStaleTranslationOverrides(
+  english: Record<string, string>,
+  files: Record<string, () => Promise<string>>,
+) {
+  const overrides: { key: string; path: string }[] = []
+  for (const [path, load] of Object.entries(files)) {
+    const translations = translationFileSchema.parse(YAML.parse(await load()))
+    for (const key of Object.keys(translations)) {
+      if (key.startsWith("ln.") && !Object.hasOwn(english, key)) {
+        overrides.push({ key, path: path.replace(/^\//, "") })
+      }
+    }
+  }
+  return overrides
+}
+
+export const loadTranslations = async (bcp47: string) => {
+  if (import.meta.env.PROD) {
+    await staleOverrides.get()
+  }
+  return {
+    ...(await loadBuiltInTranslations(builtInTranslations, bcp47)),
+    ...(await loadUserTranslations(bcp47)),
+  }
+}
 
 function hasTranslations(
   translationMap: Record<string, unknown>,

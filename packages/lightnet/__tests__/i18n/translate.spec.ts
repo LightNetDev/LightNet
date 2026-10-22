@@ -3,6 +3,55 @@ import { expect, test, vi } from "vitest"
 const importTranslate = async () => import("../../src/i18n/translate")
 const importTranslations = async () => import("../../src/i18n/translations")
 
+test("Should record only used keys during build with direct values for every site locale", async () => {
+  vi.resetModules()
+  vi.stubEnv("PROD", true)
+  const recordTranslation = vi.fn()
+  vi.doMock("../../src/i18n/record-translation", () => ({ recordTranslation }))
+  vi.doMock("../../src/i18n/translations", () => ({
+    loadTranslations: vi.fn(async (locale: string) =>
+      locale === "en"
+        ? {
+            "ln.search.title": "Search",
+            "ln.powered-by": "Powered by LightNet",
+            "custom.used": "Used",
+            "custom.unused": "Unused",
+          }
+        : { "ln.search.title": "Suche" },
+    ),
+  }))
+
+  try {
+    const { useTranslate } = await importTranslate()
+    const t = await useTranslate("de")
+    expect(recordTranslation).not.toHaveBeenCalled()
+
+    expect(t("ln.search.title")).toBe("Suche")
+    expect(t("custom.used")).toBe("Used")
+    expect(recordTranslation.mock.calls).toEqual([
+      [
+        {
+          key: "ln.search.title",
+          type: "lightnet",
+          values: { en: "Search", de: "Suche" },
+        },
+      ],
+      [
+        {
+          key: "custom.used",
+          type: "user",
+          values: { en: "Used", de: undefined },
+        },
+      ],
+    ])
+  } finally {
+    vi.doUnmock("../../src/i18n/record-translation")
+    vi.doUnmock("../../src/i18n/translations")
+    vi.unstubAllEnvs()
+    vi.resetModules()
+  }
+})
+
 test("Should load built-in translations for non-default site locales", async () => {
   const { useTranslate } = await importTranslate()
   const t = await useTranslate("de")

@@ -25,6 +25,11 @@ program
   .description("check if last build has been missing any translations")
   .option("--build", "run pnpm build before checking translations")
   .option("--no-build", "skip the build prompt and use the latest dist/ output")
+  .option(
+    "--exclude <keys...>",
+    "exclude exact translation keys from completeness checks (repeatable)",
+    [],
+  )
   .action(async (options) => {
     try {
       const checkSuccessful = await checkTranslations(options)
