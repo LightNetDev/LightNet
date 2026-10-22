@@ -1,4 +1,6 @@
 /// <reference path="../i18n/locals.d.ts" />
+import { existsSync } from "node:fs"
+
 import react from "@astrojs/react"
 import type { AstroIntegration } from "astro"
 import { AstroError } from "astro/errors"
@@ -33,6 +35,17 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           "Invalid LightNet configuration",
           "Fix these errors on the LightNet configuration:",
         )
+
+        if (
+          !config.disallowSearchIndexing &&
+          !existsSync(new URL("robots.txt", astroConfig.publicDir))
+        ) {
+          injectRoute({
+            pattern: "/robots.txt",
+            entrypoint: "lightnet/api/robots.ts",
+            prerender: true,
+          })
+        }
 
         injectRoute({
           pattern: "404",

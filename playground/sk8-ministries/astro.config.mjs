@@ -9,7 +9,7 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  site: "https://sk8-ministries.pages.dev",
+  site: "https://kuuluu.org",
   integrations: [
     lightnet({
       title: {

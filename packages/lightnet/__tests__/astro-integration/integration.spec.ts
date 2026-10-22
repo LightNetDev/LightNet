@@ -23,10 +23,12 @@ const runSetup = ({
   lightnetConfig = {},
   astroSite,
   integrations = [],
+  publicDir = new URL("file:///tmp/lightnet/public/"),
 }: {
   lightnetConfig?: Record<string, unknown>
   astroSite?: string | URL
   integrations?: AstroIntegration[]
+  publicDir?: URL
 }) => {
   const integration = lightnet({
     ...requiredLightnetConfig,
@@ -34,13 +36,15 @@ const runSetup = ({
   })
   const setupHook = integration.hooks["astro:config:setup"]!
   const updateConfig = vi.fn()
+  const injectRoute = vi.fn()
 
   setupHook({
-    injectRoute: vi.fn(),
+    injectRoute,
     config: {
       integrations,
       root: new URL("file:///tmp/lightnet"),
       srcDir: new URL("file:///tmp/lightnet/src"),
+      publicDir,
       site: astroSite,
     } as never,
     updateConfig,
@@ -53,7 +57,7 @@ const runSetup = ({
     addMiddleware: vi.fn(),
   } as never)
 
-  return { updateConfig }
+  return { updateConfig, injectRoute }
 }
 
 const getThrownError = (run: () => void) => {
@@ -127,10 +131,57 @@ test("Should preserve a user-provided sitemap integration", () => {
     expect.objectContaining({ name: "@astrojs/sitemap" }),
   )
 })
-import { mkdtemp, readFile, rm } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { pathToFileURL } from "node:url"
+
+test("Should inject a prerendered robots.txt endpoint", () => {
+  const { injectRoute } = runSetup({ astroSite: "https://example.com" })
+
+  expect(injectRoute).toHaveBeenCalledWith({
+    pattern: "/robots.txt",
+    entrypoint: "lightnet/api/robots.ts",
+    prerender: true,
+  })
+})
+
+test("Should skip robots.txt when search indexing is disabled", () => {
+  const { injectRoute } = runSetup({
+    astroSite: "https://example.com",
+    lightnetConfig: { disallowSearchIndexing: true },
+  })
+
+  expect(injectRoute).not.toHaveBeenCalledWith(
+    expect.objectContaining({ pattern: "/robots.txt" }),
+  )
+})
+
+test.each(["public", "custom-assets"])(
+  "Should preserve robots.txt in %s and skip injection",
+  async (directory) => {
+    const root = await mkdtemp(join(tmpdir(), "lightnet-robots-"))
+    const publicDir = pathToFileURL(`${join(root, directory)}/`)
+    const robots = new URL("robots.txt", publicDir)
+    const content = "User-agent: *\nDisallow: /private/\n"
+
+    try {
+      await mkdir(publicDir)
+      await writeFile(robots, content)
+      const { injectRoute } = runSetup({
+        astroSite: "https://example.com",
+        publicDir,
+      })
+
+      expect(injectRoute).not.toHaveBeenCalledWith(
+        expect.objectContaining({ pattern: "/robots.txt" }),
+      )
+      expect(await readFile(robots, "utf8")).toBe(content)
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  },
+)
 
 test.each(["admin", "internal/content-manager"])(
   "Should generate sitemap files with language alternates and exclude admin at %s",
