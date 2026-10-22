@@ -25,6 +25,20 @@ const recordedTranslations = new Set<string>()
 
 const translationStore = lazy(() => createTranslationStore())
 
+export async function writeStaleTranslationOverrides(
+  overrides: { key: string; path: string }[],
+) {
+  if (!import.meta.env.PROD) {
+    return
+  }
+  await mkdir(lightnetCachePath, { recursive: true })
+  await writeFile(
+    resolve(lightnetCachePath, "stale-translation-overrides.json"),
+    JSON.stringify(overrides),
+    "utf-8",
+  )
+}
+
 const writeLanguagesManifest = async () => {
   const manifestPath = resolve(lightnetCachePath, "languages.json")
   const { defaultLocale, locales } = config

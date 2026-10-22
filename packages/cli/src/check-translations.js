@@ -88,6 +88,18 @@ export async function checkTranslations(options = {}, runtime = {}) {
 
   const translations = await readTranslations(lightnetCachePath, output)
   const languages = await readLanguages(lightnetCachePath, output)
+  const staleOverrides = await readStaleOverrides(lightnetCachePath)
+  if (staleOverrides.length > 0) {
+    output.warn("Stale LightNet translation overrides")
+    for (const { key, path } of staleOverrides.toSorted(
+      (a, b) => a.key.localeCompare(b.key) || a.path.localeCompare(b.path),
+    )) {
+      output.message(`• ${key} — ${path}`)
+    }
+    output.message(
+      "Action: Remove these overrides or rename custom keys without the reserved ln. prefix.",
+    )
+  }
   if (!translations || !languages || translations.length === 0) {
     return false
   }
@@ -99,7 +111,11 @@ export async function checkTranslations(options = {}, runtime = {}) {
     .filter((translation) => translation.missingLocales.length > 0)
 
   if (incompleteTranslations.length === 0) {
-    output.outro("No issues found. 🎉")
+    output.outro(
+      staleOverrides.length > 0
+        ? "No missing translations. Stale overrides found."
+        : "No issues found. 🎉",
+    )
     return true
   }
 
@@ -234,6 +250,32 @@ function printMissingTranslations(source, translations, output) {
  */
 function getMissingLocales(translation, languages) {
   return languages.locales.filter((locale) => !translation.values[locale])
+}
+
+/**
+ * @param {string} lightnetCachePath
+ * @returns {Promise<{key: string, path: string}[]>}
+ */
+async function readStaleOverrides(lightnetCachePath) {
+  try {
+    return JSON.parse(
+      await readFile(
+        resolve(lightnetCachePath, "stale-translation-overrides.json"),
+        "utf-8",
+      ),
+    )
+  } catch (error) {
+    // Older builds do not include stale override metadata.
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "ENOENT"
+    ) {
+      return []
+    }
+    throw error
+  }
 }
 
 /**
