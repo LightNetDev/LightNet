@@ -18,9 +18,9 @@ import { cancelPrompt } from "./support/prompt-cancel.js"
 const mediaDir = "src/content/media"
 const defaultConcurrency = 24
 const defaultTimeoutMs = 10_000
-const headFallbackStatuses = new Set([405, 501])
 const requestHeaders = {
   accept: "*/*",
+  "accept-encoding": "identity",
   "user-agent": "@lightnet/cli link checker",
 }
 
@@ -359,22 +359,17 @@ function resolveUrl(url, siteUrl) {
  * @returns {Promise<LinkCheckResult>}
  */
 async function checkLink(url, options) {
-  const headResult = await fetchStatus(url, {
+  const rangeResult = await fetchStatus(url, {
     ...options,
-    headers: requestHeaders,
-    method: "HEAD",
+    headers: { ...requestHeaders, range: "bytes=0-0" },
   })
-  if (headResult.ok || !headFallbackStatuses.has(headResult.status ?? 0)) {
-    return headResult
+  if (rangeResult.status !== 416) {
+    return rangeResult
   }
+  // An empty resource has no first byte; retry without the range constraint.
   return fetchStatus(url, {
     ...options,
-    headers: {
-      ...requestHeaders,
-      "accept-encoding": "identity",
-      range: "bytes=0-0",
-    },
-    method: "GET",
+    headers: requestHeaders,
   })
 }
 
@@ -432,7 +427,6 @@ function formatReferenceSources(sources) {
  * @param {{
  *   fetch: typeof fetch
  *   headers?: Record<string, string>
- *   method: "GET"|"HEAD"
  *   timeoutMs: number
  * }} options
  * @returns {Promise<LinkCheckResult>}
@@ -443,12 +437,42 @@ async function fetchStatus(url, options) {
   try {
     const response = await options.fetch(url, {
       headers: options.headers,
-      method: options.method,
+      method: "GET",
       redirect: "follow",
       signal: controller.signal,
     })
-    await response.body?.cancel()
     const ok = response.status >= 200 && response.status < 400
+    if (ok) {
+      const expectsBody =
+        response.status === 206 ||
+        Number(response.headers.get("content-length")) > 0
+      const reader = response.body?.getReader()
+      let receivedByte = false
+      try {
+        // A server may ignore Range and stream the full file. Stop as soon as
+        // the first nonempty chunk proves that the body can be read.
+        if (reader) {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+            if (value.byteLength > 0) {
+              receivedByte = true
+              break
+            }
+          }
+        }
+      } finally {
+        await reader?.cancel()
+      }
+      if (expectsBody && !receivedByte) {
+        return {
+          ok: false,
+          reason: "Response body ended before the first byte",
+        }
+      }
+    } else {
+      await response.body?.cancel()
+    }
     return { ok, status: response.status }
   } catch (error) {
     return {
