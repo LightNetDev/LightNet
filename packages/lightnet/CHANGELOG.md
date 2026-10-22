@@ -1,5 +1,13 @@
 # lightnet
 
+## 4.7.0
+
+### Minor Changes
+
+- [#465](https://github.com/LightNetDev/LightNet/pull/465) [`24f5b61`](https://github.com/LightNetDev/LightNet/commit/24f5b614c50ef355f595644b9b0763e00a2210cd) - Generate XML sitemaps automatically using Astro's sitemap integration and LightNet's site languages. Respect an explicitly configured `@astrojs/sitemap` integration for custom sitemap behavior.
+
+- [#465](https://github.com/LightNetDev/LightNet/pull/465) [`24f5b61`](https://github.com/LightNetDev/LightNet/commit/24f5b614c50ef355f595644b9b0763e00a2210cd) - Automatically generate robots.txt allowing crawling and linking to the sitemap index using Astro's site and base configuration. Preserve user-provided robots.txt files in the public directory and skip generation when search indexing is disabled.
+
 ## 4.6.3
 
 ### Patch Changes
