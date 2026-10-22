@@ -68,7 +68,6 @@ export async function useTranslate(
   const resolvedLocale = bcp47 ?? config.defaultLocale
   const translations = await i18nextTranslations.get()
   const availableTranslationKeys = new Set(await translationKeys.get())
-  recordAllTranslations()
 
   const i18n = i18next.createInstance()
 
@@ -87,6 +86,19 @@ export async function useTranslate(
     "en",
   ]
   return (input, options) => {
+    if (import.meta.env.PROD) {
+      recordTranslation({
+        key: input,
+        type: input.startsWith("ln.") ? "lightnet" : "user",
+        values: Object.fromEntries(
+          config.locales.map((locale) => [
+            locale,
+            translations[locale]?.translation[input],
+          ]),
+        ),
+      })
+    }
+
     const t = i18n.getFixedT(resolvedLocale) as (
       key: TranslationKey,
       options?: TOptions,
@@ -99,41 +111,5 @@ export async function useTranslate(
       )
     }
     return value
-  }
-}
-
-async function recordAllTranslations() {
-  if (!import.meta.env.PROD) {
-    // only record translations during build time
-    return
-  }
-
-  const { locales } = config
-  const localesIncludingEnglish = [...locales.filter((l) => l !== "en"), "en"]
-  const keys = await translationKeys.get()
-  const translations = await i18nextTranslations.get()
-
-  const collectValues = (key: string, locales: string[]) => {
-    const values = {} as Record<string, string | undefined>
-    for (const locale of locales) {
-      values[locale] = translations[locale]?.translation[key]
-    }
-    return values
-  }
-
-  for (const key of keys) {
-    if (key.startsWith("ln.")) {
-      recordTranslation({
-        key,
-        values: collectValues(key, localesIncludingEnglish),
-        type: "lightnet",
-      })
-    } else {
-      recordTranslation({
-        key,
-        values: collectValues(key, locales),
-        type: "user",
-      })
-    }
   }
 }
