@@ -22,8 +22,146 @@ test("checkLinks preserves link checking when no exclusions are provided", async
 
   expect(fetch).toHaveBeenCalledWith(
     "https://example.com/public",
-    expect.objectContaining({ method: "HEAD" }),
+    expect.objectContaining({ method: "GET" }),
   )
+})
+
+test.each([200, 206])(
+  "checkLinks reads a body chunk and cancels a %i response",
+  async (status) => {
+    const projectDir = await createSite({
+      "media.json": ["https://example.com/media"],
+    })
+    const cancel = vi.fn()
+    const fetch = vi.fn(
+      async () =>
+        new Response(
+          new ReadableStream({
+            start(controller) {
+              controller.enqueue(new Uint8Array(0))
+              controller.enqueue(new Uint8Array([42]))
+            },
+            cancel,
+          }),
+          { status },
+        ),
+    )
+
+    try {
+      await expect(
+        checkLinks({}, { cwd: projectDir, fetch, isInteractive: false }),
+      ).resolves.toBe(true)
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith(
+        "https://example.com/media",
+        expect.objectContaining({
+          method: "GET",
+          redirect: "follow",
+          headers: expect.objectContaining({
+            range: "bytes=0-0",
+            "accept-encoding": "identity",
+          }),
+        }),
+      )
+      expect(cancel).toHaveBeenCalledTimes(1)
+    } finally {
+      await removeSite(projectDir)
+    }
+  },
+)
+
+test("checkLinks retries an unsatisfiable range with a plain GET", async () => {
+  const projectDir = await createSite({
+    "empty.json": ["https://example.com/empty"],
+  })
+  const fetch = vi
+    .fn()
+    .mockResolvedValueOnce(new Response(null, { status: 416 }))
+    .mockResolvedValueOnce(
+      new Response(null, { status: 200, headers: { "content-length": "0" } }),
+    )
+
+  try {
+    await expect(
+      checkLinks({}, { cwd: projectDir, fetch, isInteractive: false }),
+    ).resolves.toBe(true)
+    expect(fetch).toHaveBeenCalledTimes(2)
+    expect(fetch.mock.calls[0][1].headers.range).toBe("bytes=0-0")
+    expect(fetch.mock.calls[1][1].method).toBe("GET")
+    expect(fetch.mock.calls[1][1].headers).not.toHaveProperty("range")
+  } finally {
+    await removeSite(projectDir)
+  }
+})
+
+test.each([
+  [
+    "a failed body",
+    () =>
+      new Response(
+        new ReadableStream({
+          start(controller) {
+            controller.error(new Error("Body failed"))
+          },
+        }),
+      ),
+  ],
+  ["an empty partial response", () => new Response(null, { status: 206 })],
+  [
+    "a missing advertised body",
+    () =>
+      new Response(null, {
+        headers: { "content-length": "12" },
+      }),
+  ],
+])("checkLinks rejects %s", async (_label, response) => {
+  const projectDir = await createSite({
+    "media.json": ["https://example.com/media"],
+  })
+  const fetch = vi.fn(async () => response())
+
+  try {
+    await expect(
+      checkLinks({}, { cwd: projectDir, fetch, isInteractive: false }),
+    ).resolves.toBe(false)
+    expect(fetch).toHaveBeenCalledTimes(1)
+  } finally {
+    await removeSite(projectDir)
+  }
+})
+
+test("checkLinks keeps the timeout active while waiting for body bytes", async () => {
+  const projectDir = await createSite({
+    "media.json": ["https://example.com/media"],
+  })
+  const fetch = vi.fn(
+    async (_url, options) =>
+      new Response(
+        new ReadableStream({
+          start(controller) {
+            options.signal.addEventListener(
+              "abort",
+              () => {
+                controller.error(new Error("Body timed out"))
+              },
+              { once: true },
+            )
+          },
+        }),
+      ),
+  )
+
+  try {
+    await expect(
+      checkLinks(
+        { timeout: "20" },
+        { cwd: projectDir, fetch, isInteractive: false },
+      ),
+    ).resolves.toBe(false)
+    expect(fetch.mock.calls[0][1].signal.aborted).toBe(true)
+  } finally {
+    await removeSite(projectDir)
+  }
 })
 
 test("checkLinks does not fetch an excluded root-relative URL", async () => {
@@ -76,7 +214,7 @@ test("checkLinks applies every exclusion pattern", async () => {
   expect(fetch).toHaveBeenCalledTimes(1)
   expect(fetch).toHaveBeenCalledWith(
     "https://example.com/public",
-    expect.objectContaining({ method: "HEAD" }),
+    expect.objectContaining({ method: "GET" }),
   )
 })
 
