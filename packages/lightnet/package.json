@@ -46,7 +46,8 @@
     "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
     "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
     "./api/internal/search.ts": "./src/pages/search-page/api/search.ts",
-    "./api/versions.ts": "./src/api/versions.ts"
+    "./api/versions.ts": "./src/api/versions.ts",
+    "./api/robots.ts": "./src/api/robots.ts"
   },
   "peerDependencies": {
     "astro": "^6.0.0",
@@ -56,6 +57,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",
+    "@astrojs/sitemap": "^3.7.4",
     "@iconify-json/lucide": "^1.2.145",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/tailwind": "^1.2.0",

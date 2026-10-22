@@ -1,10 +1,13 @@
 /// <reference path="../i18n/locals.d.ts" />
+import { existsSync } from "node:fs"
+
 import react from "@astrojs/react"
 import type { AstroIntegration } from "astro"
 import { AstroError } from "astro/errors"
 
 import { verifySchema } from "../utils/verify-schema"
 import { extendedConfigSchema, type LightnetConfig } from "./config"
+import { sitemap } from "./sitemap"
 import tailwind from "./tailwind"
 import { vitePluginLightnetConfig } from "./vite-plugin-lightnet-config"
 
@@ -32,6 +35,17 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           "Invalid LightNet configuration",
           "Fix these errors on the LightNet configuration:",
         )
+
+        if (
+          !config.disallowSearchIndexing &&
+          !existsSync(new URL("robots.txt", astroConfig.publicDir))
+        ) {
+          injectRoute({
+            pattern: "/robots.txt",
+            entrypoint: "lightnet/api/robots.ts",
+            prerender: true,
+          })
+        }
 
         injectRoute({
           pattern: "404",
@@ -72,7 +86,7 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
         addMiddleware({ entrypoint: "lightnet/locals", order: "pre" })
 
         updateConfig({
-          integrations: [tailwind(), react()],
+          integrations: [tailwind(), react(), ...sitemap(config, astroConfig)],
           vite: {
             plugins: [vitePluginLightnetConfig(config, astroConfig, logger)],
           },
