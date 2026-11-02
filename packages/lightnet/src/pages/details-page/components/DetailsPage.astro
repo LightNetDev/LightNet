@@ -2,17 +2,25 @@
 import { getMediaItem } from "../../../content/get-media-items"
 import Page from "../../../layouts/Page.astro"
 import { markdownToText } from "../../../utils/markdown"
+import { detailsPagePath } from "../../../utils/paths"
 
 type Props = {
   mediaId: string
 }
 
-const mediaItem = (await getMediaItem(Astro.props.mediaId)).data
+const { mediaId: id } = Astro.props
+const mediaItem = (await getMediaItem(id)).data
 ---
 
 <Page
   title={mediaItem.title}
   description={markdownToText(mediaItem.description)}
+  canonicalUrl={
+    new URL(
+      detailsPagePath(Astro.locals.i18n.defaultLocale, { id }),
+      Astro.site,
+    )
+  }
 >
   <slot />
 </Page>

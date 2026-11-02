@@ -2,7 +2,7 @@ import config from "virtual:lightnet/config"
 
 import { resolveLanguage } from "../../i18n/resolve-language"
 import type { TranslateConfigFieldFn } from "../../i18n/translate-map"
-import { localizePath, pathWithoutBase } from "../../utils/paths"
+import { localizePath } from "../../utils/paths"
 
 export type LanguageLink = {
   active: boolean
@@ -20,7 +20,7 @@ export function getLanguageSelectionMenuItems({
   pathname: string
   tConfigField: TranslateConfigFieldFn
 }) {
-  const currentPath = pathWithoutBase(pathname)
+  const currentPath = pathname
   const hasLocale = Boolean(
     currentLocale &&
     (currentPath.startsWith(`/${currentLocale}/`) ||

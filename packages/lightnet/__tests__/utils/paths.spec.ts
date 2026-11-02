@@ -1,122 +1,67 @@
-import { afterEach, expect, test, vi } from "vitest"
+import { expect, test } from "vitest"
 
-afterEach(() => {
-  vi.unstubAllEnvs()
-  vi.resetModules()
+import {
+  detailsPagePath,
+  ensureTrailingSlash,
+  localizePath,
+  searchPagePath,
+} from "../../src/utils/paths"
+
+test("Should build media detail paths with a trailing slash", () => {
+  expect(detailsPagePath("en", { id: "my-book" })).toBe("/en/media/my-book/")
 })
 
-test("Should build localized paths at root base", async () => {
-  vi.stubEnv("BASE_URL", "/")
-
-  const { detailsPagePath, localizePath, searchPagePath } =
-    await import("../../src/utils/paths")
-
-  expect(detailsPagePath("en", { id: "my-book" })).toBe("/en/media/my-book")
+test("Should build search paths with a trailing slash before query parameters", () => {
+  expect(searchPagePath("en")).toBe("/en/media/")
   expect(searchPagePath("en", { category: "comics" })).toBe(
-    "/en/media?category=comics",
+    "/en/media/?category=comics",
   )
-  expect(localizePath("en", "/about")).toBe("/en/about")
+  expect(
+    searchPagePath("de", {
+      category: "comics",
+      language: "en",
+      search: "hello world",
+      type: "book",
+    }),
+  ).toBe("/de/media/?category=comics&language=en&search=hello+world&type=book")
 })
 
-test("Should keep internal paths unchanged at root base", async () => {
-  vi.stubEnv("BASE_URL", "/")
+test("Should localize paths with or without a leading slash", () => {
+  expect(localizePath("en", "/about")).toBe("/en/about")
+  expect(localizePath("en", "about")).toBe("/en/about")
+  expect(localizePath("en", "/about/")).toBe("/en/about/")
+})
 
-  const { pathWithBase } = await import("../../src/utils/paths")
+test("Should preserve root paths", () => {
+  expect(localizePath(undefined, "/")).toBe("/")
+  expect(localizePath("en", "/")).toBe("/en/")
+})
 
-  expect(pathWithBase("/en/about")).toBe("/en/about")
-  expect(pathWithBase("/en/media?category=comics#results")).toBe(
+test("Should preserve paths without a locale", () => {
+  expect(localizePath(undefined, "/about")).toBe("/about")
+})
+
+test("Should preserve query strings and hashes", () => {
+  expect(localizePath("en", "/media?category=comics#results")).toBe(
     "/en/media?category=comics#results",
   )
 })
 
-test("Should prefix localized paths with Astro base", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
-  const { detailsPagePath, localizePath, searchPagePath } =
-    await import("../../src/utils/paths")
-
-  expect(detailsPagePath("en", { id: "my-book" })).toBe(
-    "/docs/en/media/my-book",
-  )
-  expect(searchPagePath("en", { category: "comics" })).toBe(
-    "/docs/en/media?category=comics",
-  )
-  expect(localizePath("en", "/about")).toBe("/docs/en/about")
+test("Should not localize absolute urls", () => {
+  expect(localizePath("en", "https://foo.bar")).toBe("https://foo.bar")
 })
 
-test("Should prefix internal API paths with Astro base", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
-  const { pathWithBase } = await import("../../src/utils/paths")
-
-  expect(pathWithBase("/api/internal/search.json")).toBe(
-    "/docs/api/internal/search.json",
-  )
-})
-
-test("Should strip Astro base from pathname", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
-  const { pathWithoutBase } = await import("../../src/utils/paths")
-
-  expect(pathWithoutBase("/docs/en/media")).toBe("/en/media")
-  expect(pathWithoutBase("/docs")).toBe("/")
-})
-
-test("Should leave root-base pathname unchanged", async () => {
-  vi.stubEnv("BASE_URL", "/")
-
-  const { pathWithoutBase } = await import("../../src/utils/paths")
-
-  expect(pathWithoutBase("/en/media")).toBe("/en/media")
-})
-
-test("Should support explicit base when stripping pathname", async () => {
-  const { pathWithoutBase } = await import("../../src/utils/paths")
-
-  expect(pathWithoutBase("/custom/en/media", "/custom/")).toBe("/en/media")
-  expect(pathWithoutBase("/en/media", "/custom/")).toBe("/en/media")
-})
-
-test("Should preserve root path under Astro base", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
-  const { pathWithBase, localizePath } = await import("../../src/utils/paths")
-
-  expect(pathWithBase("/")).toBe("/docs/")
-  expect(localizePath(undefined, "/")).toBe("/docs/")
-})
-
-test("Should preserve root path at root base", async () => {
-  vi.stubEnv("BASE_URL", "/")
-
-  const { pathWithBase, localizePath } = await import("../../src/utils/paths")
-
-  expect(pathWithBase("/")).toBe("/")
-  expect(localizePath(undefined, "/")).toBe("/")
-})
-
-test("Should preserve query strings and hashes", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
-  const { pathWithBase } = await import("../../src/utils/paths")
-
-  expect(pathWithBase("/en/media?category=comics#results")).toBe(
-    "/docs/en/media?category=comics#results",
-  )
-})
-
-test("Should normalize slashes between base and path", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
-  const { pathWithBase } = await import("../../src/utils/paths")
-
-  expect(pathWithBase("/en/about")).toBe("/docs/en/about")
-  expect(pathWithBase("en/about")).toBe("/docs/en/about")
-})
-
-test("Should not localize absolute urls", async () => {
-  const { localizePath } = await import("../../src/utils/paths")
-
-  expect(localizePath("en", "https://foo.bar")).toEqual("https://foo.bar")
-})
+const trailingSlashTests = [
+  { path: "", expected: "/" },
+  { path: "foo", expected: "/foo/" },
+  { path: "/foo/", expected: "/foo/" },
+  { path: "/", expected: "/" },
+  { path: "foo?query=string", expected: "/foo/?query=string" },
+  { path: "foo#hash", expected: "/foo/#hash" },
+  { path: "foo?query=string#hash", expected: "/foo/?query=string#hash" },
+] as const
+trailingSlashTests.forEach(({ path, expected }) =>
+  test(`Should resolve trailing slash for '${path}'`, () => {
+    expect(ensureTrailingSlash(path)).toBe(expected)
+  }),
+)

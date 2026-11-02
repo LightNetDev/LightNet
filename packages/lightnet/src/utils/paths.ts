@@ -1,41 +1,6 @@
 import { isAbsoluteUrl } from "./urls"
 
 /**
- * Prefix a site-internal path with Astro's configured base path.
- *
- * This helper trims any trailing slash from `BASE_URL`, ensures the input
- * path starts with a leading slash, and concatenates the two values.
- * Absolute URLs are out of scope for this helper.
- *
- * @param path internal path such as "/en/media", "/api/internal/search.json", or "/"
- * @returns base-aware internal path
- */
-export function pathWithBase(path: string) {
-  const normalizedBase = import.meta.env.BASE_URL.replace(/\/+$/, "")
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`
-  return `${normalizedBase}${normalizedPath}`
-}
-
-/**
- * Remove Astro's configured base path from a pathname when present.
- *
- * @param pathname pathname such as "/docs/en/media" or "/en/media"
- * @param base Astro base path. Defaults to `import.meta.env.BASE_URL`.
- * @returns pathname without the base prefix
- */
-export function pathWithoutBase(
-  pathname: string,
-  base = import.meta.env.BASE_URL,
-) {
-  const normalizedBase = base !== "/" ? base.replace(/\/+$/, "") : ""
-
-  return normalizedBase &&
-    (pathname === normalizedBase || pathname.startsWith(`${normalizedBase}/`))
-    ? pathname.slice(normalizedBase.length) || "/"
-    : pathname
-}
-
-/**
  * Build path to media item page.
  *
  * @param language current locale
@@ -46,7 +11,7 @@ export function detailsPagePath(
   locale: string | undefined,
   { id }: { id: string },
 ) {
-  return pathWithBase(`/${locale}/media/${id}`)
+  return `/${locale}/media/${id}/`
 }
 
 /**
@@ -79,7 +44,7 @@ export function searchPagePath(
     searchParams.append("type", filter.type)
   }
   const query = searchParams.size ? `?${searchParams.toString()}` : ""
-  return pathWithBase(`/${locale}/media${query}`)
+  return `/${locale}/media/${query}`
 }
 
 /**
@@ -96,8 +61,22 @@ export function localizePath(locale: string | undefined, path: string) {
   if (isAbsoluteUrl(path)) {
     return path
   }
+  const localizedPath = `${locale ? `/${locale}` : ""}/${path.replace(/^\//, "")}`
+  return ensureTrailingSlash(localizedPath)
+}
 
-  return pathWithBase(
-    `${locale ? `/${locale}` : ""}/${path.replace(/^\//, "")}`,
-  )
+/**
+ * Ensure an internal path's pathname ends with a slash, before any query or hash.
+ * Uses URL parsing to normalize the path and add a leading slash when missing.
+ * Empty input resolves to "/". Absolute URL origins are not included in the result.
+ *
+ * @param path internal path, optionally including a query string or fragment
+ * @returns normalized path with a trailing slash, query string, and fragment
+ * @example ensureTrailingSlash("about?ref=menu#team") // "/about/?ref=menu#team"
+ * @example ensureTrailingSlash("/about/") // "/about/"
+ */
+export function ensureTrailingSlash(path: string) {
+  const { pathname, search, hash } = new URL(path, "https://localhost:4321")
+  const pathWithSlash = pathname.endsWith("/") ? pathname : `${pathname}/`
+  return `${pathWithSlash}${search}${hash}`
 }

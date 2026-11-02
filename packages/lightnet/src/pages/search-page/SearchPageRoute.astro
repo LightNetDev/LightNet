@@ -1,14 +1,15 @@
 ---
 import Page from "../../layouts/Page.astro"
+import { searchPagePath } from "../../utils/paths"
 import SearchFilter from "./components/SearchFilter.astro"
 import SearchList from "./components/SearchList.astro"
 
 export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
 
-const { t } = Astro.locals.i18n
+const { t, defaultLocale } = Astro.locals.i18n
 ---
 
-<Page>
+<Page canonicalUrl={new URL(searchPagePath(defaultLocale), Astro.site)}>
   <div class="mx-auto max-w-screen-md">
     <div class="px-4 md:px-8">
       <h1 class="mb-4 mt-8 text-balance text-4xl md:mb-8 md:mt-12 md:text-5xl">

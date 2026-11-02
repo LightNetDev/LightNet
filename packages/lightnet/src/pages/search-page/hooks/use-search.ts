@@ -1,7 +1,6 @@
 import Fuse from "fuse.js"
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import { pathWithBase } from "../../../utils/paths"
 import type { SearchItem, SearchResponse } from "../api/search-response"
 import { observeSearchQuery, type SearchQuery } from "../utils/search-query"
 
@@ -17,7 +16,7 @@ type EnrichedSearchItem = SearchItem & {
   translatedLanguage: string
 }
 
-const SEARCH_API_PATH = pathWithBase("/api/internal/search.json")
+const SEARCH_API_PATH = "/api/internal/search.json"
 
 export function useSearch({ categories, mediaTypes, languages }: Context) {
   const fuse = useRef<Fuse<EnrichedSearchItem>>(undefined)
