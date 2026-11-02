@@ -26,9 +26,9 @@ test("Should build search paths with a trailing slash before query parameters", 
   ).toBe("/de/media/?category=comics&language=en&search=hello+world&type=book")
 })
 
-test("Should localize paths with or without a leading slash", () => {
-  expect(localizePath("en", "/about")).toBe("/en/about")
-  expect(localizePath("en", "about")).toBe("/en/about")
+test("Should localize paths with a trailing slash regardless of the input slashes", () => {
+  expect(localizePath("en", "/about")).toBe("/en/about/")
+  expect(localizePath("en", "about")).toBe("/en/about/")
   expect(localizePath("en", "/about/")).toBe("/en/about/")
 })
 
@@ -37,13 +37,13 @@ test("Should preserve root paths", () => {
   expect(localizePath("en", "/")).toBe("/en/")
 })
 
-test("Should preserve paths without a locale", () => {
-  expect(localizePath(undefined, "/about")).toBe("/about")
+test("Should add a trailing slash to paths without a locale", () => {
+  expect(localizePath(undefined, "/about")).toBe("/about/")
 })
 
 test("Should preserve query strings and hashes", () => {
   expect(localizePath("en", "/media?category=comics#results")).toBe(
-    "/en/media?category=comics#results",
+    "/en/media/?category=comics#results",
   )
 })
 

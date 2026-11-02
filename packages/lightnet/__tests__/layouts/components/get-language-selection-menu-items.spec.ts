@@ -31,13 +31,13 @@ test("Should build localized links from a localized pathname", async () => {
       locale: "de",
       label: "Deutsch",
       active: true,
-      href: "/de/media/how-to",
+      href: "/de/media/how-to/",
     },
     {
       locale: "en",
       label: "Englisch",
       active: false,
-      href: "/en/media/how-to",
+      href: "/en/media/how-to/",
     },
   ])
 })
@@ -60,13 +60,13 @@ test("Should build localized links from an unlocalized pathname", async () => {
       locale: "de",
       label: "Deutsch",
       active: true,
-      href: "/de/media/how-to",
+      href: "/de/media/how-to/",
     },
     {
       locale: "en",
       label: "Englisch",
       active: false,
-      href: "/en/media/how-to",
+      href: "/en/media/how-to/",
     },
   ])
 })
