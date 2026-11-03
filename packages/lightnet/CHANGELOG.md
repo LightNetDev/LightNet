@@ -1,5 +1,25 @@
 # lightnet
 
+## 4.8.0
+
+### Minor Changes
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Add an optional `schemaType` field to media types, supporting `CreativeWork`, `Book`, `Article`, `DigitalDocument`, `AudioObject`, `VideoObject`, and `ImageObject`. Explicit types determine the main JSON-LD type independently of the page layout, while audio, video, and document files retain their own types. Omitting the field preserves automatic inference. The field is also available in the admin interface.
+
+### Patch Changes
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Add canonical information to pages.
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Add a `head` slot to `Page` for custom head content and an optional `jsonLd` prop to `DetailsPage` for safely rendering structured data in the page head.
+  
+  Generate JSON-LD for audio, video, and default media detail pages, including descriptive item metadata, recognized file encodings, video player URLs, and individual audio tracks.
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Fix carousel accessibility by removing group role from items.
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Removed behaviour around adding Astro base path.
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Update dependencies.
+
 ## 4.7.1
 
 ### Patch Changes

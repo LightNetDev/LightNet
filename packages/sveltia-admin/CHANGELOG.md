@@ -1,5 +1,19 @@
 # @lightnet/sveltia-admin
 
+## 4.3.0
+
+### Minor Changes
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Add an optional `schemaType` field to media types, supporting `CreativeWork`, `Book`, `Article`, `DigitalDocument`, `AudioObject`, `VideoObject`, and `ImageObject`. Explicit types determine the main JSON-LD type independently of the page layout, while audio, video, and document files retain their own types. Omitting the field preserves automatic inference. The field is also available in the admin interface.
+
+### Patch Changes
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Removed behaviour around adding Astro base path.
+
+- [#473](https://github.com/LightNetDev/LightNet/pull/473) [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6) - Update dependencies.
+- Updated dependencies [[`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6), [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6), [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6), [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6), [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6), [`9e673cf`](https://github.com/LightNetDev/LightNet/commit/9e673cfdc58cab88f96d2f3a22d23b327be626a6)]:
+  - lightnet@4.8.0
+
 ## 4.2.3
 
 ### Patch Changes
