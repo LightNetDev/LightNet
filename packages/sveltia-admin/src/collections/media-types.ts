@@ -32,6 +32,8 @@ export const mediaTypeCollection: Collection = {
         { label: "Audio recording", value: "AudioObject" },
         { label: "Video recording", value: "VideoObject" },
         { label: "Image", value: "ImageObject" },
+        { label: "Software application", value: "SoftwareApplication" },
+        { label: "Web page", value: "WebPage" },
       ],
       hint: "Describe what the media items are. Leave empty to infer the type from the details page layout and content.",
     },

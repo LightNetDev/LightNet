@@ -31,6 +31,78 @@ function build(
   })
 }
 
+test.each(["SoftwareApplication", "WebPage"] as const)(
+  "Uses the primary resource URL for %s and keeps the LightNet page separate",
+  (schemaType) => {
+    const result = build(
+      ["https://resource.example/app?lang=ar#about", "https://other.example/"],
+      "default",
+      schemaType,
+    )
+    expect(result).toMatchObject({
+      "@type": schemaType,
+      "@id": "https://example.com/en/media/work/#work",
+      url: "https://resource.example/app?lang=ar#about",
+      mainEntityOfPage: "https://example.com/en/media/work/",
+      name: item.title,
+    })
+    expect(result.encoding).toBeUndefined()
+    expect(result).not.toHaveProperty("contentUrl")
+    expect(result).not.toHaveProperty("downloadUrl")
+    expect(result).not.toHaveProperty("installUrl")
+  },
+)
+
+test.each([
+  "javascript:alert(1)",
+  "mailto:hello@example.com",
+  "https://[invalid",
+])(
+  "Keeps the detail URL when the primary resource URL is unusable: %s",
+  (url) => {
+    for (const schemaType of ["SoftwareApplication", "WebPage"] as const) {
+      expect(
+        build([url, "https://resource.example/"], "default", schemaType),
+      ).toMatchObject({
+        "@type": schemaType,
+        url: "https://example.com/en/media/work/",
+        mainEntityOfPage: "https://example.com/en/media/work/",
+      })
+    }
+  },
+)
+
+test("Does not use an uploaded file as the application URL", () => {
+  const result = createMediaItemJsonLd({
+    item: {
+      ...item,
+      content: [
+        { type: "upload", url: "/files/app.zip" },
+        { type: "link", url: "https://resource.example/app" },
+      ],
+    },
+    layout: "default",
+    schemaType: "SoftwareApplication",
+    canonicalUrl: new URL("https://example.com/en/media/work/"),
+    imageUrl: "https://example.com/cover.webp",
+  })
+  expect(result.url).toBe("https://example.com/en/media/work/")
+  expect(result).not.toHaveProperty("downloadUrl")
+})
+
+test("Resolves relative web resource links and preserves supplemental file encodings", () => {
+  expect(
+    build(["/resource/", "/guide.pdf"], "default", "WebPage"),
+  ).toMatchObject({
+    "@type": "WebPage",
+    url: "https://example.com/resource/",
+    mainEntityOfPage: "https://example.com/en/media/work/",
+    encoding: [
+      { "@type": "MediaObject", contentUrl: "https://example.com/guide.pdf" },
+    ],
+  })
+})
+
 test("Describes the work without guessing its type or original publication date", () => {
   const result = build([
     "/files/book.pdf?download=1#page=2",

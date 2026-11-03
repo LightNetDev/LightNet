@@ -16,6 +16,8 @@ export const mediaTypeSchema = z.object({
    * Schema.org type of the work described on media detail pages.
    * Independent of the page layout and downloadable file formats.
    * If omitted, structured data is inferred from the layout and content.
+   * WebPage and SoftwareApplication use the first content entry's HTTP(S)
+   * link as the work URL, with the LightNet detail page as mainEntityOfPage.
    */
   schemaType: z
     .enum([
@@ -26,6 +28,8 @@ export const mediaTypeSchema = z.object({
       "AudioObject",
       "VideoObject",
       "ImageObject",
+      "SoftwareApplication",
+      "WebPage",
     ])
     .optional(),
   /**
