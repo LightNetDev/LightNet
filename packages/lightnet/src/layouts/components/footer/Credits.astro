@@ -9,6 +9,13 @@ const { t } = Astro.locals.i18n
   class="inline-flex items-center gap-2 whitespace-nowrap underline-offset-4 hover:underline"
   {...getLinkAttributes("https://lightnet.community")}
 >
-  <img src={LightNetLogo.src} alt="" class="h-5 w-auto" loading="lazy" />
+  <img
+    src={LightNetLogo.src}
+    width="141"
+    height="173"
+    alt=""
+    class="h-5 w-auto"
+    loading="lazy"
+  />
   <span>{t("ln.footer.powered-by-lightnet")}</span>
 </a>

@@ -3,8 +3,6 @@ import { readFile } from "node:fs/promises"
 import type { APIRoute } from "astro"
 import config from "virtual:lightnet/sveltiaAdminConfig"
 
-import { pathWithBase } from "./utils/path-with-base"
-
 let sveltiaScriptUrl = ""
 const getSveltiaScriptUrl = async () => {
   // The package does not export package.json. Resolve its entry first so this
@@ -21,7 +19,7 @@ const getSveltiaScriptUrl = async () => {
 }
 
 export const GET: APIRoute = async () => {
-  const configUrl = pathWithBase(`/${config.path}/config.json`)
+  const configUrl = `/${config.path}/config.json`
   const scriptUrl = await getSveltiaScriptUrl()
 
   return new Response(

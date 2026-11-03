@@ -13,6 +13,22 @@ export const mediaTypeSchema = z.object({
    */
   label: translationMapSchema,
   /**
+   * Schema.org type of the work described on media detail pages.
+   * Independent of the page layout and downloadable file formats.
+   * If omitted, structured data is inferred from the layout and content.
+   */
+  schemaType: z
+    .enum([
+      "CreativeWork",
+      "Book",
+      "Article",
+      "DigitalDocument",
+      "AudioObject",
+      "VideoObject",
+      "ImageObject",
+    ])
+    .optional(),
+  /**
    * Defines how the cover image for a media item of this type is rendered.
    *
    * Options:

@@ -6,14 +6,24 @@ import OpenButton from "./components/main-details/OpenButton.astro"
 import MainDetailsSection from "./components/MainDetailsSection.astro"
 import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
 import MoreDetailsSection from "./components/MoreDetailsSection.astro"
+import { getDetailsPageJsonLd } from "./utils/get-details-page-json-ld"
 
 export type Props = {
   mediaId: string
 }
 const { mediaId } = Astro.props
+const { defaultLocale, tContentField } = Astro.locals.i18n
+
+const jsonLd = await getDetailsPageJsonLd({
+  mediaId,
+  layout: "default",
+  site: Astro.site,
+  defaultLocale,
+  tContentField,
+})
 ---
 
-<DetailsPage mediaId={mediaId}>
+<DetailsPage mediaId={mediaId} jsonLd={jsonLd}>
   <MainDetailsSection mediaId={mediaId}>
     <OpenButton className="mt-8" mediaId={mediaId} />
   </MainDetailsSection>

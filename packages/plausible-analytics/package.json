@@ -32,7 +32,7 @@
     "astro": "^6.0.0"
   },
   "dependencies": {
-    "@plausible-analytics/tracker": "^0.4.6"
+    "@plausible-analytics/tracker": "^0.4.7"
   },
   "devDependencies": {
     "astro": "^6.4.8",

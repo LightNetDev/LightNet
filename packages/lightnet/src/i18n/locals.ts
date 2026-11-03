@@ -12,7 +12,6 @@ export const onRequest: MiddlewareHandler = async ({ locals, url }, next) => {
     const locales = config.locales
     const currentLocale = resolveCurrentLocaleFromPathname({
       pathname: url.pathname,
-      base: import.meta.env.BASE_URL,
       locales,
       defaultLocale,
     })

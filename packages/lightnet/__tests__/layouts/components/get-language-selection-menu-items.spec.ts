@@ -10,19 +10,16 @@ vi.mock("../../../src/i18n/resolve-language", () => ({
 }))
 
 afterEach(() => {
-  vi.unstubAllEnvs()
   vi.resetModules()
 })
 
 test("Should build localized links from a localized pathname", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
   const { getLanguageSelectionMenuItems } =
     await import("../../../src/layouts/components/get-language-selection-menu-items")
 
   const result = getLanguageSelectionMenuItems({
     currentLocale: "de",
-    pathname: "/docs/de/media/how-to",
+    pathname: "/de/media/how-to",
     tConfigField: ((translationMap: Record<string, string>) =>
       translationMap.de ?? translationMap.en) as never,
   })
@@ -34,26 +31,24 @@ test("Should build localized links from a localized pathname", async () => {
       locale: "de",
       label: "Deutsch",
       active: true,
-      href: "/docs/de/media/how-to",
+      href: "/de/media/how-to/",
     },
     {
       locale: "en",
       label: "Englisch",
       active: false,
-      href: "/docs/en/media/how-to",
+      href: "/en/media/how-to/",
     },
   ])
 })
 
 test("Should build localized links from an unlocalized pathname", async () => {
-  vi.stubEnv("BASE_URL", "/docs/")
-
   const { getLanguageSelectionMenuItems } =
     await import("../../../src/layouts/components/get-language-selection-menu-items")
 
   const result = getLanguageSelectionMenuItems({
     currentLocale: "de",
-    pathname: "/docs/media/how-to",
+    pathname: "/media/how-to",
     tConfigField: ((translationMap: Record<string, string>) =>
       translationMap.de ?? translationMap.en) as never,
   })
@@ -65,13 +60,13 @@ test("Should build localized links from an unlocalized pathname", async () => {
       locale: "de",
       label: "Deutsch",
       active: true,
-      href: "/docs/de/media/how-to",
+      href: "/de/media/how-to/",
     },
     {
       locale: "en",
       label: "Englisch",
       active: false,
-      href: "/docs/en/media/how-to",
+      href: "/en/media/how-to/",
     },
   ])
 })

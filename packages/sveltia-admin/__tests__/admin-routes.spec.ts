@@ -37,9 +37,8 @@ describe("standalone admin routes", () => {
   )
 
   test.each(["manage", "tools/content"])(
-    "serves plain HTML at path %j with base-aware URLs",
+    "serves plain HTML at path %j with root-relative URLs",
     async (path) => {
-      vi.stubEnv("BASE_URL", "/site/")
       vi.doMock("virtual:lightnet/sveltiaAdminConfig", () => ({
         default: { path },
       }))
@@ -47,7 +46,7 @@ describe("standalone admin routes", () => {
       const { GET } = await import("../src/admin.html")
       const response = await GET({} as APIContext)
       const html = await response.text()
-      const prefix = `/site/${path}`
+      const prefix = `/${path}`
 
       expect(response.headers.get("Content-Type")).toContain("text/html")
       expect(html).toContain(`href="${prefix}/config.json"`)

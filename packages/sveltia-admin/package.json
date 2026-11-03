@@ -39,7 +39,7 @@
     "lightnet": "^4.6.2"
   },
   "dependencies": {
-    "@sveltia/cms": "0.248.0"
+    "@sveltia/cms": "0.256.1"
   },
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^",

@@ -10,5 +10,5 @@ test("Search should have heading section and URL", async ({
 
   await page.getByLabel("Search").click()
   await expect(page.getByRole("heading", { name: "Search" })).toBeVisible()
-  await expect(page).toHaveURL(ln.resolveURL("/en/media"))
+  await expect(page).toHaveURL(ln.resolveURL("/en/media/"))
 })

@@ -31,5 +31,8 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  }
 }

@@ -6,10 +6,10 @@ import CustomHead from "virtual:lightnet/components/CustomHead"
 import config from "virtual:lightnet/config"
 
 import { resolveLanguage } from "../i18n/resolve-language"
-import { pathWithBase } from "../utils/paths"
 import Footer from "./components/footer/Footer.astro"
 import Header from "./components/header/Header.astro"
 import Favicon from "./components/meta/Favicon.astro"
+import SearchEngineMetadata from "./components/meta/SearchEngineMetadata.astro"
 import ViewTransition from "./components/meta/ViewTransition.astro"
 
 export interface Props {
@@ -47,6 +47,17 @@ export interface Props {
    * default: false
    */
   disallowSearchIndexing?: boolean
+  /**
+   * Absolute URL of the preferred version of this page, used in the
+   * `<link rel="canonical">` tag to help search engines consolidate duplicate URLs.
+   *
+   * Defaults to the current pathname with a trailing slash, resolved against
+   * Astro's `site` URL, without query parameters or a fragment.
+   * Only included when search indexing is enabled.
+   *
+   * @example "https://example.com/about/"
+   */
+  canonicalUrl?: string | URL
 }
 
 const {
@@ -56,6 +67,7 @@ const {
   locale,
   disableShouldTrack,
   disallowSearchIndexing,
+  canonicalUrl,
 } = Astro.props
 const { currentLocale: pathCurrentLocale, tConfigField } = Astro.locals.i18n
 const currentLocale = locale ?? pathCurrentLocale
@@ -72,16 +84,20 @@ const { direction } = resolveLanguage(currentLocale)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {(disallowSearchIndexing ?? config.disallowSearchIndexing) && (
-      <meta name="robots" content="noindex" />
-    )}
-    {CustomHead && <CustomHead />}
     <title>{title ? `${title} | ${configTitle}` : configTitle}</title>
     {description && <meta name="description" content={description} />}
     {config.manifest && <link rel="manifest" href={config.manifest} />}
-    <link rel="prefetch" href={pathWithBase("/api/internal/search.json")} />
+    <link rel="prefetch" href="/api/internal/search.json" />
     <Favicon />
     <ViewTransition />
+    <SearchEngineMetadata
+      disallowSearchIndexing={disallowSearchIndexing}
+      canonicalUrl={
+        typeof canonicalUrl === "string" ? new URL(canonicalUrl) : canonicalUrl
+      }
+    />
+    {CustomHead && <CustomHead />}
+    <slot name="head" />
   </head>
   <body class="flex min-h-screen flex-col overflow-y-scroll bg-gray-50 text-gray-900">
     <Header />

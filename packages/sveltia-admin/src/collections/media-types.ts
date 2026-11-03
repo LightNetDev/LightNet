@@ -20,6 +20,22 @@ export const mediaTypeCollection: Collection = {
   fields: [
     inlineTranslation({ name: "label", label: "Name" }),
     {
+      name: "schemaType",
+      label: "Structured Data Type",
+      widget: "select",
+      required: false,
+      options: [
+        { label: "General creative work", value: "CreativeWork" },
+        { label: "Book", value: "Book" },
+        { label: "Article", value: "Article" },
+        { label: "Digital document", value: "DigitalDocument" },
+        { label: "Audio recording", value: "AudioObject" },
+        { label: "Video recording", value: "VideoObject" },
+        { label: "Image", value: "ImageObject" },
+      ],
+      hint: "Describe what the media items are. Leave empty to infer the type from the details page layout and content.",
+    },
+    {
       name: "icon",
       label: "Icon",
       pattern: [
