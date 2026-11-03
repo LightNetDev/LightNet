@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.9.0
+
+### Minor Changes
+
+- [#475](https://github.com/LightNetDev/LightNet/pull/475) [`24a5813`](https://github.com/LightNetDev/LightNet/commit/24a58138e83824c7f740b77c2373f152c6d02eb7) - Support `SoftwareApplication` and `WebPage` as media type structured data classifications in JSON definitions and the admin interface. For these types, use the first content entry's HTTP(S) link as the resource URL and identify the LightNet detail page with `mainEntityOfPage`. Retain the detail URL when the first entry is an upload or has no valid HTTP(S) URL.
+
 ## 4.8.0
 
 ### Minor Changes
