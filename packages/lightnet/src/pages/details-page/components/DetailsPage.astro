@@ -6,9 +6,11 @@ import { detailsPagePath } from "../../../utils/paths"
 
 type Props = {
   mediaId: string
+  /** Structured data to include in the page head as JSON-LD. */
+  jsonLd?: Record<string, unknown>
 }
 
-const { mediaId: id } = Astro.props
+const { mediaId: id, jsonLd } = Astro.props
 const mediaItem = (await getMediaItem(id)).data
 ---
 
@@ -22,5 +24,13 @@ const mediaItem = (await getMediaItem(id)).data
     )
   }
 >
+  <Fragment slot="head">
+    {jsonLd && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
+      />
+    )}
+  </Fragment>
   <slot />
 </Page>

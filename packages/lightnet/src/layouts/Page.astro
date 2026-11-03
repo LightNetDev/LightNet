@@ -97,6 +97,7 @@ const { direction } = resolveLanguage(currentLocale)
       }
     />
     {CustomHead && <CustomHead />}
+    <slot name="head" />
   </head>
   <body class="flex min-h-screen flex-col overflow-y-scroll bg-gray-50 text-gray-900">
     <Header />
