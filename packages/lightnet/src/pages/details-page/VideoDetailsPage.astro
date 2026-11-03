@@ -5,15 +5,25 @@ import DetailsPage from "./components/DetailsPage.astro"
 import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
 import MoreDetailsSection from "./components/MoreDetailsSection.astro"
 import VideoDetailsSection from "./components/VideoDetailsSection.astro"
+import { getDetailsPageJsonLd } from "./utils/get-details-page-json-ld"
 
 export type Props = {
   mediaId: string
 }
 
 const { mediaId } = Astro.props
+const { defaultLocale, tContentField } = Astro.locals.i18n
+
+const jsonLd = await getDetailsPageJsonLd({
+  mediaId,
+  layout: "video",
+  site: Astro.site,
+  defaultLocale,
+  tContentField,
+})
 ---
 
-<DetailsPage mediaId={mediaId}>
+<DetailsPage mediaId={mediaId} jsonLd={jsonLd}>
   <VideoDetailsSection mediaId={mediaId} />
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} />

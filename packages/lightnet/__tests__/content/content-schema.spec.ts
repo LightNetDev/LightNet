@@ -12,6 +12,7 @@ const { translationMapSchema } =
 const { mediaCollectionSchema } =
   await import("../../src/content/schema/media-collection")
 const { mediaItemSchema } = await import("../../src/content/schema/media-item")
+const { mediaTypeSchema } = await import("../../src/content/schema/media-type")
 
 test("Should accept inline translation with only default locale", () => {
   const parsed = translationMapSchema.safeParse({
@@ -107,3 +108,46 @@ test("Should accept media item without commonId", () => {
 
   expect(parsed.success).toBe(true)
 })
+
+test("Should leave structured data classification unset for existing media types", () => {
+  expect(
+    mediaTypeSchema.parse({
+      label: { en: "Books" },
+      icon: "lucide--book-open",
+    }).schemaType,
+  ).toBeUndefined()
+})
+
+test.each([
+  "CreativeWork",
+  "Book",
+  "Article",
+  "DigitalDocument",
+  "AudioObject",
+  "VideoObject",
+  "ImageObject",
+])(
+  "Should accept %s as a media type structured data classification",
+  (schemaType) => {
+    expect(
+      mediaTypeSchema.parse({
+        label: { en: "Resources" },
+        icon: "lucide--book-open",
+        schemaType,
+      }).schemaType,
+    ).toBe(schemaType)
+  },
+)
+
+test.each(["UnknownType", "book", "", null])(
+  "Should reject unsupported structured data classification %s",
+  (schemaType) => {
+    expect(
+      mediaTypeSchema.safeParse({
+        label: { en: "Resources" },
+        icon: "lucide--book-open",
+        schemaType,
+      }).success,
+    ).toBe(false)
+  },
+)
