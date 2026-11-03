@@ -61,13 +61,8 @@ export function createMediaItemJsonLd({
   }
 
   const media = item.content.map(({ url }, index) => {
-    let resolvedUrl: URL
-    try {
-      resolvedUrl = new URL(url, canonicalUrl)
-    } catch {
-      return undefined
-    }
-    if (!["http:", "https:"].includes(resolvedUrl.protocol)) {
+    const resolvedUrl = resolveHttpUrl(url, canonicalUrl)
+    if (!resolvedUrl) {
       return undefined
     }
 
@@ -92,6 +87,20 @@ export function createMediaItemJsonLd({
   })
 
   const encodings = media.filter((entry) => entry !== undefined)
+  if (schemaType === "SoftwareApplication" || schemaType === "WebPage") {
+    const primary = item.content[0]
+    const resourceUrl =
+      primary?.type === "link"
+        ? resolveHttpUrl(primary.url, canonicalUrl)
+        : undefined
+    return {
+      ...base,
+      url: resourceUrl?.href ?? canonicalUrl.href,
+      mainEntityOfPage: canonicalUrl.href,
+      encoding: encodings.length ? encodings : undefined,
+    }
+  }
+
   if (
     schemaType === "AudioObject" ||
     schemaType === "VideoObject" ||
@@ -143,6 +152,15 @@ export function createMediaItemJsonLd({
   }
 
   return { ...base, encoding: encodings.length ? encodings : undefined }
+}
+
+function resolveHttpUrl(value: string, base: URL) {
+  try {
+    const url = new URL(value, base)
+    return ["http:", "https:"].includes(url.protocol) ? url : undefined
+  } catch {
+    return undefined
+  }
 }
 
 function getVideoEmbedUrl(url: URL) {

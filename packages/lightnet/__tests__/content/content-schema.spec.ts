@@ -126,6 +126,8 @@ test.each([
   "AudioObject",
   "VideoObject",
   "ImageObject",
+  "SoftwareApplication",
+  "WebPage",
 ])(
   "Should accept %s as a media type structured data classification",
   (schemaType) => {
