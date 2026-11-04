@@ -1,4 +1,6 @@
 ---
+import config from "virtual:lightnet/config"
+
 import { getMediaItem } from "../../../content/get-media-items"
 import Page from "../../../layouts/Page.astro"
 import { markdownToText } from "../../../utils/markdown"
@@ -12,8 +14,12 @@ type Props = {
 }
 
 const { mediaId: id, fallbackSchemaType = "CreativeWork" } = Astro.props
-const { defaultLocale, tContentField } = Astro.locals.i18n
+const { defaultLocale, currentLocale, tContentField, tConfigField } =
+  Astro.locals.i18n
 const mediaItem = (await getMediaItem(id)).data
+const description = markdownToText(mediaItem.description)
+const shareUrl = new URL(detailsPagePath(currentLocale, { id }), Astro.site)
+const shareImage = new URL("open-graph.png", shareUrl)
 const jsonLd = await getDetailsPageJsonLd({
   mediaId: id,
   fallbackSchemaType,
@@ -25,10 +31,28 @@ const jsonLd = await getDetailsPageJsonLd({
 
 <Page
   title={mediaItem.title}
-  description={markdownToText(mediaItem.description)}
+  description={description}
   canonicalUrl={new URL(detailsPagePath(defaultLocale, { id }), Astro.site)}
 >
   <Fragment slot="head">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={mediaItem.title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta
+      property="og:site_name"
+      content={tConfigField(config.title, config)}
+    />
+    <meta property="og:url" content={shareUrl.href} />
+    <meta property="og:image" content={shareImage.href} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={mediaItem.title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={mediaItem.title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={shareImage.href} />
+    <meta name="twitter:image:alt" content={mediaItem.title} />
     {jsonLd && (
       <script
         type="application/ld+json"
