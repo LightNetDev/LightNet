@@ -46,7 +46,7 @@ function getChromaticColor(pixels: Buffer): number[] | undefined {
     if (weights[bucket] > weights[largestBucket]) largestBucket = bucket
   }
 
-  // Tiny colorful accents should not determine an otherwise neutral cover.
+  // Tiny colorful accents should not determine an otherwise neutral image.
   if (colorfulWeight === 0 || colorfulWeight < visibleWeight * 0.05) {
     return undefined
   }
@@ -55,14 +55,14 @@ function getChromaticColor(pixels: Buffer): number[] | undefined {
   )
 }
 
-export function getCoverTint(cover: Buffer, cacheDir?: URL): Promise<string> {
+export function getImageTint(image: Buffer, cacheDir?: URL): Promise<string> {
   const key = createHash("sha256")
     .update(
       JSON.stringify({ version: TINT_VERSION, dependencies: sharp.versions }),
     )
-    .update(cover)
+    .update(image)
     .digest("hex")
-  const directory = cacheDir && new URL("lightnet/cover-tints/", cacheDir)
+  const directory = cacheDir && new URL("lightnet/image-tints/", cacheDir)
   const tintPath = directory && new URL(`${key}.txt`, directory)
   const memoryKey = `${cacheDir?.href ?? ""}:${key}`
   const cached = tints.get(memoryKey)
@@ -81,21 +81,21 @@ export function getCoverTint(cover: Buffer, cacheDir?: URL): Promise<string> {
         }
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-          console.warn("[lightnet] Cannot read cover tint cache:", error)
+          console.warn("[lightnet] Cannot read image tint cache:", error)
         }
       }
     }
-    const image = await sharp(cover)
+    const decoded = await sharp(image)
       .autoOrient()
       .resize(432, 502, { fit: "inside" })
       .toColourspace("srgb")
       .ensureAlpha()
       .raw()
       .toBuffer({ resolveWithObject: true })
-    let color = getChromaticColor(image.data)
+    let color = getChromaticColor(decoded.data)
     if (!color) {
       // Materialize flattening before stats(), which reads input pixels directly.
-      const opaque = await sharp(image.data, { raw: image.info })
+      const opaque = await sharp(decoded.data, { raw: decoded.info })
         .flatten({ background: "#fafafa" })
         .raw()
         .toBuffer({ resolveWithObject: true })
@@ -104,6 +104,7 @@ export function getCoverTint(cover: Buffer, cacheDir?: URL): Promise<string> {
       }).stats()
       color = [dominant.r, dominant.g, dominant.b]
     }
+    // Keep every channel at least 170 for readable dark text on any image tint.
     const value = `rgb(${color
       .map((channel) => Math.round(250 * 0.68 + channel * 0.32))
       .join(",")})`
@@ -114,7 +115,7 @@ export function getCoverTint(cover: Buffer, cacheDir?: URL): Promise<string> {
         await writeFile(temporaryPath, value, { flag: "wx" })
         await rename(temporaryPath, tintPath)
       } catch (error) {
-        console.warn("[lightnet] Cannot write cover tint cache:", error)
+        console.warn("[lightnet] Cannot write image tint cache:", error)
       } finally {
         await rm(temporaryPath, { force: true }).catch(() => undefined)
       }

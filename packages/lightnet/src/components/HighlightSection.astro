@@ -1,7 +1,12 @@
 ---
+import { readFile } from "node:fs/promises"
+
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
+import { cacheDir } from "astro:config/server"
 import { ArrowRightIcon } from "lucide-react"
+
+import { getImageTint } from "../utils/get-image-tint"
 
 interface Props {
   image: ImageMetadata
@@ -16,14 +21,25 @@ interface Props {
 
 const { image, id, title, text, link, className, titleClass, textClass } =
   Astro.props
+let tint = "#e5e7eb"
+try {
+  const imagePath: unknown = Reflect.get(image, "fsPath")
+  if (typeof imagePath !== "string") {
+    throw new Error(`Cannot resolve highlight image "${image.src}"`)
+  }
+  tint = await getImageTint(await readFile(imagePath), new URL(cacheDir))
+} catch (error) {
+  console.warn("[lightnet] Cannot extract highlight image color:", error)
+}
 const iconDirectionClass =
   Astro.locals.i18n.direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <section
-  class="mt-24 w-full bg-gray-200 md:mt-28"
+  class="mt-24 w-full bg-[var(--image-tint)] text-gray-900 md:mt-28"
   class:list={[className]}
   id={id}
+  style={{ "--image-tint": tint }}
 >
   <div class="flex flex-col overflow-hidden md:flex-row">
     <Image

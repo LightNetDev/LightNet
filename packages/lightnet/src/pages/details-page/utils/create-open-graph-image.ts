@@ -1,7 +1,7 @@
 import sharp, { type OverlayOptions } from "sharp"
 
 import type { MediaTypeEntry } from "../../../content/schema/media-type"
-import { getCoverTint } from "./get-cover-tint"
+import { getImageTint } from "../../../utils/get-image-tint"
 
 export const OPEN_GRAPH_WIDTH = 1200
 export const OPEN_GRAPH_HEIGHT = 630
@@ -93,7 +93,7 @@ export async function createOpenGraphImage(
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true })
-  const tint = await getCoverTint(cover, cacheDir)
+  const tint = await getImageTint(cover, cacheDir)
   const { width: coverWidth, height: coverHeight } = coverImage.info
   const cornerRadius = coverImageStyle === "book" ? 2 : 6
   const decorations: OverlayOptions[] = []
