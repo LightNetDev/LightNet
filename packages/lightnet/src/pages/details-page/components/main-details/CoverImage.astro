@@ -27,7 +27,10 @@ const imageSizes = {
 }
 ---
 
-<CoverImageDecorator className="shrink-0" style={type.data.coverImageStyle}>
+<CoverImageDecorator
+  className="shrink-0 shadow-xl shadow-gray-900/10"
+  style={type.data.coverImageStyle}
+>
   <Image
     class:list={imageSizes[size].css}
     alt=""

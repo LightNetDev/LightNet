@@ -15,7 +15,7 @@ const { mediaId } = Astro.props
 const item = await getMediaItem(mediaId)
 ---
 
-<div class="mx-auto max-w-screen-md md:mt-8 md:px-8">
+<div class="mx-auto max-w-screen-md px-4 md:px-8">
   <VideoPlayer
     url={item.data.content[0].url!}
     title={item.data.title}
@@ -25,7 +25,7 @@ const item = await getMediaItem(mediaId)
 <div class="mx-auto mt-6 flex max-w-screen-md flex-col items-start px-4 md:mt-10 md:px-8">
   <Title mediaId={mediaId} />
   <Authors mediaId={mediaId} />
-  <div class="mt-4 flex gap-6">
+  <div class="mt-5 flex gap-6 text-sm text-gray-600">
     <ShareButton />
     <EditButton mediaId={mediaId} />
   </div>

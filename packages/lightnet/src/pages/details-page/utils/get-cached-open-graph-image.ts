@@ -33,11 +33,11 @@ export async function getCachedOpenGraphImage(
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
       console.warn("[lightnet] Cannot read Open Graph image cache:", error)
-      return createOpenGraphImage(input)
+      return createOpenGraphImage(input, cacheDir)
     }
   }
 
-  const png = await createOpenGraphImage(input)
+  const png = await createOpenGraphImage(input, cacheDir)
   const temporaryPath = new URL(`${key}.${randomUUID()}.tmp`, directory)
   try {
     await mkdir(directory, { recursive: true })

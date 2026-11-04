@@ -1,6 +1,7 @@
 ---
 import ContentSection from "./components/ContentSection.astro"
 import DescriptionSection from "./components/DescriptionSection.astro"
+import DetailsHero from "./components/DetailsHero.astro"
 import DetailsPage from "./components/DetailsPage.astro"
 import OpenButton from "./components/main-details/OpenButton.astro"
 import MainDetailsSection from "./components/MainDetailsSection.astro"
@@ -14,9 +15,11 @@ const { mediaId } = Astro.props
 ---
 
 <DetailsPage mediaId={mediaId}>
-  <MainDetailsSection mediaId={mediaId}>
-    <OpenButton className="mt-8" mediaId={mediaId} />
-  </MainDetailsSection>
+  <DetailsHero mediaId={mediaId}>
+    <MainDetailsSection mediaId={mediaId}>
+      <OpenButton className="mt-6" mediaId={mediaId} />
+    </MainDetailsSection>
+  </DetailsHero>
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} />
   <MediaCollectionsSection mediaId={mediaId} />

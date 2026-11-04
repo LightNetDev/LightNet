@@ -1,6 +1,7 @@
 import sharp, { type OverlayOptions } from "sharp"
 
 import type { MediaTypeEntry } from "../../../content/schema/media-type"
+import { getCoverTint } from "./get-cover-tint"
 
 export const OPEN_GRAPH_WIDTH = 1200
 export const OPEN_GRAPH_HEIGHT = 630
@@ -68,19 +69,22 @@ async function renderText(
   return result.info.height <= height ? result : render(true)
 }
 
-export async function createOpenGraphImage({
-  cover,
-  title,
-  authors = [],
-  direction = "ltr",
-  coverImageStyle = "default",
-}: {
-  cover: Buffer
-  title: string
-  authors?: string[] | null
-  direction?: "ltr" | "rtl"
-  coverImageStyle?: MediaTypeEntry["data"]["coverImageStyle"]
-}) {
+export async function createOpenGraphImage(
+  {
+    cover,
+    title,
+    authors = [],
+    direction = "ltr",
+    coverImageStyle = "default",
+  }: {
+    cover: Buffer
+    title: string
+    authors?: string[] | null
+    direction?: "ltr" | "rtl"
+    coverImageStyle?: MediaTypeEntry["data"]["coverImageStyle"]
+  },
+  cacheDir?: URL,
+) {
   const rtl = direction === "rtl"
   const textStart = rtl ? 64 : 560
   const coverImage = await sharp(cover)
@@ -89,9 +93,7 @@ export async function createOpenGraphImage({
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true })
-  const { dominant } = await sharp(coverImage.data, {
-    raw: coverImage.info,
-  }).stats()
+  const tint = await getCoverTint(cover, cacheDir)
   const { width: coverWidth, height: coverHeight } = coverImage.info
   const cornerRadius = coverImageStyle === "book" ? 2 : 6
   const decorations: OverlayOptions[] = []
@@ -118,9 +120,6 @@ export async function createOpenGraphImage({
     .composite(decorations)
     .raw()
     .toBuffer({ resolveWithObject: true })
-  const tint = `rgb(${[dominant.r, dominant.g, dominant.b]
-    .map((channel) => Math.round(250 * 0.68 + channel * 0.32))
-    .join(",")})`
   const coverLeft =
     (rtl ? 704 : 64) + Math.floor((432 - coverImage.info.width) / 2)
   const coverTop = 64 + Math.floor((502 - coverImage.info.height) / 2)
