@@ -1,4 +1,5 @@
 ---
+import { getImage } from "astro:assets"
 import config from "virtual:lightnet/config"
 
 import { getMediaItem } from "../../../content/get-media-items"
@@ -19,10 +20,15 @@ const { defaultLocale, currentLocale, tContentField, tConfigField } =
 const mediaItem = (await getMediaItem(id)).data
 const description = markdownToText(mediaItem.description)
 const shareUrl = new URL(detailsPagePath(currentLocale, { id }), Astro.site)
-const shareImage = new URL(
-  `${detailsPagePath(defaultLocale, { id })}open-graph.png`,
-  Astro.site,
-)
+const coverImage = config.disableOpenGraphImages
+  ? await getImage({ src: mediaItem.image, format: "png" })
+  : undefined
+const shareImage = coverImage
+  ? new URL(coverImage.src, Astro.site)
+  : new URL(
+      `${detailsPagePath(defaultLocale, { id })}open-graph.png`,
+      Astro.site,
+    )
 const jsonLd = await getDetailsPageJsonLd({
   mediaId: id,
   fallbackSchemaType,
@@ -48,8 +54,14 @@ const jsonLd = await getDetailsPageJsonLd({
     <meta property="og:url" content={shareUrl.href} />
     <meta property="og:image" content={shareImage.href} />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:width"
+      content={String(coverImage ? mediaItem.image.width : 1200)}
+    />
+    <meta
+      property="og:image:height"
+      content={String(coverImage ? mediaItem.image.height : 630)}
+    />
     <meta property="og:image:alt" content={mediaItem.title} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={mediaItem.title} />

@@ -155,6 +155,22 @@ test("Should inject prerendered localized Open Graph images", () => {
   })
 })
 
+test("Should skip Open Graph image generation when disabled", () => {
+  const { injectRoute } = runSetup({
+    astroSite: "https://example.com",
+    lightnetConfig: { disableOpenGraphImages: true },
+  })
+
+  expect(injectRoute).not.toHaveBeenCalledWith(
+    expect.objectContaining({
+      pattern: "/[locale]/media/[mediaId]/open-graph.png",
+    }),
+  )
+  expect(injectRoute).toHaveBeenCalledWith(
+    expect.objectContaining({ pattern: "/[locale]/media/[mediaId]" }),
+  )
+})
+
 test("Should skip robots.txt when search indexing is disabled", () => {
   const { injectRoute } = runSetup({
     astroSite: "https://example.com",

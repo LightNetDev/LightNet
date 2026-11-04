@@ -115,6 +115,11 @@ export const configSchema = z.object({
    */
   disallowSearchIndexing: z.boolean().optional(),
   /**
+   * Disable Open Graph image generation and use media cover images for
+   * Open Graph and Twitter previews instead. Generation is enabled by default.
+   */
+  disableOpenGraphImages: z.boolean().default(false),
+  /**
    * Link to manifest file within public/ folder
    */
   manifest: z.string().transform(absolutePath).optional(),

@@ -71,11 +71,13 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           prerender: true,
         })
 
-        injectRoute({
-          pattern: "/[locale]/media/[mediaId]/open-graph.png",
-          entrypoint: "lightnet/pages/detail-page/api/open-graph.ts",
-          prerender: true,
-        })
+        if (!config.disableOpenGraphImages) {
+          injectRoute({
+            pattern: "/[locale]/media/[mediaId]/open-graph.png",
+            entrypoint: "lightnet/pages/detail-page/api/open-graph.ts",
+            prerender: true,
+          })
+        }
 
         injectRoute({
           pattern: "/api/internal/search.json",
