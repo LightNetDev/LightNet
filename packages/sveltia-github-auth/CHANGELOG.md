@@ -1,5 +1,11 @@
 # @lightnet/sveltia-github-auth
 
+## 1.1.3
+
+### Patch Changes
+
+- [#477](https://github.com/LightNetDev/LightNet/pull/477) [`67d9a6e`](https://github.com/LightNetDev/LightNet/commit/67d9a6eab378697f0baa80b70939b69c8fbdf237) - Update dependencies.
+
 ## 1.1.2
 
 ### Patch Changes
