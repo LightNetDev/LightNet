@@ -1,5 +1,21 @@
 # lightnet
 
+## 4.11.0
+
+### Minor Changes
+
+- [#479](https://github.com/LightNetDev/LightNet/pull/479) [`d152514`](https://github.com/LightNetDev/LightNet/commit/d152514a2a637cdb6f6fb8ad8f83702a5e7e246a) - Add `disableOpenGraphImages` to skip generating Open Graph images and use media cover images for Open Graph and Twitter previews instead. Generation remains enabled by default.
+
+- [#479](https://github.com/LightNetDev/LightNet/pull/479) [`d152514`](https://github.com/LightNetDev/LightNet/commit/d152514a2a637cdb6f6fb8ad8f83702a5e7e246a) - Add cover-colored gradients to the opening section of details pages, with softer cover shadows and clearer primary actions. Share color extraction with Open Graph images, persist calculated colors in Astro's cache directory across builds, and use CSS custom properties to keep gradient styles independent of the number of covers.
+
+### Patch Changes
+
+- [#479](https://github.com/LightNetDev/LightNet/pull/479) [`d152514`](https://github.com/LightNetDev/LightNet/commit/d152514a2a637cdb6f6fb8ad8f83702a5e7e246a) - Use color tint for HighlightSection coloring.
+
+- [#479](https://github.com/LightNetDev/LightNet/pull/479) [`d152514`](https://github.com/LightNetDev/LightNet/commit/d152514a2a637cdb6f6fb8ad8f83702a5e7e246a) - Add transparent effect to headerbar.
+
+- [#479](https://github.com/LightNetDev/LightNet/pull/479) [`d152514`](https://github.com/LightNetDev/LightNet/commit/d152514a2a637cdb6f6fb8ad8f83702a5e7e246a) - Add performance improvements for open-graph image generation.
+
 ## 4.10.0
 
 ### Minor Changes
