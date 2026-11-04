@@ -6,7 +6,7 @@ import sharp from "sharp"
 import { createOpenGraphImage } from "./create-open-graph-image"
 
 // Bump when changing the renderer, layout, or fonts to invalidate old images.
-const RENDERER_VERSION = 1
+const RENDERER_VERSION = 345
 
 export async function getCachedOpenGraphImage(
   input: Parameters<typeof createOpenGraphImage>[0],
