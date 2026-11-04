@@ -33,7 +33,9 @@ try {
 
 <style>
   .details-hero {
-    padding-block: 2.5rem 3rem;
+    /* Extend the same gradient behind the fixed header. */
+    margin-block-start: -3.5rem;
+    padding-block: calc(2.5rem + 3.5rem) 3rem;
     background:
       linear-gradient(to bottom, transparent 40%, #f9fafb),
       linear-gradient(var(--hero-direction), var(--cover-tint), #f9fafb 85%);
@@ -41,7 +43,8 @@ try {
 
   @media (min-width: 640px) {
     .details-hero {
-      padding-block: 4rem;
+      margin-block-start: -5rem;
+      padding-block: calc(4rem + 5rem) 4rem;
     }
   }
 </style>
