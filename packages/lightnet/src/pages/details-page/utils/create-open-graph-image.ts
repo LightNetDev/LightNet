@@ -1,6 +1,7 @@
 import sharp, { type OverlayOptions } from "sharp"
 
 import type { MediaTypeEntry } from "../../../content/schema/media-type"
+import { getImageTint } from "../../../utils/get-image-tint"
 
 export const OPEN_GRAPH_WIDTH = 1200
 export const OPEN_GRAPH_HEIGHT = 630
@@ -25,61 +26,74 @@ async function renderText(
   {
     width,
     height,
-    size,
+    maxSize,
     color,
     bold = false,
     rtl = false,
   }: {
     width: number
     height: number
-    size: number
+    maxSize: number
     color: string
     bold?: boolean
     rtl?: boolean
   },
 ) {
-  let fontSize = size
-  // Measure the rendered text and reduce the font until every line fits.
-  // Pango handles Unicode shaping, bidi text, and wrapping long words.
-  while (true) {
-    const result = await sharp({
+  // Estimate the occupied area using average glyph width (0.55 em) and
+  // line height (1.2 em). Count Unicode code points rather than UTF-16 units.
+  const size = Math.max(
+    1,
+    Math.min(
+      maxSize,
+      Math.floor(
+        Math.sqrt((width * height) / ([...value].length * 0.55 * 1.2)),
+      ),
+    ),
+  )
+  const render = (fit = false) =>
+    sharp({
       text: {
         text: `<span foreground="${color}">${escapeMarkup(value)}</span>`,
-        font: `sans ${bold ? "bold " : ""}${fontSize}`,
+        font: `sans ${bold ? "bold " : ""}${size}`,
         width,
+        ...(fit ? { height } : {}),
         wrap: "word-char",
         align: rtl ? "right" : "left",
         rgba: true,
       },
     })
-      .png()
+      .raw()
       .toBuffer({ resolveWithObject: true })
-    if (result.info.height <= height) return result
-    fontSize *= 0.9
-  }
+  const result = await render()
+  // Wide glyphs, shaping, and explicit line breaks can exceed the estimate.
+  return result.info.height <= height ? result : render(true)
 }
 
-export async function createOpenGraphImage({
-  cover,
-  title,
-  authors = [],
-  direction = "ltr",
-  coverImageStyle = "default",
-}: {
-  cover: Buffer
-  title: string
-  authors?: string[] | null
-  direction?: "ltr" | "rtl"
-  coverImageStyle?: MediaTypeEntry["data"]["coverImageStyle"]
-}) {
+export async function createOpenGraphImage(
+  {
+    cover,
+    title,
+    authors = [],
+    direction = "ltr",
+    coverImageStyle = "default",
+  }: {
+    cover: Buffer
+    title: string
+    authors?: string[] | null
+    direction?: "ltr" | "rtl"
+    coverImageStyle?: MediaTypeEntry["data"]["coverImageStyle"]
+  },
+  cacheDir?: URL,
+) {
   const rtl = direction === "rtl"
   const textStart = rtl ? 64 : 560
   const coverImage = await sharp(cover)
     .autoOrient()
     .resize(432, 502, { fit: "inside" })
-    .png()
+    .ensureAlpha()
+    .raw()
     .toBuffer({ resolveWithObject: true })
-  const { dominant } = await sharp(coverImage.data).stats()
+  const tint = await getImageTint(cover, cacheDir)
   const { width: coverWidth, height: coverHeight } = coverImage.info
   const cornerRadius = coverImageStyle === "book" ? 2 : 6
   const decorations: OverlayOptions[] = []
@@ -102,20 +116,17 @@ export async function createOpenGraphImage({
     </svg>`),
     blend: "dest-in",
   })
-  const decoratedCover = await sharp(coverImage.data)
-    .ensureAlpha()
+  const decoratedCover = await sharp(coverImage.data, { raw: coverImage.info })
     .composite(decorations)
-    .png()
-    .toBuffer()
-  const tint = `rgb(${[dominant.r, dominant.g, dominant.b]
-    .map((channel) => Math.round(250 * 0.68 + channel * 0.32))
-    .join(",")})`
+    .raw()
+    .toBuffer({ resolveWithObject: true })
   const coverLeft =
     (rtl ? 704 : 64) + Math.floor((432 - coverImage.info.width) / 2)
   const coverTop = 64 + Math.floor((502 - coverImage.info.height) / 2)
   const layers: OverlayOptions[] = [
     {
-      input: decoratedCover,
+      input: decoratedCover.data,
+      raw: decoratedCover.info,
       left: coverLeft,
       top: coverTop,
     },
@@ -125,7 +136,7 @@ export async function createOpenGraphImage({
     value: string,
     top: number,
     height: number,
-    size: number,
+    maxSize: number,
     color: string,
     bold = false,
   ) => {
@@ -133,13 +144,14 @@ export async function createOpenGraphImage({
     const text = await renderText(value, {
       width: 576,
       height,
-      size,
+      maxSize,
       color,
       bold,
       rtl,
     })
     textLayers.push({
       input: text.data,
+      raw: text.info,
       left: textStart + (rtl ? 576 - text.info.width : 0),
       top,
     })

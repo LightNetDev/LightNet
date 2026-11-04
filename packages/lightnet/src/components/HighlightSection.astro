@@ -1,7 +1,10 @@
 ---
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
+import { cacheDir } from "astro:config/server"
 import { ArrowRightIcon } from "lucide-react"
+
+import { getImageTint } from "../utils/get-image-tint"
 
 interface Props {
   image: ImageMetadata
@@ -16,14 +19,30 @@ interface Props {
 
 const { image, id, title, text, link, className, titleClass, textClass } =
   Astro.props
+let tint = "#e5e7eb"
+try {
+  tint = await getImageTint(image, new URL(cacheDir))
+} catch (error) {
+  console.warn("[lightnet] Cannot extract highlight image color:", error)
+}
+const tintChannels = tint.startsWith("rgb(")
+  ? tint.slice(4, -1).split(",").map(Number)
+  : [229, 231, 235]
+const darkTint = (factor: number) =>
+  `rgb(${tintChannels.map((channel) => Math.round(channel * factor)).join(",")})`
 const iconDirectionClass =
   Astro.locals.i18n.direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <section
-  class="mt-24 w-full bg-gray-200 md:mt-28"
+  class="mt-24 w-full bg-[var(--image-tint)] text-gray-900 md:mt-28"
   class:list={[className]}
   id={id}
+  style={{
+    "--image-tint": tint,
+    "--button-tint": darkTint(0.12),
+    "--button-hover-tint": darkTint(0.08),
+  }}
 >
   <div class="flex flex-col overflow-hidden md:flex-row">
     <Image
@@ -49,7 +68,7 @@ const iconDirectionClass =
       )}
       {link && (
         <a
-          class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-gray-50 shadow-sm hover:bg-primary/85 hover:text-gray-100"
+          class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[var(--button-tint)] px-6 py-3 text-sm font-bold text-gray-50 shadow-sm transition-colors hover:bg-[var(--button-hover-tint)] hover:text-gray-100"
           href={link.href}
         >
           {link.text}
@@ -60,3 +79,13 @@ const iconDirectionClass =
     </div>
   </div>
 </section>
+
+<style>
+  section {
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 25%),
+      transparent
+    );
+  }
+</style>

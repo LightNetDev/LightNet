@@ -1,0 +1,50 @@
+---
+import { cacheDir } from "astro:config/server"
+
+import { getImageTint } from "../../../utils/get-image-tint"
+import { getMediaCover } from "../utils/get-media-cover"
+
+interface Props {
+  mediaId: string
+}
+
+const { direction } = Astro.locals.i18n
+let tint = "#fafafa"
+try {
+  tint = await getImageTint(
+    await getMediaCover(Astro.props.mediaId),
+    new URL(cacheDir),
+  )
+} catch (error) {
+  console.warn("[lightnet] Cannot extract details page cover color:", error)
+}
+---
+
+<div
+  class="details-hero"
+  style={{
+    "--cover-tint": tint,
+    "--hero-direction":
+      direction === "rtl" ? "to bottom left" : "to bottom right",
+  }}
+>
+  <slot />
+</div>
+
+<style>
+  .details-hero {
+    /* Extend the same gradient behind the fixed header. */
+    margin-block-start: -3.5rem;
+    padding-block: calc(2.5rem + 3.5rem) 3rem;
+    background:
+      linear-gradient(to bottom, transparent 40%, #f9fafb),
+      linear-gradient(var(--hero-direction), var(--cover-tint), #f9fafb 85%);
+  }
+
+  @media (min-width: 640px) {
+    .details-hero {
+      margin-block-start: -5rem;
+      padding-block: calc(4rem + 5rem) 4rem;
+    }
+  }
+</style>

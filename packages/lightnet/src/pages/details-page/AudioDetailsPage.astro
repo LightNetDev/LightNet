@@ -2,6 +2,7 @@
 import AudioPanel from "./components/AudioPanel.astro"
 import ContentSection from "./components/ContentSection.astro"
 import DescriptionSection from "./components/DescriptionSection.astro"
+import DetailsHero from "./components/DetailsHero.astro"
 import DetailsPage from "./components/DetailsPage.astro"
 import MainDetailsSection from "./components/MainDetailsSection.astro"
 import MediaCollectionsSection from "./components/MediaCollectionsSection.astro"
@@ -15,8 +16,10 @@ const { mediaId } = Astro.props
 ---
 
 <DetailsPage mediaId={mediaId} fallbackSchemaType="AudioObject">
-  <MainDetailsSection imageSize="md" mediaId={mediaId} />
-  <AudioPanel mediaId={mediaId} className="mt-10" />
+  <DetailsHero mediaId={mediaId}>
+    <MainDetailsSection imageSize="md" mediaId={mediaId} />
+    <AudioPanel mediaId={mediaId} className="mt-10" />
+  </DetailsHero>
   <DescriptionSection mediaId={mediaId} />
   <ContentSection mediaId={mediaId} minimumItems={1} />
   <MediaCollectionsSection mediaId={mediaId} />
