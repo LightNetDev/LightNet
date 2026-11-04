@@ -5,18 +5,17 @@ import { getMediaItem } from "../../../content/get-media-items"
 import { getMediaType } from "../../../content/get-media-types"
 import type { TranslateContentFieldFn } from "../../../i18n/translate-map"
 import { detailsPagePath } from "../../../utils/paths"
-import type { DetailsPageLayout } from "./create-media-item-json-ld"
 import { createMediaItemJsonLd } from "./create-media-item-json-ld"
 
 export async function getDetailsPageJsonLd({
   mediaId,
-  layout,
+  fallbackSchemaType,
   site,
   defaultLocale,
   tContentField,
 }: {
   mediaId: string
-  layout: DetailsPageLayout
+  fallbackSchemaType: string
   site: URL | undefined
   defaultLocale: string
   tContentField: TranslateContentFieldFn
@@ -36,7 +35,7 @@ export async function getDetailsPageJsonLd({
 
   return createMediaItemJsonLd({
     item: item.data,
-    layout,
+    fallbackSchemaType,
     schemaType: mediaType.data.schemaType,
     canonicalUrl,
     imageUrl: new URL(image.src, site).href,

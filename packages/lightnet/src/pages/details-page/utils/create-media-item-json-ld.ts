@@ -23,11 +23,9 @@ const FILE_FORMATS: Record<string, { type: string; mime: string }> = {
   txt: { type: "MediaObject", mime: "text/plain" },
 }
 
-export type DetailsPageLayout = "default" | "audio" | "video"
-
 export function createMediaItemJsonLd({
   item,
-  layout,
+  fallbackSchemaType = "CreativeWork",
   schemaType,
   canonicalUrl,
   imageUrl,
@@ -35,16 +33,17 @@ export function createMediaItemJsonLd({
   contentLabels = [],
 }: {
   item: MediaItemEntry["data"]
-  layout: DetailsPageLayout
+  fallbackSchemaType?: string
   schemaType?: MediaTypeEntry["data"]["schemaType"]
   canonicalUrl: URL
   imageUrl: string
   categoryNames?: string[]
   contentLabels?: (string | undefined)[]
 }): Record<string, unknown> {
+  const resolvedSchemaType = schemaType ?? fallbackSchemaType
   const base = {
     "@context": "https://schema.org",
-    "@type": schemaType ?? "CreativeWork",
+    "@type": resolvedSchemaType,
     "@id": `${canonicalUrl.href}#work`,
     url: canonicalUrl.href,
     name: item.title,
@@ -87,7 +86,10 @@ export function createMediaItemJsonLd({
   })
 
   const encodings = media.filter((entry) => entry !== undefined)
-  if (schemaType === "SoftwareApplication" || schemaType === "WebPage") {
+  if (
+    resolvedSchemaType === "SoftwareApplication" ||
+    resolvedSchemaType === "WebPage"
+  ) {
     const primary = item.content[0]
     const resourceUrl =
       primary?.type === "link"
@@ -102,52 +104,32 @@ export function createMediaItemJsonLd({
   }
 
   if (
-    schemaType === "AudioObject" ||
-    schemaType === "VideoObject" ||
-    schemaType === "ImageObject"
+    resolvedSchemaType === "AudioObject" ||
+    resolvedSchemaType === "VideoObject" ||
+    resolvedSchemaType === "ImageObject"
   ) {
-    const matching = encodings.filter((entry) => entry["@type"] === schemaType)
-    if (schemaType === "AudioObject" && matching.length > 1) {
+    const matching = encodings.filter(
+      (entry) => entry["@type"] === resolvedSchemaType,
+    )
+    if (resolvedSchemaType === "AudioObject" && matching.length > 1) {
       return {
         ...base,
         hasPart: matching,
-        encoding: encodings.filter((entry) => entry["@type"] !== schemaType),
+        encoding: encodings.filter(
+          (entry) => entry["@type"] !== resolvedSchemaType,
+        ),
       }
     }
-    const primary = media[0]?.["@type"] === schemaType ? media[0] : undefined
+    const primary =
+      media[0]?.["@type"] === resolvedSchemaType ? media[0] : undefined
     const alternatives = encodings.filter((entry) => entry !== primary)
     return {
       ...primary,
       ...base,
-      ...(schemaType === "VideoObject" ? { thumbnailUrl: imageUrl } : {}),
+      ...(resolvedSchemaType === "VideoObject"
+        ? { thumbnailUrl: imageUrl }
+        : {}),
       encoding: alternatives.length ? alternatives : undefined,
-    }
-  }
-
-  if (
-    !schemaType &&
-    layout === "video" &&
-    media[0]?.["@type"] === "VideoObject"
-  ) {
-    return {
-      ...media[0],
-      ...base,
-      "@type": "VideoObject",
-      thumbnailUrl: imageUrl,
-    }
-  }
-
-  if (layout === "audio") {
-    const tracks = encodings.filter((entry) => entry["@type"] === "AudioObject")
-    if (!schemaType && tracks.length === 1 && item.content.length === 1) {
-      return { ...tracks[0], ...base, "@type": "AudioObject" }
-    }
-    if (tracks.length && item.content.length > 1) {
-      return {
-        ...base,
-        hasPart: tracks,
-        encoding: encodings.filter((entry) => entry["@type"] !== "AudioObject"),
-      }
     }
   }
 

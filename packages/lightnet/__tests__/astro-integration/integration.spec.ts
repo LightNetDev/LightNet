@@ -146,6 +146,15 @@ test("Should inject a prerendered robots.txt endpoint", () => {
   })
 })
 
+test("Should inject prerendered localized Open Graph images", () => {
+  const { injectRoute } = runSetup({ astroSite: "https://example.com" })
+  expect(injectRoute).toHaveBeenCalledWith({
+    pattern: "/[locale]/media/[mediaId]/open-graph.png",
+    entrypoint: "lightnet/pages/detail-page/api/open-graph.ts",
+    prerender: true,
+  })
+})
+
 test("Should skip robots.txt when search indexing is disabled", () => {
   const { injectRoute } = runSetup({
     astroSite: "https://example.com",

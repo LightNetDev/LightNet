@@ -39,7 +39,7 @@
     "lightnet": "^4.9.0"
   },
   "dependencies": {
-    "@sveltia/cms": "0.256.1"
+    "@sveltia/cms": "0.257.0"
   },
   "devDependencies": {
     "@internal/e2e-test-utils": "workspace:^",
@@ -47,7 +47,7 @@
     "astro": "^6.4.8",
     "lightnet": "workspace:^",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   },
   "engines": {
     "node": ">=22"
