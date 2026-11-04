@@ -10,9 +10,9 @@ import { createOpenGraphImage } from "../utils/create-open-graph-image"
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const items = await getCollection("media")
-  return config.locales.flatMap((locale) =>
-    items.map(({ id: mediaId }) => ({ params: { locale, mediaId } })),
-  )
+  return items.map(({ id: mediaId }) => ({
+    params: { locale: config.defaultLocale, mediaId },
+  }))
 }
 
 export const GET: APIRoute = async ({ params, locals }) => {

@@ -19,7 +19,10 @@ const { defaultLocale, currentLocale, tContentField, tConfigField } =
 const mediaItem = (await getMediaItem(id)).data
 const description = markdownToText(mediaItem.description)
 const shareUrl = new URL(detailsPagePath(currentLocale, { id }), Astro.site)
-const shareImage = new URL("open-graph.png", shareUrl)
+const shareImage = new URL(
+  `${detailsPagePath(defaultLocale, { id })}open-graph.png`,
+  Astro.site,
+)
 const jsonLd = await getDetailsPageJsonLd({
   mediaId: id,
   fallbackSchemaType,

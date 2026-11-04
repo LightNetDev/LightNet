@@ -25,38 +25,47 @@ async function renderText(
   {
     width,
     height,
-    size,
+    maxSize,
     color,
     bold = false,
     rtl = false,
   }: {
     width: number
     height: number
-    size: number
+    maxSize: number
     color: string
     bold?: boolean
     rtl?: boolean
   },
 ) {
-  let fontSize = size
-  // Measure the rendered text and reduce the font until every line fits.
-  // Pango handles Unicode shaping, bidi text, and wrapping long words.
-  while (true) {
-    const result = await sharp({
+  // Estimate the occupied area using average glyph width (0.55 em) and
+  // line height (1.2 em). Count Unicode code points rather than UTF-16 units.
+  const size = Math.max(
+    1,
+    Math.min(
+      maxSize,
+      Math.floor(
+        Math.sqrt((width * height) / ([...value].length * 0.55 * 1.2)),
+      ),
+    ),
+  )
+  const render = (fit = false) =>
+    sharp({
       text: {
         text: `<span foreground="${color}">${escapeMarkup(value)}</span>`,
-        font: `sans ${bold ? "bold " : ""}${fontSize}`,
+        font: `sans ${bold ? "bold " : ""}${size}`,
         width,
+        ...(fit ? { height } : {}),
         wrap: "word-char",
         align: rtl ? "right" : "left",
         rgba: true,
       },
     })
-      .png()
+      .raw()
       .toBuffer({ resolveWithObject: true })
-    if (result.info.height <= height) return result
-    fontSize *= 0.9
-  }
+  const result = await render()
+  // Wide glyphs, shaping, and explicit line breaks can exceed the estimate.
+  return result.info.height <= height ? result : render(true)
 }
 
 export async function createOpenGraphImage({
@@ -77,9 +86,12 @@ export async function createOpenGraphImage({
   const coverImage = await sharp(cover)
     .autoOrient()
     .resize(432, 502, { fit: "inside" })
-    .png()
+    .ensureAlpha()
+    .raw()
     .toBuffer({ resolveWithObject: true })
-  const { dominant } = await sharp(coverImage.data).stats()
+  const { dominant } = await sharp(coverImage.data, {
+    raw: coverImage.info,
+  }).stats()
   const { width: coverWidth, height: coverHeight } = coverImage.info
   const cornerRadius = coverImageStyle === "book" ? 2 : 6
   const decorations: OverlayOptions[] = []
@@ -102,11 +114,10 @@ export async function createOpenGraphImage({
     </svg>`),
     blend: "dest-in",
   })
-  const decoratedCover = await sharp(coverImage.data)
-    .ensureAlpha()
+  const decoratedCover = await sharp(coverImage.data, { raw: coverImage.info })
     .composite(decorations)
-    .png()
-    .toBuffer()
+    .raw()
+    .toBuffer({ resolveWithObject: true })
   const tint = `rgb(${[dominant.r, dominant.g, dominant.b]
     .map((channel) => Math.round(250 * 0.68 + channel * 0.32))
     .join(",")})`
@@ -115,7 +126,8 @@ export async function createOpenGraphImage({
   const coverTop = 64 + Math.floor((502 - coverImage.info.height) / 2)
   const layers: OverlayOptions[] = [
     {
-      input: decoratedCover,
+      input: decoratedCover.data,
+      raw: decoratedCover.info,
       left: coverLeft,
       top: coverTop,
     },
@@ -125,7 +137,7 @@ export async function createOpenGraphImage({
     value: string,
     top: number,
     height: number,
-    size: number,
+    maxSize: number,
     color: string,
     bold = false,
   ) => {
@@ -133,13 +145,14 @@ export async function createOpenGraphImage({
     const text = await renderText(value, {
       width: 576,
       height,
-      size,
+      maxSize,
       color,
       bold,
       rtl,
     })
     textLayers.push({
       input: text.data,
+      raw: text.info,
       left: textStart + (rtl ? 576 - text.info.width : 0),
       top,
     })
