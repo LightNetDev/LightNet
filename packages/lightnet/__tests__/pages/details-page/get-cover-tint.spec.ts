@@ -30,14 +30,81 @@ async function reload() {
     .getCoverTint
 }
 
+async function tintChannels(svg: string) {
+  const tint = await getCoverTint(Buffer.from(svg))
+  return tint.match(/\d+/g)!.map(Number)
+}
+
+test.each(["#222", "#888", "#eee", "#304850"])(
+  "Prefers a substantial colorful region over a dominant neutral background: %s",
+  async (background) => {
+    const [r, g, b] = await tintChannels(
+      `<svg width="100" height="100">
+        <rect width="100" height="100" fill="${background}"/>
+        <rect width="20" height="100" fill="#2080e0"/>
+        <rect width="10" height="100" x="20" fill="red"/>
+      </svg>`,
+    )
+    expect(b).toBeGreaterThan(r + 40)
+    expect(g).toBeGreaterThan(r)
+  },
+)
+
+test("Keeps monochrome images neutral", async () => {
+  const [r, g, b] = await tintChannels(
+    '<svg width="100" height="100"><rect width="100" height="100" fill="#888"/></svg>',
+  )
+  expect(r).toBe(g)
+  expect(g).toBe(b)
+})
+
+test("Does not let a tiny colorful accent dominate a neutral image", async () => {
+  const [r, g, b] = await tintChannels(
+    `<svg width="100" height="100">
+      <rect width="100" height="100" fill="#888"/>
+      <rect width="2" height="100" fill="red"/>
+    </svg>`,
+  )
+  expect(r).toBe(g)
+  expect(g).toBe(b)
+})
+
+test("Weights colors by opacity and ignores hidden RGB values", async () => {
+  const pixels = Buffer.alloc(100 * 100 * 4)
+  for (let offset = 0; offset < pixels.length; offset += 4) {
+    // Mostly invisible red pixels must not outweigh the opaque blue artwork.
+    const blue = offset < 10 * 100 * 4
+    pixels[offset] = blue ? 0 : 255
+    pixels[offset + 2] = blue ? 255 : 0
+    pixels[offset + 3] = blue ? 255 : offset < 50 * 100 * 4 ? 1 : 0
+  }
+  const image = await sharp(pixels, {
+    raw: { width: 100, height: 100, channels: 4 },
+  })
+    .png()
+    .toBuffer()
+  const tint = await getCoverTint(image)
+  const [r, , b] = tint.match(/\d+/g)!.map(Number)
+  expect(b).toBeGreaterThan(r + 40)
+})
+
+test("Uses a light neutral fallback for fully transparent artwork", async () => {
+  const [r, g, b] = await tintChannels(
+    '<svg width="100" height="100"><rect width="100" height="100" fill="red" fill-opacity="0"/></svg>',
+  )
+  expect(r).toBe(g)
+  expect(g).toBe(b)
+  expect(r).toBeGreaterThan(240)
+})
+
 test("Reuses the color from disk after the module is reloaded", async () => {
-  const stats = vi.spyOn(sharp.prototype, "stats")
+  const extraction = vi.spyOn(sharp.prototype, "autoOrient")
   const tint = await getCoverTint(cover, cacheDir)
-  expect(stats).toHaveBeenCalledTimes(1)
+  expect(extraction).toHaveBeenCalledTimes(1)
 
   const reloaded = await reload()
   expect(await reloaded(cover, cacheDir)).toBe(tint)
-  expect(stats).toHaveBeenCalledTimes(1)
+  expect(extraction).toHaveBeenCalledTimes(1)
 
   const directory = new URL("lightnet/cover-tints/", cacheDir)
   const files = await readdir(directory)
@@ -68,9 +135,9 @@ test.each(["invalid", "rgb(999,0,0)"])(
     await writeFile(path, invalid)
 
     const reloaded = await reload()
-    const stats = vi.spyOn(sharp.prototype, "stats")
+    const extraction = vi.spyOn(sharp.prototype, "autoOrient")
     expect(await reloaded(cover, cacheDir)).toBe(tint)
-    expect(stats).toHaveBeenCalledTimes(1)
+    expect(extraction).toHaveBeenCalledTimes(1)
     expect(await readFile(path, "utf8")).toBe(tint)
   },
 )
@@ -86,12 +153,12 @@ test("Still calculates a color when the cache is inaccessible", async () => {
 })
 
 test("Shares color extraction between concurrent requests", async () => {
-  const stats = vi.spyOn(sharp.prototype, "stats")
+  const extraction = vi.spyOn(sharp.prototype, "autoOrient")
   const colors = await Promise.all(
     Array.from({ length: 5 }, () => getCoverTint(cover, cacheDir)),
   )
   expect(new Set(colors).size).toBe(1)
-  expect(stats).toHaveBeenCalledTimes(1)
+  expect(extraction).toHaveBeenCalledTimes(1)
   expect(
     await readdir(new URL("lightnet/cover-tints/", cacheDir)),
   ).toHaveLength(1)

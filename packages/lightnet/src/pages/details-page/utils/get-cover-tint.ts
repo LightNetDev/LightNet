@@ -6,7 +6,54 @@ import sharp from "sharp"
 // Bound the cache for long-running dev/SSR servers. Locales share the same tint.
 const tints = new Map<string, Promise<string>>()
 // Bump when changing the extraction or tint formula.
-const TINT_VERSION = 1
+const TINT_VERSION = 2
+
+function getChromaticColor(pixels: Buffer): number[] | undefined {
+  // Group similar RGB colors into 16 levels per channel.
+  const weights = new Float64Array(4096)
+  const reds = new Float64Array(4096)
+  const greens = new Float64Array(4096)
+  const blues = new Float64Array(4096)
+  let visibleWeight = 0
+  let colorfulWeight = 0
+  let largestBucket = 0
+
+  for (let offset = 0; offset < pixels.length; offset += 4) {
+    const r = pixels[offset]
+    const g = pixels[offset + 1]
+    const b = pixels[offset + 2]
+    const weight = pixels[offset + 3] / 255
+    visibleWeight += weight
+
+    const max = Math.max(r, g, b)
+    const min = Math.min(r, g, b)
+    if (
+      weight === 0 ||
+      max < 64 ||
+      min > 230 ||
+      max - min < 40 ||
+      (max - min) / max < 0.15
+    ) {
+      continue
+    }
+
+    const bucket = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4)
+    weights[bucket] += weight
+    reds[bucket] += r * weight
+    greens[bucket] += g * weight
+    blues[bucket] += b * weight
+    colorfulWeight += weight
+    if (weights[bucket] > weights[largestBucket]) largestBucket = bucket
+  }
+
+  // Tiny colorful accents should not determine an otherwise neutral cover.
+  if (colorfulWeight === 0 || colorfulWeight < visibleWeight * 0.05) {
+    return undefined
+  }
+  return [reds[largestBucket], greens[largestBucket], blues[largestBucket]].map(
+    (sum) => sum / weights[largestBucket],
+  )
+}
 
 export function getCoverTint(cover: Buffer, cacheDir?: URL): Promise<string> {
   const key = createHash("sha256")
@@ -41,11 +88,23 @@ export function getCoverTint(cover: Buffer, cacheDir?: URL): Promise<string> {
     const image = await sharp(cover)
       .autoOrient()
       .resize(432, 502, { fit: "inside" })
+      .toColourspace("srgb")
       .ensureAlpha()
       .raw()
       .toBuffer({ resolveWithObject: true })
-    const { dominant } = await sharp(image.data, { raw: image.info }).stats()
-    const value = `rgb(${[dominant.r, dominant.g, dominant.b]
+    let color = getChromaticColor(image.data)
+    if (!color) {
+      // Materialize flattening before stats(), which reads input pixels directly.
+      const opaque = await sharp(image.data, { raw: image.info })
+        .flatten({ background: "#fafafa" })
+        .raw()
+        .toBuffer({ resolveWithObject: true })
+      const { dominant } = await sharp(opaque.data, {
+        raw: opaque.info,
+      }).stats()
+      color = [dominant.r, dominant.g, dominant.b]
+    }
+    const value = `rgb(${color
       .map((channel) => Math.round(250 * 0.68 + channel * 0.32))
       .join(",")})`
     if (directory && tintPath) {
