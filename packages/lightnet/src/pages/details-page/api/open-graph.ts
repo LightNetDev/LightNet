@@ -1,12 +1,13 @@
 import { readFile } from "node:fs/promises"
 
 import type { APIRoute, GetStaticPaths } from "astro"
+import { cacheDir } from "astro:config/server"
 import { getCollection, getEntry } from "astro:content"
 import config from "virtual:lightnet/config"
 
 import { getMediaItem } from "../../../content/get-media-items"
 import { getMediaType } from "../../../content/get-media-types"
-import { createOpenGraphImage } from "../utils/create-open-graph-image"
+import { getCachedOpenGraphImage } from "../utils/get-cached-open-graph-image"
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const items = await getCollection("media")
@@ -28,13 +29,16 @@ export const GET: APIRoute = async ({ params, locals }) => {
     )
   }
   const { direction } = locals.i18n
-  const png = await createOpenGraphImage({
-    cover: await readFile(imagePath),
-    coverImageStyle: mediaType.data.coverImageStyle,
-    title: item.data.title,
-    authors: item.data.authors,
-    direction,
-  })
+  const png = await getCachedOpenGraphImage(
+    {
+      cover: await readFile(imagePath),
+      coverImageStyle: mediaType.data.coverImageStyle,
+      title: item.data.title,
+      authors: item.data.authors,
+      direction,
+    },
+    new URL(cacheDir),
+  )
   return new Response(new Uint8Array(png), {
     headers: { "Content-Type": "image/png" },
   })
