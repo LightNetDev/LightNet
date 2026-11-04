@@ -17,12 +17,12 @@ const item: MediaItemEntry["data"] = {
 
 function build(
   urls: string[],
-  layout: "default" | "audio" | "video" = "default",
+  fallbackSchemaType = "CreativeWork",
   schemaType?: MediaTypeEntry["data"]["schemaType"],
 ) {
   return createMediaItemJsonLd({
     item: { ...item, content: urls.map((url) => ({ type: "link", url })) },
-    layout,
+    fallbackSchemaType,
     schemaType,
     canonicalUrl: new URL("https://example.com/en/media/work/"),
     imageUrl: "https://example.com/cover.webp",
@@ -36,7 +36,7 @@ test.each(["SoftwareApplication", "WebPage"] as const)(
   (schemaType) => {
     const result = build(
       ["https://resource.example/app?lang=ar#about", "https://other.example/"],
-      "default",
+      "CreativeWork",
       schemaType,
     )
     expect(result).toMatchObject({
@@ -62,7 +62,7 @@ test.each([
   (url) => {
     for (const schemaType of ["SoftwareApplication", "WebPage"] as const) {
       expect(
-        build([url, "https://resource.example/"], "default", schemaType),
+        build([url, "https://resource.example/"], "CreativeWork", schemaType),
       ).toMatchObject({
         "@type": schemaType,
         url: "https://example.com/en/media/work/",
@@ -81,7 +81,7 @@ test("Does not use an uploaded file as the application URL", () => {
         { type: "link", url: "https://resource.example/app" },
       ],
     },
-    layout: "default",
+    fallbackSchemaType: "CreativeWork",
     schemaType: "SoftwareApplication",
     canonicalUrl: new URL("https://example.com/en/media/work/"),
     imageUrl: "https://example.com/cover.webp",
@@ -92,7 +92,7 @@ test("Does not use an uploaded file as the application URL", () => {
 
 test("Resolves relative web resource links and preserves supplemental file encodings", () => {
   expect(
-    build(["/resource/", "/guide.pdf"], "default", "WebPage"),
+    build(["/resource/", "/guide.pdf"], "CreativeWork", "WebPage"),
   ).toMatchObject({
     "@type": "WebPage",
     url: "https://example.com/resource/",
@@ -155,13 +155,13 @@ test("Describes mixed known files without promoting the whole work to one media 
 })
 
 test("Uses an AudioObject for one track and separate parts for multiple tracks", () => {
-  expect(build(["/track.mp3"], "audio")).toMatchObject({
+  expect(build(["/track.mp3"], "AudioObject")).toMatchObject({
     "@type": "AudioObject",
     name: "A work",
     contentUrl: "https://example.com/track.mp3",
   })
-  expect(build(["/one.mp3", "/two.mp3"], "audio")).toMatchObject({
-    "@type": "CreativeWork",
+  expect(build(["/one.mp3", "/two.mp3"], "AudioObject")).toMatchObject({
+    "@type": "AudioObject",
     hasPart: [
       {
         "@type": "AudioObject",
@@ -197,7 +197,7 @@ test.each([
     "https://player.vimeo.com/video/123?h=secret",
   ],
 ])("Uses a player URL for hosted video %s", (url, embedUrl) => {
-  const result = build([url], "video")
+  const result = build([url], "VideoObject")
   expect(result).toMatchObject({
     "@type": "VideoObject",
     name: "A work",
@@ -207,24 +207,41 @@ test.each([
   expect(result).not.toHaveProperty("contentUrl")
 })
 
-test("Describes only the primary video and uses a direct file URL for MP4", () => {
-  const result = build(["/movie.MP4?token=abc", "/other.mp4"], "video")
+test("Describes the primary video and preserves alternative encodings", () => {
+  const result = build(["/movie.MP4?token=abc", "/other.mp4"], "VideoObject")
   expect(result).toMatchObject({
     "@type": "VideoObject",
     contentUrl: "https://example.com/movie.MP4?token=abc",
     encodingFormat: "video/mp4",
   })
   expect(result).not.toHaveProperty("embedUrl")
-  expect(
-    build(["https://example.org/watch", "/movie.mp4"], "video")["@type"],
-  ).toBe("CreativeWork")
+  expect(result.encoding).toMatchObject([
+    { "@type": "VideoObject", contentUrl: "https://example.com/other.mp4" },
+  ])
+})
+
+test("Uses the video fallback without assigning an unrecognized primary URL as content", () => {
+  const result = build(
+    ["https://example.org/watch", "/movie.mp4"],
+    "VideoObject",
+  )
+  expect(result["@type"]).toBe("VideoObject")
+  expect(result).not.toHaveProperty("contentUrl")
+  expect(result).not.toHaveProperty("embedUrl")
+})
+
+test("Accepts a custom fallback and lets the media type override it", () => {
+  expect(build(["/book.pdf"], "LearningResource")["@type"]).toBe(
+    "LearningResource",
+  )
+  expect(build(["/book.pdf"], "LearningResource", "Book")["@type"]).toBe("Book")
 })
 
 test.each(["CreativeWork", "Book", "Article", "DigitalDocument"] as const)(
   "Uses explicit %s classification while preserving document encodings",
   (schemaType) => {
     expect(
-      build(["/book.pdf", "/book.epub"], "default", schemaType),
+      build(["/book.pdf", "/book.epub"], "CreativeWork", schemaType),
     ).toMatchObject({
       "@type": schemaType,
       encoding: [
@@ -236,9 +253,9 @@ test.each(["CreativeWork", "Book", "Article", "DigitalDocument"] as const)(
 )
 
 test.each(["CreativeWork", "Book", "Article", "DigitalDocument"] as const)(
-  "Keeps explicit %s classification on audio and video layouts",
+  "Keeps explicit %s classification over audio and video fallbacks",
   (schemaType) => {
-    const audio = build(["/talk.mp3"], "audio", schemaType)
+    const audio = build(["/talk.mp3"], "AudioObject", schemaType)
     expect(audio).toMatchObject({
       "@type": schemaType,
       encoding: [
@@ -247,7 +264,7 @@ test.each(["CreativeWork", "Book", "Article", "DigitalDocument"] as const)(
     })
     expect(audio).not.toHaveProperty("contentUrl")
 
-    const video = build(["https://youtu.be/abc"], "video", schemaType)
+    const video = build(["https://youtu.be/abc"], "VideoObject", schemaType)
     expect(video).toMatchObject({
       "@type": schemaType,
       encoding: [
@@ -261,33 +278,37 @@ test.each(["CreativeWork", "Book", "Article", "DigitalDocument"] as const)(
   },
 )
 
-test("Keeps multiple audio tracks as parts of an explicitly classified work", () => {
-  expect(build(["/one.mp3", "/two.mp3"], "audio", "Book")).toMatchObject({
+test("Preserves explicit work classification with multiple audio encodings", () => {
+  expect(build(["/one.mp3", "/two.mp3"], "AudioObject", "Book")).toMatchObject({
     "@type": "Book",
-    hasPart: [
+    encoding: [
       { "@type": "AudioObject", contentUrl: "https://example.com/one.mp3" },
       { "@type": "AudioObject", contentUrl: "https://example.com/two.mp3" },
     ],
   })
 })
 
-test.each(["default", "audio", "video"] as const)(
-  "Attaches explicit media object file and player URLs independently of the %s layout",
-  (layout) => {
-    expect(build(["/talk.mp3"], layout, "AudioObject")).toMatchObject({
+test.each(["CreativeWork", "AudioObject", "VideoObject"] as const)(
+  "Attaches explicit media object file and player URLs independently of the %s fallback",
+  (fallbackSchemaType) => {
+    expect(
+      build(["/talk.mp3"], fallbackSchemaType, "AudioObject"),
+    ).toMatchObject({
       "@type": "AudioObject",
       name: item.title,
       contentUrl: "https://example.com/talk.mp3",
       encodingFormat: "audio/mpeg",
     })
     expect(
-      build(["https://youtu.be/abc"], layout, "VideoObject"),
+      build(["https://youtu.be/abc"], fallbackSchemaType, "VideoObject"),
     ).toMatchObject({
       "@type": "VideoObject",
       embedUrl: "https://www.youtube-nocookie.com/embed/abc",
       thumbnailUrl: "https://example.com/cover.webp",
     })
-    expect(build(["/photo.jpg"], layout, "ImageObject")).toMatchObject({
+    expect(
+      build(["/photo.jpg"], fallbackSchemaType, "ImageObject"),
+    ).toMatchObject({
       "@type": "ImageObject",
       contentUrl: "https://example.com/photo.jpg",
       encodingFormat: "image/jpeg",
@@ -295,8 +316,8 @@ test.each(["default", "audio", "video"] as const)(
   },
 )
 
-test("Keeps explicit multi-track audio as parts even on the default layout", () => {
-  const result = build(["/one.mp3", "/two.mp3"], "default", "AudioObject")
+test("Keeps explicit multi-track audio as parts with the default fallback", () => {
+  const result = build(["/one.mp3", "/two.mp3"], "CreativeWork", "AudioObject")
   expect(result).toMatchObject({
     "@type": "AudioObject",
     hasPart: [
@@ -309,7 +330,7 @@ test("Keeps explicit multi-track audio as parts even on the default layout", () 
 
 test("Preserves alternative image encodings and does not use the cover as the content", () => {
   expect(
-    build(["/photo.jpg", "/photo.webp"], "default", "ImageObject"),
+    build(["/photo.jpg", "/photo.webp"], "CreativeWork", "ImageObject"),
   ).toMatchObject({
     "@type": "ImageObject",
     contentUrl: "https://example.com/photo.jpg",
@@ -317,13 +338,17 @@ test("Preserves alternative image encodings and does not use the cover as the co
       { "@type": "ImageObject", contentUrl: "https://example.com/photo.webp" },
     ],
   })
-  const unknown = build(["https://example.org/view"], "default", "ImageObject")
+  const unknown = build(
+    ["https://example.org/view"],
+    "CreativeWork",
+    "ImageObject",
+  )
   expect(unknown["@type"]).toBe("ImageObject")
   expect(unknown).not.toHaveProperty("contentUrl")
 })
 
 test("Does not assign an unrelated primary file URL to an explicit media object", () => {
-  const result = build(["/notes.pdf"], "audio", "AudioObject")
+  const result = build(["/notes.pdf"], "AudioObject", "AudioObject")
   expect(result["@type"]).toBe("AudioObject")
   expect(result).not.toHaveProperty("contentUrl")
   expect(result.encoding).toMatchObject([

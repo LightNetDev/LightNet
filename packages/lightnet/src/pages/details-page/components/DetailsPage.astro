@@ -3,26 +3,30 @@ import { getMediaItem } from "../../../content/get-media-items"
 import Page from "../../../layouts/Page.astro"
 import { markdownToText } from "../../../utils/markdown"
 import { detailsPagePath } from "../../../utils/paths"
+import { getDetailsPageJsonLd } from "../utils/get-details-page-json-ld"
 
 type Props = {
   mediaId: string
-  /** Structured data to include in the page head as JSON-LD. */
-  jsonLd?: Record<string, unknown>
+  /** Schema.org type used when the media type does not specify one. */
+  fallbackSchemaType?: string
 }
 
-const { mediaId: id, jsonLd } = Astro.props
+const { mediaId: id, fallbackSchemaType = "CreativeWork" } = Astro.props
+const { defaultLocale, tContentField } = Astro.locals.i18n
 const mediaItem = (await getMediaItem(id)).data
+const jsonLd = await getDetailsPageJsonLd({
+  mediaId: id,
+  fallbackSchemaType,
+  site: Astro.site,
+  defaultLocale,
+  tContentField,
+})
 ---
 
 <Page
   title={mediaItem.title}
   description={markdownToText(mediaItem.description)}
-  canonicalUrl={
-    new URL(
-      detailsPagePath(Astro.locals.i18n.defaultLocale, { id }),
-      Astro.site,
-    )
-  }
+  canonicalUrl={new URL(detailsPagePath(defaultLocale, { id }), Astro.site)}
 >
   <Fragment slot="head">
     {jsonLd && (
