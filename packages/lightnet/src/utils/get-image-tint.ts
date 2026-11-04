@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto"
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises"
 
+import type { ImageMetadata } from "astro"
 import sharp from "sharp"
 
 // Bound the cache for long-running dev/SSR servers. Locales share the same tint.
@@ -55,7 +56,19 @@ function getChromaticColor(pixels: Buffer): number[] | undefined {
   )
 }
 
-export function getImageTint(image: Buffer, cacheDir?: URL): Promise<string> {
+export async function getImageTint(
+  image: Buffer | ImageMetadata,
+  cacheDir?: URL,
+): Promise<string> {
+  if (!Buffer.isBuffer(image)) {
+    // Read the original asset; optimized image URLs may not exist during prerendering.
+    const imagePath: unknown = Reflect.get(image, "fsPath")
+    if (typeof imagePath !== "string") {
+      throw new Error(`Cannot resolve image "${image.src}"`)
+    }
+    image = await readFile(imagePath)
+  }
+
   const key = createHash("sha256")
     .update(
       JSON.stringify({ version: TINT_VERSION, dependencies: sharp.versions }),

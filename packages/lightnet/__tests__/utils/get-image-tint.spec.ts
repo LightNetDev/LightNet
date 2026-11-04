@@ -1,8 +1,9 @@
 import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { pathToFileURL } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 
+import type { ImageMetadata } from "astro"
 import sharp from "sharp"
 import { afterEach, beforeEach, expect, test, vi } from "vitest"
 
@@ -33,6 +34,36 @@ async function tintChannels(svg: string) {
   const tint = await getImageTint(Buffer.from(svg))
   return tint.match(/\d+/g)!.map(Number)
 }
+
+test("Reads imported image metadata and shares its tint cache with buffers", async () => {
+  const path = new URL("image.svg", cacheDir)
+  await writeFile(path, cover)
+  const image: ImageMetadata = {
+    src: "/_astro/image.svg",
+    width: 20,
+    height: 20,
+    format: "svg",
+  }
+  Object.defineProperty(image, "fsPath", { value: fileURLToPath(path) })
+  const extraction = vi.spyOn(sharp.prototype, "autoOrient")
+
+  expect(await getImageTint(image, cacheDir)).toBe(
+    await getImageTint(cover, cacheDir),
+  )
+  expect(extraction).toHaveBeenCalledTimes(1)
+
+  await writeFile(path, cover.toString().replace("red", "blue"))
+  expect(await getImageTint(image, cacheDir)).not.toBe(
+    await getImageTint(cover, cacheDir),
+  )
+  expect(extraction).toHaveBeenCalledTimes(2)
+})
+
+test("Rejects image metadata without an original file path", async () => {
+  await expect(
+    getImageTint({ src: "/image.svg", width: 20, height: 20, format: "svg" }),
+  ).rejects.toThrow('Cannot resolve image "/image.svg"')
+})
 
 test.each([
   "#000000",

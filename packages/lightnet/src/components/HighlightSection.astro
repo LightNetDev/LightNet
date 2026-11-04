@@ -1,6 +1,4 @@
 ---
-import { readFile } from "node:fs/promises"
-
 import type { ImageMetadata } from "astro"
 import { Image } from "astro:assets"
 import { cacheDir } from "astro:config/server"
@@ -23,11 +21,7 @@ const { image, id, title, text, link, className, titleClass, textClass } =
   Astro.props
 let tint = "#e5e7eb"
 try {
-  const imagePath: unknown = Reflect.get(image, "fsPath")
-  if (typeof imagePath !== "string") {
-    throw new Error(`Cannot resolve highlight image "${image.src}"`)
-  }
-  tint = await getImageTint(await readFile(imagePath), new URL(cacheDir))
+  tint = await getImageTint(image, new URL(cacheDir))
 } catch (error) {
   console.warn("[lightnet] Cannot extract highlight image color:", error)
 }
