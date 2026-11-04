@@ -14,6 +14,7 @@
 - External classes should be called `className`. For both Astro and React components.
 - Keep UI simple and clean; take visual cues from Airbnb (spacious, calm, neutral).
 - Layouts must work in both LTR and RTL (use logical properties and avoid left/right-only rules).
+- Only use web platform features classified as Baseline Widely available.
 
 ## Localization workflow
 
