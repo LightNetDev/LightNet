@@ -1,5 +1,5 @@
 ---
-import { SearchIcon } from "lucide-react"
+import SearchIcon from "lucide-react/icons/search"
 
 import { searchPagePath } from "../utils/paths"
 
@@ -14,11 +14,11 @@ const { t, currentLocale } = Astro.locals.i18n
   action={searchPagePath(currentLocale)}
   method="get"
   role="search"
-  class="group flex w-full rounded-2xl shadow-sm outline outline-2 outline-offset-2 outline-transparent transition-all ease-in-out group-focus-within:outline-gray-400"
+  class="group flex w-full rounded-2xl bg-white/80 shadow-sm outline outline-2 outline-offset-2 outline-transparent backdrop-blur-lg transition-all ease-in-out group-focus-within:outline-gray-400"
   class:list={[Astro.props.className]}
 >
   <input
-    class="grow rounded-s-2xl bg-gray-100/95 px-4 py-3 text-gray-900 placeholder-gray-500 shadow-inner focus:outline-none"
+    class="grow rounded-s-2xl bg-transparent px-4 py-3 text-gray-900 placeholder-gray-500 shadow-inner focus:outline-none"
     enterkeyhint="search"
     type="search"
     name="search"

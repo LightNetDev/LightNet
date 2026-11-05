@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from "lucide-react"
+import ChevronRightIcon from "lucide-react/icons/chevron-right"
 
 import CoverImageDecorator from "../../../components/CoverImageDecorator"
 import Icon from "../../../components/Icon"
