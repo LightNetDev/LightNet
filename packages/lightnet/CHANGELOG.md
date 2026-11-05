@@ -1,5 +1,15 @@
 # lightnet
 
+## 4.11.1
+
+### Patch Changes
+
+- [#481](https://github.com/LightNetDev/LightNet/pull/481) [`c8bd2a3`](https://github.com/LightNetDev/LightNet/commit/c8bd2a33c345bff6b3bded43115ed90cc8dde573) - Use direct Lucide icon imports instead of importing from the package barrel.
+
+- [#481](https://github.com/LightNetDev/LightNet/pull/481) [`c8bd2a3`](https://github.com/LightNetDev/LightNet/commit/c8bd2a33c345bff6b3bded43115ed90cc8dde573) - Give the hero search bar a translucent glass background with backdrop blur.
+
+- [#481](https://github.com/LightNetDev/LightNet/pull/481) [`c8bd2a3`](https://github.com/LightNetDev/LightNet/commit/c8bd2a33c345bff6b3bded43115ed90cc8dde573) - Add a subtle gradient at the bottom of the main section to blend into the footer.
+
 ## 4.11.0
 
 ### Minor Changes
