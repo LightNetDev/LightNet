@@ -1,4 +1,4 @@
-import { SearchIcon } from "lucide-react"
+import SearchIcon from "lucide-react/icons/search"
 import { useRef } from "react"
 
 import { createI18n, type I18nConfig } from "../../../i18n/react/i18n-context"

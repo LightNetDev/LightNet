@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from "lucide-react"
+import ChevronRightIcon from "lucide-react/icons/chevron-right"
 
 import { useI18n } from "../../../i18n/react/use-i18n"
 
