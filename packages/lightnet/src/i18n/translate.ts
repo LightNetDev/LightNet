@@ -99,10 +99,7 @@ export async function useTranslate(
       })
     }
 
-    const t = i18n.getFixedT(resolvedLocale) as (
-      key: TranslationKey,
-      options?: TOptions,
-    ) => string
+    const t = i18n.getFixedT(resolvedLocale)
     const value = t(input, { fallbackLng, ...options })
     if (value === input && !availableTranslationKeys.has(input)) {
       throw new AstroError(
