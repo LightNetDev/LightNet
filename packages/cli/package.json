@@ -29,7 +29,7 @@
   ],
   "dependencies": {
     "@clack/prompts": "^1.8.1",
-    "commander": "^15.0.0"
+    "commander": "^15.1.0"
   },
   "devDependencies": {
     "vitest": "^5.1.0"

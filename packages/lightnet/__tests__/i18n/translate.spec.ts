@@ -3,6 +3,39 @@ import { expect, test, vi } from "vitest"
 const importTranslate = async () => import("../../src/i18n/translate")
 const importTranslations = async () => import("../../src/i18n/translations")
 
+test("Should apply i18next v27 defaults to flat translations", async () => {
+  vi.resetModules()
+  vi.doMock("../../src/i18n/translations", () => ({
+    loadTranslations: vi.fn(async (locale: string) =>
+      locale === "en"
+        ? {
+            "custom.empty": "English fallback",
+            "custom.value": "Value: {{value}}",
+            "custom.items_one": "{{count}} item",
+            "custom.items_other": "{{count}} items",
+            "custom.false.key": "Flat key",
+          }
+        : { "custom.empty": "" },
+    ),
+  }))
+
+  try {
+    const { useTranslate } = await importTranslate()
+    const t = await useTranslate("de")
+
+    expect(t("custom.empty")).toBe("English fallback")
+    expect(t("custom.value", { value: "<tag>/&\"'" })).toBe(
+      "Value: &lt;tag&gt;/&amp;&quot;&#39;",
+    )
+    expect(t("custom.items", { count: 1 })).toBe("1 item")
+    expect(t("custom.items", { count: 2 })).toBe("2 items")
+    expect(t("custom.false.key")).toBe("Flat key")
+  } finally {
+    vi.doUnmock("../../src/i18n/translations")
+    vi.resetModules()
+  }
+})
+
 test("Should record only used keys during build with direct values for every site locale", async () => {
   vi.resetModules()
   vi.stubEnv("PROD", true)
