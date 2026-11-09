@@ -1,7 +1,8 @@
 import Fuse from "fuse.js"
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import type { SearchItem, SearchResponse } from "../api/search-response"
+import type { SearchItem } from "../api/search-response"
+import { loadSearchItems } from "../utils/load-search-items"
 import { observeSearchQuery, type SearchQuery } from "../utils/search-query"
 
 interface Context {
@@ -15,8 +16,6 @@ type EnrichedSearchItem = SearchItem & {
   translatedType: string
   translatedLanguage: string
 }
-
-const SEARCH_API_PATH = "/api/internal/search.json"
 
 export function useSearch({ categories, mediaTypes, languages }: Context) {
   const fuse = useRef<Fuse<EnrichedSearchItem>>(undefined)
@@ -36,13 +35,7 @@ export function useSearch({ categories, mediaTypes, languages }: Context) {
     })
     const fetchData = async () => {
       try {
-        const response = await fetch(SEARCH_API_PATH)
-        if (!response.ok) {
-          throw new Error(
-            `Was not able to load search results from ${SEARCH_API_PATH}.`,
-          )
-        }
-        const { items }: SearchResponse = await response.json()
+        const items = await loadSearchItems()
         const enrichedItems = items.map((item) => {
           const translatedCategories =
             item.categories &&

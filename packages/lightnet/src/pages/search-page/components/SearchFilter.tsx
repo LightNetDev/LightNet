@@ -5,7 +5,9 @@ import { useId, useRef, useState } from "react"
 
 import { createI18n, type I18nConfig } from "../../../i18n/react/i18n-context"
 import { useDebounce } from "../hooks/use-debounce"
+import { useSearchItems } from "../hooks/use-search-items"
 import { useSearchQueryParam } from "../hooks/use-search-query-param"
+import { availableFilterOptions } from "../utils/available-filter-options"
 import { CATEGORY, LANGUAGE, SEARCH, TYPE } from "../utils/search-query"
 import Select from "./Select"
 
@@ -36,6 +38,9 @@ export default function SearchFilter({
   const [language, setLanguage] = useSearchQueryParam(LANGUAGE, initialLanguage)
   const [type, setType] = useSearchQueryParam(TYPE)
   const [category, setCategory] = useSearchQueryParam(CATEGORY)
+
+  const items = useSearchItems()
+  const query = { language, type, category }
 
   const [filtersExpanded, setFiltersExpanded] = useState(false)
   const filtersId = useId()
@@ -117,7 +122,7 @@ export default function SearchFilter({
               valueChange={(val) => setLanguage(val)}
               options={[
                 { id: "", labelText: t("ln.search.all-languages") },
-                ...languages,
+                ...availableFilterOptions(languages, items, query, LANGUAGE),
               ]}
             />
           )}
@@ -129,7 +134,7 @@ export default function SearchFilter({
               valueChange={(val) => setType(val)}
               options={[
                 { id: "", labelText: t("ln.search.all-types") },
-                ...mediaTypes,
+                ...availableFilterOptions(mediaTypes, items, query, TYPE),
               ]}
             />
           )}
@@ -141,7 +146,7 @@ export default function SearchFilter({
               valueChange={(val) => setCategory(val)}
               options={[
                 { id: "", labelText: t("ln.search.all-categories") },
-                ...categories,
+                ...availableFilterOptions(categories, items, query, CATEGORY),
               ]}
             />
           )}
