@@ -7,6 +7,11 @@ import { getUsedMediaTypes } from "../../../content/get-media-types"
 import { prepareI18nConfig } from "../../../i18n/react/prepare-i18n-config"
 import SearchFilterReact from "./SearchFilter.tsx"
 
+interface Props {
+  sidebar?: boolean
+}
+
+const { sidebar = false } = Astro.props
 const { currentLocale, tConfigField, tContentField } = Astro.locals.i18n
 
 const categories = (await getUsedCategories(currentLocale, tContentField)).map(
@@ -62,4 +67,7 @@ const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
   typesFilterEnabled={typesFilterEnabled}
   categoriesFilterEnabled={categoriesFilterEnabled}
   initialLanguage={initialLanguageFilter}
-/>
+  sidebar={sidebar}
+>
+  <slot />
+</SearchFilterReact>
