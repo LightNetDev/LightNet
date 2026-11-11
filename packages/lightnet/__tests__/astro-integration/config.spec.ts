@@ -16,6 +16,90 @@ const requiredConfig = {
   ],
 }
 
+test.each([
+  { settings: {}, expected: undefined },
+  { settings: { overrides: {} }, expected: undefined },
+  {
+    settings: { overrides: { footer: "./src/components/Footer.astro" } },
+    expected: "./src/components/Footer.astro",
+  },
+  {
+    settings: { footerComponent: "./src/components/LegacyFooter.astro" },
+    expected: "./src/components/LegacyFooter.astro",
+  },
+  {
+    settings: {
+      footerComponent: "./src/components/LegacyFooter.astro",
+      overrides: {},
+    },
+    expected: "./src/components/LegacyFooter.astro",
+  },
+  {
+    settings: {
+      footerComponent: "./src/components/LegacyFooter.astro",
+      overrides: { footer: "./src/components/Footer.astro" },
+    },
+    expected: "./src/components/Footer.astro",
+  },
+  {
+    settings: {
+      footerComponent: "./src/components/LegacyFooter.astro",
+      overrides: { footer: "" },
+    },
+    expected: "",
+  },
+])(
+  "Should resolve footer overrides for $settings",
+  ({ settings, expected }) => {
+    const config = extendedConfigSchema.parse({
+      ...requiredConfig,
+      ...settings,
+    })
+
+    expect(config.overrides.footer).toBe(expected)
+    expect(config.footerComponent).toBe(settings.footerComponent)
+  },
+)
+
+test.each([
+  { settings: {}, expected: undefined },
+  { settings: { injects: {} }, expected: undefined },
+  {
+    settings: { injects: { head: "./src/components/Head.astro" } },
+    expected: "./src/components/Head.astro",
+  },
+  {
+    settings: { headComponent: "./src/components/LegacyHead.astro" },
+    expected: "./src/components/LegacyHead.astro",
+  },
+  {
+    settings: {
+      headComponent: "./src/components/LegacyHead.astro",
+      injects: {},
+    },
+    expected: "./src/components/LegacyHead.astro",
+  },
+  {
+    settings: {
+      headComponent: "./src/components/LegacyHead.astro",
+      injects: { head: "./src/components/Head.astro" },
+    },
+    expected: "./src/components/Head.astro",
+  },
+  {
+    settings: {
+      headComponent: "./src/components/LegacyHead.astro",
+      injects: { head: "" },
+    },
+    expected: "",
+  },
+])("Should resolve head injections for $settings", ({ settings, expected }) => {
+  const config = extendedConfigSchema.parse({ ...requiredConfig, ...settings })
+
+  expect(config.injects.head).toBe(expected)
+  expect(config.headComponent).toBe(settings.headComponent)
+})
+
 test("Should default credits to false when omitted", () => {
   const config = configSchema.parse(requiredConfig)
 

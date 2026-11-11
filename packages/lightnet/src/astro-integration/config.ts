@@ -176,9 +176,25 @@ export const configSchema = z.object({
    * Path to an Astro component to be added into the HTML head element of all pages.
    * For example use this if you need to add an analytics script to every page.
    *
+   * @deprecated Use `injects.head` instead.
+   *
    * @example "./src/components/MyHeadTag.astro"
    */
   headComponent: z.string().optional(),
+  /**
+   * Inject custom components into designated locations on all pages.
+   */
+  injects: z
+    .object({
+      /**
+       * Path to an Astro component to add inside the HTML head element.
+       * Takes precedence over the deprecated `headComponent` setting.
+       *
+       * @example "./src/components/MyHeadTag.astro"
+       */
+      head: z.string().optional(),
+    })
+    .optional(),
   /**
    * Enable displaying a “Powered by LightNet” link in your site’s footer.
    */
@@ -198,9 +214,25 @@ export const configSchema = z.object({
   /**
    * Path to an Astro component to be added at the bottom of all pages.
    *
+   * @deprecated Use `overrides.footer` instead.
+   *
    * @example "./src/components/MyFooter.astro"
    */
   footerComponent: z.string().optional(),
+  /**
+   * Replace built-in components with custom components.
+   */
+  overrides: z
+    .object({
+      /**
+       * Path to an Astro component to replace the footer on all pages.
+       * Takes precedence over the deprecated `footerComponent` setting.
+       *
+       * @example "./src/components/MyFooter.astro"
+       */
+      footer: z.string().optional(),
+    })
+    .optional(),
   /**
    * Configure search page behavior
    */
@@ -232,6 +264,14 @@ export const extendedConfigSchema = configSchema.transform((config) => {
     ""
   return {
     ...config,
+    injects: {
+      ...config.injects,
+      head: config.injects?.head ?? config.headComponent,
+    },
+    overrides: {
+      ...config.overrides,
+      footer: config.overrides?.footer ?? config.footerComponent,
+    },
     locales,
     defaultLocale,
   }
