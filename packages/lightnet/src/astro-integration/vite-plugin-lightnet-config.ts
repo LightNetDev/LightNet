@@ -57,12 +57,12 @@ export function vitePluginLightnetConfig(
             ? `import logo from ${resolveFilePath(config.logo.src)}; export default logo;`
             : "export default undefined;"
         case CUSTOM_HEAD:
-          return config.headComponent
-            ? `export { default } from ${resolveFilePath(config.headComponent)};`
+          return config.inject.head
+            ? `export { default } from ${resolveFilePath(config.inject.head)};`
             : "export default undefined;"
         case CUSTOM_FOOTER:
-          return config.footerComponent
-            ? `export { default } from ${resolveFilePath(config.footerComponent)};`
+          return config.override.footer
+            ? `export { default } from ${resolveFilePath(config.override.footer)};`
             : "export default undefined;"
       }
     },

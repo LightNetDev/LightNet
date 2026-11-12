@@ -176,9 +176,24 @@ export const configSchema = z.object({
    * Path to an Astro component to be added into the HTML head element of all pages.
    * For example use this if you need to add an analytics script to every page.
    *
+   * @deprecated Use `inject.head` instead.
+   *
    * @example "./src/components/MyHeadTag.astro"
    */
   headComponent: z.string().optional(),
+  /**
+   * Inject custom components into designated locations on all pages.
+   */
+  inject: z
+    .object({
+      /**
+       * Path to an Astro component to add inside the HTML head element.
+       *
+       * @example "./src/components/MyHeadTag.astro"
+       */
+      head: z.string().optional(),
+    })
+    .optional(),
   /**
    * Enable displaying a “Powered by LightNet” link in your site’s footer.
    */
@@ -198,9 +213,24 @@ export const configSchema = z.object({
   /**
    * Path to an Astro component to be added at the bottom of all pages.
    *
+   * @deprecated Use `override.footer` instead.
+   *
    * @example "./src/components/MyFooter.astro"
    */
   footerComponent: z.string().optional(),
+  /**
+   * Replace built-in components with custom components.
+   */
+  override: z
+    .object({
+      /**
+       * Path to an Astro component to replace the footer on all pages.
+       *
+       * @example "./src/components/MyFooter.astro"
+       */
+      footer: z.string().optional(),
+    })
+    .optional(),
   /**
    * Configure search page behavior
    */
@@ -223,7 +253,8 @@ export const configSchema = z.object({
   experimental: z.object({}).optional(),
 })
 
-export const extendedConfigSchema = configSchema.transform((config) => {
+export const extendedConfigSchema = configSchema.transform((parsedConfig) => {
+  const { headComponent, footerComponent, ...config } = parsedConfig
   const locales = config.languages
     .filter((language) => language.isSiteLanguage)
     .map((language) => language.code)
@@ -232,6 +263,14 @@ export const extendedConfigSchema = configSchema.transform((config) => {
     ""
   return {
     ...config,
+    inject: {
+      ...config.inject,
+      head: config.inject?.head ?? headComponent,
+    },
+    override: {
+      ...config.override,
+      footer: config.override?.footer ?? footerComponent,
+    },
     locales,
     defaultLocale,
   }
