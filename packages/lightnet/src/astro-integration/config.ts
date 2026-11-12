@@ -188,7 +188,6 @@ export const configSchema = z.object({
     .object({
       /**
        * Path to an Astro component to add inside the HTML head element.
-       * Takes precedence over the deprecated `headComponent` setting.
        *
        * @example "./src/components/MyHeadTag.astro"
        */
@@ -226,7 +225,6 @@ export const configSchema = z.object({
     .object({
       /**
        * Path to an Astro component to replace the footer on all pages.
-       * Takes precedence over the deprecated `footerComponent` setting.
        *
        * @example "./src/components/MyFooter.astro"
        */
