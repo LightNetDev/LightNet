@@ -1,5 +1,13 @@
 # @lightnet/sveltia-admin
 
+## 4.4.4
+
+### Patch Changes
+
+- [#488](https://github.com/LightNetDev/LightNet/pull/488) [`0579eaf`](https://github.com/LightNetDev/LightNet/commit/0579eafa34b8b61434f0db601ca10a6aed4d1e34) - Update dependencies.
+- Updated dependencies [[`0579eaf`](https://github.com/LightNetDev/LightNet/commit/0579eafa34b8b61434f0db601ca10a6aed4d1e34), [`0579eaf`](https://github.com/LightNetDev/LightNet/commit/0579eafa34b8b61434f0db601ca10a6aed4d1e34)]:
+  - lightnet@4.12.0
+
 ## 4.4.3
 
 ### Patch Changes

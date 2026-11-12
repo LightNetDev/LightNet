@@ -1,5 +1,17 @@
 # lightnet
 
+## 4.12.0
+
+### Minor Changes
+
+- [#488](https://github.com/LightNetDev/LightNet/pull/488) [`0579eaf`](https://github.com/LightNetDev/LightNet/commit/0579eafa34b8b61434f0db601ca10a6aed4d1e34) - Add `override.footer` to replace the footer component. Deprecate `footerComponent` while continuing to support it: its value is copied to `override.footer` unless the new setting is provided.
+  
+  Add `inject.head` to inject a component into the HTML head. Deprecate `headComponent` while continuing to support it: its value is copied to `inject.head` unless the new setting is provided.
+
+### Patch Changes
+
+- [#488](https://github.com/LightNetDev/LightNet/pull/488) [`0579eaf`](https://github.com/LightNetDev/LightNet/commit/0579eafa34b8b61434f0db601ca10a6aed4d1e34) - Update dependencies.
+
 ## 4.11.2
 
 ### Patch Changes

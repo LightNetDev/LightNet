@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.9.5
+
+### Patch Changes
+
+- [#488](https://github.com/LightNetDev/LightNet/pull/488) [`0579eaf`](https://github.com/LightNetDev/LightNet/commit/0579eafa34b8b61434f0db601ca10a6aed4d1e34) - Update dependencies.
+
 ## 4.9.4
 
 ### Patch Changes
