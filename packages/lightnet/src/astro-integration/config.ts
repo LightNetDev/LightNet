@@ -176,7 +176,7 @@ export const configSchema = z.object({
    * Path to an Astro component to be added into the HTML head element of all pages.
    * For example use this if you need to add an analytics script to every page.
    *
-   * @deprecated Use `injects.head` instead.
+   * @deprecated Use `inject.head` instead.
    *
    * @example "./src/components/MyHeadTag.astro"
    */
@@ -184,7 +184,7 @@ export const configSchema = z.object({
   /**
    * Inject custom components into designated locations on all pages.
    */
-  injects: z
+  inject: z
     .object({
       /**
        * Path to an Astro component to add inside the HTML head element.
@@ -214,7 +214,7 @@ export const configSchema = z.object({
   /**
    * Path to an Astro component to be added at the bottom of all pages.
    *
-   * @deprecated Use `overrides.footer` instead.
+   * @deprecated Use `override.footer` instead.
    *
    * @example "./src/components/MyFooter.astro"
    */
@@ -222,7 +222,7 @@ export const configSchema = z.object({
   /**
    * Replace built-in components with custom components.
    */
-  overrides: z
+  override: z
     .object({
       /**
        * Path to an Astro component to replace the footer on all pages.
@@ -255,7 +255,8 @@ export const configSchema = z.object({
   experimental: z.object({}).optional(),
 })
 
-export const extendedConfigSchema = configSchema.transform((config) => {
+export const extendedConfigSchema = configSchema.transform((parsedConfig) => {
+  const { headComponent, footerComponent, ...config } = parsedConfig
   const locales = config.languages
     .filter((language) => language.isSiteLanguage)
     .map((language) => language.code)
@@ -264,13 +265,13 @@ export const extendedConfigSchema = configSchema.transform((config) => {
     ""
   return {
     ...config,
-    injects: {
-      ...config.injects,
-      head: config.injects?.head ?? config.headComponent,
+    inject: {
+      ...config.inject,
+      head: config.inject?.head ?? headComponent,
     },
-    overrides: {
-      ...config.overrides,
-      footer: config.overrides?.footer ?? config.footerComponent,
+    override: {
+      ...config.override,
+      footer: config.override?.footer ?? footerComponent,
     },
     locales,
     defaultLocale,

@@ -18,9 +18,9 @@ const requiredConfig = {
 
 test.each([
   { settings: {}, expected: undefined },
-  { settings: { overrides: {} }, expected: undefined },
+  { settings: { override: {} }, expected: undefined },
   {
-    settings: { overrides: { footer: "./src/components/Footer.astro" } },
+    settings: { override: { footer: "./src/components/Footer.astro" } },
     expected: "./src/components/Footer.astro",
   },
   {
@@ -30,42 +30,39 @@ test.each([
   {
     settings: {
       footerComponent: "./src/components/LegacyFooter.astro",
-      overrides: {},
+      override: {},
     },
     expected: "./src/components/LegacyFooter.astro",
   },
   {
     settings: {
       footerComponent: "./src/components/LegacyFooter.astro",
-      overrides: { footer: "./src/components/Footer.astro" },
+      override: { footer: "./src/components/Footer.astro" },
     },
     expected: "./src/components/Footer.astro",
   },
   {
     settings: {
       footerComponent: "./src/components/LegacyFooter.astro",
-      overrides: { footer: "" },
+      override: { footer: "" },
     },
     expected: "",
   },
-])(
-  "Should resolve footer overrides for $settings",
-  ({ settings, expected }) => {
-    const config = extendedConfigSchema.parse({
-      ...requiredConfig,
-      ...settings,
-    })
+])("Should resolve footer override for $settings", ({ settings, expected }) => {
+  const config = extendedConfigSchema.parse({
+    ...requiredConfig,
+    ...settings,
+  })
 
-    expect(config.overrides.footer).toBe(expected)
-    expect(config.footerComponent).toBe(settings.footerComponent)
-  },
-)
+  expect(config.override.footer).toBe(expected)
+  expect(config).not.toHaveProperty("footerComponent")
+})
 
 test.each([
   { settings: {}, expected: undefined },
-  { settings: { injects: {} }, expected: undefined },
+  { settings: { inject: {} }, expected: undefined },
   {
-    settings: { injects: { head: "./src/components/Head.astro" } },
+    settings: { inject: { head: "./src/components/Head.astro" } },
     expected: "./src/components/Head.astro",
   },
   {
@@ -75,29 +72,29 @@ test.each([
   {
     settings: {
       headComponent: "./src/components/LegacyHead.astro",
-      injects: {},
+      inject: {},
     },
     expected: "./src/components/LegacyHead.astro",
   },
   {
     settings: {
       headComponent: "./src/components/LegacyHead.astro",
-      injects: { head: "./src/components/Head.astro" },
+      inject: { head: "./src/components/Head.astro" },
     },
     expected: "./src/components/Head.astro",
   },
   {
     settings: {
       headComponent: "./src/components/LegacyHead.astro",
-      injects: { head: "" },
+      inject: { head: "" },
     },
     expected: "",
   },
 ])("Should resolve head injections for $settings", ({ settings, expected }) => {
   const config = extendedConfigSchema.parse({ ...requiredConfig, ...settings })
 
-  expect(config.injects.head).toBe(expected)
-  expect(config.headComponent).toBe(settings.headComponent)
+  expect(config.inject.head).toBe(expected)
+  expect(config).not.toHaveProperty("headComponent")
 })
 
 test("Should default credits to false when omitted", () => {

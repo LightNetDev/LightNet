@@ -36,6 +36,17 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           "Fix these errors on the LightNet configuration:",
         )
 
+        if (lightnetConfig.headComponent !== undefined) {
+          logger.warn(
+            "`headComponent` is deprecated and will be removed in a future major version. Use `inject.head` instead.",
+          )
+        }
+        if (lightnetConfig.footerComponent !== undefined) {
+          logger.warn(
+            "`footerComponent` is deprecated and will be removed in a future major version. Use `override.footer` instead.",
+          )
+        }
+
         if (
           !config.disallowSearchIndexing &&
           !existsSync(new URL("robots.txt", astroConfig.publicDir))
