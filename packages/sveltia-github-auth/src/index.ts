@@ -1,4 +1,5 @@
 export { handleAuth } from "./handle-auth"
 export { handleCallback } from "./handle-callback"
 export { handleRefresh } from "./handle-refresh"
+export { routeRequest } from "./route-request"
 export type { Env } from "./shared/env"
