@@ -2,6 +2,7 @@ import { z } from "zod"
 
 import { hasConfiguredAllowedOrigins } from "./shared/allowed-origins"
 import type { Env } from "./shared/env"
+import { getClientCredentials, requestToken } from "./shared/github"
 import { outputHTML } from "./shared/output-html"
 
 const callbackQuerySchema = z.object({
@@ -14,18 +15,6 @@ const csrfCookieSchema = z.object({
   csrfToken: z.string().regex(/^[a-f0-9]{32}$/),
   codeVerifier: z.string().regex(/^[A-Za-z0-9\-._~]{43,128}$/),
 })
-
-const tokenResponseSchema = z
-  .looseObject({
-    access_token: z
-      .string()
-      .min(1)
-      .max(4096)
-      .regex(/^[\x21-\x7E]+$/)
-      .optional(),
-    error: z.string().min(1).max(1024).optional(),
-  })
-  .refine(({ access_token, error }) => Boolean(access_token || error))
 
 export const handleCallback = async (
   request: Request,
@@ -83,60 +72,39 @@ export const handleCallback = async (
     })
   }
 
-  const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = env
-  if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
+  const credentials = getClientCredentials(env)
+  if (!credentials) {
     return outputHTML({
       env,
-      error: "OAuth app client ID or secret is not configured.",
+      error: "GitHub client ID or secret is not configured.",
       errorCode: "MISCONFIGURED_CLIENT",
     })
   }
 
-  let response: Response | undefined
-  try {
-    response = await fetch("https://github.com/login/oauth/access_token", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        code: query.data.code,
-        client_id: GITHUB_CLIENT_ID,
-        client_secret: GITHUB_CLIENT_SECRET,
-        code_verifier: codeVerifier,
-      }),
-    })
-  } catch {
-    // The authorization server was unreachable.
-  }
+  const result = await requestToken(
+    { code: query.data.code, code_verifier: codeVerifier },
+    credentials,
+  )
 
-  if (!response) {
-    return outputHTML({
-      env,
-      error: "Failed to request an access token. Please try again later.",
-      errorCode: "TOKEN_REQUEST_FAILED",
-    })
-  }
-
-  let tokenResponse
-  try {
-    tokenResponse = tokenResponseSchema.safeParse(await response.json())
-  } catch {
-    tokenResponse = { success: false }
-  }
-
-  if (!tokenResponse.success || !tokenResponse.data) {
-    return outputHTML({
-      env,
-      error: "Server responded with malformed data. Please try again later.",
-      errorCode: "MALFORMED_RESPONSE",
-    })
+  if (!result.ok) {
+    return result.reason === "unreachable"
+      ? outputHTML({
+          env,
+          error: "Failed to request an access token. Please try again later.",
+          errorCode: "TOKEN_REQUEST_FAILED",
+        })
+      : outputHTML({
+          env,
+          error:
+            "Server responded with malformed data. Please try again later.",
+          errorCode: "MALFORMED_RESPONSE",
+        })
   }
 
   return outputHTML({
     env,
-    token: tokenResponse.data.access_token,
-    error: tokenResponse.data.error,
+    token: result.data.access_token,
+    refreshToken: result.data.refresh_token,
+    error: result.data.error,
   })
 }

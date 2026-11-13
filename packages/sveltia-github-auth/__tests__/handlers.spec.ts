@@ -186,12 +186,55 @@ describe("handleCallback", () => {
     },
   )
 
+  it("passes a GitHub App refresh token to the CMS", async () => {
+    const { cookie, callback } = await startFlow()
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json({
+          access_token: "ghu_access",
+          refresh_token: "ghr_refresh",
+          expires_in: 28800,
+        }),
+      ),
+    )
+    const response = await handleCallback(
+      new Request(callback, { headers: { Cookie: cookie } }),
+      env,
+    )
+    const postMessage = vi.fn()
+    let listener: (event: { data: string; origin: string }) => void = () => {}
+    runInNewContext(
+      (await response.text()).match(/<script>([\s\S]*)<\/script>/i)![1],
+      {
+        window: {
+          opener: { postMessage },
+          addEventListener: (_name: string, handler: typeof listener) => {
+            listener = handler
+          },
+        },
+      },
+    )
+    listener({ data: "authorizing:github", origin: "https://cms.example.org" })
+    expect(postMessage).toHaveBeenLastCalledWith(
+      `authorization:github:success:${JSON.stringify({ provider: "github", token: "ghu_access", refreshToken: "ghr_refresh" })}`,
+      "https://cms.example.org",
+    )
+  })
+
   it.each([
     [() => Promise.reject(new Error("offline")), "TOKEN_REQUEST_FAILED"],
     [() => Promise.resolve(new Response("not json")), "MALFORMED_RESPONSE"],
     [() => Promise.resolve(Response.json({})), "MALFORMED_RESPONSE"],
     [
       () => Promise.resolve(Response.json({ access_token: "bad\ntoken" })),
+      "MALFORMED_RESPONSE",
+    ],
+    [
+      () =>
+        Promise.resolve(
+          Response.json({ access_token: "ok", refresh_token: "bad token" }),
+        ),
       "MALFORMED_RESPONSE",
     ],
     [

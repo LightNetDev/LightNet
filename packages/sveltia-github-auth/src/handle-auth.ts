@@ -75,7 +75,7 @@ export const handleAuth = async (
   if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
     return outputHTML({
       env,
-      error: "OAuth app client ID or secret is not configured.",
+      error: "GitHub client ID or secret is not configured.",
       errorCode: "MISCONFIGURED_CLIENT",
     })
   }
