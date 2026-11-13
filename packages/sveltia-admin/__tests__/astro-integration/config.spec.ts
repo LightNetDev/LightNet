@@ -137,10 +137,9 @@ describe("getConfig", () => {
     fileStorage?: NonNullable<
       SveltiaAdminConfig["experimental"]
     >["fileStorage"],
+    site: string | null = "https://lightnet.community",
   ) {
-    vi.doMock("astro:config/server", () => ({
-      site: "https://lightnet.community",
-    }))
+    vi.doMock("astro:config/server", () => ({ site: site ?? undefined }))
     vi.doMock("virtual:lightnet/sveltiaAdminConfig", () => ({
       default: adminConfigSchema.parse({
         backend,
@@ -199,6 +198,33 @@ describe("getConfig", () => {
       base_url: "https://ghe.example.com",
       branch: "main",
     })
+  })
+
+  test.each([
+    ["https://lightnet.community", "https://lightnet.community/_auth"],
+    ["https://lightnet.community/", "https://lightnet.community/_auth"],
+    ["https://example.org/library/", "https://example.org/_auth"],
+  ])(
+    "Should default the github base_url for site %s to %s",
+    async (site, baseUrl) => {
+      const config = await loadConfigWithBackend(
+        { name: "github", repo: "lightnet/community" },
+        undefined,
+        site,
+      )
+
+      expect(config.backend).toMatchObject({ base_url: baseUrl })
+    },
+  )
+
+  test("Should not default the github base_url without a site", async () => {
+    const config = await loadConfigWithBackend(
+      { name: "github", repo: "lightnet/community" },
+      undefined,
+      null,
+    )
+
+    expect(config.backend).toMatchObject({ base_url: undefined })
   })
 
   test("Should expose GitHub-backed local uploads from public/files as /files URLs", async () => {

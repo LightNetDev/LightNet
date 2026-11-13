@@ -26,7 +26,8 @@
     "./handle-auth.ts": "./src/handle-auth.ts",
     "./handle-callback.ts": "./src/handle-callback.ts",
     "./handle-refresh.ts": "./src/handle-refresh.ts",
-    "./route-request.ts": "./src/route-request.ts"
+    "./route-request.ts": "./src/route-request.ts",
+    "./site-worker.ts": "./src/site-worker.ts"
   },
   "scripts": {
     "test": "vitest run"
