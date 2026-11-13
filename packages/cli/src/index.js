@@ -8,6 +8,7 @@ import { checkFiles } from "./check-files.js"
 import { checkLinks } from "./check-links.js"
 import { checkTranslations } from "./check-translations.js"
 import { copyR2, listR2, moveR2, removeR2 } from "./r2.js"
+import { setupGithubAuth } from "./setup-github-auth.js"
 import { CliError } from "./support/cli-error.js"
 import { PromptCancelled } from "./support/prompt-cancel.js"
 const { version } = pkg
@@ -155,6 +156,28 @@ r2Command
   .action(async (paths, options) => {
     try {
       await moveR2(paths, options)
+    } catch (error) {
+      handleCommandError(error)
+    }
+  })
+
+program
+  .command("setup-github-auth")
+  .description(
+    "create a GitHub App and serve Administration UI sign-in from the site's Worker",
+  )
+  .option("--site <url>", "site URL (default: site from the Astro config)")
+  .option(
+    "--org <name>",
+    "GitHub organization that owns the app (default: owner of backend.repo)",
+  )
+  .option("--personal", "create the app on your personal GitHub account")
+  .option("--name <name>", "GitHub App name (default: <site hostname> CMS)")
+  .option("--config <path>", "Wrangler config file", "wrangler.jsonc")
+  .option("--no-open", "print URLs instead of opening them in the browser")
+  .action(async (options) => {
+    try {
+      await setupGithubAuth(options)
     } catch (error) {
       handleCommandError(error)
     }

@@ -19,6 +19,12 @@ const gitlabSchema = z.object({
 const githubSchema = z.object({
   name: z.literal("github"),
   repo: z.string(),
+  /**
+   * URL of the GitHub authenticator.
+   *
+   * Default is `<site origin>/_auth`, where `@lightnet/sveltia-github-auth`
+   * serves its routes when it runs in the site's own Worker.
+   */
   baseUrl: z.string().optional(),
   branch: z.string().default("main"),
 })

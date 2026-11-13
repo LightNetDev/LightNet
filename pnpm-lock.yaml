@@ -226,6 +226,9 @@ importers:
       commander:
         specifier: ^15.1.0
         version: 15.1.0
+      jsonc-parser:
+        specifier: ^3.3.1
+        version: 3.3.1
     devDependencies:
       vitest:
         specifier: ^5.1.0

@@ -88,7 +88,7 @@ function getBackend(): Backend {
     return {
       ...commonConfig,
       ...backend,
-      base_url: backend.baseUrl,
+      base_url: backend.baseUrl ?? getDefaultAuthBaseUrl(),
     }
   }
 
@@ -101,6 +101,14 @@ function getBackend(): Backend {
     }
   }
   return { ...commonConfig, ...backend }
+}
+
+/**
+ * Sites that run `@lightnet/sveltia-github-auth` in their own Worker serve the
+ * authentication routes under `/_auth` at the root of the site's origin.
+ */
+function getDefaultAuthBaseUrl() {
+  return site ? `${new URL(site).origin}/_auth` : undefined
 }
 
 // Sveltia CMS uses repo as unique site identifier for IndexedDB
