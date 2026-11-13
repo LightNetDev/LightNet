@@ -1,5 +1,11 @@
 # @lightnet/sveltia-github-auth
 
+## 1.4.0
+
+### Minor Changes
+
+- [#494](https://github.com/LightNetDev/LightNet/pull/494) [`0b65d6a`](https://github.com/LightNetDev/LightNet/commit/0b65d6ab7dd0642a9af49b301a0cb992e21153ac) - `ALLOWED_ORIGINS` is now optional. When it is unset or empty, the handlers allow only the authenticator's own origin, so an authenticator that runs in the same Worker as the CMS site needs no origin configuration. Authenticators on their own domain still need `ALLOWED_ORIGINS` set to the CMS site's origin; without it, sign-in fails with `UNSUPPORTED_DOMAIN` instead of `MISCONFIGURED_ORIGINS`.
+
 ## 1.3.0
 
 ### Minor Changes
