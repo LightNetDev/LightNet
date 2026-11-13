@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.10.0
+
+### Minor Changes
+
+- [#496](https://github.com/LightNetDev/LightNet/pull/496) [`95b0dd5`](https://github.com/LightNetDev/LightNet/commit/95b0dd520c5062c0bf6d70b97e684e8b133939c7) - Add `lightnet setup-github-auth`, which creates the GitHub App for a site's Administration UI with GitHub's app manifest flow and configures the site's Worker to serve sign-in under `/_auth`. It fills in the callback URL, permissions, and other app settings, writes the client ID to `wrangler.jsonc`, and can store the client secret in the Worker with Wrangler.
+
 ## 4.9.5
 
 ### Patch Changes
