@@ -3,6 +3,7 @@ import { z } from "zod"
 import {
   getAllowedOrigins,
   hasConfiguredAllowedOrigins,
+  withDefaultAllowedOrigins,
 } from "./shared/allowed-origins"
 import type { Env } from "./shared/env"
 import {
@@ -70,8 +71,9 @@ const readBody = async (request: Request) => {
  */
 export const handleRefresh = async (
   request: Request,
-  env: Env,
+  configuredEnv: Env,
 ): Promise<Response> => {
+  const env = withDefaultAllowedOrigins(request, configuredEnv)
   const corsHeaders = getCorsHeaders(request, env)
 
   if (!corsHeaders) {

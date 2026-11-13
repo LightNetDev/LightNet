@@ -79,7 +79,6 @@ describe("handleAuth", () => {
   })
 
   it.each([
-    [{ ALLOWED_ORIGINS: "" }, "MISCONFIGURED_ORIGINS"],
     [{ ALLOWED_ORIGINS: "https://example.com" }, "MISCONFIGURED_ORIGINS"],
     [
       { ALLOWED_ORIGINS: "https://cms.example.org,http://evil.example.org" },
@@ -172,7 +171,9 @@ describe("handleCallback", () => {
         new Request(callback, {
           headers: scenario === "missing-cookie" ? {} : { Cookie: cookie },
         }),
-        scenario === "bad-config" ? { ...env, ALLOWED_ORIGINS: "" } : env,
+        scenario === "bad-config"
+          ? { ...env, ALLOWED_ORIGINS: "https://example.com" }
+          : env,
       )
       expect(await response.text()).toContain(
         {

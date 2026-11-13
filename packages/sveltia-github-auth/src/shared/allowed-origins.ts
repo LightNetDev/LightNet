@@ -1,3 +1,5 @@
+import type { Env } from "./env"
+
 const exampleAllowedOrigin = "https://example.com"
 
 const parseAllowedOrigins = (allowedOrigins?: string) =>
@@ -47,3 +49,14 @@ export const isAllowedSiteId = (
     (origin) => new URL(origin).hostname === siteId,
   )
 }
+
+/**
+ * Defaults `ALLOWED_ORIGINS` to the request's own origin when it is unset or
+ * empty. This fits deployments where the authenticator runs on the same
+ * origin as the CMS: the OAuth popup then only delivers tokens to its own
+ * origin.
+ */
+export const withDefaultAllowedOrigins = (request: Request, env: Env): Env =>
+  env.ALLOWED_ORIGINS?.trim()
+    ? env
+    : { ...env, ALLOWED_ORIGINS: new URL(request.url).origin }

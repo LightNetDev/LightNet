@@ -3,6 +3,7 @@ import { z } from "zod"
 import {
   hasConfiguredAllowedOrigins,
   isAllowedSiteId,
+  withDefaultAllowedOrigins,
 } from "./shared/allowed-origins"
 import type { Env } from "./shared/env"
 import { outputHTML } from "./shared/output-html"
@@ -28,8 +29,9 @@ const getScope = (requested = "repo,user") => {
 
 export const handleAuth = async (
   request: Request,
-  env: Env,
+  configuredEnv: Env,
 ): Promise<Response> => {
+  const env = withDefaultAllowedOrigins(request, configuredEnv)
   const { searchParams } = new URL(request.url)
   const query = authQuerySchema.safeParse({
     provider: searchParams.get("provider") ?? undefined,
@@ -58,7 +60,7 @@ export const handleAuth = async (
     return outputHTML({
       env,
       error:
-        "Allowed origins are not configured. Set ALLOWED_ORIGINS to your site origin.",
+        "Allowed origins are misconfigured. Set ALLOWED_ORIGINS to your site's HTTPS origin, or leave it empty to allow only this authenticator's origin.",
       errorCode: "MISCONFIGURED_ORIGINS",
     })
   }
@@ -66,7 +68,8 @@ export const handleAuth = async (
   if (!isAllowedSiteId(query.data.siteId, env.ALLOWED_ORIGINS)) {
     return outputHTML({
       env,
-      error: "Your domain is not allowed to use the authenticator.",
+      error:
+        "Your domain is not allowed to use the authenticator. Add it to ALLOWED_ORIGINS.",
       errorCode: "UNSUPPORTED_DOMAIN",
     })
   }

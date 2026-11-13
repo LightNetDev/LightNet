@@ -1,6 +1,9 @@
 import { z } from "zod"
 
-import { hasConfiguredAllowedOrigins } from "./shared/allowed-origins"
+import {
+  hasConfiguredAllowedOrigins,
+  withDefaultAllowedOrigins,
+} from "./shared/allowed-origins"
 import type { Env } from "./shared/env"
 import { getClientCredentials, requestToken } from "./shared/github"
 import { outputHTML } from "./shared/output-html"
@@ -18,8 +21,9 @@ const csrfCookieSchema = z.object({
 
 export const handleCallback = async (
   request: Request,
-  env: Env,
+  configuredEnv: Env,
 ): Promise<Response> => {
+  const env = withDefaultAllowedOrigins(request, configuredEnv)
   const { searchParams } = new URL(request.url)
   const query = callbackQuerySchema.safeParse({
     code: searchParams.get("code"),
@@ -51,7 +55,7 @@ export const handleCallback = async (
     return outputHTML({
       env,
       error:
-        "Allowed origins are not configured. Set ALLOWED_ORIGINS to your site origin.",
+        "Allowed origins are misconfigured. Set ALLOWED_ORIGINS to your site's HTTPS origin, or leave it empty to allow only this authenticator's origin.",
       errorCode: "MISCONFIGURED_ORIGINS",
     })
   }
