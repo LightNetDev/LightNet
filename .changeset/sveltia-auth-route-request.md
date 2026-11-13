@@ -15,3 +15,5 @@ export default {
   },
 }
 ```
+
+The `basePath` option serves the routes under a prefix, for example when the authenticator runs in the same Worker as a site. With `routeRequest(request, env, { basePath: "/_auth" })`, set the CMS backend's `base_url` to `https://<host>/_auth` and register `https://<host>/_auth/callback` as the GitHub callback URL.

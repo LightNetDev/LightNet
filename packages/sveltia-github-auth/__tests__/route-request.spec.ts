@@ -17,8 +17,14 @@ vi.mock("../src/handle-refresh", () => ({
 
 const env: Env = { ALLOWED_ORIGINS: "cms.example.org" }
 
-const route = (path: string, method = "GET") =>
-  routeRequest(new Request(`https://auth.example.org${path}`, { method }), env)
+const route = (path: string, method = "GET", basePath?: string) =>
+  routeRequest(
+    new Request(`https://auth.example.org${path}`, { method }),
+    env,
+    {
+      basePath,
+    },
+  )
 
 beforeEach(() => vi.clearAllMocks())
 
@@ -57,5 +63,58 @@ describe("routeRequest", () => {
     expect(handleAuth).not.toHaveBeenCalled()
     expect(handleCallback).not.toHaveBeenCalled()
     expect(handleRefresh).not.toHaveBeenCalled()
+  })
+
+  describe("with basePath", () => {
+    it.each([
+      ["GET", "/_auth/auth", "auth"],
+      ["GET", "/_auth/oauth/authorize", "auth"],
+      ["GET", "/_auth/callback", "callback"],
+      ["GET", "/_auth/oauth/redirect", "callback"],
+      ["POST", "/_auth/auth", "refresh"],
+      ["OPTIONS", "/_auth/oauth/access_token", "refresh"],
+    ])("routes %s %s to the %s handler", async (method, path, expected) => {
+      const response = await route(path, method, "/_auth")
+      expect(await response?.text()).toBe(expected)
+    })
+
+    it.each([
+      ["GET", "/auth"],
+      ["GET", "/callback"],
+      ["POST", "/auth"],
+      ["GET", "/_auth"],
+      ["GET", "/_auth/"],
+      ["GET", "/_authx/auth"],
+      ["GET", "/other/_auth/auth"],
+    ])("returns undefined for %s %s", async (method, path) => {
+      expect(await route(path, method, "/_auth")).toBeUndefined()
+    })
+
+    it.each(["_auth", "/_auth/", "_auth/"])(
+      "normalizes %j to /_auth",
+      async (basePath) => {
+        const response = await route("/_auth/auth", "GET", basePath)
+        expect(await response?.text()).toBe("auth")
+      },
+    )
+
+    it("supports nested base paths", async () => {
+      const response = await route("/cms/auth/callback", "GET", "/cms/auth")
+      expect(await response?.text()).toBe("callback")
+    })
+
+    it.each(["", "/"])("treats %j as the root", async (basePath) => {
+      const response = await route("/auth", "GET", basePath)
+      expect(await response?.text()).toBe("auth")
+    })
+
+    it.each(["/../auth", "/./auth", "/_auth?x", "/_auth#x", "/a b", "/%2e"])(
+      "throws for invalid basePath %j",
+      async (basePath) => {
+        await expect(route("/auth", "GET", basePath)).rejects.toThrow(
+          "Invalid basePath",
+        )
+      },
+    )
   })
 })

@@ -22,7 +22,7 @@ export default {
 }
 ```
 
-Check other routes before falling back to `404` to combine it with your own routes. To mount the handlers on different paths, use `handleAuth`, `handleCallback`, and `handleRefresh` directly. All handlers accept `(request: Request, env: Env)` and return `Promise<Response>`.
+Check other routes before falling back to `404` to combine it with your own routes. Pass `{ basePath: "/_auth" }` as the third argument to serve the routes under a prefix; then set the CMS `base_url` to `https://<host>/_auth` and the GitHub callback URL to `https://<host>/_auth/callback`. To mount the handlers on other paths, use `handleAuth`, `handleCallback`, and `handleRefresh` directly. All handlers accept `(request: Request, env: Env)` and return `Promise<Response>`.
 
 ## Configuration
 
