@@ -8,34 +8,21 @@ pnpm add @lightnet/sveltia-github-auth
 
 ## Worker usage
 
-Replace the template's local handlers with these imports. Routing stays in your worker:
+`routeRequest` routes Sveltia CMS authentication requests and returns `undefined` for any other request:
 
 ```ts
-import {
-  handleAuth,
-  handleCallback,
-  type Env,
-} from "@lightnet/sveltia-github-auth"
+import { routeRequest, type Env } from "@lightnet/sveltia-github-auth"
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const { pathname } = new URL(request.url)
-
-    if (request.method === "GET") {
-      if (["/auth", "/oauth/authorize"].includes(pathname)) {
-        return handleAuth(request, env)
-      }
-      if (["/callback", "/oauth/redirect"].includes(pathname)) {
-        return handleCallback(request, env)
-      }
-    }
-
-    return new Response("", { status: 404 })
+    return (
+      (await routeRequest(request, env)) ?? new Response("", { status: 404 })
+    )
   },
 }
 ```
 
-Individual imports are also available from `@lightnet/sveltia-github-auth/handle-auth.ts` and `@lightnet/sveltia-github-auth/handle-callback.ts`. Both handlers accept `(request: Request, env: Env)` and return `Promise<Response>`.
+Check other routes before falling back to `404` to combine it with your own routes. Pass `{ basePath: "/_auth" }` as the third argument to serve the routes under a prefix; then set the CMS `base_url` to `https://<host>/_auth` and the GitHub callback URL to `https://<host>/_auth/callback`. To mount the handlers on other paths, use `handleAuth`, `handleCallback`, and `handleRefresh` directly. All handlers accept `(request: Request, env: Env)` and return `Promise<Response>`.
 
 ## Configuration
 
