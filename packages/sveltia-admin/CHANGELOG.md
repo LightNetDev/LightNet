@@ -1,5 +1,11 @@
 # @lightnet/sveltia-admin
 
+## 4.5.0
+
+### Minor Changes
+
+- [#496](https://github.com/LightNetDev/LightNet/pull/496) [`95b0dd5`](https://github.com/LightNetDev/LightNet/commit/95b0dd520c5062c0bf6d70b97e684e8b133939c7) - The GitHub backend's `baseUrl` now defaults to `<site origin>/_auth`, where `@lightnet/sveltia-github-auth` serves sign-in when it runs in the site's own Worker. Sites with a separate authenticator keep setting `baseUrl`. Before, an unset `baseUrl` used Sveltia CMS's default, Netlify's authentication service at `https://api.netlify.com`; sites that rely on it must now set `baseUrl: "https://api.netlify.com"`.
+
 ## 4.4.4
 
 ### Patch Changes
