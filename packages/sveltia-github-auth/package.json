@@ -24,7 +24,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./handle-auth.ts": "./src/handle-auth.ts",
-    "./handle-callback.ts": "./src/handle-callback.ts"
+    "./handle-callback.ts": "./src/handle-callback.ts",
+    "./handle-refresh.ts": "./src/handle-refresh.ts"
   },
   "scripts": {
     "test": "vitest run"

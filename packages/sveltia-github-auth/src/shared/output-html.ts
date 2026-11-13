@@ -10,6 +10,8 @@ const serialize = (value: unknown) =>
 interface HtmlOptions {
   provider?: string
   token?: string
+  /** Only issued by GitHub Apps with expiring user access tokens. */
+  refreshToken?: string
   error?: string
   errorCode?: string
   env?: Env
@@ -19,12 +21,15 @@ const provider = "github"
 
 export const outputHTML = ({
   token,
+  refreshToken,
   error,
   errorCode,
   env = {},
 }: HtmlOptions): Response => {
   const state = error ? "error" : "success"
-  const content = error ? { provider, error, errorCode } : { provider, token }
+  const content = error
+    ? { provider, error, errorCode }
+    : { provider, token, refreshToken }
   const authorizationMessage = `authorization:${provider}:${state}:${JSON.stringify(content)}`
 
   return new Response(
