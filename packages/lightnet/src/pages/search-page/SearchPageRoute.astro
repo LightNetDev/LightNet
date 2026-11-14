@@ -4,18 +4,12 @@ import SearchFilter from "./components/SearchFilter.astro"
 import SearchList from "./components/SearchList.astro"
 
 export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
-
-const { t } = Astro.locals.i18n
 ---
 
 <Page>
-  <div class="mx-auto max-w-screen-md">
-    <div class="px-4 md:px-8">
-      <h1 class="mb-4 mt-8 text-balance text-4xl md:mb-8 md:mt-12 md:text-5xl">
-        {t("ln.search.title")}
-      </h1>
-      <SearchFilter />
-    </div>
-    <SearchList />
+  <div class="mx-auto mt-8 max-w-screen-xl md:mt-12">
+    <SearchFilter sidebar>
+      <SearchList />
+    </SearchFilter>
   </div>
 </Page>

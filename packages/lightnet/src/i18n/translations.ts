@@ -118,6 +118,8 @@ export type LightNetTranslationKey =
   | "ln.search.all-categories"
   | "ln.search.all-languages"
   | "ln.search.all-types"
+  | "ln.search.filters"
+  | "ln.search.remove-filter"
   | "ln.search.no-results"
   | "ln.search.placeholder"
   | "ln.search.title"
