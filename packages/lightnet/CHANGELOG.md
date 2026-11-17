@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.12.1
+
+### Patch Changes
+
+- [#498](https://github.com/LightNetDev/LightNet/pull/498) [`9a232ab`](https://github.com/LightNetDev/LightNet/commit/9a232abb5b3cf5370f631216ec5646441e8bfd2e) - Make the `frontmatter` prop of `MarkdownPage` optional again. Custom layouts that use `MarkdownPage` from `lightnet/components` no longer fail `astro check` when they don't pass `frontmatter`.
+
 ## 4.12.0
 
 ### Minor Changes
