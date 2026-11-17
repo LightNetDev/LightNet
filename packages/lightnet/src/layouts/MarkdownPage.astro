@@ -3,7 +3,7 @@ import Page, { type Props as PageProps } from "./Page.astro"
 
 type Props = PageProps & {
   className?: string
-  frontmatter: PageProps
+  frontmatter?: PageProps
 }
 const { className, ...pageProps } = Astro.props
 ---
