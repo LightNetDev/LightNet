@@ -1,6 +1,6 @@
 // @ts-check
 
-import { spawn } from "node:child_process"
+import { execFile, spawn } from "node:child_process"
 import { randomUUID } from "node:crypto"
 import { readFile, writeFile } from "node:fs/promises"
 import { createServer } from "node:http"
@@ -57,6 +57,7 @@ const astroConfigFiles = [
  *   promptText?: (options: { message: string, initialValue?: string, placeholder?: string, validate?: (value: string | undefined) => string | undefined }) => Promise<string>
  *   promptConfirm?: (message: string) => Promise<boolean>
  *   addPackage?: (name: string, cwd: string) => Promise<boolean>
+ *   readGitRemote?: (cwd: string) => Promise<string>
  * }} SetupGithubAuthRuntime
  */
 
@@ -78,6 +79,7 @@ export async function setupGithubAuth(runtime = {}) {
   const promptConfirm = runtime.promptConfirm ?? defaultPromptConfirm
   const openUrl = runtime.openUrl ?? openInBrowser
   const addPackage = runtime.addPackage ?? addPackageWithPnpm
+  const readGitRemote = runtime.readGitRemote ?? readOriginUrl
 
   if (!isInteractive) {
     throw new CliError(
@@ -103,14 +105,24 @@ export async function setupGithubAuth(runtime = {}) {
   }
   const siteOrigin = toSiteOrigin(site)
   log.info(`Setting up sign-in for ${siteOrigin}.`)
-  const repo = parseRepo(
-    await promptText({
-      message: "Which GitHub repository holds your site?",
-      initialValue: findRepo(astroConfig),
-      placeholder: "my-org/my-library",
-      validate: (value) => validateWith(parseRepo, value),
+  const repo = parseGithubRemote(
+    await readGitRemote(cwd).catch(() => {
+      throw new CliError(
+        'Could not read the Git remote "origin". Run this command in your site\'s Git repository and push it to GitHub first.',
+      )
     }),
   )
+  const repoName = `${repo.owner}/${repo.name}`
+  log.info(`Using the GitHub repository ${repoName} from the Git remote.`)
+  const configuredRepo = findRepo(astroConfig)
+  if (
+    configuredRepo &&
+    configuredRepo.toLowerCase() !== repoName.toLowerCase()
+  ) {
+    log.warn(
+      `backend.repo in your Astro config is ${configuredRepo}, but the Git remote is ${repoName}. Make sure both point to the same repository.`,
+    )
+  }
   const name = await promptText({
     message: "What should the GitHub App be called?",
     initialValue: getDefaultAppName(siteOrigin),
@@ -533,13 +545,20 @@ export function findRepo(astroConfig) {
 }
 
 /**
- * @param {string} repo `owner/name`
+ * Reads owner and name from a GitHub remote URL, such as
+ * `git@github.com:owner/name.git` or `https://github.com/owner/name`.
+ *
+ * @param {string} remoteUrl
  */
-export function parseRepo(repo) {
-  const match = repo.trim().match(/^([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+)$/)
+export function parseGithubRemote(remoteUrl) {
+  const match = remoteUrl
+    .trim()
+    .match(
+      /^(?:https:\/\/(?:[^@/]+@)?github\.com\/|(?:ssh:\/\/)?git@github\.com[:/])([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+?)(?:\.git)?\/?$/,
+    )
   if (!match) {
     throw new CliError(
-      `"${repo}" is not a GitHub repository. Use the form owner/name.`,
+      `The Git remote "origin" (${remoteUrl.trim()}) is not a GitHub repository. Sign-in needs your site's repository on GitHub.`,
     )
   }
   return { owner: match[1], name: match[2] }
@@ -632,6 +651,21 @@ async function hasDependency(cwd, name) {
 }
 
 /**
+ * @param {string} cwd
+ * @returns {Promise<string>}
+ */
+function readOriginUrl(cwd) {
+  return new Promise((resolvePromise, reject) => {
+    execFile(
+      "git",
+      ["remote", "get-url", "origin"],
+      { cwd },
+      (error, output) => (error ? reject(error) : resolvePromise(output)),
+    )
+  })
+}
+
+/**
  * @param {string} name
  * @param {string} cwd
  * @returns {Promise<boolean>}
@@ -657,20 +691,6 @@ function openInBrowser(url) {
   spawn(command, args, { stdio: "ignore", detached: true })
     .on("error", () => {})
     .unref()
-}
-
-/**
- * Turns a parser that throws into a prompt validator.
- *
- * @param {(value: string) => unknown} parseValue
- * @param {string | undefined} value
- */
-function validateWith(parseValue, value) {
-  try {
-    parseValue(value ?? "")
-  } catch (error) {
-    return error instanceof Error ? error.message : String(error)
-  }
 }
 
 /**
