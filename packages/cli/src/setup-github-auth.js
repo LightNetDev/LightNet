@@ -25,9 +25,14 @@ import { cancelPrompt } from "./support/prompt-cancel.js"
 export const authBasePath = "/_auth"
 export const siteWorkerPath =
   "node_modules/@lightnet/sveltia-github-auth/src/site-worker.ts"
+export const maxAppNameLength = 34
 const authPackage = "@lightnet/sveltia-github-auth"
-const maxAppNameLength = 34
+const wranglerConfigFile = "wrangler.jsonc"
 const registrationTimeoutMs = 30 * 60 * 1000
+const githubApiHeaders = {
+  Accept: "application/vnd.github+json",
+  "X-GitHub-Api-Version": "2022-11-28",
+}
 const astroConfigFiles = [
   "astro.config.mjs",
   "astro.config.js",
@@ -37,19 +42,11 @@ const astroConfigFiles = [
 
 /**
  * @typedef {{
- *   site?: string
- *   org?: string
- *   personal?: boolean
- *   name?: string
- *   config?: string
- *   open?: boolean
- * }} SetupGithubAuthOptions
- *
- * @typedef {{
  *   client_id: string
  *   client_secret: string
  *   slug: string
  *   html_url: string
+ *   owner?: { login: string, id: number, type: string }
  * }} GithubApp
  *
  * @typedef {{
@@ -57,9 +54,9 @@ const astroConfigFiles = [
  *   isInteractive?: boolean
  *   fetch?: typeof fetch
  *   openUrl?: (url: string) => void | Promise<void>
- *   promptText?: (options: { message: string, initialValue?: string, placeholder?: string }) => Promise<string>
+ *   promptText?: (options: { message: string, initialValue?: string, placeholder?: string, validate?: (value: string | undefined) => string | undefined }) => Promise<string>
  *   promptConfirm?: (message: string) => Promise<boolean>
- *   storeSecret?: (secret: string, cwd: string) => Promise<boolean>
+ *   addPackage?: (name: string, cwd: string) => Promise<boolean>
  * }} SetupGithubAuthRuntime
  */
 
@@ -67,70 +64,88 @@ const astroConfigFiles = [
  * Creates a GitHub App for the site with GitHub's manifest flow and configures
  * the site's Worker to serve the Sveltia CMS authentication routes.
  *
- * @param {SetupGithubAuthOptions} options
+ * GitHub asks the user to confirm every step in the browser, so the command
+ * is always interactive and opens the browser only after the user agrees.
+ *
  * @param {SetupGithubAuthRuntime} runtime
  */
-export async function setupGithubAuth(options, runtime = {}) {
+export async function setupGithubAuth(runtime = {}) {
   const cwd = runtime.cwd ?? process.cwd()
   const isInteractive =
     runtime.isInteractive ?? Boolean(stdin.isTTY && stdout.isTTY)
+  const fetchFn = runtime.fetch ?? fetch
   const promptText = runtime.promptText ?? defaultPromptText
   const promptConfirm = runtime.promptConfirm ?? defaultPromptConfirm
-  const openUrl =
-    options.open === false ? undefined : (runtime.openUrl ?? openInBrowser)
+  const openUrl = runtime.openUrl ?? openInBrowser
+  const addPackage = runtime.addPackage ?? addPackageWithPnpm
+
+  if (!isInteractive) {
+    throw new CliError(
+      "This command asks you to confirm steps on GitHub. Run it in an interactive terminal.",
+    )
+  }
 
   intro("Set up GitHub authentication")
 
-  const configPath = resolve(cwd, options.config ?? "wrangler.jsonc")
+  const configPath = resolve(cwd, wranglerConfigFile)
   const wranglerConfig = await readFile(configPath, "utf8").catch(() => {
     throw new CliError(
-      `Could not read ${configPath}. Run this command in your site folder or pass --config.`,
+      `Could not read ${wranglerConfigFile}. Run this command in your site folder.`,
     )
   })
   const astroConfig = await readAstroConfig(cwd)
 
-  let site = options.site ?? findSiteUrl(astroConfig)
-  if (!site) {
-    if (!isInteractive) {
-      throw new CliError("Could not find your site URL. Pass --site.")
-    }
-    site = await promptText({
+  const siteOrigin = toSiteOrigin(
+    await promptText({
       message: "What is your site's URL?",
+      initialValue: findSiteUrl(astroConfig),
       placeholder: "https://my-library.org",
-    })
-  }
-  const siteOrigin = toSiteOrigin(site)
+      validate: (value) => validateWith(toSiteOrigin, value),
+    }),
+  )
+  const repo = parseRepo(
+    await promptText({
+      message: "Which GitHub repository holds your site?",
+      initialValue: findRepo(astroConfig),
+      placeholder: "my-org/my-library",
+      validate: (value) => validateWith(parseRepo, value),
+    }),
+  )
+  const name = await promptText({
+    message: "What should the GitHub App be called?",
+    initialValue: getDefaultAppName(siteOrigin),
+    validate: validateAppName,
+  })
 
-  let org = options.personal ? "" : options.org
-  if (org === undefined) {
-    const repoOwner = findRepoOwner(astroConfig)
-    org = isInteractive
-      ? await promptText({
-          message:
-            "Which GitHub organization should own the app? Leave empty for your personal account.",
-          initialValue: repoOwner,
-        })
-      : (repoOwner ?? "")
-  }
-
-  const name =
-    options.name ??
-    `${new URL(siteOrigin).hostname} CMS`.slice(0, maxAppNameLength)
+  const ownerType = await lookupOwnerType(repo.owner, fetchFn)
+  const isOrganization =
+    ownerType === undefined
+      ? await promptConfirm(`Is ${repo.owner} a GitHub organization?`)
+      : ownerType === "Organization"
 
   const state = randomUUID()
   const code = await waitForManifestCode({
     state,
-    registrationUrl: getRegistrationUrl({ org, state }),
+    registrationUrl: getRegistrationUrl({
+      org: isOrganization ? repo.owner : "",
+      state,
+    }),
     createManifest: (redirectUrl) =>
       createManifest({ name, siteOrigin, redirectUrl }),
-    onReady: async (url) => {
-      log.step(
-        `Open ${url} to create the GitHub App. GitHub lets you review the settings before you create it.`,
-      )
-      await openUrl?.(url)
-    },
+    onReady: (url) =>
+      openWhenReady({
+        title: "Create the GitHub App",
+        message: [
+          `Next, GitHub opens in your browser to create the GitHub App "${name}" ${isOrganization ? `for the organization ${repo.owner}` : `for your personal account. Make sure you are signed in to GitHub as ${repo.owner}`}.`,
+          'GitHub shows the app settings that LightNet filled in. Review them and select "Create GitHub App".',
+          "If GitHub says the name is taken, change it on the form.",
+        ].join("\n"),
+        url,
+        promptConfirm,
+        openUrl,
+      }),
   })
-  const app = await exchangeManifestCode(code, runtime.fetch ?? fetch)
+  const app = await exchangeManifestCode(code, fetchFn)
   log.success(`Created the GitHub App "${app.slug}".`)
 
   const { text: updatedConfig, warnings } = updateWranglerConfig(
@@ -138,44 +153,104 @@ export async function setupGithubAuth(options, runtime = {}) {
     app.client_id,
   )
   await writeFile(configPath, updatedConfig)
-  log.success(`Updated ${options.config ?? "wrangler.jsonc"}.`)
+  log.success(`Updated ${wranglerConfigFile}.`)
   warnings.forEach((warning) => log.warn(warning))
 
-  const storeSecret = runtime.storeSecret ?? storeSecretWithWrangler
-  const secretStored =
-    isInteractive &&
-    (await promptConfirm(
-      "Store the client secret in your Cloudflare Worker with wrangler now?",
-    )) &&
-    (await storeSecret(app.client_secret, cwd))
-  if (!secretStored) {
-    note(
-      `${app.client_secret}\n\nIn the Cloudflare dashboard, open your site's Worker, go to Settings → Variables and Secrets, and add it as the encrypted secret GITHUB_CLIENT_SECRET. GitHub shows this secret only once.`,
-      "GitHub client secret",
-    )
+  if (await hasDependency(cwd, authPackage)) {
+    log.info(`${authPackage} is already installed.`)
+  } else if (await addPackage(authPackage, cwd)) {
+    log.success(`Added ${authPackage} to your site.`)
+  } else {
+    log.warn(`Could not add ${authPackage}. Run: pnpm add ${authPackage}`)
   }
 
-  if (!(await hasDependency(cwd, authPackage))) {
-    log.warn(`Add the auth package to your site: pnpm add ${authPackage}`)
+  note(
+    [
+      app.client_secret,
+      "",
+      "In the Cloudflare dashboard, open your site's Worker, go to Settings → Variables and Secrets, and add this value as the secret GITHUB_CLIENT_SECRET (type: Secret).",
+      "GitHub shows this secret only once.",
+    ].join("\n"),
+    "GitHub client secret",
+  )
+  while (
+    !(await promptConfirm(
+      "Have you added GITHUB_CLIENT_SECRET to your Worker in Cloudflare?",
+    ))
+  ) {
+    log.warn("Add the secret before you continue. GitHub shows it only once.")
   }
+
+  const repoId = await lookupRepoId(repo, fetchFn)
+  await openWhenReady({
+    title: "Install the GitHub App",
+    message: [
+      `Next, GitHub opens in your browser to install the app on ${repo.owner}/${repo.name}.`,
+      `Choose "Only select repositories" and select only ${repo.owner}/${repo.name}. Don't give the app access to all repositories.`,
+      repoId
+        ? `LightNet asks GitHub to preselect ${repo.owner}/${repo.name}. Check that no other repository is selected, then select "Install".`
+        : `Then select "Install".`,
+    ].join("\n"),
+    url: getInstallationUrl({ slug: app.slug, ownerId: app.owner?.id, repoId }),
+    promptConfirm,
+    openUrl,
+  })
+
+  const nextSteps = []
   if (/\bbaseUrl\s*:/.test(astroConfig ?? "")) {
-    log.warn(
+    nextSteps.push(
       `Remove backend.baseUrl from your Astro config so the Administration UI uses ${siteOrigin}${authBasePath}.`,
     )
   }
-
-  const installUrl = `https://github.com/apps/${app.slug}/installations/new`
+  nextSteps.push(
+    "Commit and push your changes, then sign in to the Administration UI.",
+  )
   note(
-    [
-      `1. Install the app on your site's repository: ${installUrl}`,
-      `2. In the app settings, check that "Expire user authorization tokens" is enabled: ${app.html_url}`,
-      "3. Commit and push your changes, then sign in to the Administration UI.",
-    ].join("\n"),
+    nextSteps.map((step, index) => `${index + 1}. ${step}`).join("\n"),
     "Next steps",
   )
-  await openUrl?.(installUrl)
   outro("GitHub authentication is configured.")
   return app
+}
+
+/**
+ * @param {string} siteOrigin
+ */
+export function getDefaultAppName(siteOrigin) {
+  return `${new URL(siteOrigin).hostname} Authentication`
+}
+
+/**
+ * @param {string | undefined} name
+ */
+export function validateAppName(name) {
+  const trimmed = name?.trim() ?? ""
+  if (!trimmed) {
+    return "Enter a name for the GitHub App."
+  }
+  if (trimmed.length > maxAppNameLength) {
+    return `GitHub App names can have at most ${maxAppNameLength} characters.`
+  }
+}
+
+/**
+ * Explains what happens next and opens the URL only after the user agrees.
+ *
+ * @param {{
+ *   title: string
+ *   message: string
+ *   url: string
+ *   promptConfirm: (message: string) => Promise<boolean>
+ *   openUrl: (url: string) => void | Promise<void>
+ * }} options
+ */
+async function openWhenReady({ title, message, url, promptConfirm, openUrl }) {
+  note(message, title)
+  if (await promptConfirm("Open GitHub in your browser now?")) {
+    await openUrl(url)
+  } else {
+    log.info(`Open this URL when you are ready: ${url}`)
+  }
 }
 
 /**
@@ -206,6 +281,26 @@ export function getRegistrationUrl({ org, state }) {
       : "https://github.com/settings/apps/new",
   )
   url.searchParams.set("state", state)
+  return url.toString()
+}
+
+/**
+ * Installation page of the app. Preselects the owner account and the site's
+ * repository when their IDs are known.
+ *
+ * @param {{ slug: string, ownerId?: number, repoId?: number }} options
+ */
+export function getInstallationUrl({ slug, ownerId, repoId }) {
+  if (!ownerId) {
+    return `https://github.com/apps/${slug}/installations/new`
+  }
+  const url = new URL(
+    `https://github.com/apps/${slug}/installations/new/permissions`,
+  )
+  url.searchParams.set("target_id", String(ownerId))
+  if (repoId) {
+    url.searchParams.append("repository_ids[]", String(repoId))
+  }
   return url.toString()
 }
 
@@ -304,10 +399,7 @@ export async function exchangeManifestCode(code, fetchFn) {
     `https://api.github.com/app-manifests/${encodeURIComponent(code)}/conversions`,
     {
       method: "POST",
-      headers: {
-        Accept: "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
+      headers: githubApiHeaders,
     },
   )
   if (response.status !== 201) {
@@ -401,10 +493,67 @@ export function findSiteUrl(astroConfig) {
 /**
  * @param {string | undefined} astroConfig
  */
-export function findRepoOwner(astroConfig) {
+export function findRepo(astroConfig) {
   return astroConfig?.match(
-    /\brepo\s*:\s*["'`]([A-Za-z0-9-]+)\/[A-Za-z0-9._-]+["'`]/,
+    /\brepo\s*:\s*["'`]([A-Za-z0-9-]+\/[A-Za-z0-9._-]+)["'`]/,
   )?.[1]
+}
+
+/**
+ * @param {string} repo `owner/name`
+ */
+export function parseRepo(repo) {
+  const match = repo.trim().match(/^([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+)$/)
+  if (!match) {
+    throw new CliError(
+      `"${repo}" is not a GitHub repository. Use the form owner/name.`,
+    )
+  }
+  return { owner: match[1], name: match[2] }
+}
+
+/**
+ * Looks up whether a GitHub account is an organization or a user.
+ *
+ * @param {string} owner
+ * @param {typeof fetch} fetchFn
+ * @returns {Promise<string | undefined>}
+ */
+export async function lookupOwnerType(owner, fetchFn) {
+  const account = await fetchGithubJson(
+    `https://api.github.com/users/${encodeURIComponent(owner)}`,
+    fetchFn,
+  )
+  return typeof account?.type === "string" ? account.type : undefined
+}
+
+/**
+ * Looks up the repository ID. Only works for public repositories, because
+ * the CLI has no GitHub token.
+ *
+ * @param {{ owner: string, name: string }} repo
+ * @param {typeof fetch} fetchFn
+ * @returns {Promise<number | undefined>}
+ */
+export async function lookupRepoId(repo, fetchFn) {
+  const result = await fetchGithubJson(
+    `https://api.github.com/repos/${encodeURIComponent(repo.owner)}/${encodeURIComponent(repo.name)}`,
+    fetchFn,
+  )
+  return typeof result?.id === "number" ? result.id : undefined
+}
+
+/**
+ * @param {string} url
+ * @param {typeof fetch} fetchFn
+ */
+async function fetchGithubJson(url, fetchFn) {
+  try {
+    const response = await fetchFn(url, { headers: githubApiHeaders })
+    return response.ok ? await response.json() : undefined
+  } catch {
+    return undefined
+  }
 }
 
 /**
@@ -450,20 +599,15 @@ async function hasDependency(cwd, name) {
 }
 
 /**
- * @param {string} secret
+ * @param {string} name
  * @param {string} cwd
  * @returns {Promise<boolean>}
  */
-function storeSecretWithWrangler(secret, cwd) {
+function addPackageWithPnpm(name, cwd) {
   return new Promise((resolvePromise) => {
-    const child = spawn(
-      "pnpm",
-      ["dlx", "wrangler@4", "secret", "put", "GITHUB_CLIENT_SECRET"],
-      { cwd, stdio: ["pipe", "inherit", "inherit"] },
-    )
+    const child = spawn("pnpm", ["add", name], { cwd, stdio: "inherit" })
     child.on("error", () => resolvePromise(false))
     child.on("close", (exitCode) => resolvePromise(exitCode === 0))
-    child.stdin.end(secret)
   })
 }
 
@@ -483,7 +627,21 @@ function openInBrowser(url) {
 }
 
 /**
- * @param {{ message: string, initialValue?: string, placeholder?: string }} options
+ * Turns a parser that throws into a prompt validator.
+ *
+ * @param {(value: string) => unknown} parseValue
+ * @param {string | undefined} value
+ */
+function validateWith(parseValue, value) {
+  try {
+    parseValue(value ?? "")
+  } catch (error) {
+    return error instanceof Error ? error.message : String(error)
+  }
+}
+
+/**
+ * @param {{ message: string, initialValue?: string, placeholder?: string, validate?: (value: string | undefined) => string | undefined }} options
  */
 async function defaultPromptText(options) {
   const answer = await text(options)

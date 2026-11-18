@@ -8,13 +8,19 @@ import { describe, expect, test, vi } from "vitest"
 import {
   createManifest,
   exchangeManifestCode,
-  findRepoOwner,
+  findRepo,
   findSiteUrl,
+  getDefaultAppName,
+  getInstallationUrl,
   getRegistrationUrl,
+  lookupOwnerType,
+  lookupRepoId,
+  parseRepo,
   setupGithubAuth,
   siteWorkerPath,
   toSiteOrigin,
   updateWranglerConfig,
+  validateAppName,
   waitForManifestCode,
 } from "../src/setup-github-auth.js"
 
@@ -139,14 +145,43 @@ describe("manifest", () => {
   ])("registers the app for owner %j at %s", (org, url) => {
     expect(getRegistrationUrl({ org, state: "abc" })).toBe(`${url}?state=abc`)
   })
+
+  test("preselects the owner and repository for the installation", () => {
+    expect(getInstallationUrl({ slug: "my-app", ownerId: 1, repoId: 2 })).toBe(
+      "https://github.com/apps/my-app/installations/new/permissions?target_id=1&repository_ids%5B%5D=2",
+    )
+    expect(getInstallationUrl({ slug: "my-app", ownerId: 1 })).toBe(
+      "https://github.com/apps/my-app/installations/new/permissions?target_id=1",
+    )
+    expect(getInstallationUrl({ slug: "my-app" })).toBe(
+      "https://github.com/apps/my-app/installations/new",
+    )
+  })
+
+  test("names the app after the site and limits the length", () => {
+    expect(getDefaultAppName("https://my-library.org")).toBe(
+      "my-library.org Authentication",
+    )
+    expect(validateAppName("my-library.org Authentication")).toBeUndefined()
+    expect(validateAppName(" ")).toContain("Enter a name")
+    expect(validateAppName("x".repeat(35))).toContain("at most 34")
+  })
 })
 
 describe("astro config", () => {
-  test("finds the site URL and repository owner", () => {
+  test("finds the site URL and repository", () => {
     expect(findSiteUrl(astroConfig)).toBe("https://my-library.org/")
-    expect(findRepoOwner(astroConfig)).toBe("my-org")
+    expect(findRepo(astroConfig)).toBe("my-org/my-site")
     expect(findSiteUrl(undefined)).toBeUndefined()
-    expect(findRepoOwner("")).toBeUndefined()
+    expect(findRepo("")).toBeUndefined()
+  })
+
+  test("parses owner/name repositories", () => {
+    expect(parseRepo(" my-org/my-site ")).toEqual({
+      owner: "my-org",
+      name: "my-site",
+    })
+    expect(() => parseRepo("my-site")).toThrow("owner/name")
   })
 
   test("uses the site origin and requires HTTPS", () => {
@@ -199,6 +234,33 @@ describe("waitForManifestCode", () => {
   })
 })
 
+describe("GitHub lookups", () => {
+  test("returns the owner type and public repository ID", async () => {
+    const fetchMock = vi.fn(async (url) =>
+      url.endsWith("/users/my-org")
+        ? Response.json({ type: "Organization" })
+        : Response.json({ id: 42 }),
+    )
+    await expect(lookupOwnerType("my-org", fetchMock)).resolves.toBe(
+      "Organization",
+    )
+    await expect(
+      lookupRepoId({ owner: "my-org", name: "my-site" }, fetchMock),
+    ).resolves.toBe(42)
+  })
+
+  test("returns undefined for private repositories and network errors", async () => {
+    const notFound = vi.fn(async () => new Response("", { status: 404 }))
+    const offline = vi.fn(async () => {
+      throw new TypeError("fetch failed")
+    })
+    await expect(
+      lookupRepoId({ owner: "my-org", name: "my-site" }, notFound),
+    ).resolves.toBeUndefined()
+    await expect(lookupOwnerType("my-org", offline)).resolves.toBeUndefined()
+  })
+})
+
 describe("exchangeManifestCode", () => {
   test("returns the app credentials", async () => {
     const fetchMock = vi.fn(async () =>
@@ -233,59 +295,86 @@ describe("exchangeManifestCode", () => {
 })
 
 describe("setupGithubAuth", () => {
-  test("creates the app and configures the site", async () => {
-    const cwd = await mkdtemp(join(tmpdir(), "lightnet-setup-github-auth-"))
-    try {
-      await writeFile(join(cwd, "wrangler.jsonc"), siteWranglerConfig)
-      await writeFile(join(cwd, "astro.config.mjs"), astroConfig)
-      await writeFile(
-        join(cwd, "package.json"),
-        JSON.stringify({
-          dependencies: { "@lightnet/sveltia-github-auth": "^1.4.0" },
-        }),
-      )
-      const openedUrls = []
-      const storeSecret = vi.fn(async () => true)
-      const fetchMock = vi.fn(async () =>
-        Response.json(
-          {
-            client_id: "Iv23client",
-            client_secret: "secret",
-            slug: "my-app",
-            html_url: "https://github.com/apps/my-app",
-          },
-          { status: 201 },
-        ),
-      )
-
-      await setupGithubAuth(
-        {},
+  /**
+   * Plays GitHub: answers API requests and, when the local registration page
+   * is opened, reads the form and redirects back with a code.
+   */
+  function createGithubMock() {
+    const fetchMock = vi.fn(async (url) => {
+      if (url.endsWith("/users/my-org")) {
+        return Response.json({ type: "Organization" })
+      }
+      if (url.endsWith("/repos/my-org/my-site")) {
+        return Response.json({ id: 42 })
+      }
+      return Response.json(
         {
-          cwd,
-          isInteractive: true,
-          fetch: fetchMock,
-          promptText: async ({ initialValue }) => initialValue ?? "",
-          promptConfirm: async () => true,
-          storeSecret,
-          // Plays GitHub: reads the form and redirects back with a code.
-          openUrl: async (url) => {
-            openedUrls.push(url)
-            if (!url.startsWith("http://127.0.0.1")) return
-            const page = await (await fetch(url)).text()
-            const action = page.match(/action="([^"]+)"/)[1]
-            const state = new URL(
-              action.replaceAll("&amp;", "&"),
-            ).searchParams.get("state")
-            await fetch(`${url}callback?code=code&state=${state}`)
-          },
+          client_id: "Iv23client",
+          client_secret: "secret",
+          slug: "my-app",
+          html_url: "https://github.com/apps/my-app",
+          owner: { login: "my-org", id: 7, type: "Organization" },
         },
+        { status: 201 },
       )
+    })
+    const openedUrls = []
+    const openUrl = async (url) => {
+      openedUrls.push(url)
+      if (!url.startsWith("http://127.0.0.1")) return
+      const page = await (await fetch(url)).text()
+      const action = page.match(/action="([^"]+)"/)[1]
+      const state = new URL(action.replaceAll("&amp;", "&")).searchParams.get(
+        "state",
+      )
+      await fetch(`${url}callback?code=code&state=${state}`)
+    }
+    return { fetchMock, openUrl, openedUrls }
+  }
 
-      expect(openedUrls[0]).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/$/)
-      expect(openedUrls[1]).toBe(
-        "https://github.com/apps/my-app/installations/new",
+  async function createSite(dependencies = {}) {
+    const cwd = await mkdtemp(join(tmpdir(), "lightnet-setup-github-auth-"))
+    await writeFile(join(cwd, "wrangler.jsonc"), siteWranglerConfig)
+    await writeFile(join(cwd, "astro.config.mjs"), astroConfig)
+    await writeFile(join(cwd, "package.json"), JSON.stringify({ dependencies }))
+    return cwd
+  }
+
+  test("creates the app and configures the site", async () => {
+    const cwd = await createSite()
+    try {
+      const { fetchMock, openUrl, openedUrls } = createGithubMock()
+      const prompts = []
+      const addPackage = vi.fn(async () => true)
+
+      await setupGithubAuth({
+        cwd,
+        isInteractive: true,
+        fetch: fetchMock,
+        openUrl,
+        addPackage,
+        promptText: async ({ message, initialValue }) => {
+          prompts.push(message)
+          return initialValue ?? ""
+        },
+        promptConfirm: async (message) => {
+          prompts.push(message)
+          return true
+        },
+      })
+
+      expect(openedUrls).toEqual([
+        expect.stringMatching(/^http:\/\/127\.0\.0\.1:\d+\/$/),
+        "https://github.com/apps/my-app/installations/new/permissions?target_id=7&repository_ids%5B%5D=42",
+      ])
+      // Every browser opening is confirmed by the user first.
+      expect(
+        prompts.filter((message) => message.includes("Open GitHub")),
+      ).toHaveLength(2)
+      expect(addPackage).toHaveBeenCalledWith(
+        "@lightnet/sveltia-github-auth",
+        cwd,
       )
-      expect(storeSecret).toHaveBeenCalledWith("secret", cwd)
       const config = parse(await readFile(join(cwd, "wrangler.jsonc"), "utf8"))
       expect(config).toMatchObject({
         main: siteWorkerPath,
@@ -296,15 +385,35 @@ describe("setupGithubAuth", () => {
     }
   })
 
-  test("requires --site without a site URL when not interactive", async () => {
-    const cwd = await mkdtemp(join(tmpdir(), "lightnet-setup-github-auth-"))
+  test("opens only the pages the user agrees to", async () => {
+    const cwd = await createSite({ "@lightnet/sveltia-github-auth": "^1.4.0" })
     try {
-      await writeFile(join(cwd, "wrangler.jsonc"), siteWranglerConfig)
-      await expect(
-        setupGithubAuth({}, { cwd, isInteractive: false }),
-      ).rejects.toThrow("Pass --site")
+      const { fetchMock, openUrl, openedUrls } = createGithubMock()
+      const addPackage = vi.fn(async () => true)
+      let browserPrompts = 0
+      await setupGithubAuth({
+        cwd,
+        isInteractive: true,
+        fetch: fetchMock,
+        openUrl,
+        addPackage,
+        promptText: async ({ initialValue }) => initialValue ?? "",
+        // Agrees to create the app, but declines the later pages.
+        promptConfirm: async (message) =>
+          !message.includes("Open GitHub") || browserPrompts++ === 0,
+      })
+      expect(openedUrls).toEqual([
+        expect.stringMatching(/^http:\/\/127\.0\.0\.1:\d+\/$/),
+      ])
+      expect(addPackage).not.toHaveBeenCalled()
     } finally {
       await rm(cwd, { force: true, recursive: true })
     }
+  })
+
+  test("requires an interactive terminal", async () => {
+    await expect(setupGithubAuth({ isInteractive: false })).rejects.toThrow(
+      "interactive terminal",
+    )
   })
 })
