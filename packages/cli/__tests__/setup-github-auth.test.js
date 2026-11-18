@@ -10,6 +10,7 @@ import {
   exchangeManifestCode,
   findRepo,
   findSiteUrl,
+  getAppSettingsUrl,
   getDefaultAppName,
   getInstallationUrl,
   getRegistrationUrl,
@@ -144,6 +145,15 @@ describe("manifest", () => {
     ["", "https://github.com/settings/apps/new"],
   ])("registers the app for owner %j at %s", (org, url) => {
     expect(getRegistrationUrl({ org, state: "abc" })).toBe(`${url}?state=abc`)
+  })
+
+  test("links to the app settings of the owner", () => {
+    expect(getAppSettingsUrl({ slug: "my-app" }, "my-org")).toBe(
+      "https://github.com/organizations/my-org/settings/apps/my-app",
+    )
+    expect(getAppSettingsUrl({ slug: "my-app" }, undefined)).toBe(
+      "https://github.com/settings/apps/my-app",
+    )
   })
 
   test("preselects the owner and repository for the installation", () => {
@@ -332,10 +342,10 @@ describe("setupGithubAuth", () => {
     return { fetchMock, openUrl, openedUrls }
   }
 
-  async function createSite(dependencies = {}) {
+  async function createSite(dependencies = {}, astro = astroConfig) {
     const cwd = await mkdtemp(join(tmpdir(), "lightnet-setup-github-auth-"))
     await writeFile(join(cwd, "wrangler.jsonc"), siteWranglerConfig)
-    await writeFile(join(cwd, "astro.config.mjs"), astroConfig)
+    await writeFile(join(cwd, "astro.config.mjs"), astro)
     await writeFile(join(cwd, "package.json"), JSON.stringify({ dependencies }))
     return cwd
   }
@@ -371,6 +381,15 @@ describe("setupGithubAuth", () => {
       expect(
         prompts.filter((message) => message.includes("Open GitHub")),
       ).toHaveLength(2)
+      // The secret can only be added after the Worker is deployed with a script.
+      expect(prompts).toEqual([
+        "Which GitHub repository holds your site?",
+        "What should the GitHub App be called?",
+        "Open GitHub in your browser now?",
+        "Open GitHub in your browser now?",
+        "Has Cloudflare deployed your site?",
+        "Have you added GITHUB_CLIENT_SECRET to your Worker in Cloudflare?",
+      ])
       expect(addPackage).toHaveBeenCalledWith(
         "@lightnet/sveltia-github-auth",
         cwd,
@@ -406,6 +425,17 @@ describe("setupGithubAuth", () => {
         expect.stringMatching(/^http:\/\/127\.0\.0\.1:\d+\/$/),
       ])
       expect(addPackage).not.toHaveBeenCalled()
+    } finally {
+      await rm(cwd, { force: true, recursive: true })
+    }
+  })
+
+  test("requires the site option in the Astro config", async () => {
+    const cwd = await createSite({}, "export default defineConfig({})")
+    try {
+      await expect(
+        setupGithubAuth({ cwd, isInteractive: true }),
+      ).rejects.toThrow('Set "site" in your Astro config')
     } finally {
       await rm(cwd, { force: true, recursive: true })
     }

@@ -95,14 +95,14 @@ export async function setupGithubAuth(runtime = {}) {
   })
   const astroConfig = await readAstroConfig(cwd)
 
-  const siteOrigin = toSiteOrigin(
-    await promptText({
-      message: "What is your site's URL?",
-      initialValue: findSiteUrl(astroConfig),
-      placeholder: "https://my-library.org",
-      validate: (value) => validateWith(toSiteOrigin, value),
-    }),
-  )
+  const site = findSiteUrl(astroConfig)
+  if (!site) {
+    throw new CliError(
+      'Could not find your site\'s URL. Set "site" in your Astro config, such as site: "https://my-library.org".',
+    )
+  }
+  const siteOrigin = toSiteOrigin(site)
+  log.info(`Setting up sign-in for ${siteOrigin}.`)
   const repo = parseRepo(
     await promptText({
       message: "Which GitHub repository holds your site?",
@@ -164,23 +164,6 @@ export async function setupGithubAuth(runtime = {}) {
     log.warn(`Could not add ${authPackage}. Run: pnpm add ${authPackage}`)
   }
 
-  note(
-    [
-      app.client_secret,
-      "",
-      "In the Cloudflare dashboard, open your site's Worker, go to Settings → Variables and Secrets, and add this value as the secret GITHUB_CLIENT_SECRET (type: Secret).",
-      "GitHub shows this secret only once.",
-    ].join("\n"),
-    "GitHub client secret",
-  )
-  while (
-    !(await promptConfirm(
-      "Have you added GITHUB_CLIENT_SECRET to your Worker in Cloudflare?",
-    ))
-  ) {
-    log.warn("Add the secret before you continue. GitHub shows it only once.")
-  }
-
   const repoId = await lookupRepoId(repo, fetchFn)
   await openWhenReady({
     title: "Install the GitHub App",
@@ -196,14 +179,52 @@ export async function setupGithubAuth(runtime = {}) {
     openUrl,
   })
 
+  // Cloudflare only stores secrets for Workers that run a script, so the
+  // site's Worker has to be deployed with the new `main` before the secret
+  // can be added.
+  const settingsUrl = getAppSettingsUrl(
+    app,
+    isOrganization ? repo.owner : undefined,
+  )
+  note(
+    [
+      `Commit and push the changes to ${wranglerConfigFile}, package.json, and pnpm-lock.yaml to the branch Cloudflare deploys from, usually main.`,
+      "Then wait until Cloudflare has deployed your site. Cloudflare can store the client secret only after this deploy.",
+      "Keep this terminal open: the next step shows the client secret.",
+    ].join("\n"),
+    "Deploy your site",
+  )
+  while (!(await promptConfirm("Has Cloudflare deployed your site?"))) {
+    log.warn(
+      `Wait for the deploy before you continue. If you have to stop now, generate a new client secret later in the app settings: ${settingsUrl}`,
+    )
+  }
+
+  note(
+    [
+      app.client_secret,
+      "",
+      "In the Cloudflare dashboard, open your site's Worker, go to Settings → Variables and Secrets, and add this value as the secret GITHUB_CLIENT_SECRET (type: Secret).",
+      `GitHub shows this secret only once. If you lose it, generate a new one in the app settings: ${settingsUrl}`,
+    ].join("\n"),
+    "GitHub client secret",
+  )
+  while (
+    !(await promptConfirm(
+      "Have you added GITHUB_CLIENT_SECRET to your Worker in Cloudflare?",
+    ))
+  ) {
+    log.warn("Add the secret before you continue. GitHub shows it only once.")
+  }
+
   const nextSteps = []
   if (/\bbaseUrl\s*:/.test(astroConfig ?? "")) {
     nextSteps.push(
-      `Remove backend.baseUrl from your Astro config so the Administration UI uses ${siteOrigin}${authBasePath}.`,
+      `Remove backend.baseUrl from your Astro config so the Administration UI uses ${siteOrigin}${authBasePath}. Then commit and push.`,
     )
   }
   nextSteps.push(
-    "Commit and push your changes, then sign in to the Administration UI.",
+    `Sign in to the Administration UI on ${siteOrigin} to check that everything works.`,
   )
   note(
     nextSteps.map((step, index) => `${index + 1}. ${step}`).join("\n"),
@@ -282,6 +303,18 @@ export function getRegistrationUrl({ org, state }) {
   )
   url.searchParams.set("state", state)
   return url.toString()
+}
+
+/**
+ * Settings page of the app, where client secrets can be generated.
+ *
+ * @param {{ slug: string }} app
+ * @param {string | undefined} org
+ */
+export function getAppSettingsUrl(app, org) {
+  return org
+    ? `https://github.com/organizations/${encodeURIComponent(org)}/settings/apps/${app.slug}`
+    : `https://github.com/settings/apps/${app.slug}`
 }
 
 /**
