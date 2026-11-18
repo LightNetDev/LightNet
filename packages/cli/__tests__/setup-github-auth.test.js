@@ -16,7 +16,6 @@ import {
   getRegistrationUrl,
   lookupOwnerType,
   lookupRepoId,
-  parseGithubRemote,
   setupGithubAuth,
   siteWorkerPath,
   toSiteOrigin,
@@ -181,28 +180,9 @@ describe("manifest", () => {
 describe("astro config", () => {
   test("finds the site URL and repository", () => {
     expect(findSiteUrl(astroConfig)).toBe("https://my-library.org/")
-    expect(findRepo(astroConfig)).toBe("my-org/my-site")
+    expect(findRepo(astroConfig)).toEqual({ owner: "my-org", name: "my-site" })
     expect(findSiteUrl(undefined)).toBeUndefined()
     expect(findRepo("")).toBeUndefined()
-  })
-
-  test.each([
-    "git@github.com:my-org/my-site.git",
-    "ssh://git@github.com/my-org/my-site.git",
-    "https://github.com/my-org/my-site.git",
-    "https://github.com/my-org/my-site\n",
-    "https://token@github.com/my-org/my-site/",
-  ])("reads the repository from the Git remote %j", (remoteUrl) => {
-    expect(parseGithubRemote(remoteUrl)).toEqual({
-      owner: "my-org",
-      name: "my-site",
-    })
-  })
-
-  test("rejects Git remotes that are not on GitHub", () => {
-    expect(() =>
-      parseGithubRemote("git@gitlab.com:my-org/my-site.git"),
-    ).toThrow("not a GitHub repository")
   })
 
   test("uses the site origin and requires HTTPS", () => {
@@ -374,7 +354,6 @@ describe("setupGithubAuth", () => {
         fetch: fetchMock,
         openUrl,
         addPackage,
-        readGitRemote: async () => "git@github.com:my-org/my-site.git\n",
         promptText: async ({ message, initialValue }) => {
           prompts.push(message)
           return initialValue ?? ""
@@ -427,7 +406,6 @@ describe("setupGithubAuth", () => {
         fetch: fetchMock,
         openUrl,
         addPackage,
-        readGitRemote: async () => "git@github.com:my-org/my-site.git\n",
         promptText: async ({ initialValue }) => initialValue ?? "",
         // Agrees to create the app, but declines the later pages.
         promptConfirm: async (message) =>
@@ -453,18 +431,15 @@ describe("setupGithubAuth", () => {
     }
   })
 
-  test("requires a Git remote", async () => {
-    const cwd = await createSite()
+  test("requires backend.repo in the Astro config", async () => {
+    const cwd = await createSite(
+      {},
+      'export default defineConfig({ site: "https://my-library.org" })',
+    )
     try {
       await expect(
-        setupGithubAuth({
-          cwd,
-          isInteractive: true,
-          readGitRemote: async () => {
-            throw new Error("No such remote 'origin'")
-          },
-        }),
-      ).rejects.toThrow('Git remote "origin"')
+        setupGithubAuth({ cwd, isInteractive: true }),
+      ).rejects.toThrow("Set backend.repo in your Astro config")
     } finally {
       await rm(cwd, { force: true, recursive: true })
     }

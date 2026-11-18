@@ -1,6 +1,6 @@
 // @ts-check
 
-import { execFile, spawn } from "node:child_process"
+import { spawn } from "node:child_process"
 import { randomUUID } from "node:crypto"
 import { readFile, writeFile } from "node:fs/promises"
 import { createServer } from "node:http"
@@ -57,7 +57,6 @@ const astroConfigFiles = [
  *   promptText?: (options: { message: string, initialValue?: string, placeholder?: string, validate?: (value: string | undefined) => string | undefined }) => Promise<string>
  *   promptConfirm?: (message: string) => Promise<boolean>
  *   addPackage?: (name: string, cwd: string) => Promise<boolean>
- *   readGitRemote?: (cwd: string) => Promise<string>
  * }} SetupGithubAuthRuntime
  */
 
@@ -79,7 +78,6 @@ export async function setupGithubAuth(runtime = {}) {
   const promptConfirm = runtime.promptConfirm ?? defaultPromptConfirm
   const openUrl = runtime.openUrl ?? openInBrowser
   const addPackage = runtime.addPackage ?? addPackageWithPnpm
-  const readGitRemote = runtime.readGitRemote ?? readOriginUrl
 
   if (!isInteractive) {
     throw new CliError(
@@ -105,24 +103,14 @@ export async function setupGithubAuth(runtime = {}) {
   }
   const siteOrigin = toSiteOrigin(site)
   log.info(`Setting up sign-in for ${siteOrigin}.`)
-  const repo = parseGithubRemote(
-    await readGitRemote(cwd).catch(() => {
-      throw new CliError(
-        'Could not read the Git remote "origin". Run this command in your site\'s Git repository and push it to GitHub first.',
-      )
-    }),
-  )
-  const repoName = `${repo.owner}/${repo.name}`
-  log.info(`Using the GitHub repository ${repoName} from the Git remote.`)
-  const configuredRepo = findRepo(astroConfig)
-  if (
-    configuredRepo &&
-    configuredRepo.toLowerCase() !== repoName.toLowerCase()
-  ) {
-    log.warn(
-      `backend.repo in your Astro config is ${configuredRepo}, but the Git remote is ${repoName}. Make sure both point to the same repository.`,
+  const repo = findRepo(astroConfig)
+  if (!repo) {
+    throw new CliError(
+      'Could not find your site\'s GitHub repository. Set backend.repo in your Astro config, such as repo: "my-org/my-library".',
     )
   }
+  const repoName = `${repo.owner}/${repo.name}`
+  log.info(`Using the GitHub repository ${repoName} from backend.repo.`)
   const name = await promptText({
     message: "What should the GitHub App be called?",
     initialValue: getDefaultAppName(siteOrigin),
@@ -539,29 +527,10 @@ export function findSiteUrl(astroConfig) {
  * @param {string | undefined} astroConfig
  */
 export function findRepo(astroConfig) {
-  return astroConfig?.match(
-    /\brepo\s*:\s*["'`]([A-Za-z0-9-]+\/[A-Za-z0-9._-]+)["'`]/,
-  )?.[1]
-}
-
-/**
- * Reads owner and name from a GitHub remote URL, such as
- * `git@github.com:owner/name.git` or `https://github.com/owner/name`.
- *
- * @param {string} remoteUrl
- */
-export function parseGithubRemote(remoteUrl) {
-  const match = remoteUrl
-    .trim()
-    .match(
-      /^(?:https:\/\/(?:[^@/]+@)?github\.com\/|(?:ssh:\/\/)?git@github\.com[:/])([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+?)(?:\.git)?\/?$/,
-    )
-  if (!match) {
-    throw new CliError(
-      `The Git remote "origin" (${remoteUrl.trim()}) is not a GitHub repository. Sign-in needs your site's repository on GitHub.`,
-    )
-  }
-  return { owner: match[1], name: match[2] }
+  const match = astroConfig?.match(
+    /\brepo\s*:\s*["'`]([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+)["'`]/,
+  )
+  return match ? { owner: match[1], name: match[2] } : undefined
 }
 
 /**
@@ -648,21 +617,6 @@ async function hasDependency(cwd, name) {
   } catch {
     return false
   }
-}
-
-/**
- * @param {string} cwd
- * @returns {Promise<string>}
- */
-function readOriginUrl(cwd) {
-  return new Promise((resolvePromise, reject) => {
-    execFile(
-      "git",
-      ["remote", "get-url", "origin"],
-      { cwd },
-      (error, output) => (error ? reject(error) : resolvePromise(output)),
-    )
-  })
 }
 
 /**
