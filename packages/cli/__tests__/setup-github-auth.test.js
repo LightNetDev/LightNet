@@ -129,12 +129,13 @@ describe("manifest", () => {
         redirectUrl: "http://127.0.0.1:1234/callback",
       }),
     ).toMatchObject({
-      url: "https://my-library.org",
+      description: expect.not.stringContaining("my-library.org"),
+      url: "https://lightnet.community",
       redirect_url: "http://127.0.0.1:1234/callback",
       callback_urls: ["https://my-library.org/_auth/callback"],
       public: false,
       request_oauth_on_install: false,
-      hook_attributes: { active: false },
+      hook_attributes: { url: "https://lightnet.community", active: false },
       default_permissions: { contents: "write", metadata: "read" },
     })
   })
@@ -167,10 +168,12 @@ describe("manifest", () => {
     )
   })
 
-  test("names the app after the site and limits the length", () => {
-    expect(getDefaultAppName("https://my-library.org")).toBe(
-      "my-library.org Authentication",
+  test("names the app after the repository and fits the length limit", () => {
+    expect(getDefaultAppName("my-site")).toBe("my-site Authentication")
+    expect(getDefaultAppName("mediaworks-digital-library")).toBe(
+      "mediaworks-digital-library Auth",
     )
+    expect(getDefaultAppName("x".repeat(40))).toBe("x".repeat(34))
     expect(validateAppName("my-library.org Authentication")).toBeUndefined()
     expect(validateAppName(" ")).toContain("Enter a name")
     expect(validateAppName("x".repeat(35))).toContain("at most 34")

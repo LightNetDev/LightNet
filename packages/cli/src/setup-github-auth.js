@@ -26,6 +26,8 @@ export const authBasePath = "/_auth"
 export const siteWorkerPath =
   "node_modules/@lightnet/sveltia-github-auth/src/site-worker.ts"
 export const maxAppNameLength = 34
+/** The app's homepage. Not the site's URL, which can change later. */
+export const appHomepageUrl = "https://lightnet.community"
 const authPackage = "@lightnet/sveltia-github-auth"
 const wranglerConfigFile = "wrangler.jsonc"
 const registrationTimeoutMs = 30 * 60 * 1000
@@ -113,7 +115,7 @@ export async function setupGithubAuth(runtime = {}) {
   log.info(`Using the GitHub repository ${repoName} from backend.repo.`)
   const name = await promptText({
     message: "What should the GitHub App be called?",
-    initialValue: getDefaultAppName(siteOrigin),
+    initialValue: getDefaultAppName(repo.name),
     validate: validateAppName,
   })
 
@@ -235,10 +237,17 @@ export async function setupGithubAuth(runtime = {}) {
 }
 
 /**
- * @param {string} siteOrigin
+ * Names the app after the site's repository, which stays the same when the
+ * site moves to another domain. Shortens the suffix to fit GitHub's limit.
+ *
+ * @param {string} repoName
  */
-export function getDefaultAppName(siteOrigin) {
-  return `${new URL(siteOrigin).hostname} Authentication`
+export function getDefaultAppName(repoName) {
+  return (
+    [`${repoName} Authentication`, `${repoName} Auth`].find(
+      (name) => name.length <= maxAppNameLength,
+    ) ?? repoName.slice(0, maxAppNameLength)
+  )
 }
 
 /**
@@ -280,13 +289,14 @@ async function openWhenReady({ title, message, url, promptConfirm, openUrl }) {
 export function createManifest({ name, siteOrigin, redirectUrl }) {
   return {
     name,
-    url: siteOrigin,
-    description: `Sign in to the LightNet Administration UI of ${siteOrigin}.`,
+    url: appHomepageUrl,
+    description:
+      "Lets editors sign in to the LightNet Administration UI and save content to the site's repository.",
     redirect_url: redirectUrl,
     callback_urls: [`${siteOrigin}${authBasePath}/callback`],
     public: false,
     request_oauth_on_install: false,
-    hook_attributes: { url: siteOrigin, active: false },
+    hook_attributes: { url: appHomepageUrl, active: false },
     default_permissions: { contents: "write", metadata: "read" },
     default_events: [],
   }
