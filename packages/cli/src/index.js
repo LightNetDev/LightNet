@@ -166,18 +166,9 @@ program
   .description(
     "create a GitHub App and serve Administration UI sign-in from the site's Worker",
   )
-  .option("--site <url>", "site URL (default: site from the Astro config)")
-  .option(
-    "--org <name>",
-    "GitHub organization that owns the app (default: owner of backend.repo)",
-  )
-  .option("--personal", "create the app on your personal GitHub account")
-  .option("--name <name>", "GitHub App name (default: <site hostname> CMS)")
-  .option("--config <path>", "Wrangler config file", "wrangler.jsonc")
-  .option("--no-open", "print URLs instead of opening them in the browser")
-  .action(async (options) => {
+  .action(async () => {
     try {
-      await setupGithubAuth(options)
+      await setupGithubAuth()
     } catch (error) {
       handleCommandError(error)
     }
