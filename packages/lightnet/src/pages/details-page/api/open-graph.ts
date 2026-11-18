@@ -5,6 +5,7 @@ import config from "virtual:lightnet/config"
 
 import { getMediaItem } from "../../../content/get-media-items"
 import { getMediaType } from "../../../content/get-media-types"
+import { resolveLanguage } from "../../../i18n/resolve-language"
 import { getCachedOpenGraphImage } from "../utils/get-cached-open-graph-image"
 import { getMediaCover } from "../utils/get-media-cover"
 
@@ -15,10 +16,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }))
 }
 
-export const GET: APIRoute = async ({ params, locals }) => {
+export const GET: APIRoute = async ({ params }) => {
   const item = await getMediaItem(params.mediaId!)
   const mediaType = await getMediaType(item.data.type.id)
-  const { direction } = locals.i18n
+  const { direction } = resolveLanguage(item.data.language)
   const png = await getCachedOpenGraphImage(
     {
       cover: await getMediaCover(item.id),
