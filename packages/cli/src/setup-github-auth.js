@@ -6,6 +6,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import { createServer } from "node:http"
 import { resolve } from "node:path"
 import { stdin, stdout } from "node:process"
+import { styleText } from "node:util"
 
 import {
   confirm,
@@ -88,6 +89,16 @@ export async function setupGithubAuth(runtime = {}) {
   }
 
   intro("Set up GitHub authentication")
+  const heading = createStepHeadings([
+    "Check your site",
+    "Create GitHub App",
+    "Configure your site",
+    "Install GitHub App",
+    "Deploy your site",
+    "Add client secret",
+  ])
+
+  heading("Check your site")
 
   const configPath = resolve(cwd, wranglerConfigFile)
   const wranglerConfig = await readFile(configPath, "utf8").catch(() => {
@@ -125,6 +136,7 @@ export async function setupGithubAuth(runtime = {}) {
       ? await promptConfirm(`Is ${repo.owner} a GitHub organization?`)
       : ownerType === "Organization"
 
+  heading("Create GitHub App")
   const state = randomUUID()
   const code = await waitForManifestCode({
     state,
@@ -136,7 +148,6 @@ export async function setupGithubAuth(runtime = {}) {
       createManifest({ name, siteOrigin, redirectUrl }),
     onReady: (url) =>
       openWhenReady({
-        title: "Create the GitHub App",
         message: [
           `Next, GitHub opens in your browser to create the GitHub App "${name}" ${isOrganization ? `for the organization ${repo.owner}` : `for your personal account. Make sure you are signed in to GitHub as ${repo.owner}`}.`,
           'GitHub shows the app settings that LightNet filled in. Review them and select "Create GitHub App".',
@@ -150,6 +161,7 @@ export async function setupGithubAuth(runtime = {}) {
   const app = await exchangeManifestCode(code, fetchFn)
   log.success(`Created the GitHub App "${app.slug}".`)
 
+  heading("Configure your site")
   const { text: updatedConfig, warnings } = updateWranglerConfig(
     wranglerConfig,
     app.client_id,
@@ -166,9 +178,9 @@ export async function setupGithubAuth(runtime = {}) {
     log.warn(`Could not add ${authPackage}. Run: pnpm add ${authPackage}`)
   }
 
+  heading("Install GitHub App")
   const repoId = await lookupRepoId(repo, fetchFn)
   await openWhenReady({
-    title: "Install the GitHub App",
     message: [
       `Next, GitHub opens in your browser to install the app on ${repo.owner}/${repo.name}.`,
       `Choose "Only select repositories" and select only ${repo.owner}/${repo.name}. Don't give the app access to all repositories.`,
@@ -181,6 +193,7 @@ export async function setupGithubAuth(runtime = {}) {
     openUrl,
   })
 
+  heading("Deploy your site")
   // Cloudflare only stores secrets for Workers that run a script, so the
   // site's Worker has to be deployed with the new `main` before the secret
   // can be added.
@@ -194,7 +207,6 @@ export async function setupGithubAuth(runtime = {}) {
       "Then wait until Cloudflare has deployed your site. Cloudflare can store the client secret only after this deploy.",
       "Keep this terminal open: the next step shows the client secret.",
     ].join("\n"),
-    "Deploy your site",
   )
   while (!(await promptConfirm("Has Cloudflare deployed your site?"))) {
     log.warn(
@@ -202,6 +214,7 @@ export async function setupGithubAuth(runtime = {}) {
     )
   }
 
+  heading("Add client secret")
   note(
     [
       app.client_secret,
@@ -209,7 +222,7 @@ export async function setupGithubAuth(runtime = {}) {
       "In the Cloudflare dashboard, open your site's Worker, go to Settings → Variables and Secrets, and add this value as the secret GITHUB_CLIENT_SECRET (type: Secret).",
       `GitHub shows this secret only once. If you lose it, generate a new one in the app settings: ${settingsUrl}`,
     ].join("\n"),
-    "GitHub client secret",
+    "GITHUB_CLIENT_SECRET",
   )
   while (
     !(await promptConfirm(
@@ -264,18 +277,31 @@ export function validateAppName(name) {
 }
 
 /**
+ * Prints numbered headings, such as "2/6 Create GitHub App", so users can see
+ * where they are in the setup.
+ *
+ * @param {string[]} titles
+ */
+function createStepHeadings(titles) {
+  /** @param {string} title */
+  return (title) => {
+    const number = titles.indexOf(title) + 1
+    log.step(styleText("bold", `${number}/${titles.length} ${title}`))
+  }
+}
+
+/**
  * Explains what happens next and opens the URL only after the user agrees.
  *
  * @param {{
- *   title: string
  *   message: string
  *   url: string
  *   promptConfirm: (message: string) => Promise<boolean>
  *   openUrl: (url: string) => void | Promise<void>
  * }} options
  */
-async function openWhenReady({ title, message, url, promptConfirm, openUrl }) {
-  note(message, title)
+async function openWhenReady({ message, url, promptConfirm, openUrl }) {
+  note(message)
   if (await promptConfirm("Open GitHub in your browser now?")) {
     await openUrl(url)
   } else {
