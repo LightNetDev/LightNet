@@ -1,5 +1,11 @@
 # lightnet
 
+## 4.12.2
+
+### Patch Changes
+
+- [#500](https://github.com/LightNetDev/LightNet/pull/500) [`995eddd`](https://github.com/LightNetDev/LightNet/commit/995eddd7a5061a558cb51f5ef02da3235d9d7be1) - Open Graph images now use the text direction of the media item's language instead of the site's default language. For example, a Farsi media item gets a right-to-left layout on an English site.
+
 ## 4.12.1
 
 ### Patch Changes
