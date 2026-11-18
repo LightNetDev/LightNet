@@ -1,5 +1,11 @@
 # @lightnet/cli
 
+## 4.11.1
+
+### Patch Changes
+
+- [#504](https://github.com/LightNetDev/LightNet/pull/504) [`d1624cd`](https://github.com/LightNetDev/LightNet/commit/d1624cd43be6d1e8ed0d9d2f19f97c948d6c3506) - Show numbered step headings in `lightnet setup-github-auth`, such as "2/6 Create GitHub App", so you can see where you are in the setup.
+
 ## 4.11.0
 
 ### Minor Changes
