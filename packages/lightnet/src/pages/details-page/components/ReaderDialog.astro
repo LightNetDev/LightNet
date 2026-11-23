@@ -23,6 +23,8 @@ const {
   data: { title, language },
 } = await getMediaItem(Astro.props.mediaId)
 
+// Touch screens zoom PDF pages with a pinch, so the zoom buttons are hidden there.
+const zoomButton = "[@media(pointer:coarse)]:hidden"
 const iconButton =
   "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full disabled:cursor-default disabled:opacity-30 [@media(hover:hover)]:hover:bg-gray-100 [@media(hover:hover)]:group-data-[theme=dark]:hover:bg-white/10"
 const bar =
@@ -76,7 +78,7 @@ const themeOption =
         </button>
         <button
           type="button"
-          class:list={[iconButton, "hidden"]}
+          class:list={[iconButton, zoomButton, "hidden"]}
           aria-label={t("ln.reader.zoom-out")}
           title={t("ln.reader.zoom-out")}
           data-reader-zoom-out
@@ -85,7 +87,7 @@ const themeOption =
         </button>
         <button
           type="button"
-          class:list={[iconButton, "hidden"]}
+          class:list={[iconButton, zoomButton, "hidden"]}
           aria-label={t("ln.reader.zoom-in")}
           title={t("ln.reader.zoom-in")}
           data-reader-zoom-in
