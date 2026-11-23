@@ -138,6 +138,31 @@ ln.details.download: Download
 # Used on: https://kuuluu.org/en/media/ride-the-ramp-of-faith--en/ (Firefox)
 ln.share.url-copied-to-clipboard: Link copied to clipboard
 
+# Button label to read a PDF or EPUB file in the built-in reader.
+#
+# English: Read
+ln.details.read: Read
+
+# Button label on the reader page to go back to the media item's details page.
+#
+# English: Back
+ln.reader.back: Back
+
+# Message on the reader page while a PDF or EPUB file is loading.
+#
+# English: Loading…
+ln.reader.loading: Loading…
+
+# Message on the reader page when a file could not be opened.
+#
+# English: This file could not be opened.
+ln.reader.error: This file could not be opened.
+
+# Page indicator on the reader page. {{current}} is the current page and {{total}} the number of pages.
+#
+# English: Page {{current}} of {{total}}
+ln.reader.page-of: Page {{current}} of {{total}}
+
 # Title for the 404-error page. This page is displayed when a path does not exist.
 #
 # English: Page not found

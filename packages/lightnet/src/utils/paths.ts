@@ -48,6 +48,18 @@ export function searchPagePath(
 }
 
 /**
+ * Build path to the reader page that shows a PDF or EPUB file.
+ *
+ * @param locale current locale
+ * @param fileUrl url of the file to open
+ * @returns path to the reader page eg. '/en/reader/?file=%2Ffiles%2Fbook.pdf'
+ */
+export function readerPagePath(locale: string | undefined, fileUrl: string) {
+  const searchParams = new URLSearchParams({ file: fileUrl })
+  return `/${locale}/reader/?${searchParams.toString()}`
+}
+
+/**
  * Resolve a path for a given locale.
  * Use this if you create paths based on user's input. In
  * cases where you control the full path, JavaScript template strings

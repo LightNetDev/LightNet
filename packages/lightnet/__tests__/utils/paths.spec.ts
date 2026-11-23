@@ -4,6 +4,7 @@ import {
   detailsPagePath,
   ensureTrailingSlash,
   localizePath,
+  readerPagePath,
   searchPagePath,
 } from "../../src/utils/paths"
 
@@ -65,3 +66,9 @@ trailingSlashTests.forEach(({ path, expected }) =>
     expect(ensureTrailingSlash(path)).toBe(expected)
   }),
 )
+
+test("Should build reader page path", () => {
+  expect(readerPagePath("en", "https://cdn.example.com/my book.pdf")).toBe(
+    "/en/reader/?file=https%3A%2F%2Fcdn.example.com%2Fmy+book.pdf",
+  )
+})

@@ -82,6 +82,12 @@ export function lightnet(lightnetConfig: LightnetConfig): AstroIntegration {
           prerender: true,
         })
 
+        injectRoute({
+          pattern: "/[locale]/reader",
+          entrypoint: "lightnet/pages/ReaderPageRoute.astro",
+          prerender: true,
+        })
+
         if (!config.disableOpenGraphImages) {
           injectRoute({
             pattern: "/[locale]/media/[mediaId]/open-graph.png",

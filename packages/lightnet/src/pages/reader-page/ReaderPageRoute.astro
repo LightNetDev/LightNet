@@ -1,0 +1,57 @@
+---
+import "../../layouts/global.css"
+
+import CustomHead from "virtual:lightnet/components/CustomHead"
+import config from "virtual:lightnet/config"
+
+import { getMediaItems } from "../../content/get-media-items"
+import { prepareI18nConfig } from "../../i18n/react/prepare-i18n-config"
+import Favicon from "../../layouts/components/meta/Favicon.astro"
+import SearchEngineMetadata from "../../layouts/components/meta/SearchEngineMetadata.astro"
+import { detailsPagePath } from "../../utils/paths"
+import { createContentMetadata } from "../details-page/utils/create-content-metadata"
+import Reader, { type ReaderBook } from "./Reader"
+
+export { getLocalePaths as getStaticPaths } from "../../i18n/get-locale-paths"
+
+const { currentLocale, direction, tConfigField } = Astro.locals.i18n
+
+const books: ReaderBook[] = (await getMediaItems()).flatMap(({ id, data }) =>
+  data.content.flatMap(({ url }) => {
+    const { readerFormat } = createContentMetadata({ url })
+    if (!readerFormat) {
+      return []
+    }
+    return [
+      {
+        url,
+        format: readerFormat,
+        title: data.title,
+        language: data.language,
+        detailsPath: detailsPagePath(currentLocale, { id }),
+      },
+    ]
+  }),
+)
+
+const i18nConfig = prepareI18nConfig(Astro.locals.i18n, [
+  "ln.previous",
+  "ln.next",
+  "ln.reader.*",
+])
+---
+
+<!doctype html>
+<html lang={currentLocale} dir={direction}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{tConfigField(config.title, config)}</title>
+    <Favicon />
+    <SearchEngineMetadata disallowSearchIndexing />
+    {CustomHead && <CustomHead />}
+  </head>
+  <body>
+    <Reader client:only="react" i18nConfig={i18nConfig} books={books} />
+  </body>
+</html>

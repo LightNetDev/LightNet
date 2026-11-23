@@ -12,6 +12,7 @@ import { type LucideIcon } from "lucide-react/types"
 
 import { getMediaItem } from "../../../content/get-media-items"
 import { getLinkAttributes } from "../../../utils/link-attributes"
+import { readerPagePath } from "../../../utils/paths"
 import {
   createContentMetadata,
   type UrlType,
@@ -29,7 +30,7 @@ const item = await getMediaItem(mediaId)
 if (item.data.content.length < minimumItems) {
   return
 }
-const { t, tContentField, direction } = Astro.locals.i18n
+const { t, tContentField, direction, currentLocale } = Astro.locals.i18n
 
 const content = item.data.content.map(({ url, label }) =>
   createContentMetadata({
@@ -50,13 +51,15 @@ const iconDirectionClass = direction === "rtl" ? "scale-x-[-1]" : ""
 ---
 
 <ol class="mx-auto mt-16 max-w-screen-md overflow-hidden bg-gray-200 md:mt-20 md:rounded-xl">
-  {content.map(({ extension, labelText, type, isDownload, url }, index) => {
+  {content.map(({ extension, labelText, type, readerFormat, url }, index) => {
     const TypeIcon = typeIcons[type]
+    const href = readerFormat ? readerPagePath(currentLocale, url) : url
+    const isDownload = !readerFormat && content[index].isDownload
 
     return (
       <li class="group -mt-px px-4 transition-colors ease-in-out hover:bg-gray-300 md:px-8">
         <a
-          {...getLinkAttributes(url)}
+          {...getLinkAttributes(href)}
           class="flex items-center justify-between py-8"
         >
           <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200">

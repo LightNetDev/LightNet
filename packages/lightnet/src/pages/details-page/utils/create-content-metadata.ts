@@ -37,6 +37,14 @@ const KNOWN_EXTENSIONS: Record<
   docx: { type: "text", isDownload: true },
 } as const
 
+/**
+ * File extensions that can be opened with the built-in reader page.
+ */
+const READER_FORMATS: Record<string, "pdf" | "epub" | undefined> = {
+  pdf: "pdf",
+  epub: "epub",
+}
+
 export function createContentMetadata({
   url,
   labelText: customLabel,
@@ -61,6 +69,7 @@ export function createContentMetadata({
   const labelText = customLabel ?? fileName ?? linkName
   const type = KNOWN_EXTENSIONS[extension]?.type ?? "link"
   const isDownload = KNOWN_EXTENSIONS[extension]?.isDownload
+  const readerFormat = READER_FORMATS[extension]
 
   return {
     url,
@@ -69,5 +78,6 @@ export function createContentMetadata({
     labelText,
     isDownload,
     type,
+    readerFormat,
   } as const
 }
