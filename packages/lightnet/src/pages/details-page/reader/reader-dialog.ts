@@ -69,7 +69,6 @@ export function initReaderDialog() {
   const progress = element<HTMLElement>("[data-reader-progress]")
   const progressValue = element<HTMLElement>("[data-reader-progress-value]")
   const pageIndicator = element<HTMLElement>("[data-reader-page]")
-  const download = element<HTMLAnchorElement>("[data-reader-download]")
   const contentsButton = element<HTMLButtonElement>(
     "[data-reader-contents-button]",
   )
@@ -225,7 +224,6 @@ export function initReaderDialog() {
 
   const open = async (url: string, format: BookFormat) => {
     const currentSession = ++session
-    download.href = url
     dialog.dataset.format = format
     show(contentsButton, false)
     show(displayButton, format === "epub")
