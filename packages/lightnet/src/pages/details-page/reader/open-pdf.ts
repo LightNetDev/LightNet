@@ -34,6 +34,7 @@ export async function openPdf({
 
   return {
     reader,
+    manifest,
     readingDirection: manifest.readingDirection === "rtl" ? "rtl" : "ltr",
     destroy: () => {
       reader.destroy()

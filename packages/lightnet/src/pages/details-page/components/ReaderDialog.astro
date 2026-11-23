@@ -1,10 +1,16 @@
 ---
+import ALargeSmallIcon from "lucide-react/icons/a-large-small"
 import ChevronLeftIcon from "lucide-react/icons/chevron-left"
 import ChevronRightIcon from "lucide-react/icons/chevron-right"
 import DownloadIcon from "lucide-react/icons/download"
+import MinusIcon from "lucide-react/icons/minus"
 import MoonIcon from "lucide-react/icons/moon"
+import PlusIcon from "lucide-react/icons/plus"
 import SunIcon from "lucide-react/icons/sun"
+import TableOfContentsIcon from "lucide-react/icons/table-of-contents"
 import XIcon from "lucide-react/icons/x"
+import ZoomInIcon from "lucide-react/icons/zoom-in"
+import ZoomOutIcon from "lucide-react/icons/zoom-out"
 
 import { getMediaItem } from "../../../content/get-media-items"
 
@@ -24,6 +30,11 @@ const bar =
 // Same max width and padding as the site header, so controls line up with its menu items.
 const barContent =
   "mx-auto flex h-full max-w-screen-xl items-center px-4 md:px-8"
+// Popovers are placed below their button by the reader script.
+const popover =
+  "m-0 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-2 text-gray-900 shadow-lg group-data-[theme=dark]:border-white/10 group-data-[theme=dark]:bg-[#252222] group-data-[theme=dark]:text-gray-100"
+const themeOption =
+  "flex grow cursor-pointer items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm aria-pressed:bg-gray-100 aria-pressed:font-bold group-data-[theme=dark]:aria-pressed:bg-white/10 [@media(hover:hover)]:hover:bg-gray-100 [@media(hover:hover)]:group-data-[theme=dark]:hover:bg-white/10"
 ---
 
 <dialog
@@ -33,10 +44,9 @@ const barContent =
   data-loading={t("ln.reader.loading")}
   data-error={t("ln.reader.error")}
   data-page={t("ln.reader.page")}
+  data-page-of={t("ln.reader.page-of")}
   data-previous={t("ln.previous")}
   data-next={t("ln.next")}
-  data-dark-mode={t("ln.reader.dark-mode")}
-  data-light-mode={t("ln.reader.light-mode")}
 >
   <div class="flex h-full flex-col">
     <header class:list={[bar, "border-b"]}>
@@ -47,10 +57,40 @@ const barContent =
         <button
           type="button"
           class:list={[iconButton, "hidden"]}
-          data-reader-theme
+          aria-label={t("ln.reader.contents")}
+          title={t("ln.reader.contents")}
+          popovertarget="ln-reader-contents"
+          data-reader-contents-button
         >
-          <MoonIcon className="group-data-[theme=dark]:hidden" />
-          <SunIcon className="hidden group-data-[theme=dark]:block" />
+          <TableOfContentsIcon />
+        </button>
+        <button
+          type="button"
+          class:list={[iconButton, "hidden"]}
+          aria-label={t("ln.reader.display")}
+          title={t("ln.reader.display")}
+          popovertarget="ln-reader-display"
+          data-reader-display-button
+        >
+          <ALargeSmallIcon />
+        </button>
+        <button
+          type="button"
+          class:list={[iconButton, "hidden"]}
+          aria-label={t("ln.reader.zoom-out")}
+          title={t("ln.reader.zoom-out")}
+          data-reader-zoom-out
+        >
+          <ZoomOutIcon />
+        </button>
+        <button
+          type="button"
+          class:list={[iconButton, "hidden"]}
+          aria-label={t("ln.reader.zoom-in")}
+          title={t("ln.reader.zoom-in")}
+          data-reader-zoom-in
+        >
+          <ZoomInIcon />
         </button>
         <a
           class={iconButton}
@@ -77,6 +117,71 @@ const barContent =
       </div>
     </header>
 
+    <div
+      id="ln-reader-contents"
+      popover
+      class:list={[popover, "w-80"]}
+      aria-label={t("ln.reader.contents")}
+    >
+      <ul lang={language} data-reader-contents></ul>
+    </div>
+
+    <div
+      id="ln-reader-display"
+      popover
+      class:list={[popover, "w-72"]}
+      aria-label={t("ln.reader.display")}
+    >
+      <div class="flex items-center justify-between gap-2 ps-2">
+        <span class="text-sm">{t("ln.reader.text-size")}</span>
+        <div class="flex items-center">
+          <button
+            type="button"
+            class={iconButton}
+            aria-label={t("ln.reader.smaller-text")}
+            title={t("ln.reader.smaller-text")}
+            data-reader-smaller-text
+          >
+            <MinusIcon className="size-4" />
+          </button>
+          <span
+            class="w-12 text-center text-sm tabular-nums"
+            aria-live="polite"
+            data-reader-text-size
+          ></span>
+          <button
+            type="button"
+            class={iconButton}
+            aria-label={t("ln.reader.larger-text")}
+            title={t("ln.reader.larger-text")}
+            data-reader-larger-text
+          >
+            <PlusIcon className="size-4" />
+          </button>
+        </div>
+      </div>
+      <div class="mt-2 flex gap-1 border-t border-gray-200 pt-2 group-data-[theme=dark]:border-white/10">
+        <button
+          type="button"
+          class={themeOption}
+          aria-pressed="false"
+          data-reader-theme="light"
+        >
+          <SunIcon className="size-4" />
+          {t("ln.reader.light-mode")}
+        </button>
+        <button
+          type="button"
+          class={themeOption}
+          aria-pressed="false"
+          data-reader-theme="dark"
+        >
+          <MoonIcon className="size-4" />
+          {t("ln.reader.dark-mode")}
+        </button>
+      </div>
+    </div>
+
     <div class="relative grow">
       <div class="absolute inset-0">
         {/* prose reader sets its own positioning on the mount element.
@@ -93,8 +198,10 @@ const barContent =
     </div>
 
     <nav dir="ltr" class:list={[bar, "relative"]}>
+      {/* An invisible area around the line makes it easy to hit.
+          Clicking or dragging on it jumps to that point in the book. */}
       <div
-        class="absolute inset-x-0 top-0 h-0.5 bg-gray-200 group-data-[theme=dark]:bg-white/15"
+        class="group/progress absolute inset-x-0 -top-2 z-10 h-4 cursor-pointer touch-none"
         role="progressbar"
         aria-label={t("ln.reader.progress")}
         aria-valuemin="0"
@@ -102,10 +209,12 @@ const barContent =
         aria-valuenow="0"
         data-reader-progress
       >
-        <div
-          class="h-full w-0 bg-gray-900 transition-[width] duration-300 group-data-[theme=dark]:bg-gray-100 motion-reduce:transition-none"
-          data-reader-progress-value
-        ></div>
+        <div class="absolute inset-x-0 top-2 h-0.5 bg-gray-200 transition-[height] group-hover/progress:h-1 group-data-[theme=dark]:bg-white/15 motion-reduce:transition-none">
+          <div
+            class="h-full w-0 bg-gray-900 transition-[width] duration-300 group-data-[theme=dark]:bg-gray-100 group-data-[seeking]/progress:transition-none motion-reduce:transition-none"
+            data-reader-progress-value
+          ></div>
+        </div>
       </div>
       <div class:list={[barContent, "justify-between"]}>
         <button type="button" class={iconButton} data-reader-left disabled>

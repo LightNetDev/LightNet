@@ -1,4 +1,4 @@
-import type { createReader } from "@prose-reader/core"
+import type { createReader, Manifest } from "@prose-reader/core"
 
 export type ReaderTheme = "light" | "dark"
 
@@ -8,13 +8,18 @@ export type OpenBookOptions = {
   /** Element to mount the reader into. */
   container: HTMLElement
   theme: ReaderTheme
+  /** Text size, 1 keeps the book's own size. Only applies to EPUB books. */
+  fontScale: number
 }
 
 export type OpenedBook = {
   reader: ReturnType<typeof createReader>
+  manifest: Manifest
   readingDirection: "ltr" | "rtl"
   /** Undefined when the format keeps its own colors, like PDF pages. */
   setTheme?: (theme: ReaderTheme) => void
+  /** Undefined when the format has a fixed layout, like PDF pages. */
+  setFontScale?: (fontScale: number) => void
   destroy: () => void
 }
 

@@ -178,6 +178,46 @@ ln.reader.page: Page {{current}}
 # English: Reading progress
 ln.reader.progress: Reading progress
 
+# Page indicator in the reader when the number of pages is known. {{current}} is the current page, {{total}} the number of pages.
+#
+# English: Page {{current}} of {{total}}
+ln.reader.page-of: Page {{current}} of {{total}}
+
+# Button label in the reader to show the table of contents of a book.
+#
+# English: Contents
+ln.reader.contents: Contents
+
+# Button label in the reader to show settings for text size and colors.
+#
+# English: Display settings
+ln.reader.display: Display settings
+
+# Label in the reader for the text size setting.
+#
+# English: Text size
+ln.reader.text-size: Text size
+
+# Button label in the reader to make the text smaller.
+#
+# English: Smaller text
+ln.reader.smaller-text: Smaller text
+
+# Button label in the reader to make the text larger.
+#
+# English: Larger text
+ln.reader.larger-text: Larger text
+
+# Button label in the reader to zoom out of a page.
+#
+# English: Zoom out
+ln.reader.zoom-out: Zoom out
+
+# Button label in the reader to zoom in on a page.
+#
+# English: Zoom in
+ln.reader.zoom-in: Zoom in
+
 # Title for the 404-error page. This page is displayed when a path does not exist.
 #
 # English: Page not found
