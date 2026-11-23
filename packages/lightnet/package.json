@@ -45,7 +45,6 @@
     "./pages/RootRoute.astro": "./src/pages/RootRoute.astro",
     "./pages/SearchPageRoute.astro": "./src/pages/search-page/SearchPageRoute.astro",
     "./pages/DetailsPageRoute.astro": "./src/pages/details-page/DetailsPageRoute.astro",
-    "./pages/ReaderPageRoute.astro": "./src/pages/reader-page/ReaderPageRoute.astro",
     "./api/internal/search.ts": "./src/pages/search-page/api/search.ts",
     "./api/versions.ts": "./src/api/versions.ts",
     "./api/robots.ts": "./src/api/robots.ts",

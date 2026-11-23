@@ -4,7 +4,6 @@ import ExternalLinkIcon from "lucide-react/icons/external-link"
 import { getMediaItem } from "../../../../content/get-media-items"
 import { getMediaType } from "../../../../content/get-media-types"
 import { getLinkAttributes } from "../../../../utils/link-attributes"
-import { readerPagePath } from "../../../../utils/paths"
 import { createContentMetadata } from "../../utils/create-content-metadata"
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
   className?: string
 }
 const { mediaId, className } = Astro.props
-const { tContentField, t, currentLocale } = Astro.locals.i18n
+const { tContentField, t } = Astro.locals.i18n
 const item = await getMediaItem(mediaId)
 const { url, label } = item.data.content[0]
 const content = createContentMetadata({
@@ -39,9 +38,8 @@ const getOpenActionLabel = () => {
 
 <a
   class="flex min-w-52 items-center justify-center gap-2 rounded-2xl bg-gray-800 px-6 py-3 font-bold text-gray-100 shadow-sm hover:bg-gray-950 hover:text-gray-300"
-  {...getLinkAttributes(
-    opensInReader ? readerPagePath(currentLocale, content.url) : content.url,
-  )}
+  {...getLinkAttributes(content.url)}
+  data-ln-reader={content.readerFormat}
   hreflang={item.data.language}
   class:list={[className]}
 >

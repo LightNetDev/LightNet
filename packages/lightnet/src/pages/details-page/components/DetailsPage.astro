@@ -6,7 +6,9 @@ import { getMediaItem } from "../../../content/get-media-items"
 import Page from "../../../layouts/Page.astro"
 import { markdownToText } from "../../../utils/markdown"
 import { detailsPagePath } from "../../../utils/paths"
+import { createContentMetadata } from "../utils/create-content-metadata"
 import { getDetailsPageJsonLd } from "../utils/get-details-page-json-ld"
+import ReaderDialog from "./ReaderDialog.astro"
 
 type Props = {
   mediaId: string
@@ -29,6 +31,9 @@ const shareImage = coverImage
       `${detailsPagePath(defaultLocale, { id })}open-graph.png`,
       Astro.site,
     )
+const hasReaderContent = mediaItem.content.some(
+  ({ url }) => createContentMetadata({ url }).readerFormat,
+)
 const jsonLd = await getDetailsPageJsonLd({
   mediaId: id,
   fallbackSchemaType,
@@ -76,4 +81,5 @@ const jsonLd = await getDetailsPageJsonLd({
     )}
   </Fragment>
   <slot />
+  {hasReaderContent && <ReaderDialog mediaId={id} />}
 </Page>

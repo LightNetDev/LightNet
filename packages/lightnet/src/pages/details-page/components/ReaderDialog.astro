@@ -1,0 +1,111 @@
+---
+import ChevronLeftIcon from "lucide-react/icons/chevron-left"
+import ChevronRightIcon from "lucide-react/icons/chevron-right"
+import DownloadIcon from "lucide-react/icons/download"
+import MoonIcon from "lucide-react/icons/moon"
+import SunIcon from "lucide-react/icons/sun"
+import XIcon from "lucide-react/icons/x"
+
+import { getMediaItem } from "../../../content/get-media-items"
+
+interface Props {
+  mediaId: string
+}
+
+const { t, direction } = Astro.locals.i18n
+const {
+  data: { title, language },
+} = await getMediaItem(Astro.props.mediaId)
+
+const iconButton =
+  "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 disabled:cursor-default disabled:opacity-30 group-data-[theme=dark]:hover:bg-white/10"
+const bar =
+  "flex h-16 shrink-0 items-center border-gray-200 px-4 group-data-[theme=dark]:border-white/10 md:px-8"
+---
+
+<dialog
+  id="ln-reader"
+  class="group m-0 h-dvh max-h-none w-screen max-w-none bg-white p-0 text-gray-900 backdrop:bg-gray-900/60 data-[theme=dark]:bg-[#191717] data-[theme=dark]:text-gray-100"
+  aria-label={title}
+  data-loading={t("ln.reader.loading")}
+  data-error={t("ln.reader.error")}
+  data-page-of={t("ln.reader.page-of")}
+  data-previous={t("ln.previous")}
+  data-next={t("ln.next")}
+  data-dark-mode={t("ln.reader.dark-mode")}
+  data-light-mode={t("ln.reader.light-mode")}
+>
+  <div class="flex h-full flex-col">
+    <header class:list={[bar, "gap-2 border-b"]}>
+      <h2 class="line-clamp-1 grow font-bold" lang={language}>
+        {title}
+      </h2>
+      <button
+        type="button"
+        class:list={[iconButton, "hidden"]}
+        data-reader-theme
+      >
+        <MoonIcon className="group-data-[theme=dark]:hidden" />
+        <SunIcon className="hidden group-data-[theme=dark]:block" />
+      </button>
+      <a
+        class={iconButton}
+        href="#"
+        download
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t("ln.details.download")}
+        title={t("ln.details.download")}
+        data-reader-download
+      >
+        <DownloadIcon />
+      </a>
+      <button
+        type="button"
+        class={iconButton}
+        aria-label={t("ln.reader.close")}
+        title={t("ln.reader.close")}
+        autofocus
+        data-reader-close
+      >
+        <XIcon />
+      </button>
+    </header>
+
+    <div class="relative grow">
+      <div class="absolute inset-0">
+        {/* prose reader sets its own positioning on the mount element.
+           EPUB pages get a readable width, centered on wide screens. */}
+        <div
+          class="mx-auto h-full w-full group-data-[format=epub]:max-w-3xl"
+          data-reader-container
+        ></div>
+      </div>
+      <div
+        class="absolute inset-0 flex items-center justify-center px-4 text-center text-gray-600 group-data-[theme=dark]:text-gray-400"
+        data-reader-status
+      ></div>
+    </div>
+
+    <nav dir="ltr" class:list={[bar, "justify-between border-t"]}>
+      <button type="button" class={iconButton} data-reader-left disabled>
+        <ChevronLeftIcon />
+      </button>
+      <div
+        class="text-sm text-gray-600 group-data-[theme=dark]:text-gray-400"
+        dir={direction}
+        aria-live="polite"
+        data-reader-page
+      ></div>
+      <button type="button" class={iconButton} data-reader-right disabled>
+        <ChevronRightIcon />
+      </button>
+    </nav>
+  </div>
+</dialog>
+
+<script>
+  import { initReaderDialog } from "../reader/reader-dialog"
+
+  initReaderDialog()
+</script>

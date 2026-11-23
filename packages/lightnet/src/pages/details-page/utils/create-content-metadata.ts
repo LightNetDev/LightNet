@@ -38,9 +38,11 @@ const KNOWN_EXTENSIONS: Record<
 } as const
 
 /**
- * File extensions that can be opened with the built-in reader page.
+ * File extensions that can be opened with the built-in reader.
  */
-const READER_FORMATS: Record<string, "pdf" | "epub" | undefined> = {
+export type BookFormat = "pdf" | "epub"
+
+const READER_FORMATS: Record<string, BookFormat | undefined> = {
   pdf: "pdf",
   epub: "epub",
 }

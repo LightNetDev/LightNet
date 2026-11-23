@@ -143,22 +143,32 @@ ln.share.url-copied-to-clipboard: Link copied to clipboard
 # English: Read
 ln.details.read: Read
 
-# Button label on the reader page to go back to the media item's details page.
+# Button label to close the reader that shows PDF and EPUB files.
 #
-# English: Back
-ln.reader.back: Back
+# English: Close
+ln.reader.close: Close
 
-# Message on the reader page while a PDF or EPUB file is loading.
+# Button label in the reader to switch to dark colors.
+#
+# English: Dark mode
+ln.reader.dark-mode: Dark mode
+
+# Button label in the reader to switch to light colors.
+#
+# English: Light mode
+ln.reader.light-mode: Light mode
+
+# Message in the reader while a PDF or EPUB file is loading.
 #
 # English: Loading…
 ln.reader.loading: Loading…
 
-# Message on the reader page when a file could not be opened.
+# Message in the reader when a file could not be opened.
 #
 # English: This file could not be opened.
 ln.reader.error: This file could not be opened.
 
-# Page indicator on the reader page. {{current}} is the current page and {{total}} the number of pages.
+# Page indicator in the reader. {{current}} is the current page and {{total}} the number of pages.
 #
 # English: Page {{current}} of {{total}}
 ln.reader.page-of: Page {{current}} of {{total}}
