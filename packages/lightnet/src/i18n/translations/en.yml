@@ -168,10 +168,10 @@ ln.reader.loading: Loading…
 # English: This file could not be opened.
 ln.reader.error: This file could not be opened.
 
-# Page indicator in the reader. {{current}} is the current page and {{total}} the number of pages.
+# Accessible label of the progress bar in the reader that shows how much of a book has been read.
 #
-# English: Page {{current}} of {{total}}
-ln.reader.page-of: Page {{current}} of {{total}}
+# English: Reading progress
+ln.reader.progress: Reading progress
 
 # Title for the 404-error page. This page is displayed when a path does not exist.
 #

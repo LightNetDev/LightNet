@@ -37,7 +37,8 @@ export function initReaderDialog() {
   }
   const container = element<HTMLElement>("[data-reader-container]")
   const status = element<HTMLElement>("[data-reader-status]")
-  const pageIndicator = element<HTMLElement>("[data-reader-page]")
+  const progress = element<HTMLElement>("[data-reader-progress]")
+  const progressValue = element<HTMLElement>("[data-reader-progress-value]")
   const download = element<HTMLAnchorElement>("[data-reader-download]")
   const themeButton = element<HTMLButtonElement>("[data-reader-theme]")
   const leftButton = element<HTMLButtonElement>("[data-reader-left]")
@@ -63,6 +64,12 @@ export function initReaderDialog() {
     status.classList.toggle("hidden", !message)
   }
 
+  const setProgress = (fraction: number) => {
+    const percent = Math.round(Math.min(Math.max(fraction, 0), 1) * 100)
+    progress.ariaValueNow = `${percent}`
+    progressValue.style.width = `${percent}%`
+  }
+
   const setNavigationEnabled = (enabled: boolean) => {
     leftButton.disabled = !enabled
     rightButton.disabled = !enabled
@@ -73,7 +80,7 @@ export function initReaderDialog() {
     download.href = url
     dialog.dataset.format = format
     themeButton.classList.toggle("hidden", format !== "epub")
-    pageIndicator.textContent = ""
+    setProgress(0)
     setNavigationEnabled(false)
     showStatus(labels.loading)
     document.documentElement.style.overflow = "hidden"
@@ -95,16 +102,12 @@ export function initReaderDialog() {
       const isRtl = opened.readingDirection === "rtl"
       leftButton.ariaLabel = (isRtl ? labels.next : labels.previous) ?? null
       rightButton.ariaLabel = (isRtl ? labels.previous : labels.next) ?? null
+      // The progress bar fills in the book's reading direction.
+      progress.dir = opened.readingDirection
 
-      pagination = opened.reader.pagination.state$.subscribe((state) => {
-        const index = state.begin.absolutePageIndex
-        pageIndicator.textContent =
-          index === undefined
-            ? ""
-            : (labels.pageOf ?? "")
-                .replace("{{current}}", `${index + 1}`)
-                .replace("{{total}}", `${state.numberOfTotalPages}`)
-      })
+      pagination = opened.reader.pagination.state$.subscribe((state) =>
+        setProgress(state.percentageEstimateOfBook),
+      )
     } catch (error) {
       console.error("Could not open book", error)
       if (currentSession === session) {
