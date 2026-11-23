@@ -12,13 +12,13 @@ interface Props {
   mediaId: string
 }
 
-const { t } = Astro.locals.i18n
+const { t, direction } = Astro.locals.i18n
 const {
   data: { title, language },
 } = await getMediaItem(Astro.props.mediaId)
 
 const iconButton =
-  "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 disabled:cursor-default disabled:opacity-30 group-data-[theme=dark]:hover:bg-white/10"
+  "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full disabled:cursor-default disabled:opacity-30 [@media(hover:hover)]:hover:bg-gray-100 [@media(hover:hover)]:group-data-[theme=dark]:hover:bg-white/10"
 const bar =
   "flex h-16 shrink-0 items-center border-gray-200 px-4 [@media(max-height:30rem)]:h-12 group-data-[theme=dark]:border-white/10 md:px-8"
 ---
@@ -29,6 +29,7 @@ const bar =
   aria-label={title}
   data-loading={t("ln.reader.loading")}
   data-error={t("ln.reader.error")}
+  data-page-of={t("ln.reader.page-of")}
   data-previous={t("ln.previous")}
   data-next={t("ln.next")}
   data-dark-mode={t("ln.reader.dark-mode")}
@@ -86,12 +87,9 @@ const bar =
       ></div>
     </div>
 
-    <nav dir="ltr" class:list={[bar, "justify-between border-t"]}>
-      <button type="button" class={iconButton} data-reader-left disabled>
-        <ChevronLeftIcon />
-      </button>
+    <nav dir="ltr" class:list={[bar, "relative justify-between"]}>
       <div
-        class="mx-4 h-0.5 max-w-md grow overflow-hidden rounded-full bg-gray-200 group-data-[theme=dark]:bg-white/15"
+        class="absolute inset-x-0 top-0 h-0.5 bg-gray-200 group-data-[theme=dark]:bg-white/15"
         role="progressbar"
         aria-label={t("ln.reader.progress")}
         aria-valuemin="0"
@@ -104,6 +102,15 @@ const bar =
           data-reader-progress-value
         ></div>
       </div>
+      <button type="button" class={iconButton} data-reader-left disabled>
+        <ChevronLeftIcon />
+      </button>
+      <div
+        class="text-sm text-gray-600 group-data-[theme=dark]:text-gray-400"
+        dir={direction}
+        aria-live="polite"
+        data-reader-page
+      ></div>
       <button type="button" class={iconButton} data-reader-right disabled>
         <ChevronRightIcon />
       </button>

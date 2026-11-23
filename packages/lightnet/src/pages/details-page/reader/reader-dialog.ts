@@ -39,6 +39,7 @@ export function initReaderDialog() {
   const status = element<HTMLElement>("[data-reader-status]")
   const progress = element<HTMLElement>("[data-reader-progress]")
   const progressValue = element<HTMLElement>("[data-reader-progress-value]")
+  const pageIndicator = element<HTMLElement>("[data-reader-page]")
   const download = element<HTMLAnchorElement>("[data-reader-download]")
   const themeButton = element<HTMLButtonElement>("[data-reader-theme]")
   const leftButton = element<HTMLButtonElement>("[data-reader-left]")
@@ -81,6 +82,7 @@ export function initReaderDialog() {
     dialog.dataset.format = format
     themeButton.classList.toggle("hidden", format !== "epub")
     setProgress(0)
+    pageIndicator.textContent = ""
     setNavigationEnabled(false)
     showStatus(labels.loading)
     document.documentElement.style.overflow = "hidden"
@@ -105,9 +107,16 @@ export function initReaderDialog() {
       // The progress bar fills in the book's reading direction.
       progress.dir = opened.readingDirection
 
-      pagination = opened.reader.pagination.state$.subscribe((state) =>
-        setProgress(state.percentageEstimateOfBook),
-      )
+      pagination = opened.reader.pagination.state$.subscribe((state) => {
+        setProgress(state.percentageEstimateOfBook)
+        const index = state.begin.absolutePageIndex
+        pageIndicator.textContent =
+          index === undefined
+            ? ""
+            : (labels.pageOf ?? "")
+                .replace("{{current}}", `${index + 1}`)
+                .replace("{{total}}", `${state.numberOfTotalPages}`)
+      })
     } catch (error) {
       console.error("Could not open book", error)
       if (currentSession === session) {
