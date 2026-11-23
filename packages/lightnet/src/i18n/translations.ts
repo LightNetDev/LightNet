@@ -118,7 +118,7 @@ export type LightNetTranslationKey =
   | "ln.reader.light-mode"
   | "ln.reader.loading"
   | "ln.reader.error"
-  | "ln.reader.page-of"
+  | "ln.reader.page"
   | "ln.reader.progress"
   | "ln.header.open-main-menu"
   | "ln.select-language"

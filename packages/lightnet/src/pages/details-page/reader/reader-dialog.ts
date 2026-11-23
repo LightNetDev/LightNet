@@ -113,9 +113,7 @@ export function initReaderDialog() {
         pageIndicator.textContent =
           index === undefined
             ? ""
-            : (labels.pageOf ?? "")
-                .replace("{{current}}", `${index + 1}`)
-                .replace("{{total}}", `${state.numberOfTotalPages}`)
+            : (labels.page ?? "").replace("{{current}}", `${index + 1}`)
       })
     } catch (error) {
       console.error("Could not open book", error)
