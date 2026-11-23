@@ -1,5 +1,6 @@
 import { createArchiveFromJszip } from "@prose-reader/archive-reader/archives/createArchiveFromJszip"
 import { createReader, type Manifest } from "@prose-reader/core"
+import { gesturesEnhancer } from "@prose-reader/enhancer-gestures"
 import { Streamer } from "@prose-reader/streamer"
 import JSZip from "jszip"
 import { from } from "rxjs"
@@ -35,7 +36,8 @@ export async function openEpub({
   }
   const manifest = (await manifestResponse.json()) as Manifest
 
-  const reader = createReader({
+  // Gestures add swipe and tap navigation for touch screens.
+  const reader = gesturesEnhancer(createReader)({
     manifest,
     theme: proseTheme(theme),
     spreadMode: "never",

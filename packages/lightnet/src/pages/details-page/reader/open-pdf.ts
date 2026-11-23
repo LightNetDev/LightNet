@@ -1,4 +1,5 @@
 import { createReader } from "@prose-reader/core"
+import { gesturesEnhancer } from "@prose-reader/enhancer-gestures"
 import { createArchiveFromPdf, pdfEnhancer } from "@prose-reader/enhancer-pdf"
 import { generateManifestFromArchive } from "@prose-reader/streamer"
 import { GlobalWorkerOptions } from "pdfjs-dist"
@@ -23,7 +24,8 @@ export async function openPdf({
   const archive = await createArchiveFromPdf(blob, filename)
   const manifest = await generateManifestFromArchive(archive)
 
-  const reader = pdfEnhancer(createReader)({
+  // Gestures add swipe and tap navigation for touch screens.
+  const reader = pdfEnhancer(gesturesEnhancer(createReader))({
     manifest,
     spreadMode: "never",
     pdf: { pdfjsViewerInlineCss, getArchiveForItem: () => of(archive) },

@@ -275,6 +275,9 @@ importers:
       '@prose-reader/core':
         specifier: ^47.0.0
         version: 47.0.0(rxjs@7.8.2)
+      '@prose-reader/enhancer-gestures':
+        specifier: ^47.0.0
+        version: 47.0.0(@prose-reader/core@47.0.0(rxjs@7.8.2))(gesturx@8.0.1(rxjs@7.8.2))(rxjs@7.8.2)
       '@prose-reader/enhancer-pdf':
         specifier: ^47.0.0
         version: 47.0.0(@prose-reader/archive-reader@47.0.0(jszip@3.10.2))(@prose-reader/core@47.0.0(rxjs@7.8.2))(pdfjs-dist@6.5.438)(rxjs@7.8.2)
@@ -299,6 +302,9 @@ importers:
       fuse.js:
         specifier: ^7.5.0
         version: 7.5.0
+      gesturx:
+        specifier: ^8.0.1
+        version: 8.0.1(rxjs@7.8.2)
       i18next:
         specifier: ^27.1.1
         version: 27.1.1(typescript@6.0.3)
@@ -1464,6 +1470,14 @@ packages:
     peerDependencies:
       rxjs: ^7.5.5
 
+  '@prose-reader/enhancer-gestures@47.0.0':
+    resolution: {integrity: sha512-45Pey4iE912MslxQS3xj1lv09pXp5CvbWusSCkKGAycULoKifzNcK295MSBmYUOHwW5PRqgX4+XuIp/SHYuukQ==}
+    engines: {node: '>=22.12'}
+    peerDependencies:
+      '@prose-reader/core': ^47.0.0
+      gesturx: ^8.0.0
+      rxjs: ^7.5.5
+
   '@prose-reader/enhancer-pdf@47.0.0':
     resolution: {integrity: sha512-5IcGzcsz9xYZdgwB05+oLvny1gRNnyawgw+C33zx1volIyYynHCbYZdJX3Td7wf3KozMJWqY9EU15ioxIYhnyA==}
     engines: {node: '>=22.12'}
@@ -2407,6 +2421,11 @@ packages:
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
+
+  gesturx@8.0.1:
+    resolution: {integrity: sha512-CoB5sA2Y4Rm9zG2U5YRcgDUjIC4tUGq1NUWQEwhO8J5b3BBHaIWoppF2Un3dK2fDVUGWRFi+AmuYTuhEciu0UA==}
+    peerDependencies:
+      rxjs: 7.x
 
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
@@ -4699,6 +4718,12 @@ snapshots:
       '@prose-reader/shared': 47.0.0
       rxjs: 7.8.2
 
+  '@prose-reader/enhancer-gestures@47.0.0(@prose-reader/core@47.0.0(rxjs@7.8.2))(gesturx@8.0.1(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@prose-reader/core': 47.0.0(rxjs@7.8.2)
+      gesturx: 8.0.1(rxjs@7.8.2)
+      rxjs: 7.8.2
+
   '@prose-reader/enhancer-pdf@47.0.0(@prose-reader/archive-reader@47.0.0(jszip@3.10.2))(@prose-reader/core@47.0.0(rxjs@7.8.2))(pdfjs-dist@6.5.438)(rxjs@7.8.2)':
     dependencies:
       '@prose-reader/archive-reader': 47.0.0(jszip@3.10.2)
@@ -5725,6 +5750,10 @@ snapshots:
   fuse.js@7.5.0: {}
 
   gensync@1.0.0-beta.2: {}
+
+  gesturx@8.0.1(rxjs@7.8.2):
+    dependencies:
+      rxjs: 7.8.2
 
   get-caller-file@2.0.5: {}
 
