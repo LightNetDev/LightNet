@@ -364,7 +364,7 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
-  packages/lightnet/__e2e__/fixtures/search-indexing:
+  packages/lightnet/__e2e__/fixtures/disabled-features:
     dependencies:
       '@astrojs/react':
         specifier: ^5.0.7
