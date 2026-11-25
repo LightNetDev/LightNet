@@ -1,0 +1,15 @@
+{
+  "label": {
+    "en": "Book",
+    "de": "Buch"
+  },
+  "coverImageStyle": "book",
+  "detailsPage": {
+    "layout": "default",
+    "openActionLabel": {
+      "en": "Read",
+      "de": "Lesen"
+    }
+  },
+  "icon": "lucide--book-open-text"
+}
