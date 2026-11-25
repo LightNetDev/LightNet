@@ -7,7 +7,7 @@ export default defineConfig({
   site: "https://lightnet.community",
   integrations: [
     lightnet({
-      title: { en: "Search Indexing Test" },
+      title: { en: "Disabled Features Test" },
       languages: [
         {
           code: "en",
@@ -16,6 +16,7 @@ export default defineConfig({
         },
       ],
       disallowSearchIndexing: true,
+      disableOpenGraphImages: true,
       mainMenu: [
         {
           href: "/",

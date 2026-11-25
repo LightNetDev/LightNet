@@ -6,9 +6,9 @@ import { expect, type Page } from "@playwright/test"
 
 import { test } from "./basics-fixture"
 
-const searchIndexingRoot = resolveFixturePath(
+const disabledFeaturesRoot = resolveFixturePath(
   import.meta.url,
-  "./fixtures/search-indexing/",
+  "./fixtures/disabled-features/",
 )
 
 const expectRobotsNoIndex = async (page: Page) => {
@@ -41,7 +41,7 @@ test("Should disallow search indexing for a single page", async ({
 test("Should disallow search indexing for the entire site", async ({
   page,
 }) => {
-  const ln = await createAstroFixturePage(searchIndexingRoot, page)
+  const ln = await createAstroFixturePage(disabledFeaturesRoot, page)
   await ln.goto("/en/")
 
   await expectRobotsNoIndex(page)
@@ -50,7 +50,7 @@ test("Should disallow search indexing for the entire site", async ({
 test("Should allow a single page to override site-wide search indexing", async ({
   page,
 }) => {
-  const ln = await createAstroFixturePage(searchIndexingRoot, page)
+  const ln = await createAstroFixturePage(disabledFeaturesRoot, page)
   await ln.goto("/en/search-indexing-enabled")
 
   await expectNoRobotsMeta(page)

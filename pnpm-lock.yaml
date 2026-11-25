@@ -364,34 +364,7 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
-  packages/lightnet/__e2e__/fixtures/open-graph-disabled:
-    dependencies:
-      '@astrojs/react':
-        specifier: ^5.0.7
-        version: 5.0.7(@types/node@24.19.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(jiti@1.21.7)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(yaml@2.9.1)
-      astro:
-        specifier: ^6.4.8
-        version: 6.4.8(@types/node@24.19.2)(jiti@1.21.7)(rollup@4.68.2)(yaml@2.9.1)
-      lightnet:
-        specifier: workspace:^
-        version: link:../../..
-      react:
-        specifier: ^19.3.1
-        version: 19.3.1
-      react-dom:
-        specifier: ^19.3.1
-        version: 19.3.1(react@19.3.1)
-      sharp:
-        specifier: ^0.34.5
-        version: 0.34.5
-      tailwindcss:
-        specifier: ^3.4.19
-        version: 3.4.19(yaml@2.9.1)
-      typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
-
-  packages/lightnet/__e2e__/fixtures/search-indexing:
+  packages/lightnet/__e2e__/fixtures/disabled-features:
     dependencies:
       '@astrojs/react':
         specifier: ^5.0.7

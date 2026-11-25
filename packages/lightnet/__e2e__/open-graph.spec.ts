@@ -16,9 +16,9 @@ const ITEM_PATH = "/en/media/faithful-freestyle--en/"
 const OPEN_GRAPH_IMAGE_URL = `${SITE}${ITEM_PATH}open-graph.png`
 
 const basicsRoot = resolveFixturePath(import.meta.url, "./fixtures/basics/")
-const disabledRoot = resolveFixturePath(
+const disabledFeaturesRoot = resolveFixturePath(
   import.meta.url,
-  "./fixtures/open-graph-disabled/",
+  "./fixtures/disabled-features/",
 )
 const coverPath = join(basicsRoot, "src/content/media/images/cover.jpg")
 
@@ -249,11 +249,13 @@ test.describe("Open Graph images enabled (default)", () => {
 
 test.describe("Open Graph images disabled", () => {
   test("Should not build open-graph.png", async ({ page }) => {
-    const ln = await createAstroFixturePage(disabledRoot, page)
+    const ln = await createAstroFixturePage(disabledFeaturesRoot, page)
     await ln.goto(ITEM_PATH)
 
     expect(
-      await fileExists(join(disabledRoot, "dist", ITEM_PATH, "open-graph.png")),
+      await fileExists(
+        join(disabledFeaturesRoot, "dist", ITEM_PATH, "open-graph.png"),
+      ),
     ).toBe(false)
     const response = await page.request.get(
       ln.resolveURL(`${ITEM_PATH}open-graph.png`),
@@ -264,7 +266,7 @@ test.describe("Open Graph images disabled", () => {
   test("Should fall back to an optimized PNG of the cover image", async ({
     page,
   }) => {
-    const ln = await createAstroFixturePage(disabledRoot, page)
+    const ln = await createAstroFixturePage(disabledFeaturesRoot, page)
     await ln.goto(ITEM_PATH)
 
     const { width, height } = await sharp(coverPath).metadata()
