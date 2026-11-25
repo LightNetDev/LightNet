@@ -80,6 +80,12 @@ ln.search.title: Search
 # Used on: https://kuuluu.org/en/media/
 ln.search.placeholder: Search media
 
+# Button to expand or collapse search filters.
+ln.search.filters: Filters
+
+# Accessible label for removing an active search filter. {{filter}} is its label and value.
+ln.search.remove-filter: "Remove filter: {{filter}}"
+
 # Filter option to display content in all languages.
 #
 # English: All languages
