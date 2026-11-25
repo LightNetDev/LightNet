@@ -14,7 +14,17 @@ test("Should create complete content metadata", () => {
     labelText: "some",
     isExternal: true,
     extension: "pdf",
+    readerFormat: "pdf",
   })
+})
+
+test("Should only open pdf and epub files in the reader", () => {
+  expect(createContentMetadata({ url: "/files/book.epub" }).readerFormat).toBe(
+    "epub",
+  )
+  expect(
+    createContentMetadata({ url: "/files/book.docx" }).readerFormat,
+  ).toBeUndefined()
 })
 ;[
   {

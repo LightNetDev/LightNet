@@ -138,6 +138,86 @@ ln.details.download: Download
 # Used on: https://kuuluu.org/en/media/ride-the-ramp-of-faith--en/ (Firefox)
 ln.share.url-copied-to-clipboard: Link copied to clipboard
 
+# Button label to read a PDF or EPUB file in the built-in reader.
+#
+# English: Read
+ln.details.read: Read
+
+# Button label to close the reader that shows PDF and EPUB files.
+#
+# English: Close
+ln.reader.close: Close
+
+# Button label in the reader to switch to dark colors.
+#
+# English: Dark mode
+ln.reader.dark-mode: Dark mode
+
+# Button label in the reader to switch to light colors.
+#
+# English: Light mode
+ln.reader.light-mode: Light mode
+
+# Message in the reader while a PDF or EPUB file is loading.
+#
+# English: Loading…
+ln.reader.loading: Loading…
+
+# Message in the reader when a file could not be opened.
+#
+# English: This file could not be opened.
+ln.reader.error: This file could not be opened.
+
+# Page indicator in the reader. {{current}} is the current page.
+#
+# English: Page {{current}}
+ln.reader.page: Page {{current}}
+
+# Accessible label of the progress bar in the reader that shows how much of a book has been read.
+#
+# English: Reading progress
+ln.reader.progress: Reading progress
+
+# Page indicator in the reader when the number of pages is known. {{current}} is the current page, {{total}} the number of pages.
+#
+# English: Page {{current}} of {{total}}
+ln.reader.page-of: Page {{current}} of {{total}}
+
+# Button label in the reader to show the table of contents of a book.
+#
+# English: Contents
+ln.reader.contents: Contents
+
+# Button label in the reader to show settings for text size and colors.
+#
+# English: Display settings
+ln.reader.display: Display settings
+
+# Label in the reader for the text size setting.
+#
+# English: Text size
+ln.reader.text-size: Text size
+
+# Button label in the reader to make the text smaller.
+#
+# English: Smaller text
+ln.reader.smaller-text: Smaller text
+
+# Button label in the reader to make the text larger.
+#
+# English: Larger text
+ln.reader.larger-text: Larger text
+
+# Button label in the reader to zoom out of a page.
+#
+# English: Zoom out
+ln.reader.zoom-out: Zoom out
+
+# Button label in the reader to zoom in on a page.
+#
+# English: Zoom in
+ln.reader.zoom-in: Zoom in
+
 # Title for the 404-error page. This page is displayed when a path does not exist.
 #
 # English: Page not found
