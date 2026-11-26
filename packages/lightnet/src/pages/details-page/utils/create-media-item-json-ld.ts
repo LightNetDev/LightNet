@@ -31,6 +31,7 @@ export function createMediaItemJsonLd({
   imageUrl,
   categoryNames = [],
   contentLabels = [],
+  translations = [],
 }: {
   item: MediaItemEntry["data"]
   fallbackSchemaType?: string
@@ -39,6 +40,8 @@ export function createMediaItemJsonLd({
   imageUrl: string
   categoryNames?: string[]
   contentLabels?: (string | undefined)[]
+  /** Canonical URLs and languages of media items that translate this one. */
+  translations?: { canonicalUrl: URL; language: string }[]
 }): Record<string, unknown> {
   const resolvedSchemaType = schemaType ?? fallbackSchemaType
   const base = {
@@ -56,6 +59,15 @@ export function createMediaItemJsonLd({
       : undefined,
     about: categoryNames.length
       ? categoryNames.map((name) => ({ "@type": "Thing", name }))
+      : undefined,
+    // Media items sharing a commonId do not record which one is the original,
+    // so each lists the others as translations.
+    workTranslation: translations.length
+      ? translations.map(({ canonicalUrl, language }) => ({
+          "@id": `${canonicalUrl.href}#work`,
+          url: canonicalUrl.href,
+          inLanguage: language,
+        }))
       : undefined,
   }
 

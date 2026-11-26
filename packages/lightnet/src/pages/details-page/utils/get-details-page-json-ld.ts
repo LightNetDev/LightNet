@@ -6,6 +6,7 @@ import { getMediaType } from "../../../content/get-media-types"
 import type { TranslateContentFieldFn } from "../../../i18n/translate-map"
 import { detailsPagePath } from "../../../utils/paths"
 import { createMediaItemJsonLd } from "./create-media-item-json-ld"
+import { getTranslations } from "./get-translations"
 
 export async function getDetailsPageJsonLd({
   mediaId,
@@ -22,10 +23,15 @@ export async function getDetailsPageJsonLd({
 }) {
   const item = await getMediaItem(mediaId)
   const mediaType = await getMediaType(item.data.type.id)
-  const canonicalUrl = new URL(
-    detailsPagePath(defaultLocale, { id: mediaId }),
-    site,
-  )
+  const getCanonicalUrl = (id: string) =>
+    new URL(detailsPagePath(defaultLocale, { id }), site)
+  const canonicalUrl = getCanonicalUrl(mediaId)
+  const translations = (await getTranslations(mediaId))
+    .filter(({ language }) => language !== item.data.language)
+    .map(({ id, language }) => ({
+      canonicalUrl: getCanonicalUrl(id),
+      language,
+    }))
   const image = await getImage({ src: item.data.image, format: "webp" })
   const categories = await Promise.all(
     (item.data.categories ?? []).map(({ id }) =>
@@ -43,5 +49,6 @@ export async function getDetailsPageJsonLd({
     contentLabels: item.data.content.map(({ label }) =>
       label ? tContentField(label, item) : undefined,
     ),
+    translations,
   })
 }
