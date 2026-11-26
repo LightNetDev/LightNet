@@ -209,7 +209,7 @@ test.each(["public", "custom-assets"])(
 )
 
 test.each(["admin", "internal/content-manager"])(
-  "Should generate sitemap files with language alternates and exclude admin at %s",
+  "Should generate sitemap files with language alternates and exclude admin and translated details pages at %s",
   async (adminPath) => {
     const { updateConfig } = runSetup({
       astroSite: "https://lightnet.community",
@@ -230,14 +230,20 @@ test.each(["admin", "internal/content-manager"])(
     const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
 
     try {
-      await sitemap.hooks["astro:config:done"]!({
-        config: {
-          site: "https://lightnet.community",
-          base: "/library/",
-          trailingSlash: "always",
-          build: { format: "directory" },
-        },
-      } as never)
+      const astroConfig = {
+        site: "https://lightnet.community",
+        base: "/library/",
+        trailingSlash: "always",
+        build: { format: "directory" },
+      }
+      const sitemapIntegrations = integrations.filter(({ name }) =>
+        ["@astrojs/sitemap", "lightnet/sitemap-exclusions"].includes(name),
+      )
+      for (const integration of sitemapIntegrations) {
+        await integration.hooks["astro:config:done"]!({
+          config: astroConfig,
+        } as never)
+      }
       for (const integration of integrations) {
         await integration.hooks["astro:routes:resolved"]?.({
           routes: [
@@ -275,9 +281,16 @@ test.each(["admin", "internal/content-manager"])(
         "<loc>https://lightnet.community/library/en/media/example/</loc>",
       )
       expect(xml).toContain(
-        'hreflang="de" href="https://lightnet.community/library/de/media/example/"',
+        'hreflang="de" href="https://lightnet.community/library/de/media/"',
       )
-      expect(xml).toContain('hreflang="en"')
+      expect(xml).toContain(
+        'hreflang="en" href="https://lightnet.community/library/en/media/"',
+      )
+      // Translated details pages declare the default locale page as canonical.
+      expect(xml).not.toContain("/library/de/media/example/")
+      expect(xml).not.toMatch(
+        /hreflang="[^"]+" href="https:\/\/lightnet\.community\/library\/en\/media\/example\/"/,
+      )
       expect(xml).not.toContain('hreflang="ar"')
       expect(xml).not.toContain("404")
       expect(xml).not.toContain(
