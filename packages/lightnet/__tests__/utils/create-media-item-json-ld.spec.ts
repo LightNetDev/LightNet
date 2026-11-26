@@ -355,3 +355,31 @@ test("Does not assign an unrelated primary file URL to an explicit media object"
     { "@type": "MediaObject", encodingFormat: "application/pdf" },
   ])
 })
+
+test("Lists translations as workTranslation", () => {
+  const result = createMediaItemJsonLd({
+    item,
+    canonicalUrl: new URL("https://example.com/en/media/work-ar/"),
+    imageUrl: "https://example.com/cover.webp",
+    translations: [
+      {
+        url: "https://example.com/en/media/work-de/",
+        language: "de",
+      },
+    ],
+  })
+
+  expect(result.workTranslation).toEqual([
+    {
+      "@id": "https://example.com/en/media/work-de/#work",
+      url: "https://example.com/en/media/work-de/",
+      inLanguage: "de",
+    },
+  ])
+})
+
+test("Omits workTranslation without translations", () => {
+  const result = build(["/files/book.pdf"])
+
+  expect(JSON.stringify(result)).not.toContain("workTranslation")
+})

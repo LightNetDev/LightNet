@@ -1,6 +1,7 @@
 import { expect, test } from "vitest"
 
 import {
+  detailsPageCanonicalUrl,
   detailsPagePath,
   ensureTrailingSlash,
   localizePath,
@@ -9,6 +10,16 @@ import {
 
 test("Should build media detail paths with a trailing slash", () => {
   expect(detailsPagePath("en", { id: "my-book" })).toBe("/en/media/my-book/")
+})
+
+test("Should build canonical details page URLs with the default locale", () => {
+  expect(
+    detailsPageCanonicalUrl(
+      "en",
+      { id: "my-book" },
+      new URL("https://example.com"),
+    ).href,
+  ).toBe("https://example.com/en/media/my-book/")
 })
 
 test("Should build search paths with a trailing slash before query parameters", () => {

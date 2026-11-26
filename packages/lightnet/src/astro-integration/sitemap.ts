@@ -17,6 +17,8 @@ export const sitemap = (
     return []
   }
 
+  const isTranslatedDetailsPage =
+    createTranslatedDetailsPageMatcher(lightnetConfig)
   let adminRoutePatterns: RegExp[] = []
 
   return [
@@ -35,10 +37,13 @@ export const sitemap = (
       },
     },
     astroSitemap({
-      filter: (page) =>
-        !adminRoutePatterns.some((pattern) =>
-          pattern.test(new URL(page).pathname),
-        ),
+      filter: (page) => {
+        const { pathname } = new URL(page)
+        return (
+          !isTranslatedDetailsPage(pathname) &&
+          !adminRoutePatterns.some((pattern) => pattern.test(pathname))
+        )
+      },
       i18n: {
         defaultLocale: lightnetConfig.defaultLocale,
         locales: Object.fromEntries(
@@ -47,4 +52,28 @@ export const sitemap = (
       },
     }),
   ]
+}
+
+/**
+ * Details pages declare the default locale version as their canonical URL,
+ * because only the interface language differs between locales. Search engines
+ * expect sitemaps to list only canonical URLs, so the other locale versions
+ * are excluded. This also keeps them out of the sitemap's hreflang alternates.
+ */
+const createTranslatedDetailsPageMatcher = ({
+  defaultLocale,
+  locales,
+}: ExtendedLightnetConfig) => {
+  const translatedLocales = new Set(
+    locales.filter((locale) => locale !== defaultLocale),
+  )
+  return (pathname: string) => {
+    const [, locale, media, id, ...rest] = pathname.split("/")
+    return (
+      translatedLocales.has(locale) &&
+      media === "media" &&
+      !!id &&
+      rest.join("") === ""
+    )
+  }
 }
