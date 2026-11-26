@@ -17,19 +17,14 @@ export const sitemap = (
     return []
   }
 
+  const isTranslatedDetailsPage =
+    createTranslatedDetailsPageMatcher(lightnetConfig)
   let adminRoutePatterns: RegExp[] = []
-  let isTranslatedDetailsPage = (_pathname: string) => false
 
   return [
     {
       name: "lightnet/sitemap-exclusions",
       hooks: {
-        "astro:config:done": ({ config }) => {
-          isTranslatedDetailsPage = createTranslatedDetailsPageMatcher(
-            lightnetConfig,
-            config.base,
-          )
-        },
         "astro:routes:resolved": ({ routes }) => {
           // Astro resolves the package entrypoint to its source file, including
           // workspace paths when the admin package is linked locally.
@@ -65,21 +60,15 @@ export const sitemap = (
  * expect sitemaps to list only canonical URLs, so the other locale versions
  * are excluded. This also keeps them out of the sitemap's hreflang alternates.
  */
-const createTranslatedDetailsPageMatcher = (
-  { defaultLocale, locales }: ExtendedLightnetConfig,
-  base: string,
-) => {
-  const basePath = base.replace(/\/+$/, "")
+const createTranslatedDetailsPageMatcher = ({
+  defaultLocale,
+  locales,
+}: ExtendedLightnetConfig) => {
   const translatedLocales = new Set(
     locales.filter((locale) => locale !== defaultLocale),
   )
   return (pathname: string) => {
-    if (!pathname.startsWith(`${basePath}/`)) {
-      return false
-    }
-    const [locale, media, id, ...rest] = pathname
-      .slice(basePath.length + 1)
-      .split("/")
+    const [, locale, media, id, ...rest] = pathname.split("/")
     return (
       translatedLocales.has(locale) &&
       media === "media" &&

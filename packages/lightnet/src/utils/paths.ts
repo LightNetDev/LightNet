@@ -15,6 +15,24 @@ export function detailsPagePath(
 }
 
 /**
+ * Build the canonical URL of a media item's details page. Details pages only
+ * differ by interface language between locales, so the default locale version
+ * is canonical.
+ *
+ * @param defaultLocale default locale of the site
+ * @param mediaItem media item
+ * @param site site URL from the Astro config
+ * @returns canonical URL eg. 'https://example.com/en/media/my-book/'
+ */
+export function detailsPageCanonicalUrl(
+  defaultLocale: string,
+  { id }: { id: string },
+  site: URL | undefined,
+) {
+  return new URL(detailsPagePath(defaultLocale, { id }), site)
+}
+
+/**
  * Build path to the search page.
  *
  * @param locale current locale

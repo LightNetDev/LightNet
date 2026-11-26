@@ -363,7 +363,7 @@ test("Lists translations as workTranslation", () => {
     imageUrl: "https://example.com/cover.webp",
     translations: [
       {
-        canonicalUrl: new URL("https://example.com/en/media/work-de/"),
+        url: "https://example.com/en/media/work-de/",
         language: "de",
       },
     ],

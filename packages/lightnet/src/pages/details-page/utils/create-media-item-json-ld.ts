@@ -41,7 +41,7 @@ export function createMediaItemJsonLd({
   categoryNames?: string[]
   contentLabels?: (string | undefined)[]
   /** Canonical URLs and languages of media items that translate this one. */
-  translations?: { canonicalUrl: URL; language: string }[]
+  translations?: { url: string; language: string }[]
 }): Record<string, unknown> {
   const resolvedSchemaType = schemaType ?? fallbackSchemaType
   const base = {
@@ -63,9 +63,9 @@ export function createMediaItemJsonLd({
     // Media items sharing a commonId do not record which one is the original,
     // so each lists the others as translations.
     workTranslation: translations.length
-      ? translations.map(({ canonicalUrl, language }) => ({
-          "@id": `${canonicalUrl.href}#work`,
-          url: canonicalUrl.href,
+      ? translations.map(({ url, language }) => ({
+          "@id": `${url}#work`,
+          url,
           inLanguage: language,
         }))
       : undefined,

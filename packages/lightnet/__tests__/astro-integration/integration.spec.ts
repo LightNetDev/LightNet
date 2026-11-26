@@ -230,26 +230,20 @@ test.each(["admin", "internal/content-manager"])(
     const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
 
     try {
-      const astroConfig = {
-        site: "https://lightnet.community",
-        base: "/library/",
-        trailingSlash: "always",
-        build: { format: "directory" },
-      }
-      const sitemapIntegrations = integrations.filter(({ name }) =>
-        ["@astrojs/sitemap", "lightnet/sitemap-exclusions"].includes(name),
-      )
-      for (const integration of sitemapIntegrations) {
-        await integration.hooks["astro:config:done"]!({
-          config: astroConfig,
-        } as never)
-      }
+      await sitemap.hooks["astro:config:done"]!({
+        config: {
+          site: "https://lightnet.community",
+          base: "/",
+          trailingSlash: "always",
+          build: { format: "directory" },
+        },
+      } as never)
       for (const integration of integrations) {
         await integration.hooks["astro:routes:resolved"]?.({
           routes: [
             {
               entrypoint: "../../packages/sveltia-admin/src/Admin.astro",
-              patternRegex: new RegExp(`^/library/${adminPath}/?$`),
+              patternRegex: new RegExp(`^/${adminPath}/?$`),
               type: "page",
               pathname: `/${adminPath}`,
               generate: () => `/${adminPath}`,
@@ -274,33 +268,31 @@ test.each(["admin", "internal/content-manager"])(
 
       const index = await readFile(join(output, "sitemap-index.xml"), "utf8")
       const xml = await readFile(join(output, "sitemap-0.xml"), "utf8")
-      expect(index).toContain(
-        "https://lightnet.community/library/sitemap-0.xml",
+      expect(index).toContain("https://lightnet.community/sitemap-0.xml")
+      expect(xml).toContain(
+        "<loc>https://lightnet.community/en/media/example/</loc>",
       )
       expect(xml).toContain(
-        "<loc>https://lightnet.community/library/en/media/example/</loc>",
+        'hreflang="de" href="https://lightnet.community/de/media/"',
       )
       expect(xml).toContain(
-        'hreflang="de" href="https://lightnet.community/library/de/media/"',
-      )
-      expect(xml).toContain(
-        'hreflang="en" href="https://lightnet.community/library/en/media/"',
+        'hreflang="en" href="https://lightnet.community/en/media/"',
       )
       // Translated details pages declare the default locale page as canonical.
-      expect(xml).not.toContain("/library/de/media/example/")
+      expect(xml).not.toContain("/de/media/example/")
       expect(xml).not.toMatch(
-        /hreflang="[^"]+" href="https:\/\/lightnet\.community\/library\/en\/media\/example\/"/,
+        /hreflang="[^"]+" href="https:\/\/lightnet\.community\/en\/media\/example\/"/,
       )
       expect(xml).not.toContain('hreflang="ar"')
       expect(xml).not.toContain("404")
       expect(xml).not.toContain(
-        `<loc>https://lightnet.community/library/${adminPath}</loc>`,
+        `<loc>https://lightnet.community/${adminPath}</loc>`,
       )
       expect(xml).not.toContain(
-        `<loc>https://lightnet.community/library/${adminPath}/</loc>`,
+        `<loc>https://lightnet.community/${adminPath}/</loc>`,
       )
       expect(xml).toContain(
-        `<loc>https://lightnet.community/library/${adminPath}-guide/</loc>`,
+        `<loc>https://lightnet.community/${adminPath}-guide/</loc>`,
       )
       expect(logger.warn).not.toHaveBeenCalled()
       expect(logger.error).not.toHaveBeenCalled()

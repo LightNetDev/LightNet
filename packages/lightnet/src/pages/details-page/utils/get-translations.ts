@@ -17,15 +17,14 @@ const groupItemsByCommonId = async () => {
   itemsByCommonId.forEach((value, key) => {
     if (value.length < 2) {
       itemsByCommonId.delete(key)
+    } else {
+      value.sort((a, b) => a.language.localeCompare(b.language))
     }
   })
   return itemsByCommonId
 }
 
 let itemsByCommonIdPromise: Promise<Map<string, Translation[]>> | undefined
-
-const sortByLanguage = (items: Translation[]) =>
-  [...items].sort((a, b) => a.language.localeCompare(b.language))
 
 const getGroup = async (mediaId: string) => {
   itemsByCommonIdPromise ??= groupItemsByCommonId()
@@ -38,13 +37,8 @@ const getGroup = async (mediaId: string) => {
  * Get all other media items that share the commonId of the given media item,
  * sorted by language.
  */
-export const getTranslations = async (mediaId: string) => {
-  const group = await getGroup(mediaId)
-  if (!group) {
-    return []
-  }
-  return sortByLanguage(group.filter(({ id }) => id !== mediaId))
-}
+export const getTranslations = async (mediaId: string) =>
+  (await getGroup(mediaId))?.filter(({ id }) => id !== mediaId) ?? []
 
 /**
  * Get the language versions of the given media item for hreflang alternate
@@ -56,10 +50,7 @@ export const getTranslations = async (mediaId: string) => {
  * so no alternates are returned for the whole group.
  */
 export const getLanguageAlternates = async (mediaId: string) => {
-  const group = await getGroup(mediaId)
-  if (!group) {
-    return []
-  }
+  const group = (await getGroup(mediaId)) ?? []
   const languages = new Set(group.map(({ language }) => language))
-  return languages.size === group.length ? sortByLanguage(group) : []
+  return languages.size === group.length ? group : []
 }
