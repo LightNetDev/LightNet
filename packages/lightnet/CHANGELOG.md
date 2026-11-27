@@ -1,5 +1,13 @@
 # lightnet
 
+## 4.13.0
+
+### Minor Changes
+
+- [#508](https://github.com/LightNetDev/LightNet/pull/508) [`e65d6f0`](https://github.com/LightNetDev/LightNet/commit/e65d6f01815312bd1800fc1dc622c3b63455c2fd) - Link translations of a media item for search engines. When search indexing is allowed, details pages add `hreflang` alternate links to all media items that share their `commonId`, and their JSON-LD lists the other translations as `workTranslation`. If media items with the same `commonId` share a language, the alternate links are skipped for that group.
+  
+  The sitemap now only lists the default locale version of details pages. The other locale versions point their canonical URL at it, so search engines no longer receive conflicting language alternates for details pages.
+
 ## 4.12.2
 
 ### Patch Changes
